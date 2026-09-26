@@ -18,7 +18,8 @@ export const calendarStyles = css`
     color: var(--tec-foreground);
   }
   /* Inside a card or a popover the calendar takes the surface colour of its container. */
-  :host-context(tec-card, tec-popover) {
+  :host-context(tec-card),
+  :host-context(tec-popover) {
     --tec-calendar-background: transparent;
   }
 

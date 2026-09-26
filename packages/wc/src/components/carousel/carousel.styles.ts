@@ -87,7 +87,6 @@ export const carouselItemStyles = css`
     display: block;
     flex: 0 0 100%;
     min-width: 0;
-    min-height: 0;
   }
   .base {
     height: 100%;

@@ -1,0 +1,233 @@
+---
+title: Message Scroller
+description: A chat scroll container that anchors turns, opens saved transcripts, follows streamed responses, loads history without jumping, and jumps to any message.
+tags: ["tec-message-scroller", "tec-message-scroller-viewport", "tec-message-scroller-content", "tec-message-scroller-item", "tec-message-scroller-button"]
+---
+
+<ComponentPreview name="message-scroller-demo" />
+
+Streaming breaks the classic chat list. Replies arrive in chunks while the reader may still be reading, scrolling back, or looking elsewhere. A good transcript preserves the reader's place while the conversation keeps changing:
+
+1. **Move only when the reader asked to.** Auto-scroll is never the default.
+2. **Follow only while they are following.** At the live edge, keep the stream in view; once they scroll away, leave them there.
+3. **Start a new turn near the top**, with a slice of the previous turn still visible, and let the answer grow into the screen below it.
+4. **Reopen where the reader left off** — usually the last question, not the absolute bottom.
+5. **Keep the place when layout changes**: images load, older messages appear above.
+6. **Make returning easy** with a "jump to latest" control, and let people jump to any message.
+7. **Stay accessible without the noise**: a navigable transcript, preserved focus, polite announcements.
+
+`<tec-message-scroller>` is built for these behaviours. It owns the scroll state — the opening position, new-turn anchoring, following the live edge, prepended history, visibility and scroll commands — and nothing else: messages, transport and AI state stay in your code, which appends `tec-message-scroller-item`s.
+
+## Usage
+
+```ts
+import "@tecton/wc/message-scroller"
+```
+
+```html
+<tec-message-scroller>
+  <tec-message-scroller-viewport>
+    <tec-message-scroller-content>
+      <tec-message-scroller-item message-id="m1" scroll-anchor>
+        <tec-message align="end">…</tec-message>
+      </tec-message-scroller-item>
+      <tec-message-scroller-item message-id="m2">
+        <tec-message>…</tec-message>
+      </tec-message-scroller-item>
+    </tec-message-scroller-content>
+  </tec-message-scroller-viewport>
+  <tec-message-scroller-button></tec-message-scroller-button>
+</tec-message-scroller>
+```
+
+The scroller fills its parent, so place it in a height-constrained container (`class="flex-1"` in a column of fixed height).
+
+## Composition
+
+```text
+tec-message-scroller                 the scroll state and behaviour options
+├── tec-message-scroller-viewport    the scrollable, focusable region
+│   └── tec-message-scroller-content the transcript (a log)
+│       └── tec-message-scroller-item   one row: a message, a marker, a typing indicator…
+└── tec-message-scroller-button      "jump to latest" (or to the start)
+```
+
+Wrap **every** row of the transcript in a `tec-message-scroller-item` so the scroller can measure, anchor, preserve and jump to it.
+
+## Anchoring turns
+
+A turn starts a new exchange — in an AI chat, usually the user's question. Mark that row with `scroll-anchor`. When an anchor is appended, the view moves it near the top and keeps `scroll-previous-item-peek` pixels (64 by default) of the previous row visible, and the reply streams in below it. Anchors are not tied to a role: a marker such as "Rocky joined the chat" can start a turn too, while typing indicators and history controls usually should not.
+
+<ComponentPreview name="message-scroller-group-chat" />
+
+## Following the live edge
+
+With `auto-scroll`, the view follows content growing at the end while the reader is there. Wheel, touch, keyboard scrolling or a jump releases it; new chunks then arrive without moving the reader. `scrollToEnd()` — or pressing the button — re-engages it. The scroller exposes `:state(autoscrolling)` while that programmatic scroll runs.
+
+```html
+<tec-message-scroller auto-scroll>…</tec-message-scroller>
+```
+
+## Opening saved threads
+
+`default-scroll-position` chooses where a transcript opens: `end` (default), `start`, or `last-anchor` — the last turn (the user's latest question) with the reply below it, which gives the reader an immediate place in the thread. `last-anchor` falls back to `end` when there is no anchor or the last turn already fits. The viewport stays hidden (`:state(pending-scroll)`) until the position is applied, so there is no visible jump.
+
+<ComponentPreview name="message-scroller-opening-position" />
+
+To avoid a flash of the oldest messages before the element upgrades, hide the scroller until it is defined: `tec-message-scroller:not(:defined) { visibility: hidden }`.
+
+## Loading earlier messages
+
+When rows are prepended above the transcript, the visible row keeps its place, so history loads above the reader without moving what they are looking at. Give rows stable `message-id`s so the scroller preserves a specific row. Set `prepend-shift` on the viewport to let prepended rows push the view instead.
+
+## Jumping to messages
+
+Search results, permalinks and outlines drive the transcript through the element's methods:
+
+```ts
+const scroller = document.querySelector("tec-message-scroller")
+scroller.scrollToMessage("m42", { align: "start", behavior: "smooth" })
+scroller.scrollToEnd()
+scroller.scrollToStart()
+```
+
+`scrollToMessage` targets the `message-id` of an item. Before any row exists the jump is queued (a permalink resolved while the transcript loads); afterwards a missing id returns `false`.
+
+## Reading the position
+
+`scroller.scrollable` reports which edges the viewport can still scroll toward (`{ start, end }`) and changes fire `tec-scrollable-change`; style with `:state(scrollable-start)` / `:state(scrollable-end)`. With `track-visibility`, `scroller.visibility` reports `visibleMessageIds` (in document order) and `currentAnchorId` (the current turn, still set after it scrolls above the view), and changes fire `tec-visibility-change` — tracking costs nothing until you turn it on.
+
+## Animating new messages
+
+Animate a new row with `transform` and `opacity` (not height, margin or padding, which fight the positioning), and skip the animation under `prefers-reduced-motion: reduce`.
+
+## Performance
+
+Scroll position, anchoring and following are tracked imperatively; nothing re-renders the rows while scrolling or streaming. Items use `content-visibility: auto`, so rows far outside the viewport skip rendering work but stay in the DOM for find-in-page, selection and assistive technology. That is comfortable for hundreds to low thousands of turns.
+
+## RTL
+
+The button centres itself in either direction and the transcript follows the reading direction.
+
+<ComponentPreview name="message-scroller-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Focuses the viewport (a scroll region), then the content inside it, then an active scroll button."],
+    ["ArrowUp / ArrowDown", "Scrolls the focused viewport (and releases following the live edge)."],
+    ["PageUp / PageDown / Space", "Scrolls the focused viewport by a page."],
+    ["Home / End", "Scrolls the focused viewport to the start / end."],
+    ["Enter / Space", "On the scroll button: jumps to the start or end."],
+  ]}
+/>
+
+## Accessibility
+
+- `tec-message-scroller-viewport` is a labelled, keyboard-focusable scroll region (`role="region"`, named "Messages" — set `aria-label` to localise it), so keyboard users can focus the transcript and scroll it directly. Focusable content inside it stays reachable with Tab.
+- `tec-message-scroller-content` is a live region (`role="log"`, `aria-relevant="additions"`): new rows are announced politely, streamed text inside a row is not announced token by token. Set `aria-busy="true"` on it while a turn streams if the announcement should wait for the completed row.
+- `tec-message-scroller-button` is a real button named "Scroll to end" / "Scroll to start" (set `label` to localise). While there is nothing to scroll toward it is inert, out of the tab order and faded out, so it creates no extra focus stop.
+
+## API Reference
+
+<ApiReference tags={["tec-message-scroller", "tec-message-scroller-viewport", "tec-message-scroller-content", "tec-message-scroller-item", "tec-message-scroller-button"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A transcript grows while the reader is inside it: a reply streams in, or a group chat appends.
+- Reopening a saved thread should land on the last turn, and a permalink, a search hit or a jump menu can drive it from outside the list.
+
+### Not for
+
+- a styled scroll region for content that does not grow at its end: use [Scroll Area](/docs/components/scroll-area)
+- the row layout of one turn inside the transcript: use [Message](/docs/components/message)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose all of it: `tec-message-scroller`, `-viewport`, `-content`, `-item` and `-button`.
+
+</Do>
+
+<Do>
+
+Put the behaviour on the scroller: `auto-scroll` (off by default), `default-scroll-position="last-anchor"`, `scroll-previous-item-peek`.
+
+</Do>
+
+<Do>
+
+Give every row a stable `message-id`, `scroll-anchor` to the row that starts a turn, and the scroller its height from outside.
+
+</Do>
+
+<Do>
+
+Never nest a `tec-message` in another; show a quoted or forwarded turn as content inside the outer bubble.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A transcript in a plain overflow-auto div">
+
+<Wrong>
+
+```html
+<div class="h-full overflow-y-auto">…rows…</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-message-scroller auto-scroll default-scroll-position="last-anchor" class="flex-1">
+  <tec-message-scroller-viewport>
+    <tec-message-scroller-content>…items…</tec-message-scroller-content>
+  </tec-message-scroller-viewport>
+  <tec-message-scroller-button></tec-message-scroller-button>
+</tec-message-scroller>
+```
+
+</Correct>
+
+The div never follows a streamed reply and loses what the parts give for free: a focusable, labelled region, a `log` that announces new rows, and the reader's place kept when older messages are prepended.
+
+</Dont>
+
+<Dont severity="HIGH" title="Rows dropped straight into the content">
+
+<Wrong>
+
+```html
+<tec-message-scroller-content>
+  <tec-message>…</tec-message>
+</tec-message-scroller-content>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-message-scroller-content>
+  <tec-message-scroller-item message-id="m1" scroll-anchor>
+    <tec-message>…</tec-message>
+  </tec-message-scroller-item>
+</tec-message-scroller-content>
+```
+
+</Correct>
+
+The id and the anchor live on the item: unwrapped rows never anchor a new turn, are skipped by visibility tracking and make `scrollToMessage` return `false`.
+
+</Dont>
