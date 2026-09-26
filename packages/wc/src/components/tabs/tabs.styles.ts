@@ -186,7 +186,7 @@ export const tabsContentStyles = css`
     outline: none;
   }
   :host(:not(:state(selected))) {
-    display: none;
+    display: none !important;
   }
   :host(:focus-visible) {
     box-shadow: var(--tec-focus-ring);

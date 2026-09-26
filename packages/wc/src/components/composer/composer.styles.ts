@@ -321,7 +321,7 @@ export const composerAttachmentsStyles = css`
     min-width: 0;
   }
   :host(:state(empty)) {
-    display: none;
+    display: none !important;
   }
   .base {
     display: flex;
@@ -447,7 +447,7 @@ export const composerCommandsStyles = css`
     height: 0;
   }
   :host(:not(:state(open))) {
-    display: none;
+    display: none !important;
   }
   .content {
     box-sizing: border-box;

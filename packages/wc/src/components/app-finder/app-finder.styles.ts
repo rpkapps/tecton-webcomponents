@@ -251,7 +251,7 @@ export const appFinderGroupStyles = css`
     display: block;
   }
   :host(:state(hidden)) {
-    display: none;
+    display: none !important;
   }
   .base {
     overflow: hidden;
@@ -286,7 +286,7 @@ export const appFinderItemStyles = css`
     outline: none;
   }
   :host(:state(filtered)) {
-    display: none;
+    display: none !important;
   }
   .base {
     position: relative;

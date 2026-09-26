@@ -246,6 +246,8 @@ Rules:
 - **Visual overrides on controls go through custom properties and `::part()`**, never utility classes
   on the host (`style="--tec-button-radius: 9999px"`, not `class="rounded-full"`). Every custom
   property an example needs is documented with `@cssprop`.
+- An element that hides **itself** for a state (`:host(:not(:state(selected))) { display: none !important }`)
+  uses `!important`, so an application's layout class (`class="flex"`) cannot reveal it.
 - No `text-wrap: balance` unless the Tecton spec asks for it; focus rings appear only for keyboard
   focus, never after a pointer-initiated open.
 

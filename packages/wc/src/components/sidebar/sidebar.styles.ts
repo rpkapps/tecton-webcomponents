@@ -360,7 +360,7 @@ export const sidebarActionStyles = css`
     }
   }
   :host(:state(icon)) {
-    display: none;
+    display: none !important;
   }
   ::slotted(svg),
   ::slotted(tec-icon) {
@@ -633,7 +633,7 @@ export const sidebarMenuBadgeStyles = css`
     color: var(--tec-sidebar-accent-foreground);
   }
   :host(:state(icon)) {
-    display: none;
+    display: none !important;
   }
 `
 
@@ -700,7 +700,7 @@ export const sidebarMenuSubStyles = css`
     translate: -1px 0;
   }
   :host(:state(icon)) {
-    display: none;
+    display: none !important;
   }
   @media (forced-colors: active) {
     .base {
@@ -744,7 +744,7 @@ export const sidebarMenuSubButtonStyles = [
       color: var(--tec-sidebar-accent-foreground);
     }
     :host(:state(icon)) {
-      display: none;
+      display: none !important;
     }
   `,
 ]

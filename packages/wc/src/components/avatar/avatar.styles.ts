@@ -81,7 +81,7 @@ export const avatarImageStyles = css`
     overflow: hidden;
   }
   :host(:state(error)) {
-    display: none;
+    display: none !important;
   }
   img {
     display: block;

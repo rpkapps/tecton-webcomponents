@@ -195,7 +195,7 @@ export const tooltipStyles = [
       white-space: nowrap;
     }
     :host(:not(:state(active))) {
-      display: none;
+      display: none !important;
     }
     :host([standalone]) {
       position: relative;

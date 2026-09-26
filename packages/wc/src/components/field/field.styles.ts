@@ -267,7 +267,7 @@ export const fieldErrorStyles = css`
     font-weight: var(--tec-font-weight-normal);
   }
   :host(:not(:state(displayed))) {
-    display: none;
+    display: none !important;
   }
   ul {
     display: flex;
