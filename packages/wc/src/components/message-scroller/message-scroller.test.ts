@@ -66,6 +66,25 @@ describe("tec-message-scroller", () => {
     expect(Math.round(topIn(last.viewport, "m6"))).toBe(64)
   })
 
+  it("keeps the opening position while rows finish rendering, until the reader interacts", async () => {
+    const last = await mount({ position: "last-anchor", anchors: [2, 5] })
+    const grow = (id: string, h: number) => ((last.viewport.querySelector(`[message-id="${id}"]`)!.firstElementChild as HTMLElement).style.height = `${h}px`)
+    // A row above the anchor grows late (an image, a font, a content-visibility placeholder).
+    grow("m2", 300)
+    await waitUntil(() => Math.round(topIn(last.viewport, "m6")) === 64, "re-anchored after late growth")
+    const end = await mount()
+    grow.call(null, "m1", 120)
+    ;(end.viewport.querySelector('[message-id="m10"]')!.firstElementChild as HTMLElement).style.height = "300px"
+    await waitUntil(() => atEnd(end.viewport), "still at the end")
+    // After an interaction the view is left alone.
+    end.viewport.dispatchEvent(new PointerEvent("pointerdown"))
+    end.viewport.scrollTop = 200
+    await aTimeout(50)
+    ;(end.viewport.querySelector('[message-id="m9"]')!.firstElementChild as HTMLElement).style.height = "300px"
+    await aTimeout(100)
+    expect(end.viewport.scrollTop).toBe(200)
+  })
+
   it("the button is inert until there is content in its direction, then jumps there", async () => {
     const { el, viewport, button } = await mount()
     const inner = button.shadowRoot!.querySelector("button")!
