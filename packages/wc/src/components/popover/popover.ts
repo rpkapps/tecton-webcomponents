@@ -44,10 +44,10 @@ export class TecPopover extends TectonElement {
   @property({ type: Boolean, reflect: true }) open = false
 
   /** Side of the trigger to place the panel on (flips when there is no room). */
-  @property({ reflect: true }) side: PopupSide = "bottom"
+  @property() side: PopupSide = "bottom"
 
-  /** Alignment against the trigger. */
-  @property({ reflect: true }) align: PopupAlign = "center"
+  /** Alignment against the trigger. (Not reflected: an `align` attribute is a legacy presentational hint for text-align.) */
+  @property() align: PopupAlign = "center"
 
   /** Distance from the trigger in px. */
   @property({ type: Number, attribute: "side-offset" }) sideOffset = 4

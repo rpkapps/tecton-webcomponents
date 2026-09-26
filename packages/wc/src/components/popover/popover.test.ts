@@ -201,4 +201,14 @@ describe("tec-popover", () => {
     await aTimeout(10)
     expect(el.open).toBe(false)
   })
+
+  it("an align attribute does not centre the content (legacy presentational hint)", async () => {
+    const root = await fixture<HTMLElement>(html`<div><tec-popover open align="center"><tec-button slot="trigger">Open</tec-button><p>Body</p></tec-popover></div>`)
+    const el = root.querySelector("tec-popover")!
+    await waitUntil(() => isShown(el), "open")
+    expect(getComputedStyle(el.querySelector("p")!).textAlign).toBe("start")
+    el.align = "end"
+    await el.updateComplete
+    expect(el.getAttribute("align")).toBe("center")
+  })
 })

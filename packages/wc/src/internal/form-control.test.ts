@@ -4,7 +4,7 @@ import { live } from "lit/directives/live.js"
 import { describe, expect, it } from "vitest"
 import { userEvent } from "vitest/browser"
 import { defineElement } from "./define.js"
-import { FormControlMixin, nativeValueMissingMessage, requiredValidator } from "./form-control.js"
+import { FormControlMixin, nativeValueMissingMessage, requiredValidator, type Validator } from "./form-control.js"
 import { TectonElement } from "./tecton-element.js"
 import { aTimeout, axNode, fixture, recordEvents } from "./test-utils.js"
 
@@ -31,7 +31,7 @@ defineElement("test-input", TestInput)
 
 /** A control without an inner native control: custom validators, host semantics. */
 class TestPicker extends FormControlMixin(TectonElement) {
-  protected override get validators() {
+  protected override get validators(): Validator<TestPicker>[] {
     return [requiredValidator<TestPicker>((el) => !el.value, "select")]
   }
   pick(value: string) {

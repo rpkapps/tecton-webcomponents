@@ -17,14 +17,18 @@
  * - **trigger ARIA**: `aria-haspopup` and `aria-expanded` on the trigger element (on a `tec-button`
  *   they are delegated to its inner `<button>` by `AriaDelegateController`).
  *
- * The owner keeps the `open` state (and emits the events); the controller only acts on it:
+ * The owner keeps the `open` state (and emits the events); the controller only acts on it.
+ * Don't reflect `align`: an `align` attribute is a legacy presentational hint (Chrome turns
+ * `align="center"` into `text-align: center` on any element, inherited by the content); style by the
+ * popup's `data-side` / `data-align` instead, and set `text-align: start` on the popup surface.
+ *
  *
  * ```ts
  * export class TecPopover extends TectonElement {
  *   static styles = [hostStyles, popupStyles, animationStyles, popupMotion(".content"), styles]
  *   @property({ type: Boolean, reflect: true }) open = false
- *   @property({ reflect: true }) side: PopupSide = "bottom"
- *   @property({ reflect: true }) align: PopupAlign = "center"
+ *   @property() side: PopupSide = "bottom"      // not reflected — see the note on `align` below
+ *   @property() align: PopupAlign = "center"
  *   @property({ type: Number, attribute: "side-offset" }) sideOffset = 4
  *
  *   #popup = new PopupController(this, {

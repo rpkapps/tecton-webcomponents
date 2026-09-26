@@ -133,6 +133,11 @@ Rules:
   only (`attribute: false`).
 - Boolean attributes are false by default (`hide-close`, never `show-close="false"`).
 - Reflect `variant`, `size`, `open`, `disabled`, `invalid`, `orientation` (they drive styling).
+- **Don't reflect (or rely on) attribute names that are legacy presentational hints**: an `align`
+  attribute becomes `text-align` in Chrome even on custom elements (`align="center"` centres all the
+  content). Popups accept `side`/`align` but don't reflect them (style by the popup's `data-side`), and
+  their surface sets `text-align: start`. Likewise avoid reflecting `width`, `height`, `border`,
+  `bgcolor`, `valign`, `nowrap`.
 - Events fire only for **user** interaction, never for programmatic property changes (same as native).
 - Event names are not added to the global `HTMLElementEventMap` per component (declarations would
   clash); document them with `@fires`.
@@ -428,7 +433,7 @@ export class TecInput extends FormControlMixin(TectonElement) {
   control:
 
   ```ts
-  protected override get validators() {
+  protected override get validators(): Validator<TecSelect>[] {
     return [requiredValidator<TecSelect>((el) => !el.value, "select")]  // localized "Please select an item…"
   }
   ```
@@ -448,8 +453,8 @@ Render the surface in the shadow root with `popover="manual"`; keep `open` on th
 static styles = [hostStyles, popupStyles, animationStyles, popupMotion(".content"), styles]
 
 @property({ type: Boolean, reflect: true }) open = false
-@property({ reflect: true }) side: PopupSide = "bottom"
-@property({ reflect: true }) align: PopupAlign = "start"
+@property() side: PopupSide = "bottom"     // don't reflect side/align (below)
+@property() align: PopupAlign = "start"
 @property({ type: Number, attribute: "side-offset" }) sideOffset = 4
 
 #popup = new PopupController(this, {

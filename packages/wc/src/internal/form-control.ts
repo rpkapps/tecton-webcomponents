@@ -24,7 +24,7 @@
  * | `name`, `disabled`, `required`, `invalid` | reflected attributes |
  * | `value` / `defaultValue` | native `<input>` model: the `value` **attribute** is the default (`defaultValue`), the `value` **property** is the current value; until the property is set it follows the attribute; form reset returns to the attribute |
  * | `isDisabled` | `disabled` or disabled by a `<fieldset>` — use it in `render()`; style with `:host(:disabled)` |
- * | `showInvalid` | whether to *display* invalidity (`invalid` attribute, or constraint failure after user interaction or a submit attempt — the `:user-invalid` model). Also exposed as `:state(user-invalid)`; `aria-invalid` is set on the `formControl` for you |
+ * | `showInvalid` | whether to *display* invalidity (`invalid` attribute, or constraint failure after user interaction or a submit attempt — the `:user-invalid` model). Validity is computed after each render, so style it with `:state(user-invalid)` (always current) rather than reading `showInvalid` in `render()`; `aria-invalid` is set on the `formControl` for you |
  * | `checkValidity()`, `reportValidity()`, `setCustomValidity()`, `validity`, `validationMessage`, `willValidate`, `form`, `labels` | native API |
  * | `redispatchChange(e)` | re-fires the inner control's (non-composed) `change` event from the host |
  *
@@ -147,7 +147,8 @@ export declare class FormControl {
   syncFormState(): void
   protected formDisabled: boolean
   protected get formControl(): HTMLElement | null
-  protected get validators(): Validator[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected get validators(): Validator<any>[]
   protected formValue(): FormValue
   protected formState(): FormValue
   protected formResetValue(): void
@@ -201,7 +202,6 @@ export function FormControlMixin<T extends Constructor<TectonElement>>(Base: T) 
 
     @state() private _interacted = false
     #customMessage = ""
-    #lastShown = false
     #silentCheck = false
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -223,7 +223,9 @@ export function FormControlMixin<T extends Constructor<TectonElement>>(Base: T) 
     protected get formControl(): HTMLElement | null {
       return null
     }
-    protected get validators(): Validator[] {
+    /** Custom validators, run when the `formControl` (if any) is valid. Typed loosely so subclasses can return `Validator<TheirClass>[]`. */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    protected get validators(): Validator<any>[] {
       return []
     }
     protected formValue(): FormValue {
@@ -294,13 +296,16 @@ export function FormControlMixin<T extends Constructor<TectonElement>>(Base: T) 
     }
 
     // ---------------------------------------------------------------- form callbacks
+    /** @internal */
     formResetCallback(): void {
       this.formResetValue()
       this._interacted = false
     }
+    /** @internal */
     formDisabledCallback(disabled: boolean): void {
       this.formDisabled = disabled
     }
+    /** @internal */
     formStateRestoreCallback(state: FormValue, reason: "restore" | "autocomplete"): void {
       this.formRestoreState(state, reason)
     }
@@ -311,6 +316,7 @@ export function FormControlMixin<T extends Constructor<TectonElement>>(Base: T) 
       this.syncFormState()
     }
 
+    /** Re-syncs the submitted value and validity now (runs after every update). */
     syncFormState(): void {
       this.internals.setFormValue(this.formValue(), this.formState())
       const control = this.formControl as (HTMLElement & Partial<Pick<HTMLInputElement, "validity" | "validationMessage" | "willValidate">>) | null
@@ -348,11 +354,6 @@ export function FormControlMixin<T extends Constructor<TectonElement>>(Base: T) 
       if (control) {
         if (show) control.setAttribute("aria-invalid", "true")
         else control.removeAttribute("aria-invalid")
-      }
-      // Validity is only known after render; re-render once when the displayed state flips.
-      if (show !== this.#lastShown) {
-        this.#lastShown = show
-        this.requestUpdate()
       }
     }
   }

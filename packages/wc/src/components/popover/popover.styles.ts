@@ -17,6 +17,7 @@ export const popoverStyles = css`
     font-family: var(--tec-font-sans);
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
+    text-align: start;
     box-shadow:
       0 0 0 1px color-mix(in oklab, var(--tec-foreground) 10%, transparent),
       var(--tec-shadow-md);

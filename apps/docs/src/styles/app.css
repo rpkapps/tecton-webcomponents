@@ -13,11 +13,9 @@
 @layer theme, tecton-base, base, components, utilities;
 
 @import "tailwindcss";
-/* TODO(packaging): switch to "@tecton/wc/tecton.css", "@tecton/wc/tailwind.css" and
-   "@tecton/wc/fonts.css" once the package exports them. */
-@import "../../node_modules/@tecton/wc/src/styles/tecton.css";
-@import "../../node_modules/@tecton/wc/src/styles/tailwind.css";
-@import "../../node_modules/@tecton/wc/src/utilities/tailwind-utilities.css";
+@import "@tecton/wc/tecton.css";
+@import "@tecton/wc/tailwind.css";
+@import "@tecton/wc/tailwind-utilities.css";
 @import "@fontsource/figtree/400.css";
 @import "@fontsource/figtree/500.css";
 @import "@fontsource/figtree/600.css";
