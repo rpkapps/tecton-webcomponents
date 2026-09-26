@@ -37,9 +37,11 @@
       </div>
     </dl>
     <tec-tabs value="design">
-      <tec-tab value="design">Design</tec-tab>
-      <tec-tab value="risk">Risk</tec-tab>
-      <tec-tab-panel value="design">
+      <tec-tabs-list>
+        <tec-tabs-trigger value="design">Design</tec-tabs-trigger>
+        <tec-tabs-trigger value="risk">Risk</tec-tabs-trigger>
+      </tec-tabs-list>
+      <tec-tabs-content value="design">
         <div class="flex flex-col gap-4 pt-3">
           <tec-slider value="64" min="0" max="100" aria-label="Variogram range"></tec-slider>
           <div class="flex items-center gap-3">
@@ -53,10 +55,10 @@
             <tec-switch checked>Auto-update</tec-switch>
           </div>
         </div>
-      </tec-tab-panel>
-      <tec-tab-panel value="risk">
+      </tec-tabs-content>
+      <tec-tabs-content value="risk">
         <p class="pt-3 text-sm text-muted-foreground">Risk 68 %, complexity 35 %.</p>
-      </tec-tab-panel>
+      </tec-tabs-content>
     </tec-tabs>
     <tec-alert variant="warning" appearance="outline">
       <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
