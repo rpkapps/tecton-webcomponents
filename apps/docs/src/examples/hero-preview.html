@@ -43,22 +43,26 @@
         <tec-tabs-trigger value="design">Design</tec-tabs-trigger>
         <tec-tabs-trigger value="risk">Risk</tec-tabs-trigger>
       </tec-tabs-list>
-      <tec-tabs-content value="design" class="flex flex-col gap-4 pt-3">
-        <tec-slider value="64" min="0" max="100" aria-label="Variogram range"></tec-slider>
-        <div class="flex items-center gap-3">
-          <tec-input class="flex-1" placeholder="Search horizons…" aria-label="Search"></tec-input>
-          <tec-button variant="outline" size="icon" aria-label="Search">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
-          </tec-button>
-        </div>
-        <div class="flex items-center gap-6 text-sm">
-          <tec-checkbox>Show hidden items</tec-checkbox>
-          <tec-switch checked>Auto-update</tec-switch>
+      <tec-tabs-content value="design">
+        <div class="flex flex-col gap-4 pt-3">
+          <tec-slider value="64" min="0" max="100" aria-label="Variogram range"></tec-slider>
+          <div class="flex items-center gap-3">
+            <tec-input class="flex-1" placeholder="Search horizons…" aria-label="Search"></tec-input>
+            <tec-button variant="outline" size="icon" aria-label="Search">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+            </tec-button>
+          </div>
+          <div class="flex items-center gap-6 text-sm">
+            <tec-checkbox>Show hidden items</tec-checkbox>
+            <tec-switch checked>Auto-update</tec-switch>
+          </div>
         </div>
       </tec-tabs-content>
-      <tec-tabs-content value="risk" class="flex flex-col gap-3 pt-3">
-        <tec-meter label="Risk" value="68" color="auto" show-value></tec-meter>
-        <tec-meter label="Complexity" value="35" color="auto" show-value></tec-meter>
+      <tec-tabs-content value="risk">
+        <div class="flex flex-col gap-3 pt-3">
+          <tec-meter label="Risk" value="68" color="auto" show-value></tec-meter>
+          <tec-meter label="Complexity" value="35" color="auto" show-value></tec-meter>
+        </div>
       </tec-tabs-content>
     </tec-tabs>
     <tec-alert variant="warning" appearance="outline">
