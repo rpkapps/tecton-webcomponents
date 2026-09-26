@@ -11,7 +11,7 @@
 // --shiki-light or --shiki-dark from the page's mode.
 import { iconHast } from "./icons.mjs"
 
-export const SHIKI_THEMES = { light: "github-light", dark: "github-dark-dimmed" }
+export const SHIKI_THEMES = { light: "github-light-high-contrast", dark: "github-dark-dimmed" }
 
 export const SHIKI_LANGS = ["html", "ts", "tsx", "js", "jsx", "css", "bash", "json", "vue", "svelte", "angular-html", "diff", "ini"]
 
