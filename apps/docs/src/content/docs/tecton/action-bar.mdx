@@ -1,0 +1,232 @@
+---
+title: Action Bar
+description: "A transient bar for acting on a selection or on unsaved changes: a summary, then actions that collapse into a More menu as the bar narrows."
+tags: ["tec-action-bar", "tec-action-bar-selection", "tec-action-bar-message", "tec-action-bar-actions"]
+---
+
+<ComponentPreview name="action-bar-demo" align="start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/action-bar"
+```
+
+```html
+<tec-action-bar aria-label="Selected wells">
+  <tec-action-bar-selection count="12" total="340" clearable></tec-action-bar-selection>
+  <tec-action-bar-actions aria-label="Selection actions">
+    <tec-overflow-item value="tag">
+      <tec-button variant="outline" size="sm">
+        <svg slot="start" aria-hidden="true">…</svg>
+        <tec-overflow-label>Add tag</tec-overflow-label>
+      </tec-button>
+    </tec-overflow-item>
+    <tec-button size="sm">Assign</tec-button>
+  </tec-action-bar-actions>
+</tec-action-bar>
+```
+
+```js
+bar.hidden = selected.size === 0
+selection.count = selected.size
+bar.addEventListener("tec-clear", clearSelection)   // the Clear button
+bar.addEventListener("tec-dismiss", clearSelection) // Escape inside the bar
+```
+
+Show the bar while there is something to act on and hide it with the `hidden` attribute otherwise; it plays a short enter transition each time it appears. Everything in `<tec-action-bar-actions>` is an [Overflow](/docs/tecton/overflow) toolbar: wrap the actions that may leave in `<tec-overflow-item>` and leave the primary action bare so it never does.
+
+## Composition
+
+```text
+tec-action-bar
+├── tec-action-bar-selection | tec-action-bar-message
+└── tec-action-bar-actions (an overflow toolbar)
+    ├── tec-overflow-item …
+    ├── tec-overflow-divider
+    └── tec-button (fixed)
+```
+
+## Placement
+
+`placement="toolbar"` (the default) fills the row a table toolbar normally occupies: show it in place of the search and filter controls while something is selected, as the first example does.
+
+`placement="floating"` is a sticky card at the bottom of its scroll container. It stays inside the panel, not the viewport, so the bar keeps its width and its container queries.
+
+<ComponentPreview name="action-bar-floating" align="start" />
+
+## Unsaved changes
+
+The same bar with a `<tec-action-bar-message>` instead of a selection.
+
+<ComponentPreview name="action-bar-message" align="start" />
+
+## Collapse order
+
+The actions overflow by the [Overflow](/docs/tecton/overflow) rules first, then the summary compacts with container queries on the bar:
+
+| Width of the bar | Selection summary |
+| --- | --- |
+| Wide | 12 of 340 selected · Clear |
+| Below 32rem | 12 selected · Clear |
+| Below 24rem | count badge and an X button |
+
+A visually hidden polite live region always announces the full text ("12 of 340 wells selected"). It is filled a moment after the bar appears and after each change, so the first selection is announced too (a screen reader ignores a live region that appears with its content already in it) and a burst of selection changes is announced once.
+
+## RTL
+
+<ComponentPreview name="action-bar-rtl" direction="rtl" align="start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves into the bar: the Clear button, then the actions toolbar (one tab stop)."],
+    ["ArrowRight / ArrowLeft", "Moves between the visible actions and the More button (mirrored in RTL)."],
+    ["Home / End", "Moves to the first action / the More button."],
+    ["Escape", "Fires `tec-dismiss` while focus is inside the bar. An open More menu closes first."],
+  ]}
+/>
+
+## Accessibility
+
+- The bar is a `region` landmark: give it an `aria-label` ("Selected wells").
+- `<tec-action-bar-actions>` is a `toolbar` named "Actions" unless you give it an `aria-label`.
+- The visible summary is hidden from assistive technology; the live region speaks the full text at every width. The compact Clear button is named by `clear-label` ("Clear selection").
+- The bar is a dismiss layer only while focus is inside it: menus opened from it take Escape first, and Escape elsewhere on the page is not the bar's.
+- When the bar is hidden while it holds focus, move focus back to the table or form it acts on.
+
+## API Reference
+
+<ApiReference tags={["tec-action-bar", "tec-action-bar-selection", "tec-action-bar-message", "tec-action-bar-actions"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Rows are selected in a table or list and the actions apply to that selection.
+- A form has unsaved changes and needs Save or Discard without moving the page.
+- The bar should exist only while there is something to act on, then disappear.
+
+### Not for
+
+- a permanent row of page actions: use [Button Group](/docs/components/button-group)
+- a transient confirmation that carries no actions: use [Toast](/docs/components/sonner)
+- a list of actions behind a single button: use [Dropdown Menu](/docs/components/dropdown-menu)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Show it with `hidden` removed while there is something to act on, and handle `tec-dismiss` (Escape) and `tec-clear`.
+
+</Do>
+
+<Do>
+
+Give it an `aria-label`; it is a `region` landmark.
+
+</Do>
+
+<Do>
+
+Summarise with `<tec-action-bar-selection>` (`count`, `total`, `label`, `clearable`) or with `<tec-action-bar-message>`.
+
+</Do>
+
+<Do>
+
+Put the actions in `<tec-action-bar-actions>`, wrapping collapsible ones in `<tec-overflow-item>` and leaving the primary action bare.
+
+</Do>
+
+<Do>
+
+Choose `placement="toolbar"` to fill a table's toolbar row and `"floating"` for a sticky card inside the scroll container.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A hand-written selection summary and Clear button">
+
+<Wrong>
+
+```html
+<tec-action-bar aria-label="Selected wells">
+  <span>12 of 340 selected</span>
+  <tec-button variant="ghost" size="sm">Clear</tec-button>
+</tec-action-bar>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-action-bar aria-label="Selected wells">
+  <tec-action-bar-selection count="12" total="340" label="wells" clearable></tec-action-bar-selection>
+</tec-action-bar>
+```
+
+</Correct>
+
+`<tec-action-bar-selection>` carries the visually hidden live announcement and the container queries that compact the text to "12 selected" and then to a count badge; a plain span announces nothing and overflows as the bar narrows.
+
+</Dont>
+
+<Dont severity="HIGH" title="Bare buttons inside the actions toolbar">
+
+<Wrong>
+
+```html
+<tec-action-bar-actions aria-label="Selection actions">
+  <tec-button variant="outline" size="sm"><svg slot="start">…</svg>Add tag</tec-button>
+  <tec-button size="sm">Assign</tec-button>
+</tec-action-bar-actions>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-action-bar-actions aria-label="Selection actions">
+  <tec-overflow-item value="tag">
+    <tec-button variant="outline" size="sm"><svg slot="start">…</svg><tec-overflow-label>Add tag</tec-overflow-label></tec-button>
+  </tec-overflow-item>
+  <tec-button size="sm">Assign</tec-button>
+</tec-action-bar-actions>
+```
+
+</Correct>
+
+Only a `<tec-overflow-item>` can be measured and moved into the More menu, so unwrapped actions never collapse and the row wraps instead.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A floating bar sized with w-fit">
+
+<Wrong>
+
+```html
+<tec-action-bar placement="floating" class="mx-auto w-fit" aria-label="Selected documents">…</tec-action-bar>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-action-bar placement="floating" class="mx-auto max-w-md" aria-label="Selected documents">…</tec-action-bar>
+```
+
+</Correct>
+
+The bar is its own size container, so a fit-content inline size resolves from its padding alone: the toolbar measures no room and collapses every action into the More menu.
+
+</Dont>

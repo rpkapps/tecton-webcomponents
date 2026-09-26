@@ -220,6 +220,12 @@ export class TecCombobox extends FormControlMixin(TectonElement) {
     this.open = false
   }
 
+  /** Focuses the input (not the chips' remove buttons, which come first in the shadow root). */
+  override focus(options?: FocusOptions): void {
+    if (this._input) this._input.focus(options)
+    else super.focus(options)
+  }
+
   /** Selects the input text. */
   select(): void {
     this._input?.select()

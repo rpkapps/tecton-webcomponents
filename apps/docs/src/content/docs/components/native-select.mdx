@@ -1,0 +1,166 @@
+---
+title: Native Select
+description: The browser's own select, styled as a Tecton field — native picker, keyboard and typeahead, form-associated.
+tags: ["tec-native-select"]
+---
+
+<ComponentPreview name="native-select-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/native-select"
+```
+
+```html
+<tec-native-select name="status" aria-label="Status">
+  <option value="">Select status</option>
+  <option value="todo">Todo</option>
+  <option value="done">Done</option>
+</tec-native-select>
+```
+
+The options are plain `<option>` and `<optgroup>` children. They are mirrored into a native `<select>` in the shadow root and kept in sync when you add, remove or edit them. The default value is the `value` attribute, else the `selected` option, else the first enabled option — like a native select.
+
+## Groups
+
+Group options with `<optgroup label="…">`.
+
+<ComponentPreview name="native-select-groups" />
+
+## Disabled
+
+<ComponentPreview name="native-select-disabled" />
+
+## Invalid
+
+`invalid` shows the error state; `required` fails while the empty placeholder option is selected.
+
+<ComponentPreview name="native-select-invalid" />
+
+## Field
+
+In a [`tec-field`](/docs/components/field) the select gets its label, description and error message wired automatically.
+
+<ComponentPreview name="native-select-field" />
+
+## RTL
+
+The chevron sits at the inline end, so it moves to the left in right-to-left layouts.
+
+<ComponentPreview name="native-select-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space / Enter / Alt+ArrowDown", "Opens the browser's picker."],
+    ["ArrowUp / ArrowDown", "Selects the previous / next option (opens the picker on some platforms)."],
+    ["Home / End", "Selects the first / last option."],
+    ["Type a character", "Selects the next option starting with it."],
+  ]}
+/>
+
+## Accessibility
+
+- A native `<select>` in the shadow root is what assistive technology sees; its picker is the operating system's own.
+- Name it with a `tec-field-label`, `<tec-label for>`, `<label for>`, the `label` attribute or `aria-label`.
+- An empty `<option value="">` is the placeholder; with `required` it keeps the form from submitting until the user chooses.
+
+## API Reference
+
+<ApiReference tags={["tec-native-select"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- You want the platform's own dropdown: native keyboard behaviour and the mobile wheel, with no popover.
+- The row is dense and the options are plain text, with no icons or descriptions.
+
+### Not for
+
+- a themed popover with icons, rich items or a searchable list: use [Select](/docs/components/select)
+- typing to narrow a long list: use [Combobox](/docs/components/combobox)
+- two to five options that all stay visible: use [Radio Group](/docs/components/radio-group)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Treat it as a select: the `value` property, `input` / `change` events, `disabled`, `required`, `name`.
+
+</Do>
+
+<Do>
+
+Make the first option an empty-valued row when you need a placeholder.
+
+</Do>
+
+<Do>
+
+Group options with `<optgroup label="…">`.
+
+</Do>
+
+<Do>
+
+Signal errors with `invalid` (or `required`) on the select; a surrounding `tec-field` follows it.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="MEDIUM" title="Passing a native row count to size">
+
+<Wrong>
+
+```html
+<tec-native-select size="5">…</tec-native-select>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-native-select size="sm">…</tec-native-select>
+```
+
+</Correct>
+
+`size` is the Tecton height (`sm` or `default`), not the native row count; a list box that shows several rows is not what this component draws.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A placeholder attribute instead of an empty option">
+
+<Wrong>
+
+```html
+<tec-native-select placeholder="Select status">
+  <option value="todo">Todo</option>
+</tec-native-select>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-native-select>
+  <option value="">Select status</option>
+  <option value="todo">Todo</option>
+</tec-native-select>
+```
+
+</Correct>
+
+A select has no placeholder attribute, so it would silently show the first real option as if it had been chosen.
+
+</Dont>

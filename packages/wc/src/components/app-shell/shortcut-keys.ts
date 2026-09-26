@@ -97,6 +97,9 @@ export const shortcutKeysStyles = css`
     align-items: center;
   }
   .caps {
+    /* Key chords read left to right in every script (Ctrl + K). */
+    direction: ltr;
+    unicode-bidi: isolate;
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;

@@ -1,0 +1,239 @@
+---
+title: Collapsible
+description: An interactive component which expands/collapses a panel.
+tags: ["tec-collapsible", "tec-collapsible-trigger", "tec-collapsible-content"]
+---
+
+<ComponentPreview name="collapsible-demo" align="start" class="items-start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/collapsible"
+```
+
+```html
+<tec-collapsible>
+  <tec-button slot="trigger" variant="ghost">Can I use this in my project?</tec-button>
+  <tec-collapsible-content>
+    Yes. Free to use for personal and commercial projects. No attribution required.
+  </tec-collapsible-content>
+</tec-collapsible>
+```
+
+The element itself has no styling: use `class` on it for layout (`flex flex-col gap-2`).
+
+## Composition
+
+```text
+tec-collapsible
+├── trigger: a button with slot="trigger", or any button wrapped in tec-collapsible-trigger
+└── tec-collapsible-content
+```
+
+## Trigger
+
+There are two ways to provide the button that toggles the content:
+
+- a **direct child with `slot="trigger"`** — rendered before everything else;
+- any button **wrapped in `<tec-collapsible-trigger>`**, anywhere inside the collapsible — inside a header row, or after the content as in the demo above.
+
+The collapsible sets `aria-expanded` and `aria-controls` on that button, disables it while the collapsible is `disabled`, and toggles on its `click` (pointer, <Kbd>Enter</Kbd>, <Kbd>Space</Kbd>). With only text inside, `<tec-collapsible-trigger>` renders an unstyled native `<button>` (its `base` part).
+
+```html
+<tec-collapsible>
+  <tec-collapsible-trigger>Show details</tec-collapsible-trigger>
+  <tec-collapsible-content>…</tec-collapsible-content>
+</tec-collapsible>
+```
+
+## State and events
+
+`open` is the state (attribute and property). `show()`, `hide()` and `toggle()` change it from code without an event. When the user toggles it, the cancelable `tec-open-change` event fires with `detail.open` and `detail.reason` (`"trigger"`, or `"find"` when find-in-page reveals collapsed text).
+
+```js
+collapsible.addEventListener("tec-open-change", (event) => {
+  if (!event.detail.open && form.dirty) event.preventDefault() // keep it open
+})
+```
+
+Style anything by the state with `tec-collapsible[open]`, e.g. a chevron: `class="[tec-collapsible[open]_&]:rotate-90"`.
+
+## Settings Panel
+
+Use a trigger button to reveal additional settings.
+
+<ComponentPreview name="collapsible-settings" />
+
+## File Tree
+
+Use nested collapsibles to build a file tree. Each folder is a collapsible whose `slot="trigger"` button rotates its chevron by the `open` attribute. For a real hierarchy with arrow-key navigation, use [Tree View](/docs/tecton/tree-view).
+
+<ComponentPreview name="collapsible-file-tree" class="h-[36rem] items-start" />
+
+## Animation
+
+`<tec-collapsible-content>` animates its height when it expands and collapses (200 ms, not under `prefers-reduced-motion: reduce`). While collapsed it stays in the document with `hidden="until-found"`: it takes no space and is not announced, but find-in-page searches it and expands the collapsible on a match.
+
+## RTL
+
+<ComponentPreview name="collapsible-rtl" direction="rtl" align="start" class="items-start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Enter / Space", "Expands or collapses the content (on the trigger button)."],
+    ["Tab / Shift+Tab", "Moves to the next / previous focusable element; content of a collapsed panel is skipped."],
+  ]}
+/>
+
+## Accessibility
+
+- Follows the WAI-ARIA disclosure pattern: the trigger is a button with `aria-expanded` and `aria-controls`; the content is a `group` named by the trigger.
+- Give an icon-only trigger an `aria-label` that says what it reveals ("Toggle details"), not the icon's name.
+- Collapsed content is hidden from assistive technology and from the tab order.
+- Keep the trigger where it is when the content opens, so focus and reading position stay put.
+
+## API Reference
+
+<ApiReference tags={["tec-collapsible", "tec-collapsible-trigger", "tec-collapsible-content"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- One region shows more detail on demand: advanced settings, a row's sub-fields, a long log.
+- The control that toggles it is already on the page and stays where it is.
+- Nothing else collapses with it — a second collapsible next to the first is an [Accordion](/docs/components/accordion).
+
+### Not for
+
+- several stacked sections with one open at a time: use [Accordion](/docs/components/accordion)
+- a panel that slides in over the page and is dismissed: use [Sheet](/docs/components/sheet)
+- short content anchored to the control that opened it: use [Popover](/docs/components/popover)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Read and set the state with `open`; listen to `tec-open-change` for user toggles.
+
+</Do>
+
+<Do>
+
+Style the trigger by using a [`<tec-button>`](/docs/components/button) as it (`slot="trigger"`, or wrapped in `<tec-collapsible-trigger>`); the bare trigger is unstyled.
+
+</Do>
+
+<Do>
+
+Keep the revealed markup inside `<tec-collapsible-content>`: it is the region the trigger's `aria-expanded` and `aria-controls` refer to.
+
+</Do>
+
+<Do>
+
+Show a short paragraph or a few fields directly; use a collapsible only when hidden content would push the main content out of view.
+
+</Do>
+
+<Do>
+
+Start it open (`open`) when its content is needed on first view; collapse only secondary detail.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Hiding the region yourself">
+
+<Wrong>
+
+```html
+<tec-collapsible>
+  <tec-button slot="trigger">Details</tec-button>
+  <div class="hidden [tec-collapsible[open]_&]:block">…</div>
+</tec-collapsible>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-collapsible>
+  <tec-button slot="trigger">Details</tec-button>
+  <tec-collapsible-content>…</tec-collapsible-content>
+</tec-collapsible>
+```
+
+</Correct>
+
+Without `<tec-collapsible-content>` the trigger's `aria-controls` points at nothing, the region is not a named group, find-in-page cannot reveal it and nothing animates.
+
+</Dont>
+
+<Dont severity="HIGH" title="A trigger with its own click handler">
+
+<Wrong>
+
+```html
+<tec-collapsible id="details">
+  <tec-button onclick="details.open = !details.open">Details</tec-button>
+  <tec-collapsible-content>…</tec-collapsible-content>
+</tec-collapsible>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-collapsible>
+  <tec-button slot="trigger">Details</tec-button>
+  <tec-collapsible-content>…</tec-collapsible-content>
+</tec-collapsible>
+```
+
+</Correct>
+
+A button that is not the trigger gets no `aria-expanded` or `aria-controls`, so assistive technology cannot tell it opens anything; `tec-open-change` never fires.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A trigger nested in a wrapper without tec-collapsible-trigger">
+
+<Wrong>
+
+```html
+<tec-collapsible>
+  <div class="flex justify-between"><h4>Order</h4><tec-button slot="trigger">Toggle</tec-button></div>
+  <tec-collapsible-content>…</tec-collapsible-content>
+</tec-collapsible>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-collapsible>
+  <div class="flex justify-between">
+    <h4>Order</h4>
+    <tec-collapsible-trigger><tec-button>Toggle</tec-button></tec-collapsible-trigger>
+  </div>
+  <tec-collapsible-content>…</tec-collapsible-content>
+</tec-collapsible>
+```
+
+</Correct>
+
+`slot="trigger"` only works on a direct child of `<tec-collapsible>`; deeper, it is an inert attribute and the button toggles nothing.
+
+</Dont>

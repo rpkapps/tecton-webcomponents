@@ -1,5 +1,15 @@
 <div class="h-[28rem] w-full overflow-hidden rounded-lg border border-border [contain:layout]">
   <tec-sidebar-provider class="h-full min-h-0" persist="none" shortcut="">
+    <tec-sidebar-inset>
+      <header class="flex h-12 shrink-0 items-center gap-2 border-b border-border-subtle px-3">
+        <tec-sidebar-trigger class="-ms-1"></tec-sidebar-trigger>
+        <span class="text-sm font-medium">Right side</span>
+      </header>
+      <div class="flex flex-1 flex-col gap-4 p-4">
+        <div class="aspect-video rounded-lg bg-muted/50"></div>
+        <div class="min-h-24 flex-1 rounded-lg bg-muted/50"></div>
+      </div>
+    </tec-sidebar-inset>
     <tec-sidebar side="right">
       <tec-sidebar-header>
         <div class="flex h-8 items-center gap-2 px-2 text-sm font-medium"><svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span class="truncate">Gullfaks</span></div>
@@ -33,15 +43,5 @@
       </tec-sidebar-footer>
       <tec-sidebar-rail></tec-sidebar-rail>
     </tec-sidebar>
-    <tec-sidebar-inset>
-      <header class="flex h-12 shrink-0 items-center gap-2 border-b border-border-subtle px-3">
-        <tec-sidebar-trigger class="-ms-1"></tec-sidebar-trigger>
-        <span class="text-sm font-medium">Right side</span>
-      </header>
-      <div class="flex flex-1 flex-col gap-4 p-4">
-        <div class="aspect-video rounded-lg bg-muted/50"></div>
-        <div class="min-h-24 flex-1 rounded-lg bg-muted/50"></div>
-      </div>
-    </tec-sidebar-inset>
   </tec-sidebar-provider>
 </div>

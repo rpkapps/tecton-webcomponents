@@ -1,0 +1,172 @@
+---
+title: Hover Card
+description: A popover that appears on hover, focus, or long press to preview content available behind a link.
+tags: ["tec-hover-card"]
+---
+
+<ComponentPreview name="hover-card-demo" class="min-h-80" />
+
+## Usage
+
+```ts
+import "@tecton/wc/hover-card"
+```
+
+```html
+<tec-hover-card>
+  <tec-button slot="trigger" variant="link">Hover</tec-button>
+  Web components for the Tecton design system.
+</tec-hover-card>
+```
+
+## Composition
+
+```text
+tec-hover-card
+├── tec-button slot="trigger" (or a link)
+└── (card content)
+```
+
+## Trigger Delays
+
+Use `delay` and `close-delay` to control when the card opens and closes (defaults: `600` and `200` ms). Keyboard focus opens it after the same delay, so tabbing quickly through a page does not open every preview.
+
+```html
+<tec-hover-card delay="100" close-delay="200">
+  <tec-button slot="trigger" variant="link">Hover</tec-button>
+  Content
+</tec-hover-card>
+```
+
+## Positioning
+
+Use `side` to control the placement: `bottom` (default), `top`, `left`, `right`, or the logical `inline-start` / `inline-end`. `align`, `side-offset` and `align-offset` fine-tune it; set the width with `--tec-hover-card-width` (default `16rem`).
+
+```html
+<tec-hover-card side="top">…</tec-hover-card>
+```
+
+## Sides
+
+<ComponentPreview name="hover-card-sides" class="min-h-[22rem]" />
+
+## RTL
+
+<ComponentPreview name="hover-card-rtl" direction="rtl" class="min-h-80" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Focusing the trigger with the keyboard opens the card after the delay. While it is open, Tab moves into the card when it holds focusable content."],
+    ["Shift+Tab", "Moves focus back; the card closes once focus leaves both the trigger and the card."],
+    ["Esc", "Closes the card and returns focus to the trigger."],
+  ]}
+/>
+
+## Accessibility
+
+- The trigger gets `aria-haspopup="dialog"` and `aria-expanded`; while the card is open it is also the trigger's description (ARIA element reflection).
+- The card is a non-modal `role="dialog"` in the top layer, named after the trigger (or `label`). Focus stays on the trigger when it opens.
+- It stays open while the pointer travels between the trigger and the card, and while keyboard focus is in either. On touch screens a long press opens it and moves focus into it.
+- A hover card is a preview: everything in it must be reachable another way (usually by following the link).
+
+## API Reference
+
+<ApiReference tags={["tec-hover-card"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A link or a name in running text has more behind it: a person, a well, a document.
+- The extra detail is a courtesy — the user can reach the same content by following the link.
+- It is a preview, not a control panel: nothing inside it is the only way to do something.
+
+### Not for
+
+- a short label on a control: use [Tooltip](/docs/components/tooltip)
+- content the user opens deliberately and works in: use [Popover](/docs/components/popover)
+- a row of a list with media, title and actions: use [Item](/docs/components/item)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the trigger in `slot="trigger"` and the preview in the default slot; the card opens on hover, keyboard focus and long press.
+
+</Do>
+
+<Do>
+
+Tune the timing with `delay` and `close-delay` — the defaults are 600 ms and 200 ms.
+
+</Do>
+
+<Do>
+
+Position with `side`, and set the width with `--tec-hover-card-width` only.
+
+</Do>
+
+<Do>
+
+Make the trigger something the keyboard can reach — a `tec-button variant="link"` or a link — so focus can open the card.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Labelling an icon button with a hover card">
+
+<Wrong>
+
+```html
+<tec-hover-card>
+  <tec-button slot="trigger" variant="ghost" size="icon-sm"><svg>…</svg></tec-button>
+  Reservoir pressure, measured 2025-03-14.
+</tec-hover-card>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-tooltip>
+  <tec-button slot="trigger" variant="ghost" size="icon-sm" aria-label="About this reading"><svg>…</svg></tec-button>
+  Reservoir pressure, measured 2025-03-14.
+</tec-tooltip>
+```
+
+</Correct>
+
+The hover card only describes the trigger while it is open, so the icon button still reaches a screen reader with no accessible name.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Radix open-delay on the card">
+
+<Wrong>
+
+```html
+<tec-hover-card open-delay="100" close-delay="200">…</tec-hover-card>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-hover-card delay="100" close-delay="200">…</tec-hover-card>
+```
+
+</Correct>
+
+The open delay is named `delay`; an unknown `open-delay` attribute is ignored and the card keeps waiting the default 600 ms, which reads as the hover card being broken.
+
+</Dont>

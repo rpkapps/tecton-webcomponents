@@ -1,0 +1,21 @@
+<div id="input-otp-controlled" class="flex flex-col items-center gap-2">
+  <tec-input-otp maxlength="6" aria-label="One-time password">
+    <tec-input-otp-group>
+      <tec-input-otp-slot></tec-input-otp-slot>
+      <tec-input-otp-slot></tec-input-otp-slot>
+      <tec-input-otp-slot></tec-input-otp-slot>
+      <tec-input-otp-slot></tec-input-otp-slot>
+      <tec-input-otp-slot></tec-input-otp-slot>
+      <tec-input-otp-slot></tec-input-otp-slot>
+    </tec-input-otp-group>
+  </tec-input-otp>
+  <div class="text-center text-sm" aria-live="polite">Enter your one-time password.</div>
+</div>
+<script type="module">
+  const root = document.getElementById("input-otp-controlled")
+  const otp = root.querySelector("tec-input-otp")
+  const output = root.querySelector("[aria-live]")
+  otp.addEventListener("input", () => {
+    output.textContent = otp.value === "" ? "Enter your one-time password." : `You entered: ${otp.value}`
+  })
+</script>

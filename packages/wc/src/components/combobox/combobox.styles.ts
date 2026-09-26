@@ -137,10 +137,6 @@ export const comboboxStyles = css`
     border-color: var(--tec-ring);
     box-shadow: var(--tec-focus-ring);
   }
-  .icon-button[aria-expanded="true"] {
-    background-color: var(--tec-ghost-active);
-    color: var(--tec-ghost-active-foreground);
-  }
   .icon-button:disabled {
     pointer-events: none;
     opacity: 0.5;

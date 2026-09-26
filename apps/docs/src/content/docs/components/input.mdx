@@ -1,0 +1,282 @@
+---
+title: Input
+description: A text input for forms and data entry, form-associated, with the Tecton outline, filled and text surfaces.
+tags: ["tec-input"]
+---
+
+<ComponentPreview name="input-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/input"
+```
+
+```html
+<tec-input name="well" placeholder="34/10-A-12" aria-label="Well name"></tec-input>
+```
+
+`<tec-input>` renders a native `<input>` in its shadow root and takes the native attributes — `type`, `placeholder`, `min`, `max`, `step`, `minlength`, `maxlength`, `pattern`, `autocomplete`, `inputmode`, `readonly`, `multiple`, `accept` — and methods (`select()`, `setSelectionRange()`, `stepUp()`, `valueAsNumber` …). It is a form-associated custom element: see [Forms](/docs/forms).
+
+## Basic
+
+<ComponentPreview name="input-basic" />
+
+## Field
+
+Compose the input in a [`<tec-field>`](/docs/components/field) with a `tec-field-label` and a `tec-field-description`: the field names and describes the input for you — no ids needed.
+
+<ComponentPreview name="input-field" />
+
+## Field Group
+
+Use `tec-field-group` to stack several fields and build forms.
+
+<ComponentPreview name="input-fieldgroup" />
+
+## Disabled
+
+`disabled` disables the input: it leaves the tab order and the form data. The field around it dims its label by itself.
+
+<ComponentPreview name="input-disabled" />
+
+## Invalid
+
+`invalid` marks the input invalid: destructive border and ring, `aria-invalid` on the inner input, and the surrounding field turns destructive. Constraint failures (`required`, `type="email"`, `pattern` …) show the same state once the user has changed the value or tried to submit.
+
+<ComponentPreview name="input-invalid" />
+
+## File
+
+`type="file"` renders a file picker. The selected files are submitted with the form (`FormData.getAll(name)`) and available as `files`.
+
+<ComponentPreview name="input-file" />
+
+## Inline
+
+A horizontal `tec-field` puts the input beside a button.
+
+<ComponentPreview name="input-inline" />
+
+## Grid
+
+Use a grid layout to place several inputs side by side.
+
+<ComponentPreview name="input-grid" />
+
+## Required
+
+`required` blocks form submission while the input is empty. Put a visible mark in the label; a `tec-field-error` without content shows the browser's own message once the constraint fails.
+
+<ComponentPreview name="input-required" />
+
+## Badge
+
+A [`<tec-badge>`](/docs/components/badge) in the label highlights a new or recommended field.
+
+<ComponentPreview name="input-badge" />
+
+## Input Group
+
+To put icons, text or buttons inside the input's border, use [`<tec-input-group>`](/docs/components/input-group).
+
+<ComponentPreview name="input-input-group" />
+
+## Button Group
+
+To attach buttons to an input, use [`<tec-button-group>`](/docs/components/button-group).
+
+<ComponentPreview name="input-button-group" />
+
+## Form
+
+A complete form with inputs, a select and buttons. Values are submitted, validated and reset like native controls.
+
+<ComponentPreview name="input-form" class="min-h-[32rem]" />
+
+## Variants
+
+`variant="outline" | "filled" | "text"` selects one of the three Tecton surface styles. [`<tec-textarea>`](/docs/components/textarea) takes the same variants.
+
+<ComponentPreview name="input-variants" />
+
+## RTL
+
+The input uses logical properties, so padding and text direction follow `dir="rtl"` on any ancestor.
+
+<ComponentPreview name="input-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus into and out of the input."],
+    ["ArrowUp / ArrowDown", "With `type=\"number\"`, increments / decrements by `step`."],
+    ["Enter", "Commits the value (`change`) and submits the enclosing form, like a native input."],
+  ]}
+/>
+
+## Accessibility
+
+- A native `<input>` in the shadow root (with `delegatesFocus`) is what assistive technology sees: role, value, `required`, `readonly`, `disabled` and `aria-invalid` are native.
+- Name it with a `tec-field-label` in a `tec-field`, a `<tec-label for>`, a native `<label for>`, the `label` attribute or `aria-label`. A placeholder is not a label.
+- `aria-describedby` and `aria-labelledby` set on the element are forwarded to the inner input as element references; `tec-field` uses them to attach descriptions and error messages.
+- The focus ring is the 2px Tecton ring and turns into a system outline in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-input"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A single line of text: name, email, password, number, date, file.
+- The value is free-form; a fixed set of options belongs in a picker instead.
+- Inside a `tec-field`, so the control arrives with a label and room for an error.
+
+### Not for
+
+- more than one line of free text: use [Textarea](/docs/components/textarea)
+- an icon, a prefix or a button inside the field: use [Input Group](/docs/components/input-group)
+- the label, description and error message around the control: use [Field](/docs/components/field)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Pick the surface with `variant="outline" | "filled" | "text"` — outline in forms, filled in dense panels, text for inline editing.
+
+</Do>
+
+<Do>
+
+Put the input in a `tec-field` with a `tec-field-label`: the field wires the label, description and error to the input.
+
+</Do>
+
+<Do>
+
+Read the current text from the `value` property and listen to `input` (every keystroke) or `change` (committed); the `value` attribute is only the initial value.
+
+</Do>
+
+<Do>
+
+Keep `class` on the element to layout (`w-full`, `col-span-2`); the variant owns border, colour and padding.
+
+</Do>
+
+<Do>
+
+Numeric inputs reject values outside what the quantity allows, such as porosity 0–1 or depth ≥ 0 (`min`, `max`, `step`).
+
+</Do>
+
+<Do>
+
+Identifiers such as API numbers, UWIs and licence codes are text fields, not number fields (`type="text"` with `inputmode="numeric"`).
+
+</Do>
+
+<Do>
+
+Search and filter fields show a clear button at the end while they hold a value (`tec-input-group-button size="icon-xs"` with `aria-label="Clear search"`).
+
+</Do>
+
+<Do>
+
+Every numeric value shows its unit (ft, psi, bbl/d): a `tec-input-group-text` end addon on the input.
+
+</Do>
+
+<Do>
+
+Never let a placeholder stand in for the label; keep it to an example value such as `34/10-A-12`.
+
+</Do>
+
+<Do>
+
+Mark as required only the fields a record cannot be saved without, and show that mark visibly in their label.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Faking the filled surface with background classes">
+
+<Wrong>
+
+```html
+<tec-input class="rounded-md border-zinc-300 bg-zinc-100" aria-label="Well name"></tec-input>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-input variant="filled" aria-label="Well name"></tec-input>
+```
+
+</Correct>
+
+The Tecton palette resets Tailwind's, so `bg-zinc-100` and `border-zinc-300` emit no CSS — and the box of the input is the inner `base` part, which host classes do not reach.
+
+</Dont>
+
+<Dont severity="HIGH" title="Reading the value attribute after the user typed">
+
+<Wrong>
+
+```ts
+save(input.getAttribute("value"))
+```
+
+</Wrong>
+
+<Correct>
+
+```ts
+save(input.value)
+```
+
+</Correct>
+
+Like a native input, the `value` attribute is the default value and never changes while the user types; the `value` property is the current text.
+
+</Dont>
+
+<Dont severity="HIGH" title="Positioning an icon on top of the input">
+
+<Wrong>
+
+```html
+<div class="relative">
+  <svg class="absolute start-2 top-2 size-4">…</svg>
+  <tec-input class="ps-8" placeholder="Search wells"></tec-input>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-input-group>
+  <tec-input-group-input placeholder="Search wells" aria-label="Search wells"></tec-input-group-input>
+  <tec-input-group-addon><svg aria-hidden="true">…</svg></tec-input-group-addon>
+</tec-input-group>
+```
+
+</Correct>
+
+The overlay sits outside the focus ring, is not clickable into the field, and host padding does not move the text.
+
+</Dont>

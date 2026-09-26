@@ -11,6 +11,10 @@ export const sidebarStyles = css`
     color: var(--tec-sidebar-foreground);
     --_w: ${W};
   }
+  /* A right sidebar sits at the end of the provider's row even when it comes first in the markup. */
+  :host([side="right"]) {
+    order: 1;
+  }
   :host(:state(mobile)) {
     display: contents;
   }

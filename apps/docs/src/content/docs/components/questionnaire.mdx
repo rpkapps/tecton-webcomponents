@@ -1,0 +1,290 @@
+---
+title: Questionnaire
+description: A multi-step questionnaire with single-choice, multiple-choice, freeform, and skippable questions.
+tags: ["tec-questionnaire", "tec-questionnaire-progress", "tec-questionnaire-item", "tec-questionnaire-title", "tec-questionnaire-description", "tec-questionnaire-choices", "tec-questionnaire-choice", "tec-questionnaire-choice-description", "tec-questionnaire-input", "tec-questionnaire-error", "tec-questionnaire-actions", "tec-questionnaire-previous", "tec-questionnaire-skip", "tec-questionnaire-next", "tec-questionnaire-submit"]
+---
+
+<ComponentPreview name="questionnaire-demo" class="min-h-[35rem]" />
+
+`<tec-questionnaire>` asks a short, ordered set of questions one at a time, with progress, back, skip and submit around them, and gathers the answers once, on submit.
+
+## Usage
+
+```ts
+import "@tecton/wc/questionnaire"
+```
+
+```html
+<tec-questionnaire>
+  <tec-questionnaire-progress></tec-questionnaire-progress>
+  <tec-questionnaire-item name="direction" required>
+    <tec-questionnaire-title>What should we prototype next?</tec-questionnaire-title>
+    <tec-questionnaire-description>Choose a direction or write your own.</tec-questionnaire-description>
+    <tec-questionnaire-choices>
+      <tec-questionnaire-choice value="delegation">
+        <span class="font-medium">Delegation</span>
+        <tec-questionnaire-choice-description>Show how work moves to a specialist.</tec-questionnaire-choice-description>
+      </tec-questionnaire-choice>
+      <tec-questionnaire-choice value="both">Both together</tec-questionnaire-choice>
+      <tec-questionnaire-input aria-label="Another answer" placeholder="Type another answer…"></tec-questionnaire-input>
+    </tec-questionnaire-choices>
+    <tec-questionnaire-error></tec-questionnaire-error>
+  </tec-questionnaire-item>
+  <tec-questionnaire-item name="detail">…</tec-questionnaire-item>
+  <tec-questionnaire-actions>
+    <tec-questionnaire-previous></tec-questionnaire-previous>
+    <tec-questionnaire-skip></tec-questionnaire-skip>
+    <tec-questionnaire-next></tec-questionnaire-next>
+    <tec-questionnaire-submit></tec-questionnaire-submit>
+  </tec-questionnaire-actions>
+</tec-questionnaire>
+```
+
+```ts
+questionnaire.addEventListener("tec-submit", (event) => {
+  const answers = event.detail.formData // answers.get("direction"), answers.getAll(…) for multiple items
+})
+```
+
+## Composition
+
+```text
+tec-questionnaire
+├── tec-questionnaire-progress
+├── tec-questionnaire-item
+│   ├── tec-questionnaire-title
+│   ├── tec-questionnaire-description
+│   ├── tec-questionnaire-choices
+│   │   ├── tec-questionnaire-choice
+│   │   └── tec-questionnaire-input
+│   └── tec-questionnaire-error
+└── tec-questionnaire-actions
+    ├── tec-questionnaire-previous
+    ├── tec-questionnaire-skip
+    ├── tec-questionnaire-next
+    └── tec-questionnaire-submit
+```
+
+The questionnaire owns the ordered items (enabled `tec-questionnaire-item`s in document order), the active item, answer state, validation, progress and navigation. The page, card or dialog around it owns cancellation, persistence and transport.
+
+**Validation**: Next, Enter and Submit need an answer for the active question — or, for an optional one, an explicit Skip. On submit every question is checked and the first invalid one becomes active with its error shown.
+
+**Forms**: the items are form-associated. Inside a `<form>`, the answers are submitted with it under each item's `name` (repeated for `multiple`, nothing for a skipped or disabled item), a form reset restores the initial answers, and `tec-submit` is followed by the form's own submission.
+
+## Multiple Selection
+
+Use `multiple` for a question that accepts more than one fixed answer: the choices become checkboxes.
+
+<ComponentPreview name="questionnaire-multiple" class="min-h-[26rem]" />
+
+## Freeform Answer
+
+Add a `tec-questionnaire-input` next to the choices when the user can provide another answer. In a single-answer question, typing replaces the selected choice.
+
+<ComponentPreview name="questionnaire-freeform" class="min-h-[26rem]" />
+
+## Explicit Skip
+
+Add `tec-questionnaire-skip` so an optional question can be left unanswered on purpose. The item's `status` is then `skipped` (it fires `tec-status-change`) and nothing is submitted for it.
+
+<ComponentPreview name="questionnaire-skip" class="min-h-[32rem]" />
+
+## Shortcuts
+
+`shortcuts="letters"` or `"numbers"` assigns a key to each choice of the active question; the key is shown on the card and exposed as `aria-keyshortcuts`. Shortcuts never act while a text field has focus.
+
+<ComponentPreview name="questionnaire-shortcuts" class="min-h-[30rem]" />
+
+## Custom Validation
+
+Check rules across questions yourself on `tec-submit` (with a schema library such as Zod, or by hand): mark the offending item `invalid`, put the message in its `tec-questionnaire-error`, and set `item` to return to it.
+
+<ComponentPreview name="questionnaire-validation" class="min-h-[32rem]" />
+
+## Controlled
+
+`item` is the active question: the `item` attribute sets the initial one, the property the current one. Listen to `tec-item-change` to keep it in page state (or `preventDefault()` to stay), and set `item` to move.
+
+<ComponentPreview name="questionnaire-controlled" class="min-h-[32rem]" />
+
+## Resume
+
+Restore a saved draft with `checked` choices, a `value` on the input and `item` on the questionnaire; a reset of the surrounding form returns to that saved state.
+
+<ComponentPreview name="questionnaire-resume" class="min-h-[32rem]" />
+
+## Conditional Items
+
+Set `disabled` on an item that does not apply to earlier answers: it leaves the flow, the progress and the submission.
+
+<ComponentPreview name="questionnaire-conditional" class="min-h-[32rem]" />
+
+## Navigation State
+
+Read `activeItem.status` (or listen to `tec-status-change`) to opt into disabled navigation. The navigation buttons also expose the active status as `:state(unanswered)`, `:state(answered)` and `:state(skipped)`.
+
+<ComponentPreview name="questionnaire-navigation-state" class="min-h-[30rem]" />
+
+## Custom Progress
+
+`format` sets the progress text (`{current}` and `{total}` are replaced) and `segments` adds a bar with one segment per question. For a fully custom indicator, read `questionnaire.navState` on `tec-item-change`.
+
+<ComponentPreview name="questionnaire-progress" class="min-h-[32rem]" />
+
+## Animated Items
+
+Animate the active item with `tec-questionnaire-item:state(active)` while the progress and navigation stay still. Keep the animation under `prefers-reduced-motion: no-preference`.
+
+<ComponentPreview name="questionnaire-animated" class="min-h-[32rem]" />
+
+## Card
+
+Compose the questionnaire with [card](/docs/components/card) parts while the question title and description keep their semantics.
+
+<ComponentPreview name="questionnaire-card" class="min-h-[35rem]" />
+
+## Dialog
+
+Compose the questionnaire inside a [dialog](/docs/components/dialog); cancellation and dismissal stay with the dialog.
+
+<ComponentPreview name="questionnaire-dialog" />
+
+## RTL
+
+Arrow Left and Right on a radio answer follow the reading direction, and the layout mirrors. Localise the default texts with `format`, `value-text` and `label` on the progress, `required-message` and `optional-message` on the error, and the button labels.
+
+<ComponentPreview name="questionnaire-rtl" direction="rtl" class="min-h-[30rem]" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves between the answers (one stop for the radio answers of a question), the text input and the navigation buttons."],
+    ["ArrowDown / ArrowUp", "Moves to the next / previous answer, wrapping; moving onto a radio answer selects it. In a text input only while it is empty."],
+    ["ArrowLeft / ArrowRight", "On a radio answer: moves between the answers (mirrored in RTL). Elsewhere (not while typing): previous question / next question once the active one is answered or skipped."],
+    ["Space", "Selects the focused answer (toggles a checkbox answer)."],
+    ["Enter", "On a selected answer or a filled text input: continues to the next question, or submits on the last one."],
+    ["Ctrl+Enter / Meta+Enter", "Continues or submits from anywhere in the questionnaire."],
+    ["A–Z / 1–9", "With `shortcuts`: selects the answer with that key (never while typing in a text field)."],
+  ]}
+/>
+
+## Accessibility
+
+- Each `tec-questionnaire-item` is a group (the fieldset of the question) named by its `tec-questionnaire-title` and described by its descriptions. Only the active item is rendered; the others are hidden.
+- Choices are native radio buttons (or checkboxes in a `multiple` item) covering each card, named by the card content; radio answers report their position ("2 of 3") and form one tab stop.
+- While invalid, the item and its answers expose `aria-invalid`, and the `tec-questionnaire-error` is an alert that also describes the item. Failed validation focuses the first answer (or the filled text input); successful navigation focuses the new question.
+- Progress is a named progress bar ("Question 2 of 3") announced politely; the navigation buttons are real buttons, and the ones that do not apply to the active question are hidden. Next and Submit expose `aria-keyshortcuts="Enter"`, items and choices their own shortcuts.
+- Always give `tec-questionnaire-input` an accessible name (`aria-label` or `aria-labelledby`); a placeholder is not a label.
+
+## API Reference
+
+<ApiReference tags={["tec-questionnaire", "tec-questionnaire-progress", "tec-questionnaire-item", "tec-questionnaire-title", "tec-questionnaire-description", "tec-questionnaire-choices", "tec-questionnaire-choice", "tec-questionnaire-choice-description", "tec-questionnaire-input", "tec-questionnaire-error", "tec-questionnaire-actions", "tec-questionnaire-previous", "tec-questionnaire-skip", "tec-questionnaire-next", "tec-questionnaire-submit"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The assistant asks a short, ordered set of questions before it acts: scope, constraints, review.
+- One question is on screen at a time, with progress, back, skip and submit around it, and the answers are gathered once, on submit.
+
+### Not for
+
+- one labelled control with a description and an error, inside a form: use [Field](/docs/components/field)
+- a single group of radio options that is part of a larger form: use [Radio Group](/docs/components/radio-group)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Give every `tec-questionnaire-item` a `name`, mark it `required` or `multiple`, and put its answers in `tec-questionnaire-choices`.
+
+</Do>
+
+<Do>
+
+Read the answers from `event.detail.formData` on `tec-submit` — or from the surrounding `<form>`.
+
+</Do>
+
+<Do>
+
+Navigate only with `tec-questionnaire-previous`, `-skip`, `-next` and `-submit` inside `tec-questionnaire-actions`.
+
+</Do>
+
+<Do>
+
+Leave a question out with `disabled` rather than removing it, so the flow, progress and submission stay consistent.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A questionnaire hand-built from a radio group">
+
+<Wrong>
+
+```html
+<div class="flex flex-col gap-5">
+  <h3>What kind of change is this?</h3>
+  <tec-radio-group name="change">…</tec-radio-group>
+  <tec-button>Submit</tec-button>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-questionnaire>
+  <tec-questionnaire-item name="change" required>
+    <tec-questionnaire-title>What kind of change is this?</tec-questionnaire-title>
+    <tec-questionnaire-choices>
+      <tec-questionnaire-choice value="feature">New feature</tec-questionnaire-choice>
+    </tec-questionnaire-choices>
+    <tec-questionnaire-error></tec-questionnaire-error>
+  </tec-questionnaire-item>
+  <tec-questionnaire-actions><tec-questionnaire-submit></tec-questionnaire-submit></tec-questionnaire-actions>
+</tec-questionnaire>
+```
+
+</Correct>
+
+The hand-built version enforces nothing, has no progress, skip or keyboard flow, and leaves the question unassociated with its answers.
+
+</Dont>
+
+<Dont severity="HIGH" title="A plain submit button in the actions row">
+
+<Wrong>
+
+```html
+<tec-questionnaire-actions>
+  <tec-questionnaire-next></tec-questionnaire-next>
+  <tec-button type="submit">Submit</tec-button>
+</tec-questionnaire-actions>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-questionnaire-actions>
+  <tec-questionnaire-previous></tec-questionnaire-previous>
+  <tec-questionnaire-next></tec-questionnaire-next>
+  <tec-questionnaire-submit>Submit brief</tec-questionnaire-submit>
+</tec-questionnaire-actions>
+```
+
+</Correct>
+
+`tec-questionnaire-submit` appears only on the last question and validates every question first; a plain button is reachable from the first question and submits with later questions unanswered.
+
+</Dont>

@@ -1,0 +1,217 @@
+---
+title: Tooltip
+description: A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.
+tags: ["tec-tooltip"]
+---
+
+<ComponentPreview name="tooltip-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/tooltip"
+```
+
+```html
+<tec-tooltip>
+  <tec-button slot="trigger">Hover</tec-button>
+  Add to library
+</tec-tooltip>
+```
+
+## Composition
+
+```text
+tec-tooltip
+├── tec-button slot="trigger"
+└── (tooltip text)
+```
+
+## Timing
+
+The tooltip opens as soon as the pointer rests on the trigger (`delay="0"`) and closes `500` ms after it leaves (`close-delay`); moving onto the tooltip keeps it open. With a `delay`, only the first tooltip waits: while one was just shown, the next one opens at once and without animation, the way toolbars feel in desktop applications. Only one tooltip is open at a time. Keyboard focus opens it immediately; pressing the trigger or a key closes it.
+
+```html
+<tec-tooltip delay="700" close-delay="0">…</tec-tooltip>
+```
+
+## Placement
+
+Use `side` to change the position of the tooltip: `top` (default), `right`, `bottom`, `left`, or the logical `inline-start` / `inline-end`. It flips to the other side when there is no room. `align`, `side-offset` and `align-offset` fine-tune it.
+
+<ComponentPreview name="tooltip-sides" />
+
+## With Keyboard Shortcut
+
+A `tec-kbd` inside the tooltip gets tighter end padding.
+
+<ComponentPreview name="tooltip-keyboard" />
+
+## Disabled Button
+
+A disabled button receives no pointer or focus events. Wrap it in a focusable element and make that the trigger.
+
+<ComponentPreview name="tooltip-disabled" />
+
+## RTL
+
+`inline-start` and `inline-end` follow the text direction; the physical sides do not.
+
+<ComponentPreview name="tooltip-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Focusing the trigger with the keyboard opens the tooltip; moving focus away closes it."],
+    ["Esc", "Closes the tooltip; focus stays on the trigger."],
+    ["Space / Enter", "Activates the trigger and closes the tooltip."],
+  ]}
+/>
+
+## Accessibility
+
+- Follows the WAI-ARIA tooltip pattern: the bubble has `role="tooltip"` and, while it is open, is the trigger's accessible **description** (`aria-describedby` through ARIA element reflection; on a `tec-button` it lands on the inner `<button>`). Tooltip text made of bare text rather than elements is announced through `aria-description`.
+- It opens on keyboard focus, not only on hover, and can be dismissed with <Kbd>Esc</Kbd> without moving the pointer or focus. It stays open while the pointer is over it (WCAG 1.4.13).
+- The tooltip never names the trigger: an icon-only trigger needs its own `aria-label`.
+- Content inside a tooltip cannot be focused or activated; use a [Popover](/docs/components/popover) for links and buttons.
+
+## API Reference
+
+<ApiReference tags={["tec-tooltip"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A control needs a few words of explanation: what an icon button does, why one is disabled.
+- The text is a description, never the only place a fact appears.
+
+### Not for
+
+- content with a link, a button or a field inside it: use [Popover](/docs/components/popover)
+- a preview of what is behind a link: use [Hover Card](/docs/components/hover-card)
+- a confirmation the user has to answer: use [Alert Dialog](/docs/components/alert-dialog)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put exactly one trigger in `slot="trigger"` and the tooltip text in the default slot.
+
+</Do>
+
+<Do>
+
+Give an icon-only trigger its own `aria-label`; the tooltip is the description, not the name.
+
+</Do>
+
+<Do>
+
+Set `delay` and `close-delay` on the element (Tecton opens at `delay="0"`) and `side` for placement; a `tec-kbd` inside gets its own spacing, as in `Save changes <tec-kbd>S</tec-kbd>`.
+
+</Do>
+
+<Do>
+
+To explain a disabled control, wrap it: `<span slot="trigger" tabindex="0" class="inline-block w-fit"><tec-button disabled>Export</tec-button></span>`.
+
+</Do>
+
+<Do>
+
+A trigger that is not a control (a badge, a term) needs focus and a role, or keyboard users never open it: `<tec-badge slot="trigger" tabindex="0" role="img" aria-label="True vertical depth">TVD</tec-badge>`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="An icon button named only by its tooltip">
+
+<Wrong>
+
+```html
+<tec-tooltip>
+  <tec-button slot="trigger" variant="ghost" size="icon-sm"><svg>…</svg></tec-button>
+  Save changes
+</tec-tooltip>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-tooltip>
+  <tec-button slot="trigger" variant="ghost" size="icon-sm" aria-label="Save changes"><svg>…</svg></tec-button>
+  Save changes
+</tec-tooltip>
+```
+
+</Correct>
+
+The tooltip describes the trigger, and only while it is open, so the button's accessible name stays empty and the control is unusable with a screen reader.
+
+</Dont>
+
+<Dont severity="CRITICAL" title="Interactive content inside a tooltip">
+
+<Wrong>
+
+```html
+<tec-tooltip>
+  <tec-button slot="trigger" variant="outline">Licence</tec-button>
+  <a href="/licences/pl-045">Open licence PL-045</a>
+</tec-tooltip>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-popover>
+  <tec-button slot="trigger" variant="outline">Licence</tec-button>
+  <a href="/licences/pl-045">Open licence PL-045</a>
+</tec-popover>
+```
+
+</Correct>
+
+The tooltip closes as soon as focus leaves the trigger and its content sits inside `role="tooltip"`, so the link can never be tabbed to and is never announced as a link.
+
+</Dont>
+
+<Dont severity="HIGH" title="Several triggers in one tooltip">
+
+<Wrong>
+
+```html
+<tec-tooltip>
+  <tec-button slot="trigger" aria-label="Zoom in">+</tec-button>
+  <tec-button slot="trigger" aria-label="Zoom out">−</tec-button>
+  Zoom
+</tec-tooltip>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-tooltip>
+  <tec-button slot="trigger" aria-label="Zoom in">+</tec-button>
+  Zoom in
+</tec-tooltip>
+```
+
+</Correct>
+
+Only the first `slot="trigger"` element opens and is described by the tooltip; the second button gets nothing.
+
+</Dont>

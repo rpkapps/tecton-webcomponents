@@ -1,0 +1,204 @@
+---
+title: Input OTP
+description: Accessible one-time password input with separate character boxes, paste and one-time-code autofill.
+tags: ["tec-input-otp", "tec-input-otp-group", "tec-input-otp-slot", "tec-input-otp-separator"]
+---
+
+<ComponentPreview name="input-otp-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/input-otp"
+```
+
+```html
+<tec-input-otp name="code" maxlength="6" pattern="digits" aria-label="Verification code">
+  <tec-input-otp-group>
+    <tec-input-otp-slot></tec-input-otp-slot>
+    <tec-input-otp-slot></tec-input-otp-slot>
+    <tec-input-otp-slot></tec-input-otp-slot>
+  </tec-input-otp-group>
+  <tec-input-otp-separator></tec-input-otp-separator>
+  <tec-input-otp-group>
+    <tec-input-otp-slot></tec-input-otp-slot>
+    <tec-input-otp-slot></tec-input-otp-slot>
+    <tec-input-otp-slot></tec-input-otp-slot>
+  </tec-input-otp-group>
+</tec-input-otp>
+```
+
+One real, transparent `<input>` covers the slots and holds the code, so typing, deleting, the arrow keys, paste, the virtual keyboard and one-time-code autofill work as in a text field; the slots display it. Slots take their position from their order (set `index` to override), and `maxlength` defaults to the number of slots.
+
+## Pattern
+
+`pattern` restricts the characters: `digits` (also opens the numeric keypad), `letters`, `alphanumeric`, or a regular expression every partial value must match (`[0-9A-F]*`). Characters that do not match are rejected; spaces in a pasted code are removed.
+
+<ComponentPreview name="input-otp-pattern" />
+
+## Separator
+
+<ComponentPreview name="input-otp-separator" />
+
+## Disabled
+
+<ComponentPreview name="input-otp-disabled" />
+
+## Controlled
+
+Read the code from `value` on `input`; `tec-complete` fires when every slot is filled.
+
+<ComponentPreview name="input-otp-controlled" />
+
+## Invalid
+
+`invalid` turns the slots destructive (and `aria-invalid` on the input).
+
+<ComponentPreview name="input-otp-invalid" />
+
+## Four Digits
+
+<ComponentPreview name="input-otp-four-digits" />
+
+## Alphanumeric
+
+<ComponentPreview name="input-otp-alphanumeric" />
+
+## Form
+
+The OTP input is form-associated: it submits `name=value`, `required` fails while empty, and a `tec-field` wires its label and messages. Size the slots with `--tec-input-otp-slot-width`, `--tec-input-otp-slot-height` and `--tec-input-otp-slot-font-size`.
+
+<ComponentPreview name="input-otp-form" class="min-h-[30rem]" />
+
+## RTL
+
+<ComponentPreview name="input-otp-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus into the code (the next empty slot, or the last character of a full code) and out of it."],
+    ["ArrowLeft / ArrowRight", "Selects the previous / next character."],
+    ["Home / End", "Moves to the first character / after the last one."],
+    ["Backspace", "Deletes the selected character (or the one before the caret)."],
+    ["Ctrl+V / ⌘V", "Pastes a code into the slots."],
+  ]}
+/>
+
+## Accessibility
+
+- Assistive technology sees one text field with the whole code as its value; the groups, slots and separators are hidden from it.
+- Name it like any control: a `tec-field-label` in a `tec-field`, `<tec-label for>`, `<label for>`, the `label` attribute or `aria-label`.
+- `autocomplete="one-time-code"` (the default) lets browsers and phones offer a code received by SMS or email.
+
+## API Reference
+
+<ApiReference tags={["tec-input-otp", "tec-input-otp-group", "tec-input-otp-slot", "tec-input-otp-separator"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A one-time code from email, SMS or an authenticator app.
+- A short fixed-length PIN the user reads from somewhere and types once.
+- The value has a known length and every character deserves its own box.
+
+### Not for
+
+- a password, a token or any other free-form value: use [Input](/docs/components/input)
+- a field with an icon or a button attached: use [Input Group](/docs/components/input-group)
+- the label, description and error message around the code: use [Field](/docs/components/field)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Write one `tec-input-otp-slot` per character; `maxlength` defaults to their number.
+
+</Do>
+
+<Do>
+
+Read `value` on `input`, or wait for `tec-complete`; set the initial code with the `value` attribute.
+
+</Do>
+
+<Do>
+
+Restrict the alphabet with `pattern="digits"` or `pattern="alphanumeric"`.
+
+</Do>
+
+<Do>
+
+Split long codes with `tec-input-otp-group` and `tec-input-otp-separator`, and mark errors with `invalid` on the OTP input.
+
+</Do>
+
+<Do>
+
+Put it in a `tec-field` with a `tec-field-label`, and disable it with `disabled`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Repeating explicit slot indexes in each group">
+
+<Wrong>
+
+```html
+<tec-input-otp maxlength="4" aria-label="PIN">
+  <tec-input-otp-group><tec-input-otp-slot index="0"></tec-input-otp-slot><tec-input-otp-slot index="1"></tec-input-otp-slot></tec-input-otp-group>
+  <tec-input-otp-group><tec-input-otp-slot index="0"></tec-input-otp-slot><tec-input-otp-slot index="1"></tec-input-otp-slot></tec-input-otp-group>
+</tec-input-otp>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-input-otp maxlength="4" aria-label="PIN">
+  <tec-input-otp-group><tec-input-otp-slot></tec-input-otp-slot><tec-input-otp-slot></tec-input-otp-slot></tec-input-otp-group>
+  <tec-input-otp-group><tec-input-otp-slot></tec-input-otp-slot><tec-input-otp-slot></tec-input-otp-slot></tec-input-otp-group>
+</tec-input-otp>
+```
+
+</Correct>
+
+`index` addresses a character of the whole code, so repeated indexes show the first characters twice and the rest is never displayed. Leave it out: slots number themselves in order.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="One input per character">
+
+<Wrong>
+
+```html
+<div class="flex gap-2">
+  <tec-input maxlength="1" aria-label="Digit 1"></tec-input>
+  <tec-input maxlength="1" aria-label="Digit 2"></tec-input>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-input-otp maxlength="2" aria-label="Code">
+  <tec-input-otp-group><tec-input-otp-slot></tec-input-otp-slot><tec-input-otp-slot></tec-input-otp-slot></tec-input-otp-group>
+</tec-input-otp>
+```
+
+</Correct>
+
+Separate inputs break paste and autofill, add a tab stop per character and are announced as unrelated fields.
+
+</Dont>

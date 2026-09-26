@@ -94,6 +94,7 @@ export const buttonGroupTextStyles = css`
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
     font-weight: var(--tec-font-weight-medium);
+    white-space: nowrap;
     --tec-icon-size: 1rem;
   }
   .base {

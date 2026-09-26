@@ -1,0 +1,274 @@
+---
+title: Overflow
+description: "A row of controls that collapses in stages when its container gets narrow: labels drop to icons, then items move into a More menu. The toolbar is the same row with arrow-key navigation."
+tags: ["tec-overflow", "tec-toolbar", "tec-overflow-item", "tec-overflow-label", "tec-overflow-group", "tec-overflow-divider", "tec-overflow-spacer"]
+---
+
+<ComponentPreview name="overflow-demo" align="start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/overflow"
+```
+
+```html
+<tec-toolbar aria-label="Well actions">
+  <tec-overflow-item value="share" priority="1">
+    <tec-button variant="outline">
+      <svg slot="start" aria-hidden="true">…</svg>
+      <tec-overflow-label>Share</tec-overflow-label>
+    </tec-button>
+  </tec-overflow-item>
+  <tec-overflow-divider></tec-overflow-divider>
+  <tec-overflow-item value="delete" label-behavior="keep">
+    <tec-button variant="destructive">Delete</tec-button>
+  </tec-overflow-item>
+  <tec-button>New well</tec-button>
+</tec-toolbar>
+```
+
+Wrap every control that may leave the row in a `<tec-overflow-item>`. Controls that are not wrapped are fixed: they never leave, so the primary action goes in bare. Put the label text in a `<tec-overflow-label>` so it can drop to icon-only; only an item whose control has an icon (an `svg`, `img`, `tec-icon` or `[data-icon]`) collapses. The More button is rendered at the end of the row automatically; `overflow-badge` shows how many items it holds.
+
+<Callout>
+  `<tec-toolbar>` has toolbar semantics: one tab stop, arrow keys move between the visible controls. Use `<tec-overflow>` when the row is not a toolbar semantically (a chip row, a row with tabs in it). Items, dividers and spacers must be direct children of the row (or of a `<tec-overflow-group>` in it).
+</Callout>
+
+## Stages
+
+The row gives up space one stage at a time and takes it back in reverse order. The complete contract — tie-breaks, groups, dividers, focus, measurement — is `docs/OVERFLOW-RULES.md` in the repository; the summary:
+
+| Stage | What gives |
+| --- | --- |
+| 1 | `elastic` items shrink to their minimum. |
+| 2 | Labels drop; items with an icon become icon-only, with the label as tooltip. Items with `label-behavior="keep"` and text-only items stay as they are. |
+| 3 | Items move into the More menu, lowest `priority` first, ties from the end of the row inward. |
+| 4 | The host compacts its own summary (see [Action Bar](/docs/tecton/action-bar)). |
+| 5 | Fixed items alone do not fit: the row wraps (`last-resort="wrap"`, default) or scrolls (`"scroll"`). |
+
+Stage 2 collapses every label at once and brings them back only when every item fits again with its label, so the row never flickers between the two. Stage 3 is the only stage that moves items; nothing is ever reordered.
+
+## Priority
+
+`priority` decides who leaves first, never where an item sits. The menu keeps the row order. `labels="always"` skips the icon-only stage; `labels="never"` is icon-only from the start.
+
+<ComponentPreview name="overflow-priority" align="start" />
+
+## Other controls
+
+Each item's form in the More menu is derived from the control it wraps, and every form acts through that control — it clicks the button, the toggle, the tab or the menu item, or sets the select's value and fires `input` and `change` — so the listeners you attached to the control run in both places:
+
+| Control | In the More menu |
+| --- | --- |
+| Button, link | A menu item with the control's icon, the label and `shortcut` |
+| Toggle (`tec-toggle`, `aria-pressed`, checkbox, switch) | A checkbox item (`menu-type="radio"` for exclusive tools) |
+| `tec-select`, native `select` | A submenu of radio items |
+| `tec-dropdown-menu` | A submenu with the same items |
+| `tec-tabs`, `tec-toggle-group`, `tec-radio-group` | A labelled section of radio items (checkbox items for a `multiple` toggle group) |
+| Text field (`tec-input`, `input`, combobox …) | A menu item that opens a dialog holding the same field |
+| Anything else | The entries you give the `menuForm` property |
+
+A text field is usually `elastic`: it shrinks between `--tec-overflow-item-min` and `--tec-overflow-item-max` before any label collapses, and in the menu it opens a dialog with the same element, so its value and validation stay. An item whose own menu or popup is open is not hidden until it closes. Put an icon for the menu entry in `slot="icon"` when the control shows none.
+
+<ComponentPreview name="overflow-forms" align="start" />
+
+A divider stays as long as something is visible on both sides of it; two dividers never show side by side. In the menu it becomes a separator between the hidden items on either side of it. `<tec-overflow-group label="…">` renders its hidden members as a labelled menu section; `collapse="together"` moves the whole group at once.
+
+### Custom forms
+
+`menuForm` takes menu entries (or a function of the item returning them):
+
+```ts
+const item = document.querySelector("tec-overflow-item[value=zoom]")
+item.menuForm = [
+  { type: "group", label: "Zoom", entries: [
+    { type: "radio", label: "Fit", checked: zoom === "fit", onSelect: () => setZoom("fit") },
+    { type: "radio", label: "100%", checked: zoom === "100", onSelect: () => setZoom("100") },
+  ] },
+]
+```
+
+Entry types: `item`, `checkbox`, `radio` (with `label`, `icon`, `shortcut`, `disabled`, `destructive`, `checked` and `onSelect`), `submenu` (with `entries`), `group` (with `label` and `entries`), `label` and `separator`.
+
+## Vertical
+
+`orientation="vertical"` lays the row out as a column and measures heights instead of widths: items leave from the bottom, the More button sits at the bottom and its menu opens to the side. A tool rail is icon-only already, so give it `labels="never"`: the tooltips show the labels from the start.
+
+<ComponentPreview name="overflow-vertical" align="start" />
+
+## Events
+
+Items whose menu form is a menu item (buttons) fire `tec-select` (`detail: { value }`) whether they are activated in the row or from the More menu — and so does the button's own `click`. The row fires `tec-overflow-change` with the `value`s of the hidden items whenever that set changes; `hiddenItems` and `isItemVisible(value)` read it at any time.
+
+## Cost
+
+One `ResizeObserver` per row observes the row's available size and its direct children. Sizes are cached per element, hidden items keep their last size and are not measured again, and a pass is one walk over the cache: no layout reads, and a pass that changes nothing writes nothing. Collapsing happens inside the observer callback, before paint, so nothing flashes. Hidden items stay in the DOM (`display: none`), so their state survives, and the More menu reads their forms only when it opens.
+
+## RTL
+
+The row, its dividers, the More button and the menus use logical positions: items leave from the end of the row, which is the left in right-to-left layouts, and submenus open towards the inline end.
+
+<ComponentPreview name="overflow-rtl" direction="rtl" align="start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves into a `tec-toolbar` (to the last focused control) and out of it. In a `tec-overflow` every control is its own tab stop."],
+    ["ArrowRight / ArrowLeft", "In a horizontal toolbar, moves to the next / previous visible control (mirrored in RTL). Hidden items are skipped; the More button is the last stop. In a text field the arrows move the caret."],
+    ["ArrowDown / ArrowUp", "In a vertical toolbar, moves between the controls. On the More button, opens the menu on the first / last item."],
+    ["Home / End", "Moves to the first / last visible control of a toolbar."],
+    ["Enter / Space", "On the More button, opens the menu on its first item. On a menu item, activates it; on a submenu item, opens the submenu."],
+    ["ArrowDown / ArrowUp (menu)", "Moves between the menu items (disabled ones are skipped). Typing a letter jumps to the item that starts with it."],
+    ["ArrowRight / ArrowLeft (menu)", "Opens a submenu / closes it and returns to its item (mirrored in RTL)."],
+    ["Escape", "Closes the top-most menu (or the overflow dialog) and returns focus to its trigger."],
+  ]}
+/>
+
+## Accessibility
+
+- `<tec-toolbar>` is a `toolbar` (with `aria-orientation`) named by its `aria-label`; `<tec-overflow>` has no role. A row that holds a tab list should be a `<tec-overflow>`, so the tabs keep their own arrow keys.
+- An icon-only item keeps its label as accessible name: `<tec-overflow-label>` is only visually hidden. The tooltip that shows the label is decorative (`aria-hidden`), since it repeats the name.
+- The More button is a button named by `menu-label` ("More actions") with `aria-haspopup="menu"` and `aria-expanded`. Its menu follows the WAI-ARIA menu button pattern: `menu`, `menuitem`, `menuitemcheckbox` and `menuitemradio` entries with `aria-checked`, `group`s named by their labels, `separator`s, and submenu items with `aria-haspopup` and `aria-expanded`.
+- The count badge (`overflow-badge`) is `aria-hidden`: the menu lists the items it counts.
+- When a focused item leaves the row, focus moves to the More button; when the last hidden item comes back while the button or its menu has focus, focus goes to that item. Focus is never dropped to the page.
+- The overflow dialog of a text field is a modal `dialog` named by the item's label; closing it returns focus to the More button.
+- Give a `<tec-overflow-group>` a `label`: it names the group in the row and heads its section in the menu.
+
+## API Reference
+
+<ApiReference tags={["tec-overflow", "tec-toolbar", "tec-overflow-item", "tec-overflow-label", "tec-overflow-group", "tec-overflow-divider", "tec-overflow-spacer"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A row of controls has to survive a container that gets narrow: a panel toolbar, a table header, a card's action row.
+- The actions matter enough to stay reachable, so hiding them outright is not acceptable.
+- The row is measured by its own width, not by a breakpoint — the same toolbar sits in a wide page and a 320 px aside.
+
+### Not for
+
+- two or three buttons welded into one control: use [Button Group](/docs/components/button-group)
+- actions that appear only while rows are selected: use [Action Bar](/docs/tecton/action-bar)
+- every action behind one button from the start: use [Dropdown Menu](/docs/components/dropdown-menu)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Wrap every control that may leave the row in a `<tec-overflow-item>` with a stable `value`; leave the primary action unwrapped so it is fixed and never collapses.
+
+</Do>
+
+<Do>
+
+Put the label text in a `<tec-overflow-label>` beside an icon; only an item with a label and an icon in its control goes icon-only, a text-only item keeps its label.
+
+</Do>
+
+<Do>
+
+Decide who leaves first with `priority` (higher stays longer); the menu always keeps the row order.
+
+</Do>
+
+<Do>
+
+Use `<tec-toolbar>` with an `aria-label` when the row is a toolbar (one tab stop, arrow keys) and `<tec-overflow>` when it is not, such as a row with tabs or chips.
+
+</Do>
+
+<Do>
+
+Attach your handlers to the controls themselves (`click`, `change`, `tec-select`): the More menu acts through them, so one listener serves both places.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Bare controls in the row">
+
+<Wrong>
+
+```html
+<tec-toolbar aria-label="Well actions">
+  <tec-button variant="outline"><svg slot="start">…</svg>Add tag</tec-button>
+  <tec-button variant="outline"><svg slot="start">…</svg>Share</tec-button>
+  <tec-button>New well</tec-button>
+</tec-toolbar>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-toolbar aria-label="Well actions">
+  <tec-overflow-item value="tag">
+    <tec-button variant="outline"><svg slot="start">…</svg><tec-overflow-label>Add tag</tec-overflow-label></tec-button>
+  </tec-overflow-item>
+  <tec-overflow-item value="share">
+    <tec-button variant="outline"><svg slot="start">…</svg><tec-overflow-label>Share</tec-overflow-label></tec-button>
+  </tec-overflow-item>
+  <tec-button>New well</tec-button>
+</tec-toolbar>
+```
+
+</Correct>
+
+Only a `<tec-overflow-item>` can be collapsed or moved into the menu: a row of bare buttons is entirely fixed, no More button is ever shown, and the row wraps or scrolls instead.
+
+</Dont>
+
+<Dont severity="HIGH" title="Label text that is not in a tec-overflow-label">
+
+<Wrong>
+
+```html
+<tec-overflow-item value="export">
+  <tec-button variant="outline"><svg slot="start">…</svg>Export</tec-button>
+</tec-overflow-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-overflow-item value="export">
+  <tec-button variant="outline"><svg slot="start">…</svg><tec-overflow-label>Export</tec-overflow-label></tec-button>
+</tec-overflow-item>
+```
+
+</Correct>
+
+The icon-only stage visually hides the `<tec-overflow-label>` alone, so plain text keeps its width: the item never gets narrower, the row skips the collapse stage and starts hiding items instead.
+
+</Dont>
+
+<Dont severity="HIGH" title="A second code path for the menu">
+
+<Wrong>
+
+```js
+toolbar.addEventListener("tec-overflow-change", () => rebuildMyOwnMoreMenu())
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+deleteButton.addEventListener("click", removeSelection)
+```
+
+</Correct>
+
+The More menu is built from the items and acts through their controls. A menu of your own next to the row duplicates every action and drifts out of sync with the row; the rules forbid more than one menu per row.
+
+</Dont>

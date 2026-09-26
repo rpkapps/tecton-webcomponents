@@ -222,7 +222,7 @@ describe("tec-data-table", () => {
   })
 
   it("keeps state when properties are set before it connects", async () => {
-    const el = document.createElement("tec-data-table") as TecDataTable<Payment>
+    const el = document.createElement("tec-data-table") as unknown as TecDataTable<Payment>
     el.selectable = true
     el.selection = ["m5gr84i9"]
     el.sorting = [{ id: "email", desc: false }]

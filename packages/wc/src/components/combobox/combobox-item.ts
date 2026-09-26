@@ -47,6 +47,8 @@ export class TecComboboxGroup extends ListGroupBase {
  * @tag tec-combobox-label
  *
  * @slot - The heading text.
+ *
+ * @csspart base - The heading box (padding, muted text).
  */
 export class TecComboboxLabel extends ListLabelBase {}
 

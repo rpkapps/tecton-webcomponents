@@ -1,0 +1,192 @@
+---
+title: Page Header
+description: "Page title block with optional eyebrow, description, section tabs and trailing actions."
+tags: ["tec-page-header", "tec-page-header-content", "tec-page-header-eyebrow", "tec-page-header-title", "tec-page-header-description", "tec-page-header-nav", "tec-page-header-actions"]
+---
+
+<ComponentPreview name="page-header-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/page-header"
+```
+
+```html
+<tec-page-header>
+  <tec-page-header-content>
+    <tec-page-header-eyebrow>Gullfaks / Wells</tec-page-header-eyebrow>
+    <tec-page-header-title>34/10-A-12</tec-page-header-title>
+    <tec-page-header-description>Drilled 2019 · TD 3 250 m</tec-page-header-description>
+  </tec-page-header-content>
+  <tec-page-header-actions>
+    <tec-button>New well</tec-button>
+  </tec-page-header-actions>
+</tec-page-header>
+```
+
+The import registers the page header parts and the [Overflow](/docs/tecton/overflow) elements its actions use.
+
+## Composition
+
+```text
+tec-page-header
+├── tec-page-header-content
+│   ├── tec-page-header-eyebrow
+│   ├── tec-page-header-title
+│   └── tec-page-header-description
+└── tec-page-header-actions
+```
+
+## Actions
+
+`<tec-page-header-actions>` is an [Overflow](/docs/tecton/overflow) row at the end of the header. Wrap secondary actions in `<tec-overflow-item>`: when the header is narrow their labels drop to icons, then they move into a More menu, lowest priority first. Leave the primary action unwrapped so it never leaves. The content keeps its natural width up to 60% of the header and the actions get the rest. The header is a single row at every width: because the actions collapse, it never needs to stack.
+
+<ComponentPreview name="page-header-actions" align="start" />
+
+## Section tabs
+
+`<tec-page-header-nav>` holds the section tabs. Between the title and the actions it keeps its natural width and never collapses. To let the tabs collapse, put the nav inside `<tec-page-header-actions>` in a `<tec-overflow-item>` with a `priority` and a `label`, followed by a `<tec-overflow-spacer>` and then the actions: everything is then one overflow row, and the tabs move into the More menu as a single-selection section headed by the label, all at once, when their priority is reached. Tabs never collapse one by one, so arrow-key navigation and the selected tab stay intact; choosing a section in the menu selects the tab.
+
+In the example the view toggle has priority 1 and the tabs priority 2, so as the header narrows the toggle goes first and the tabs second.
+
+<ComponentPreview name="page-header-nav" align="start" />
+
+## Eyebrow
+
+Use `<tec-page-header-eyebrow>` for a breadcrumb or category above the title.
+
+<ComponentPreview name="page-header-eyebrow" />
+
+## RTL
+
+<ComponentPreview name="page-header-rtl" direction="rtl" align="start" />
+
+## Keyboard interactions
+
+The header itself is not interactive. The actions row is a plain [Overflow](/docs/tecton/overflow) row, not a toolbar: every control is its own tab stop and a tab list inside keeps its own arrow keys. The More button follows the menu button keyboard model (see [Overflow](/docs/tecton/overflow#keyboard-interactions)).
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves through the header's controls in order, the More button last."],
+    ["Enter / Space / ArrowDown", "On the More button, opens the menu on its first item."],
+    ["Escape", "Closes the More menu and returns focus to its button."],
+  ]}
+/>
+
+## Accessibility
+
+- `<tec-page-header-title>` is a heading of level 1 (`level` changes it). Use one per page.
+- `<tec-page-header-nav>` is a `navigation` landmark: give it an `aria-label` ("Project sections").
+- `<tec-page-header-description>` is a paragraph; the eyebrow is plain text — use a breadcrumb inside it for navigation.
+- The actions row has no role, so tabs inside it keep their own `tablist` keyboard model. In the More menu the tabs become a `group` of `menuitemradio`s named by the item's `label`.
+
+## API Reference
+
+<ApiReference tags={["tec-page-header", "tec-page-header-content", "tec-page-header-eyebrow", "tec-page-header-title", "tec-page-header-description", "tec-page-header-nav", "tec-page-header-actions"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The block at the top of a page: what the user is looking at, and what they can do to it.
+- The title needs an eyebrow (a breadcrumb or category), a description, or section tabs.
+- The actions have to survive a narrow window without the header stacking.
+
+### Not for
+
+- the title row of a panel or an inspector: use [Panel](/docs/tecton/panel)
+- the top bar of the application frame: use [App Shell](/docs/tecton/app-shell)
+- a heading inside a card: use [Card](/docs/components/card)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the eyebrow, title and description inside `<tec-page-header-content>`; put the actions in `<tec-page-header-actions>`.
+
+</Do>
+
+<Do>
+
+Leave the primary action unwrapped in `<tec-page-header-actions>`, and wrap secondary ones in `<tec-overflow-item>` with a `priority` so they collapse first.
+
+</Do>
+
+<Do>
+
+Use `<tec-page-header-nav>` for section tabs and give it an `aria-label`.
+
+</Do>
+
+<Do>
+
+Let `<tec-page-header-title>` be the page's level-1 heading: one per page.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Title and actions as direct children of tec-page-header">
+
+<Wrong>
+
+```html
+<tec-page-header>
+  <tec-page-header-title>Gullfaks field development</tec-page-header-title>
+  <tec-page-header-description>Three alternatives.</tec-page-header-description>
+  <tec-page-header-actions><tec-button>New alternative</tec-button></tec-page-header-actions>
+</tec-page-header>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-page-header>
+  <tec-page-header-content>
+    <tec-page-header-title>Gullfaks field development</tec-page-header-title>
+    <tec-page-header-description>Three alternatives.</tec-page-header-description>
+  </tec-page-header-content>
+  <tec-page-header-actions><tec-button>New alternative</tec-button></tec-page-header-actions>
+</tec-page-header>
+```
+
+</Correct>
+
+`<tec-page-header>` is a wrapping flex row, so without `<tec-page-header-content>` the title and the description become siblings of the action row: the title loses its 60% cap and the description wraps onto its own line.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A hand-built header row instead of tec-page-header">
+
+<Wrong>
+
+```html
+<div class="flex items-center justify-between">
+  <h1 class="text-2xl font-bold text-zinc-900">34/10-A-12</h1>
+  <tec-button>Edit</tec-button>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-page-header>
+  <tec-page-header-content><tec-page-header-title>34/10-A-12</tec-page-header-title></tec-page-header-content>
+  <tec-page-header-actions><tec-button>Edit</tec-button></tec-page-header-actions>
+</tec-page-header>
+```
+
+</Correct>
+
+`text-zinc-900` is a stock Tailwind colour and emits no CSS with the Tecton palette, and a hand-built row has neither the title truncation nor the collapsing action row, so it overflows as soon as the window narrows.
+
+</Dont>

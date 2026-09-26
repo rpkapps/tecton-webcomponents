@@ -1,0 +1,142 @@
+---
+title: Label
+description: Renders an accessible label associated with a control — native or Tecton — by for, containment or field.
+tags: ["tec-label"]
+---
+
+<ComponentPreview name="label-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/label"
+```
+
+```html
+<tec-checkbox id="terms"></tec-checkbox>
+<tec-label for="terms">Accept terms and conditions</tec-label>
+```
+
+`<tec-label>` behaves like a native `<label>` for every control, including Tecton controls whose real input lives in a shadow root:
+
+- **`for`** names the control's `id` (the property is `htmlFor`). Without it the label labels the control it **contains**, or else the control of its [`tec-field`](/docs/components/field).
+- It gives the control its **accessible name** (its id is added to the control's `aria-labelledby`, next to any ids already there).
+- **Clicking** it focuses the control and clicks it: a checkbox, switch or radio toggles, a text field takes focus.
+- It **dims** while the control is disabled.
+
+A native `<label for>` also works with every Tecton form control; `tec-label` adds the Tecton look and the containment/field association.
+
+## With an input
+
+<ComponentPreview name="label-input" />
+
+## Wrapping the control
+
+<ComponentPreview name="label-wrapping" />
+
+## RTL
+
+<ComponentPreview name="label-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A label is not focusable; the control it names keeps the keyboard behaviour.
+
+## Accessibility
+
+- The label's text becomes the control's accessible name through `aria-labelledby` (a generated `id` is given to the label when it has none). A control with its own `aria-label` keeps that name.
+- Clicking the label activates the control like a native label; links and buttons inside the label keep their own behaviour.
+- Put one label per control. For a group of controls use a [`tec-field-legend`](/docs/components/field) in a `tec-field-set`.
+
+## API Reference
+
+<ApiReference tags={["tec-label"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A control sits on its own — a toolbar filter, a preview switch — with no `tec-field` around it.
+- A caption sits beside a value in a header row and still has to point at a control.
+
+### Not for
+
+- the label of a control that has a description or an error: use [Field](/docs/components/field) with `tec-field-label`
+- the caption over a group of related controls: use `tec-field-legend` in a [`tec-field-set`](/docs/components/field)
+- a heading beside a control that is already inside a label: use `tec-field-title`
+
+### Do
+
+<DoList>
+
+<Do>
+
+Point `for` at the control's `id`, or wrap the control in the label.
+
+</Do>
+
+<Do>
+
+Reach for `tec-field-label` the moment the control gains a description, an error or a `tec-field` wrapper.
+
+</Do>
+
+<Do>
+
+Keep `class` to layout; the size, weight and the disabled dimming belong to the component.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Rendering a label with nothing to associate">
+
+<Wrong>
+
+```html
+<div class="flex items-center gap-2">
+  <tec-label>Rows per page</tec-label>
+  <tec-input type="number" class="w-20"></tec-input>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<div class="flex items-center gap-2">
+  <tec-label for="rows">Rows per page</tec-label>
+  <tec-input id="rows" type="number" class="w-20"></tec-input>
+</div>
+```
+
+</Correct>
+
+Outside a field, a label without `for` only labels a control it contains: the input has no accessible name and clicking the text does not focus it.
+
+</Dont>
+
+<Dont severity="HIGH" title="Styling a bare label element by hand">
+
+<Wrong>
+
+```html
+<label for="rows" class="text-sm font-medium text-zinc-700">Rows per page</label>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-label for="rows">Rows per page</tec-label>
+```
+
+</Correct>
+
+`text-zinc-700` emits no CSS after the palette reset, and the bare element does not dim with a disabled control.
+
+</Dont>

@@ -1,0 +1,231 @@
+---
+title: Input Group
+description: Add icons, text, buttons and key hints inside the border of an input or textarea.
+tags: ["tec-input-group", "tec-input-group-addon", "tec-input-group-input", "tec-input-group-textarea", "tec-input-group-button", "tec-input-group-text"]
+---
+
+<ComponentPreview name="input-group-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/input-group"
+```
+
+```html
+<tec-input-group>
+  <tec-input-group-input placeholder="Search..." aria-label="Search"></tec-input-group-input>
+  <tec-input-group-addon>
+    <svg aria-hidden="true">…</svg>
+  </tec-input-group-addon>
+  <tec-input-group-addon align="inline-end">
+    <tec-input-group-button>Search</tec-input-group-button>
+  </tec-input-group-addon>
+</tec-input-group>
+```
+
+The group draws one border around the control and its addons, with the control's focus ring and invalid style. `tec-input-group-input` and `tec-input-group-textarea` are borderless versions of [`tec-input`](/docs/components/input) and [`tec-textarea`](/docs/components/textarea) with the same API (form participation, validation, events).
+
+## Align
+
+Place addons **after** the control in the markup and position them with `align`: `inline-start` (default) and `inline-end` beside an input, `block-start` and `block-end` as a header or footer row. Tab order follows the markup, so the control comes first.
+
+### inline-start
+
+<ComponentPreview name="input-group-inline-start" />
+
+### inline-end
+
+<ComponentPreview name="input-group-inline-end" />
+
+### block-start
+
+<ComponentPreview name="input-group-block-start" />
+
+### block-end
+
+<ComponentPreview name="input-group-block-end" />
+
+## Icon
+
+<ComponentPreview name="input-group-icon" />
+
+## Text
+
+<ComponentPreview name="input-group-text" />
+
+## Button
+
+`tec-input-group-button` is a [`tec-button`](/docs/components/button) sized for addons (`ghost`, `size="xs"` by default; `sm`, `icon-xs`, `icon-sm`). Give icon-only buttons an `aria-label`. It can be the trigger of a popover or a menu.
+
+<ComponentPreview name="input-group-button" />
+
+## Kbd
+
+<ComponentPreview name="input-group-kbd" />
+
+## Dropdown
+
+<ComponentPreview name="input-group-dropdown" />
+
+## Spinner
+
+<ComponentPreview name="input-group-spinner" />
+
+## Textarea
+
+<ComponentPreview name="input-group-textarea" />
+
+## Custom Input
+
+Any native `<input>` or `<textarea>` with `data-slot="input-group-control"` can be the control; style it yourself.
+
+<ComponentPreview name="input-group-custom" />
+
+## RTL
+
+<ComponentPreview name="input-group-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves between the control and the buttons of the addons, in markup order."],
+  ]}
+/>
+
+Clicking an addon outside its buttons focuses the control.
+
+## Accessibility
+
+- The group and each addon have the `group` role; the control keeps its own semantics.
+- Name the control as usual (a `tec-field-label` in a `tec-field`, `<label for>`, `aria-label`). Text in addons (a unit, a prefix) is not part of the name — mention it in the label or a description when it matters.
+- Icons in addons are decorative (`aria-hidden="true"`); icon-only buttons need an `aria-label`.
+
+## API Reference
+
+<ApiReference tags={["tec-input-group", "tec-input-group-addon", "tec-input-group-input", "tec-input-group-textarea", "tec-input-group-button", "tec-input-group-text"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- An icon, unit, hint or status belongs inside the field's border: search, currency, `https://`.
+- A button acts on the value in place: clear, copy, reveal, remove, send.
+- A textarea needs a toolbar or a footer row that shares its border and focus ring.
+
+### Not for
+
+- a plain field with nothing attached to it: use [Input](/docs/components/input)
+- a verification code split into separate boxes: use [Input OTP](/docs/components/input-otp)
+- the label, description and error message around the group: use [Field](/docs/components/field)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose `tec-input-group` > `tec-input-group-input` or `tec-input-group-textarea`, then the addons; the group owns the border, ring and height.
+
+</Do>
+
+<Do>
+
+Place `tec-input-group-addon` **after** the control in the markup and position it with `align`.
+
+</Do>
+
+<Do>
+
+Put buttons in `tec-input-group-button`, static copy in `tec-input-group-text`, and mark errors with `invalid` on the control.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Putting a plain tec-input inside the group">
+
+<Wrong>
+
+```html
+<tec-input-group>
+  <tec-input placeholder="Search wells"></tec-input>
+  <tec-input-group-addon><svg aria-hidden="true">…</svg></tec-input-group-addon>
+</tec-input-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-input-group>
+  <tec-input-group-input placeholder="Search wells" aria-label="Search wells"></tec-input-group-input>
+  <tec-input-group-addon><svg aria-hidden="true">…</svg></tec-input-group-addon>
+</tec-input-group>
+```
+
+</Correct>
+
+A plain `tec-input` keeps its own border and ring, so a box appears inside the box and the group's ring never shows.
+
+</Dont>
+
+<Dont severity="HIGH" title="Placing the addon before the control">
+
+<Wrong>
+
+```html
+<tec-input-group>
+  <tec-input-group-addon><tec-input-group-button>Filters</tec-input-group-button></tec-input-group-addon>
+  <tec-input-group-input placeholder="Search" aria-label="Search"></tec-input-group-input>
+</tec-input-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-input-group>
+  <tec-input-group-input placeholder="Search" aria-label="Search"></tec-input-group-input>
+  <tec-input-group-addon align="inline-start"><tec-input-group-button>Filters</tec-input-group-button></tec-input-group-addon>
+</tec-input-group>
+```
+
+</Correct>
+
+`align` moves the addon visually, but tab order follows the markup, so a leading addon puts its button ahead of the field the user came to type in.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Aligning a textarea addon inline">
+
+<Wrong>
+
+```html
+<tec-input-group>
+  <tec-input-group-textarea aria-label="Message"></tec-input-group-textarea>
+  <tec-input-group-addon align="inline-end">Send</tec-input-group-addon>
+</tec-input-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-input-group>
+  <tec-input-group-textarea aria-label="Message"></tec-input-group-textarea>
+  <tec-input-group-addon align="block-end">Send</tec-input-group-addon>
+</tec-input-group>
+```
+
+</Correct>
+
+Only `block-start` and `block-end` stack the group, so an inline addon squeezes the textarea beside it.
+
+</Dont>

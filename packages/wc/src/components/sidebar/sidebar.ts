@@ -24,7 +24,8 @@ export type { SidebarCollapsible, SidebarOpenChangeReason, SidebarSide, SidebarV
  * breakpoint it renders as a modal sheet (a native `<dialog>`: Escape and a press on the backdrop
  * close it, focus is trapped and restored).
  *
- * `side` is logical: `left` is the inline start (the right edge in right-to-left pages).
+ * `side` is logical: `left` is the inline start (the right edge in right-to-left pages). Put a
+ * `side="right"` sidebar after the `tec-sidebar-inset` (it is drawn at the end of the row either way).
  *
  * Style the content by state from your own CSS: `tec-sidebar:state(icon) .x { display: none }`.
  *

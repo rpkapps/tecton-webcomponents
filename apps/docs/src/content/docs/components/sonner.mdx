@@ -1,0 +1,225 @@
+---
+title: Sonner
+description: An opinionated toast notification stack, with an imperative toast() function.
+tags: ["tec-toaster"]
+---
+
+<ComponentPreview name="sonner-demo" />
+
+## Usage
+
+Mount one `<tec-toaster>` per page — usually at the end of `<body>` — and call `toast()` anywhere else.
+
+```ts
+import { toast } from "@tecton/wc/sonner"
+```
+
+```html
+<tec-toaster position="bottom-right"></tec-toaster>
+```
+
+```ts
+toast("Event has been created.")
+```
+
+The import registers `<tec-toaster>` and exports `toast`. Toasts created before the toaster connects are shown as soon as it does. When several toasters share a `toaster-id` (e.g. one per example on this page), only the first one connected shows toasts; the next one takes over if it is removed.
+
+## Types
+
+`toast.success`, `toast.info`, `toast.warning` and `toast.error` add an icon and the Tecton outlined status colours (popover surface, status-coloured text and border). `toast.loading` shows a spinner and stays until updated or dismissed; `toast.promise` shows a loading toast that turns into a success or error toast when the promise settles.
+
+<ComponentPreview name="sonner-types" />
+
+## Description
+
+<ComponentPreview name="sonner-description" />
+
+## Position
+
+Set the stack's corner with `position` on the toaster (`top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`), or per toast with the `position` option.
+
+<ComponentPreview name="sonner-position" />
+
+## Buttons and updates
+
+`action` adds the primary button (the toast closes after its `onClick` unless it calls `event.preventDefault()`), `cancel` a secondary one that closes the toast, `closeButton: true` (or `close-button` on the toaster) a close button. Reusing an `id` updates a toast in place instead of stacking another.
+
+<ComponentPreview name="sonner-close-button" />
+
+## The toast() API
+
+| Call | Result |
+| --- | --- |
+| `toast(message, options?)` | A plain toast; returns its id. |
+| `toast.success / info / warning / error(message, options?)` | A typed toast. |
+| `toast.loading(message, options?)` | A spinner toast that never auto-closes. |
+| `toast.promise(promise, { loading, success, error, description, finally })` | Loading, then success or error; `success` / `error` may be functions of the result. Returns `{ id, unwrap }`. |
+| `toast.dismiss(id?)` | Closes one toast, or all of them. |
+| `toast.getToasts()` | The toasts currently shown. |
+
+Options: `id`, `description`, `duration` (ms; `Infinity` keeps it), `action` / `cancel` (`{ label, onClick }`), `icon` (a node, or `null` for none), `closeButton`, `dismissible` (`false`: cannot be swiped or closed), `position`, `toasterId`, `onDismiss`, `onAutoClose`, `className`. `message` and `description` accept text, a DOM node or a function returning either.
+
+## Behaviour
+
+- Toasts stack with the newest in front; `visible-toasts` (3) are shown. Hovering the stack (or focusing a toast) expands it; `expand` keeps it expanded.
+- Each toast closes after `duration` (4 s). Timers pause while the stack is hovered, pressed or focused, and while the browser tab is hidden.
+- Swipe a toast towards the edge it sits on to dismiss it.
+- The region renders in the top layer, above dialogs, and never takes pointer events outside the toasts.
+- Colours follow the theme through CSS variables — light and dark need no setting. Motion is skipped under `prefers-reduced-motion: reduce`.
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Alt+T / F6", "Moves focus to the toasts and expands the stack (the `hotkey` attribute changes the keys). F6 again returns focus."],
+    ["Tab / Shift+Tab", "Moves through the toasts and their buttons."],
+    ["Delete / Backspace", "Closes the focused toast."],
+    ["Escape", "Collapses the stack and returns focus to where it was."],
+  ]}
+/>
+
+## Accessibility
+
+- The toasts are a list in a region landmark named "Notifications alt+T" (`label` attribute). New toasts are announced through a polite live region (`role="status"`); error toasts through an assertive one (`role="alert"`).
+- Timers pause while focus is inside the toasts, so keyboard and screen reader users have time to act. When the focused toast closes, focus moves to the next toast or back to where it came from.
+- Keep a toast to one sentence and at most one action, and never make the action the only way to do something: the toast disappears.
+- The close button is named "Close toast" (`close-label`).
+
+## API Reference
+
+<ApiReference tags={["tec-toaster"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Confirming something the user just did, where the page already shows the result: saved, copied, queued, undone.
+- Reporting the end of a background task the user is not watching: an export finished, a run failed to start.
+- Offering a short-lived undo beside that confirmation.
+
+### Not for
+
+- a message that must stay until the user resolves it: use [Alert](/docs/components/alert)
+- the state of a list that has nothing in it: use [Empty](/docs/components/empty)
+- the progress of a task the user is watching: use [Progress](/docs/components/progress)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Mount `<tec-toaster>` once, at the application root; everywhere else import `toast` from `@tecton/wc/sonner` and call it.
+
+</Do>
+
+<Do>
+
+Use the typed helpers — `toast.success`, `toast.info`, `toast.warning`, `toast.error`, `toast.promise` — so the icons and the Tecton outlined status colours apply.
+
+</Do>
+
+<Do>
+
+Put the detail in `description` and a single undo in `action`; a toast is one sentence and at most one action.
+
+</Do>
+
+<Do>
+
+Set the placement once on the toaster (`position="top-center"`), not per call, and let `toast.promise` own a pending toast so it resolves itself.
+
+</Do>
+
+<Do>
+
+Repeating an action replaces its toast instead of stacking another (a stable `id: "save-model"`).
+
+</Do>
+
+<Do>
+
+Use an error toast only for background failures the page also shows; failures needing action are a destructive [Alert](/docs/components/alert).
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Calling toast() with no toaster mounted">
+
+<Wrong>
+
+```js
+import { toast } from "@tecton/wc/sonner"
+saveButton.addEventListener("click", () => toast.success("Model saved"))
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-toaster position="top-center"></tec-toaster>
+<script type="module">
+  import { toast } from "@tecton/wc/sonner"
+  saveButton.addEventListener("click", () => toast.success("Model saved"))
+</script>
+```
+
+</Correct>
+
+`toast()` adds to a shared store and returns an id; with no `<tec-toaster>` connected nothing renders and nothing throws, so the confirmation is lost in silence.
+
+</Dont>
+
+<Dont severity="HIGH" title="A pending toast that is never resolved">
+
+<Wrong>
+
+```js
+toast.loading("Running simulation…")
+await runSimulation()
+toast.success("Simulation finished")
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+toast.promise(runSimulation(), {
+  loading: "Running simulation…",
+  success: "Simulation finished",
+  error: "Simulation failed",
+})
+```
+
+</Correct>
+
+`toast.loading` has no duration, so unless its returned id is reused it stays on screen for the rest of the session and the success toast stacks beneath it.
+
+</Dont>
+
+<Dont severity="HIGH" title="Colouring a toast by hand">
+
+<Wrong>
+
+```js
+toast("Simulation failed", { className: "bg-red-600 text-white" })
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+toast.error("Simulation failed", { description: "12 cells have negative volume." })
+```
+
+</Correct>
+
+Toasts render in the toaster's shadow root, so page classes do not reach them, and `red-600` is not a Tecton step anyway: the toast shows no severity at all. The typed helpers apply the status colours.
+
+</Dont>

@@ -1,0 +1,196 @@
+---
+title: Textarea
+description: A multi-line text input that grows with its content, form-associated, with the Tecton surface variants.
+tags: ["tec-textarea"]
+---
+
+<ComponentPreview name="textarea-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/textarea"
+```
+
+```html
+<tec-textarea name="notes" placeholder="Type your message here." aria-label="Notes"></tec-textarea>
+```
+
+`<tec-textarea>` renders a native `<textarea>` that grows with its content (`field-sizing: content`, at least 4rem). The initial text is the `value` attribute or, like a native textarea, the element's text content. It takes `rows`, `minlength`, `maxlength`, `readonly`, `wrap`, `autocomplete` and `resize` (`vertical` by default, `none`, `horizontal`, `both`).
+
+## Field
+
+<ComponentPreview name="textarea-field" />
+
+## Disabled
+
+<ComponentPreview name="textarea-disabled" />
+
+## Invalid
+
+`invalid` marks the textarea invalid; the enclosing field follows it.
+
+<ComponentPreview name="textarea-invalid" />
+
+## Button
+
+<ComponentPreview name="textarea-button" />
+
+## Variants
+
+`variant="outline" | "filled" | "text"`, the same surfaces as [Input](/docs/components/input).
+
+<ComponentPreview name="textarea-variants" />
+
+## RTL
+
+<ComponentPreview name="textarea-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus into and out of the textarea."],
+    ["Enter", "Inserts a new line (it never submits the form)."],
+  ]}
+/>
+
+## Accessibility
+
+- A native `<textarea>` in the shadow root is what assistive technology sees (a multi-line text box).
+- Name it with a `tec-field-label`, `<tec-label for>`, `<label for>`, the `label` attribute or `aria-label`; descriptions and errors of a `tec-field` are attached automatically.
+- `required`, `readonly`, `disabled` and `aria-invalid` are native on the inner textarea.
+
+## API Reference
+
+<ApiReference tags={["tec-textarea"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Several lines of free text: a description, a note, a comment, a message.
+- The content grows while the user types and the box should follow it.
+- Inside a `tec-field`, so the control arrives with a label and room for an error.
+
+### Not for
+
+- a single line of text: use [Input](/docs/components/input)
+- a toolbar, a counter or a send button attached to the box: use [Input Group](/docs/components/input-group) with `tec-input-group-textarea`
+- the label, description and error message around the control: use [Field](/docs/components/field)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Pick the surface with `variant="outline" | "filled" | "text"` — the same three as `tec-input`.
+
+</Do>
+
+<Do>
+
+Set the starting height with `rows` or a `min-h-*` class on the element; the box grows from there.
+
+</Do>
+
+<Do>
+
+Mark errors with `invalid` on the textarea (or a failed `required` / `minlength`): the field turns destructive and shows its `tec-field-error`.
+
+</Do>
+
+<Do>
+
+Keep `class` to layout only — `w-full`, `col-span-2`, `min-h-40`.
+
+</Do>
+
+<Do>
+
+A text area with a hard limit shows a live character count as the user types (`tec-input-group-textarea` with `maxlength`, the count in an `align="block-end"` addon).
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="MEDIUM" title="Pinning the textarea to a fixed height">
+
+<Wrong>
+
+```html
+<tec-textarea class="h-[120px]" resize="none" aria-label="Notes"></tec-textarea>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-textarea rows="5" aria-label="Notes"></tec-textarea>
+```
+
+</Correct>
+
+The box grows with its value; a fixed height freezes it and long text scrolls inside a short field.
+
+</Dont>
+
+<Dont severity="HIGH" title="Turning the border red for an invalid value">
+
+<Wrong>
+
+```html
+<tec-textarea class="border-red-500" aria-label="About"></tec-textarea>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-field>
+  <tec-field-label>About</tec-field-label>
+  <tec-textarea invalid></tec-textarea>
+  <tec-field-error>Keep this under 500 characters.</tec-field-error>
+</tec-field>
+```
+
+</Correct>
+
+`border-red-500` emits no CSS after the palette reset and does not reach the inner box, while `invalid` is both what the component styles and what assistive technology reads.
+
+</Dont>
+
+<Dont severity="HIGH" title="Putting the send button outside the control">
+
+<Wrong>
+
+```html
+<div class="flex items-end gap-2">
+  <tec-textarea placeholder="Write a reply" aria-label="Reply"></tec-textarea>
+  <tec-button type="submit">Send</tec-button>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-input-group>
+  <tec-input-group-textarea placeholder="Write a reply" aria-label="Reply"></tec-input-group-textarea>
+  <tec-input-group-addon align="block-end">
+    <tec-input-group-button variant="default" type="submit">Send</tec-input-group-button>
+  </tec-input-group-addon>
+</tec-input-group>
+```
+
+</Correct>
+
+A sibling button sits outside the control's border and focus ring; a `block-end` addon keeps it inside the field.
+
+</Dont>

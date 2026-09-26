@@ -1,0 +1,158 @@
+---
+title: Kbd
+description: Displays a keyboard key or a shortcut as a key cap.
+tags: ["tec-kbd", "tec-kbd-group"]
+---
+
+<ComponentPreview name="kbd-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/kbd"
+```
+
+```html
+<tec-kbd-group>
+  <tec-kbd>Ctrl</tec-kbd>
+  <tec-kbd>K</tec-kbd>
+</tec-kbd-group>
+```
+
+## Group
+
+Use `tec-kbd-group` to group keys of a combination or several shortcuts.
+
+<ComponentPreview name="kbd-group" />
+
+## Button
+
+Put a key in a button's `end` (or `start`) slot so the button trims its padding on that side.
+
+<ComponentPreview name="kbd-button" />
+
+## Tooltip
+
+Inside a [`tec-tooltip`](/docs/components/tooltip) the key cap inverts to the tooltip surface automatically.
+
+<ComponentPreview name="kbd-tooltip" />
+
+## Input Group
+
+<ComponentPreview name="kbd-input-group" />
+
+## RTL
+
+<ComponentPreview name="kbd-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A key cap is not interactive: it has no keyboard behaviour and ignores pointer events.
+
+## Accessibility
+
+- Each element renders a `<kbd>`; a group renders a `<kbd>` around its keys, the HTML markup for a key combination.
+- Symbols such as ⌘ or ⇧ are read by their Unicode names; where that matters, spell the key out (`Ctrl`) or add the words next to the key cap.
+- Do not rely on a key cap alone to make a feature discoverable: the same action needs a visible control.
+
+## API Reference
+
+<ApiReference tags={["tec-kbd", "tec-kbd-group"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Naming the key that triggers something: a shortcut hint in a menu item, a tooltip, a button or an input group addon.
+- Showing a combination or a sequence: `tec-kbd-group` around several `tec-kbd`.
+- Documenting a shortcut inline in a sentence.
+
+### Not for
+
+- a status or category label: use [Badge](/docs/components/badge)
+- a glyph for an action rather than a key: use an [icon](/docs/icons)
+
+### Do
+
+<DoList>
+
+<Do>
+
+One key per `tec-kbd`, wrapped in a `tec-kbd-group` when there is more than one; a combination that reads as a single token (`Ctrl + B`) may stay in one `tec-kbd`.
+
+</Do>
+
+<Do>
+
+Inside a `tec-button`, put the key in `slot="end"` (or `start`) so the button trims its padding on that side.
+
+</Do>
+
+<Do>
+
+Inside a tooltip leave it alone: the key cap already inverts to the tooltip surface.
+
+</Do>
+
+<Do>
+
+Show shortcuts in the user's platform keys, ⌘ on macOS and Ctrl elsewhere (use [`tec-shortcut-keys`](/docs/tecton/shortcuts) rather than a hard-coded key cap).
+
+</Do>
+
+<Do>
+
+Every shortcut shown in a key cap also has a visible control that runs the same action.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Expecting a key cap to be pressable">
+
+<Wrong>
+
+```html
+<tec-kbd onclick="openPalette()">⌘K</tec-kbd>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-button variant="outline" onclick="openPalette()">
+  Search
+  <tec-kbd slot="end">⌘K</tec-kbd>
+</tec-button>
+```
+
+</Correct>
+
+A key cap ignores pointer events and is not focusable, so the handler never fires and keyboard users cannot reach it.
+
+</Dont>
+
+<Dont severity="HIGH" title="Hand-building the key from raw markup">
+
+<Wrong>
+
+```html
+<kbd class="rounded border border-gray-300 bg-gray-200 px-1 text-xs text-gray-600">⌘</kbd>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-kbd>⌘</tec-kbd>
+```
+
+</Correct>
+
+`gray-200`, `gray-300` and `gray-600` are not Tecton steps, so the reset palette emits no rule for any of them and the key renders as bare text.
+
+</Dont>

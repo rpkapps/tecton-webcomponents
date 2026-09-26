@@ -204,6 +204,8 @@ describe("tec-combobox", () => {
       <tec-combobox name="fw" multiple aria-label="Frameworks" value="next">${frameworks}</tec-combobox>
     </form>`)
     const el = form.querySelector("tec-combobox")!
+    el.focus()
+    expect(el.shadowRoot!.activeElement).toBe(input(el))
     const chips = () => [...el.shadowRoot!.querySelectorAll(".chip")].map((c) => c.textContent!.trim())
     expect(el.values).toEqual(["next"])
     expect(chips()).toEqual(["Next.js"])

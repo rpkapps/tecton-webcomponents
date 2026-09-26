@@ -129,7 +129,7 @@ describe("tec-date-range-picker", () => {
     await userEvent.click(day(el, "2026-01-05"))
     await userEvent.click(day(el, "2026-01-08"))
     expect(el.value).toBe("2026-01-05/2026-01-08")
-    await waitUntil(() => !el.open)
+    await waitUntil(() => !panel(el).matches(":popover-open"))
     await expectAccessible(el)
   })
 

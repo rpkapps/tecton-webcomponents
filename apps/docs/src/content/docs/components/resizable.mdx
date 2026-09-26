@@ -1,0 +1,219 @@
+---
+title: Resizable
+description: Accessible resizable panel groups and layouts with keyboard support.
+tags: ["tec-resizable-group", "tec-resizable-panel", "tec-resizable-handle"]
+---
+
+<ComponentPreview name="resizable-demo" class="h-80" />
+
+## Usage
+
+```ts
+import "@tecton/wc/resizable"
+```
+
+```html
+<tec-resizable-group orientation="horizontal" class="h-96">
+  <tec-resizable-panel>One</tec-resizable-panel>
+  <tec-resizable-handle aria-label="Resize panel One"></tec-resizable-handle>
+  <tec-resizable-panel>Two</tec-resizable-panel>
+</tec-resizable-group>
+```
+
+The group fills its container (`width` and `height: 100%`): give it a height from outside (`class="h-96"`, a flex parent, or content with a height as in the demo). Handles and panels must be direct children of their group; groups nest inside panels.
+
+## Composition
+
+```text
+tec-resizable-group
+├── tec-resizable-panel
+├── tec-resizable-handle
+└── tec-resizable-panel
+```
+
+## Vertical
+
+Use `orientation="vertical"` for vertical resizing.
+
+<ComponentPreview name="resizable-vertical" />
+
+## Handle
+
+Use `with-handle` on `<tec-resizable-handle>` to show a visible grip.
+
+<ComponentPreview name="resizable-handle" />
+
+## Sizes and constraints
+
+`default-size`, `min-size`, `max-size` and `collapsed-size` take a size with a unit, measured along the group's axis in the space the panels share: `"25%"` (a bare number is a percentage too), `"320px"`, `"20rem"`. Pixel and rem sizes stay constant when the group is resized. Panels without `default-size` share the remaining space equally.
+
+## Collapsible panels
+
+A `collapsible` panel collapses to `collapsed-size` (default 0) when it is dragged below half of its `min-size`, and with <Kbd>Enter</Kbd> on its handle; <Kbd>Enter</Kbd> again restores the size it had. From code, call `collapse()`, `expand()` or `resize("40%")` on the panel; `collapsed` and `size` read its state, and `tec-resizable-panel:state(collapsed)` styles it.
+
+<ComponentPreview name="resizable-collapsible" />
+
+## Saving the layout
+
+`layout` on the group is the panel sizes in percent (summing to 100). `tec-layout-change` fires with `detail.layout` after the user resizes (at the end of a drag, on each keyboard step, on a double-click); set `layout` to restore it.
+
+```js
+const group = document.querySelector("tec-resizable-group")
+const saved = localStorage.getItem("split")
+if (saved) group.layout = JSON.parse(saved)
+group.addEventListener("tec-layout-change", (event) => {
+  localStorage.setItem("split", JSON.stringify(event.detail.layout))
+})
+```
+
+Double-clicking a handle resets the panel before it to its `default-size`. `disabled` on a handle (or on the group) stops resizing with it.
+
+## RTL
+
+In a right-to-left context the first panel is on the right; dragging and the arrow keys follow the visual direction.
+
+<ComponentPreview name="resizable-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["ArrowLeft / ArrowRight", "Horizontal group: moves the focused handle 5% left / right (mirrored in RTL)."],
+    ["ArrowUp / ArrowDown", "Vertical group: moves the focused handle 5% up / down."],
+    ["Home", "Shrinks the panel before the handle to its minimum (collapses a collapsible panel)."],
+    ["End", "Grows the panel before the handle to its maximum."],
+    ["Enter", "Collapses the panel before the handle, or restores it, when it is `collapsible`."],
+    ["F6 / Shift+F6", "Moves focus to the next / previous handle of the group."],
+    ["Tab / Shift+Tab", "Moves to the next / previous focusable element; each enabled handle is a tab stop."],
+  ]}
+/>
+
+## Accessibility
+
+- Each handle is a WAI-ARIA window splitter: a focusable `separator` with `aria-orientation` (perpendicular to the group), `aria-valuenow` (the size in percent of the panel before it), `aria-valuemin`, `aria-valuemax` and `aria-controls` pointing at that panel.
+- Give each handle an `aria-label` naming what it resizes ("Resize well list"), especially when a group has several.
+- The focus ring is a 1px ring on the divider and stays visible in forced-colours mode; the grip has a larger invisible hit area (20px on touch screens).
+
+## API Reference
+
+<ApiReference tags={["tec-resizable-group", "tec-resizable-panel", "tec-resizable-handle"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Two or three regions share one axis and the user decides how the space is split: a tree beside an editor, a list above a detail.
+- The split is a working preference worth remembering (`layout` in, `tec-layout-change` out), not a fixed design.
+- The regions are peers; neither is chrome wrapped around the other.
+
+### Not for
+
+- a draggable divider between the regions of the application frame: use [App Shell](/docs/tecton/app-shell)
+- a navigation rail the user collapses and expands: use [Sidebar](/docs/components/sidebar)
+- a titled tool surface whose body scrolls: use [Panel](/docs/tecton/panel)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Size panels with unit strings on `default-size`, `min-size` and `max-size` — `"25%"`, `"320px"`, `"20rem"` — and show a grip with `with-handle` when the divider should be obvious.
+
+</Do>
+
+<Do>
+
+Give the group a height from outside (`class="h-96"`, or a flex parent): it fills its container and brings none of its own.
+
+</Do>
+
+<Do>
+
+Keep every `<tec-resizable-handle>` a direct child of its group, between two panels.
+
+</Do>
+
+<Do>
+
+When a group has several resize handles, label each with what it resizes ("Resize well list").
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A direction attribute instead of orientation">
+
+<Wrong>
+
+```html
+<tec-resizable-group direction="vertical" class="h-96">…</tec-resizable-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-resizable-group orientation="vertical" class="h-96">…</tec-resizable-group>
+```
+
+</Correct>
+
+`direction` is not an attribute of the group: the panels stay side by side and the arrow keys keep resizing horizontally.
+
+</Dont>
+
+<Dont severity="HIGH" title="Pixel sizes without a unit">
+
+<Wrong>
+
+```html
+<tec-resizable-panel default-size="250" min-size="200">…</tec-resizable-panel>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-resizable-panel default-size="250px" min-size="200px">…</tec-resizable-panel>
+```
+
+</Correct>
+
+A bare number is a percentage: this panel asks for 250% and is clamped to the whole group, with a 200% minimum that can never be met.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A handle nested in a wrapper">
+
+<Wrong>
+
+```html
+<tec-resizable-group>
+  <tec-resizable-panel>…</tec-resizable-panel>
+  <div class="px-1"><tec-resizable-handle></tec-resizable-handle></div>
+  <tec-resizable-panel>…</tec-resizable-panel>
+</tec-resizable-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-resizable-group>
+  <tec-resizable-panel>…</tec-resizable-panel>
+  <tec-resizable-handle aria-label="Resize"></tec-resizable-handle>
+  <tec-resizable-panel>…</tec-resizable-panel>
+</tec-resizable-group>
+```
+
+</Correct>
+
+The group only reads its direct children: a wrapped handle has no panels to resize, does nothing when dragged and reports no value.
+
+</Dont>

@@ -1,0 +1,194 @@
+---
+title: Panel
+description: "Titled application surface for side panels, tool panels and dashboard sections, with a scrolling body and a pinned footer."
+tags: ["tec-panel", "tec-panel-header", "tec-panel-title", "tec-panel-description", "tec-panel-actions", "tec-panel-content", "tec-panel-footer"]
+---
+
+<ComponentPreview name="panel-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/panel"
+```
+
+```html
+<tec-panel>
+  <tec-panel-header>
+    <tec-panel-title>Well properties</tec-panel-title>
+    <tec-panel-actions>…</tec-panel-actions>
+  </tec-panel-header>
+  <tec-panel-content>…</tec-panel-content>
+  <tec-panel-footer>…</tec-panel-footer>
+</tec-panel>
+```
+
+<Callout>
+  [Card](/docs/components/card) is for content; `<tec-panel>` is the application chrome around a tool: it fills its container, scrolls its body and pins its footer.
+</Callout>
+
+## Composition
+
+```text
+tec-panel
+├── tec-panel-header
+│   ├── tec-panel-title
+│   ├── tec-panel-description
+│   └── tec-panel-actions
+├── tec-panel-content
+└── tec-panel-footer
+```
+
+## Variants
+
+Use the `variant` attribute: `default` with a hairline border, `elevated` with a shadow, `flat` without an edge and `outline` with a visible border on a transparent background.
+
+<ComponentPreview name="panel-variants" />
+
+## Sizes
+
+Use the `size` attribute to scale the padding of header, content and footer (`--tec-panel-px` / `--tec-panel-py`).
+
+<ComponentPreview name="panel-sizes" />
+
+## Footer
+
+Give the panel a height: `<tec-panel-content>` scrolls and `<tec-panel-footer>` stays pinned to the bottom. `justify="end"` (or `"between"`) distributes the footer's buttons. The content's own padding is its scroll area, so lay out what is inside it with a wrapper element.
+
+<ComponentPreview name="panel-footer" />
+
+## Many actions
+
+`<tec-panel-actions>` is a plain slot: one to three icon buttons beside a title that truncates. When a panel carries more, put an [Overflow](/docs/tecton/overflow) toolbar inside the slot. The title then keeps its natural width up to 60% of the header, the slot takes the rest, and the actions move into a More menu lowest priority first. A custom More button (`slot="menu-trigger"`) keeps the panel's small button size. Panels that do not opt in pay nothing.
+
+<ComponentPreview name="panel-actions" align="start" />
+
+## RTL
+
+<ComponentPreview name="panel-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+The panel is not interactive; focus and keys belong to the controls in it. An overflow toolbar in `<tec-panel-actions>` is one tab stop with arrow-key navigation (see [Overflow](/docs/tecton/overflow#keyboard-interactions)).
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves through the header actions, the content and the footer in order."],
+  ]}
+/>
+
+## Accessibility
+
+- `<tec-panel-title>` is a heading of level 2 (`level` changes it to fit the page outline).
+- `<tec-panel-description>` is a paragraph. Icon buttons in `<tec-panel-actions>` need an `aria-label`.
+- The panel renders a `section` without a name, so it is not a landmark. Put it in a named region (for example an `aside` with an `aria-label`) when it is one of the page's main areas.
+- Borders stay visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-panel", "tec-panel-header", "tec-panel-title", "tec-panel-description", "tec-panel-actions", "tec-panel-content", "tec-panel-footer"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A tool surface inside the application: a properties panel, an inspector, a dashboard section.
+- The panel is given a height by its container and its body has to scroll inside it.
+- Actions belong to the panel itself — in the header row, or pinned at the bottom.
+
+### Not for
+
+- a self-contained content block that grows with its text: use [Card](/docs/components/card)
+- the title block at the top of a page: use [Page Header](/docs/tecton/page-header)
+- a panel that floats over the page and is dismissed: use [Sheet](/docs/components/sheet)
+- the application frame around the work area: use [App Shell](/docs/tecton/app-shell)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `<tec-panel-header>` with `<tec-panel-title>`, `<tec-panel-description>` and `<tec-panel-actions>`, then `<tec-panel-content>`, then `<tec-panel-footer>`.
+
+</Do>
+
+<Do>
+
+Choose the surface with `variant="default" | "elevated" | "flat" | "outline"` and the padding with `size="sm" | "md" | "lg"`.
+
+</Do>
+
+<Do>
+
+Put the body in `<tec-panel-content>`: it is the part that takes the remaining height and scrolls.
+
+</Do>
+
+<Do>
+
+Give the panel its height from the outside (`class="h-72"`, or an app shell aside); the parts handle the rest.
+
+</Do>
+
+<Do>
+
+Keep one to three icon buttons in `<tec-panel-actions>`; beyond that put a `<tec-toolbar>` inside the slot and the title yields width to it.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A body that is not in tec-panel-content">
+
+<Wrong>
+
+```html
+<tec-panel class="h-72">
+  <tec-panel-header><tec-panel-title>Well properties</tec-panel-title></tec-panel-header>
+  <div class="p-4">…</div>
+  <tec-panel-footer><tec-button size="sm">Open</tec-button></tec-panel-footer>
+</tec-panel>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-panel class="h-72">
+  <tec-panel-header><tec-panel-title>Well properties</tec-panel-title></tec-panel-header>
+  <tec-panel-content>…</tec-panel-content>
+  <tec-panel-footer><tec-button size="sm">Open</tec-button></tec-panel-footer>
+</tec-panel>
+```
+
+</Correct>
+
+Only `<tec-panel-content>` takes the remaining height and scrolls, so a plain `div` in its place is clipped instead of scrolling and pushes the footer out of view.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Painting the variant by hand">
+
+<Wrong>
+
+```html
+<tec-panel class="rounded-lg border border-gray-200 bg-white shadow-md">…</tec-panel>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-panel variant="elevated" size="lg">…</tec-panel>
+```
+
+</Correct>
+
+The shadow is the `elevated` variant and the padding is the `size` scale, which the parts read through `--tec-panel-px` / `--tec-panel-py`. `border-gray-200` and `bg-white` are stock Tailwind colours and emit no CSS with the Tecton palette, and a border on the element draws a second edge outside the panel's own.
+
+</Dont>

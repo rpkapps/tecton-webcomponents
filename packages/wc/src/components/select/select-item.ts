@@ -79,6 +79,8 @@ export class TecSelectGroup extends ListGroupBase {
  * @tag tec-select-label
  *
  * @slot - The heading text.
+ *
+ * @csspart base - The heading box (padding, muted text).
  */
 export class TecSelectLabel extends ListLabelBase {}
 

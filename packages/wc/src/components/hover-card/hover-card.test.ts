@@ -16,8 +16,8 @@ const basic = (o: { delay?: number; closeDelay?: number; side?: string } = {}) =
   <button id="before">Before</button>
   <tec-hover-card delay=${o.delay ?? 10} close-delay=${o.closeDelay ?? 100} side=${o.side ?? "bottom"}>
     <tec-button slot="trigger" variant="link">Hover Here</tec-button>
-    <div>@nextjs</div>
-    <div>The React Framework.</div>
+    <div>@tecton</div>
+    <div>Tecton web components.</div>
     <a href="#profile">Profile</a>
   </tec-hover-card>
   <button id="after" style="display: block; margin-top: 300px">After</button>
@@ -39,7 +39,7 @@ describe("tec-hover-card", () => {
     expect(Math.round(c.top - t.bottom)).toBe(4)
     expect(Math.round(c.width)).toBe(256)
     expect(getComputedStyle(card(el)).paddingTop).toBe("16px")
-    expect(await axNode(innerButton(trigger))).toMatchObject({ expanded: "true", description: "@nextjs The React Framework. Profile" })
+    expect(await axNode(innerButton(trigger))).toMatchObject({ expanded: "true", description: "@tecton Tecton web components. Profile" })
     expect(await axNode(card(el))).toMatchObject({ role: "dialog", name: "Hover Here" })
     expect(deepActiveElement()).not.toBe(card(el))
     await expectAccessible(root)

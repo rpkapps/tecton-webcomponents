@@ -1,0 +1,293 @@
+---
+title: Field
+description: Combine labels, controls, help text and error messages into accessible form fields and groups — wired together without ids.
+tags: ["tec-field", "tec-field-label", "tec-field-description", "tec-field-error", "tec-field-content", "tec-field-title", "tec-field-group", "tec-field-set", "tec-field-legend", "tec-field-separator"]
+---
+
+<ComponentPreview name="field-demo" class="min-h-[52rem]" />
+
+## Usage
+
+```ts
+import "@tecton/wc/field"
+```
+
+```html
+<tec-field-set>
+  <tec-field-legend>Profile</tec-field-legend>
+  <tec-field-description>This appears on invoices and emails.</tec-field-description>
+  <tec-field-group>
+    <tec-field>
+      <tec-field-label>Full name</tec-field-label>
+      <tec-input name="name" autocomplete="off" placeholder="Evil Rabbit"></tec-input>
+      <tec-field-description>This appears on invoices and emails.</tec-field-description>
+    </tec-field>
+    <tec-field>
+      <tec-field-label>Username</tec-field-label>
+      <tec-input name="username" invalid></tec-input>
+      <tec-field-error>Choose another username.</tec-field-error>
+    </tec-field>
+    <tec-field orientation="horizontal">
+      <tec-switch name="newsletter"></tec-switch>
+      <tec-field-label>Subscribe to the newsletter</tec-field-label>
+    </tec-field>
+  </tec-field-group>
+</tec-field-set>
+```
+
+## How a field is wired
+
+`tec-field` connects its parts to its control, so the markup needs no ids:
+
+- The **control** is the first form control inside the field — any Tecton control (`tec-input`, `tec-select`, `tec-checkbox`, `tec-switch`, `tec-radio-group`, `tec-slider` …) or a native `<input>`, `<select>`, `<textarea>`. Buttons are not controls.
+- A `tec-field-label` without `for` **labels** that control: it becomes its accessible name, and clicking it focuses the control (or toggles a checkbox, switch or radio). `for="id"` still works when the label must point elsewhere.
+- Every `tec-field-description`, and the `tec-field-error` while it is displayed, **describes** the control (`aria-describedby`, after the ids you set yourself).
+- The field **follows the control's state**: while the control displays invalidity — its `invalid` attribute, or a failed constraint after the user edited it or tried to submit — the field turns destructive and shows its `tec-field-error`; while the control is disabled, the label dims.
+- `invalid` on the field forces the error display and marks the control invalid for assistive technology (`aria-invalid`), without failing validation — for an error that comes from the server.
+
+The same protocol is available to any form-associated element built on the library's form-control base, so custom controls built that way join fields too.
+
+## Anatomy
+
+```text
+tec-field-set                 ← <fieldset>, named by its legend
+├── tec-field-legend
+├── tec-field-description
+└── tec-field-group           ← stacks fields; size container of responsive fields
+    ├── tec-field             ← one control with its label and messages
+    │   ├── tec-field-label
+    │   ├── (control)
+    │   ├── tec-field-description
+    │   └── tec-field-error
+    ├── tec-field-separator
+    └── tec-field orientation="horizontal"
+        ├── (checkbox / switch / radio)
+        └── tec-field-content
+            ├── tec-field-label
+            └── tec-field-description
+```
+
+## Input
+
+<ComponentPreview name="field-input" />
+
+## Textarea
+
+<ComponentPreview name="field-textarea" />
+
+## Select
+
+<ComponentPreview name="field-select" />
+
+## Slider
+
+A slider that names itself (`aria-label`) takes a `tec-field-title`, a heading that labels nothing.
+
+<ComponentPreview name="field-slider" />
+
+## Fieldset
+
+`tec-field-set` renders a native `<fieldset>`; its `tec-field-legend` becomes the group's name.
+
+<ComponentPreview name="field-fieldset" />
+
+## Checkbox
+
+<ComponentPreview name="field-checkbox" class="min-h-[32rem]" />
+
+## Radio
+
+<ComponentPreview name="field-radio" />
+
+## Switch
+
+<ComponentPreview name="field-switch" />
+
+## Choice Card
+
+Wrap a whole `tec-field` in a `tec-field-label` to turn it into a selectable card. This works with radio items, checkboxes and switches: the card is the click target, shows the control's focus ring and is tinted while the control is checked.
+
+<ComponentPreview name="field-choice-card" />
+
+## Field Group
+
+Stack fields with `tec-field-group`, and divide sections with `tec-field-separator`.
+
+<ComponentPreview name="field-group" class="min-h-96" />
+
+## Responsive Layout
+
+- **Vertical** (default) stacks label, control and help text — the mobile-first layout.
+- **Horizontal** (`orientation="horizontal"`) puts the control beside its label. Add a `tec-field-content` to keep the label and its description together.
+- **Responsive** (`orientation="responsive"`) is vertical until the enclosing `tec-field-group` is at least 28rem wide, then horizontal. The group is a size container, so the switch follows the space the form gets, not the viewport.
+
+<ComponentPreview name="field-responsive" class="min-h-[28rem]" />
+
+## Validation and Errors
+
+Give the control its constraints (`required`, `pattern`, `minlength`, `type="email"` …) and put a `tec-field-error` in the field. The error stays hidden until the control displays invalidity — after the user changed the value, on a submit attempt or `reportValidity()`, or while the control has `invalid`. With no content, it shows the browser's own, localized validation message; with content, yours.
+
+<ComponentPreview name="field-validation" />
+
+A form library or a server passes its issues through the `errors` property (strings or `{ message }` objects, duplicates removed; several render as a list).
+
+<ComponentPreview name="field-errors" />
+
+## RTL
+
+<ComponentPreview name="field-rtl" direction="rtl" class="min-h-[52rem]" />
+
+## Keyboard interactions
+
+The field parts are not focusable. The control keeps its own keyboard behaviour; clicking a `tec-field-label` moves focus to the control.
+
+## Accessibility
+
+- `tec-field` has the `group` role; `tec-field-set` renders a native `<fieldset>` named by its `tec-field-legend`.
+- The label's text is the control's accessible name, the descriptions and the displayed error are its description — through `aria-labelledby` / `aria-describedby` with generated ids on the parts. On Tecton controls these reach the real inner control.
+- `tec-field-error` is a `role="alert"` live region: an error that appears is announced.
+- `tec-field-title` labels nothing. Use it only where the control is already named (a choice card's `tec-field-label`, a slider with `aria-label`).
+- A `tec-field-set` does not disable the controls inside it (its fieldset lives in a shadow root); wrap them in a native `<fieldset disabled>` for that.
+
+## API Reference
+
+<ApiReference tags={["tec-field", "tec-field-label", "tec-field-description", "tec-field-error", "tec-field-content", "tec-field-title", "tec-field-group", "tec-field-set", "tec-field-legend", "tec-field-separator"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Any control needs a label: input, textarea, select, checkbox, switch, slider.
+- The control needs helper text, a validation message, or both.
+- Related controls need one legend (`tec-field-set` + `tec-field-legend`) or even spacing (`tec-field-group`).
+
+### Not for
+
+- a label for a control that stands on its own, outside a field: use [Label](/docs/components/label)
+- the single-line text control itself: use [Input](/docs/components/input)
+- form state and submission: see [Forms](/docs/forms)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put exactly one control in a `tec-field`, with its `tec-field-label`; the field wires label, descriptions and error — no ids needed.
+
+</Do>
+
+<Do>
+
+Choose the layout with `orientation="vertical" | "horizontal" | "responsive"`, and add `tec-field-content` when the label and description sit beside the control.
+
+</Do>
+
+<Do>
+
+Mark errors on the control (`invalid`, or its constraints) — the field follows it; use `invalid` on the field only for errors that do not come from the control.
+
+</Do>
+
+<Do>
+
+Write helper text as `tec-field-description` and the message as `tec-field-error` — content, the `errors` property, or empty to show the browser's message.
+
+</Do>
+
+<Do>
+
+Hide a field's label only when its purpose shows nearby, like a search icon or a column header; otherwise keep it visible.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Announcing the error with a red paragraph">
+
+<Wrong>
+
+```html
+<tec-field>
+  <tec-field-label>Email</tec-field-label>
+  <tec-input type="email"></tec-input>
+  <p class="mt-1 text-sm text-red-500">Enter a valid email address.</p>
+</tec-field>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-field>
+  <tec-field-label>Email</tec-field-label>
+  <tec-input type="email" invalid></tec-input>
+  <tec-field-error>Enter a valid email address.</tec-field-error>
+</tec-field>
+```
+
+</Correct>
+
+`text-red-500` emits no CSS once the Tecton palette replaces Tailwind's, and the paragraph is neither announced nor attached to the input.
+
+</Dont>
+
+<Dont severity="HIGH" title="Marking the field invalid but not the control">
+
+<Wrong>
+
+```html
+<tec-field invalid>
+  <tec-field-label>Username</tec-field-label>
+  <tec-input name="user"></tec-input>
+</tec-field>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-field>
+  <tec-field-label>Username</tec-field-label>
+  <tec-input name="user" invalid></tec-input>
+  <tec-field-error>Choose another username.</tec-field-error>
+</tec-field>
+```
+
+</Correct>
+
+`invalid` on the control also blocks submission and is kept by its validity; `invalid` on the field only paints the error. Without a `tec-field-error` nothing says what is wrong.
+
+</Dont>
+
+<Dont severity="HIGH" title="Reaching for tec-field-title where a label belongs">
+
+<Wrong>
+
+```html
+<tec-field orientation="horizontal">
+  <tec-field-title>Marketing emails</tec-field-title>
+  <tec-switch></tec-switch>
+</tec-field>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-field orientation="horizontal">
+  <tec-field-label>Marketing emails</tec-field-label>
+  <tec-switch></tec-switch>
+</tec-field>
+```
+
+</Correct>
+
+`tec-field-title` labels nothing, so the switch is left unnamed; it is only for the heading inside a `tec-field-content` whose whole field is already wrapped in a `tec-field-label`.
+
+</Dont>
