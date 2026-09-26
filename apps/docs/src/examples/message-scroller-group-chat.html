@@ -1,6 +1,6 @@
 <div id="message-scroller-group-chat" class="flex w-full max-w-sm flex-col gap-4">
   <tec-card class="h-[35rem] w-full gap-0">
-    <tec-card-header class="gap-1 border-b">
+    <tec-card-header class="gap-1 border-b border-border">
       <tec-card-title>Group Chat</tec-card-title>
       <tec-card-description>A group chat with several participants and an assistant. The marker is marked as a turn.</tec-card-description>
       <tec-card-action>
@@ -10,7 +10,7 @@
         </tec-tooltip>
       </tec-card-action>
     </tec-card-header>
-    <tec-card-content class="min-h-0 flex-1 px-0">
+    <tec-card-content class="min-h-0 flex-1" style="--tec-card-spacing: 0">
       <tec-message-scroller>
         <tec-message-scroller-viewport>
           <tec-message-scroller-content class="p-6">
@@ -35,7 +35,7 @@
         <tec-message-scroller-button></tec-message-scroller-button>
       </tec-message-scroller>
     </tec-card-content>
-    <tec-card-footer class="flex-col gap-2 border-t">
+    <tec-card-footer class="flex-col gap-2 border-t border-border">
       <tec-button class="w-full" variant="secondary" data-action="next">Add Rocky</tec-button>
       <p class="text-xs text-muted-foreground" data-hint>This will create a marker and make it the anchor</p>
     </tec-card-footer>

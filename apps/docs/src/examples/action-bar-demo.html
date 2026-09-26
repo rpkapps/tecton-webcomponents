@@ -89,6 +89,10 @@
     toolbar.hidden = count > 0
     all.checked = count === rows.length
     all.indeterminate = count > 0 && count < rows.length
+    for (const row of rows) {
+      if (row.checked) row.closest("tr").dataset.state = "selected"
+      else delete row.closest("tr").dataset.state
+    }
   }
   const clear = () => {
     for (const row of rows) row.checked = false

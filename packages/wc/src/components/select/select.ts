@@ -404,9 +404,9 @@ export class TecSelect extends FormControlMixin(TectonElement) {
   async #onSearchInput(event: Event) {
     event.stopPropagation()
     this._query = (event.target as HTMLInputElement).value
+    // Like React Aria's Autocomplete: typing filters; the arrow keys move into the results.
     await this.updateComplete
-    if (this._query) this.#nav.first()
-    else this.#nav.clear()
+    this.#nav.update()
   }
 
   #onListClick(event: MouseEvent) {

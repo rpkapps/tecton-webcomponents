@@ -185,9 +185,9 @@ export class TecCommand extends TectonElement {
     const input = this.inputElement
     if (!input || !this.#fromInput(event)) return
     this.search = input.input?.value ?? input.value
+    // Like React Aria's Autocomplete: typing filters; the arrow keys move into the results.
     await this.updateComplete
-    if (this.search) this.#nav.first()
-    else this.#nav.clear()
+    this.#nav.update()
   }
 
   #onKeyDown = (event: KeyboardEvent) => {

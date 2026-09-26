@@ -75,7 +75,7 @@ export function tectonDocs() {
         // build imports them statically and fails loudly instead.
         const files = defineFiles()
         for (const file of files) this.addWatchFile(file)
-        if (server)
+        if (this.environment?.mode === "dev")
           return (
             `const families = ${JSON.stringify(files)};\n` +
             `await Promise.all(families.map((f) => import(/* @vite-ignore */ "/@fs" + f).catch((e) => console.error("[tecton-docs] could not load", f, e))));\n` +

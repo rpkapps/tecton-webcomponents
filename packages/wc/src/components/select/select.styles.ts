@@ -186,9 +186,10 @@ export const selectStyles = css`
   .search:hover {
     border-color: var(--tec-input-hover);
   }
-  .search:has(input:focus-visible) {
-    border-color: var(--tec-ring);
-    box-shadow: var(--tec-focus-ring);
+  @media (forced-colors: active) {
+    .search:focus-within {
+      outline: 2px solid Highlight;
+    }
   }
   .search input {
     all: unset;

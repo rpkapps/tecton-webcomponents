@@ -256,11 +256,13 @@ describe("tec-select", () => {
     await userEvent.keyboard("ar")
     await el.updateComplete
     expect(items(el).filter((i) => !i.filtered).map((i) => i.value)).toEqual(["ar"])
+    expect(await axActiveDescendant(search, items(el))).toBeNull()
+    await userEvent.keyboard("{ArrowDown}")
     expect(await axActiveDescendant(search, items(el))).toBe(items(el)[0])
     await userEvent.keyboard("{Backspace}{Backspace}az")
     await el.updateComplete
     expect(items(el).filter((i) => !i.filtered).map((i) => i.value)).toEqual(["br"])
-    await userEvent.keyboard("{Enter}")
+    await userEvent.keyboard("{ArrowDown}{Enter}")
     await waitUntil(() => !el.open)
     expect(el.value).toBe("br")
     await userEvent.click(trigger(el))

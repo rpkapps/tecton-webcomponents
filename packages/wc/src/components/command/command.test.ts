@@ -52,13 +52,15 @@ describe("tec-command", () => {
     await expectAccessible(el)
   })
 
-  it("filters as you type: groups without matches and separators hide, the first match is highlighted", async () => {
+  it("filters as you type: groups without matches and separators hide; arrows move into the results", async () => {
     const el = await fixture<TecCommand>(palette)
     inputOf(el).focus()
     await userEvent.keyboard("se")
     await el.updateComplete
     expect(visible(el)).toEqual(["emoji", "Settings"])
     expect(el.querySelector("tec-command-separator")!.filtered).toBe(true)
+    expect(active(el)).toBeNull()
+    await userEvent.keyboard("{ArrowDown}")
     expect(active(el)?.key).toBe("emoji")
     expect(await axActiveDescendant(inputOf(el), items(el))).toBe(items(el)[1])
     await userEvent.keyboard("{Control>}a{/Control}smiley")

@@ -38,7 +38,7 @@ document.querySelector("tec-command").addEventListener("tec-select", (event) => 
 })
 ```
 
-Typing filters the items (case- and accent-insensitive `contains` over each item's text and `keywords`; `filter="fuzzy" | "starts-with"` or a filter function change it) and highlights the first match; groups without a match and separators hide, and `tec-command-empty` shows when nothing matches. <Kbd>Enter</Kbd> or a click fires `tec-select` on the item.
+Typing filters the items (case- and accent-insensitive `contains` over each item's text and `keywords`; `filter="fuzzy" | "starts-with"` or a filter function change it); groups without a match and separators hide, and `tec-command-empty` shows when nothing matches. <Kbd>Enter</Kbd> or a click fires `tec-select` on the item.
 
 ## Composition
 
@@ -95,7 +95,7 @@ The list scrolls past 18rem (`--tec-command-list-max-height`); the highlighted i
 
 <KeyboardTable
   rows={[
-    ["A–Z", "Types into the search field; the list filters and the first match is highlighted."],
+    ["A–Z", "Types into the search field; the list filters. The arrow keys then move into the results."],
     ["ArrowDown / ArrowUp", "Highlights the next / previous item (disabled ones are skipped). From nothing: the first / last item."],
     ["Home / End", "Highlights the first / last item."],
     ["PageUp / PageDown", "Moves the highlight by ten items."],
