@@ -12,3 +12,5 @@ packages/wc/custom-elements.json
 *.tmp.*
 /.*.mjs
 /*.mjs
+*-tmp.mjs
+*.tmp.mjs
