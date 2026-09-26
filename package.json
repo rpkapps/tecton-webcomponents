@@ -6,6 +6,7 @@
   "scripts": {
     "build": "pnpm --filter @tecton/wc build && pnpm --filter docs build",
     "dev": "pnpm --filter docs dev",
+    "preview": "pnpm --filter docs preview",
     "test": "pnpm --filter @tecton/wc test",
     "typecheck": "pnpm -r run typecheck"
   },

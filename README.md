@@ -19,7 +19,11 @@ pnpm install
 pnpm dev          # docs site with live components (loads the library from source)
 pnpm test         # 799 browser tests (Vitest + Playwright Chromium, axe checks)
 pnpm build        # library (dist + custom-elements.json) and the static docs site
+pnpm preview      # serve the built docs site on http://localhost:4321 (run pnpm build first)
 ```
+
+`astro dev` and `astro preview` run in the background: stop them with
+`pnpm --filter docs exec astro dev stop` / `astro preview stop`.
 
 Requirements: Node ≥ 22 and pnpm 10, on Windows, macOS or Linux. The tests run in Playwright's
 Chromium; download it once with `pnpm --filter @tecton/wc exec playwright install chromium`
