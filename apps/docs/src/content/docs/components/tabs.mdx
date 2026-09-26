@@ -1,0 +1,224 @@
+---
+title: Tabs
+description: A set of layered sections of content—known as tab panels—that are displayed one at a time.
+tags: ["tec-tabs", "tec-tabs-list", "tec-tabs-trigger", "tec-tabs-content"]
+---
+
+<ComponentPreview name="tabs-demo" class="min-h-96" />
+
+## Usage
+
+```ts
+import "@tecton/wc/tabs"
+```
+
+```html
+<tec-tabs value="account" class="w-[400px]">
+  <tec-tabs-list>
+    <tec-tabs-trigger value="account">Account</tec-tabs-trigger>
+    <tec-tabs-trigger value="password">Password</tec-tabs-trigger>
+  </tec-tabs-list>
+  <tec-tabs-content value="account">Make changes to your account here.</tec-tabs-content>
+  <tec-tabs-content value="password">Change your password here.</tec-tabs-content>
+</tec-tabs>
+```
+
+The import registers `<tec-tabs>`, `<tec-tabs-list>`, `<tec-tabs-trigger>` and `<tec-tabs-content>`.
+
+## Composition
+
+```text
+tec-tabs
+├── tec-tabs-list
+│   ├── tec-tabs-trigger
+│   └── tec-tabs-trigger
+├── tec-tabs-content
+└── tec-tabs-content
+```
+
+A trigger and its panel share the same `value`. `value` on `tec-tabs` is the selected tab; without it, the first enabled trigger is selected. Triggers and panels may be added or removed at any time, and tabs can be nested.
+
+## Line
+
+Use `variant="line"` on `tec-tabs-list` for a transparent strip with an underline on the selected tab.
+
+<ComponentPreview name="tabs-line" />
+
+## Vertical
+
+Use `orientation="vertical"` on `tec-tabs` for vertical tabs. The arrow keys follow: Up and Down move between them.
+
+<ComponentPreview name="tabs-vertical" />
+
+## Disabled
+
+A trigger with `disabled` cannot be selected and is skipped by the arrow keys.
+
+<ComponentPreview name="tabs-disabled" />
+
+## Icons
+
+Put an inline SVG (or a `tec-icon`) before the label; icons in a trigger are sized to 1rem. In `slot="start"` or `slot="end"` instead, the padding on that side tightens, for a denser strip.
+
+<ComponentPreview name="tabs-icons" />
+
+## Selection Events
+
+When the user selects another tab, `tec-tabs` fires a cancelable `tec-value-change` event with `detail: { value }`; `preventDefault()` keeps the current tab. Setting `value` from code fires nothing. `activation="manual"` makes the arrow keys move focus only, and Enter or Space select — use it when showing a panel is expensive.
+
+<ComponentPreview name="tabs-events" />
+
+## RTL
+
+The arrow keys and the strip are mirrored in right-to-left layouts: ArrowLeft moves to the next tab.
+
+<ComponentPreview name="tabs-rtl" direction="rtl" class="min-h-96" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves focus to the selected tab, then into its panel (or onto the panel itself when it has nothing focusable)."],
+    ["ArrowRight / ArrowLeft", "Horizontal tabs: moves focus to the next / previous enabled tab, wrapping, and selects it (mirrored in RTL)."],
+    ["ArrowDown / ArrowUp", "Vertical tabs: moves focus to the next / previous enabled tab, wrapping, and selects it."],
+    ["Home / End", "Moves focus to the first / last enabled tab and selects it."],
+    ["Enter / Space", "With `activation=\"manual\"`: selects the focused tab."],
+  ]}
+/>
+
+## Accessibility
+
+- Implements the WAI-ARIA tabs pattern: `tec-tabs-list` is the `tablist` (with `aria-orientation`), each `tec-tabs-trigger` is a `tab` with `aria-selected` and `aria-controls` pointing at its panel, and each `tec-tabs-content` is a `tabpanel` labelled by its tab.
+- Only the selected tab is in the tab order (roving tabindex); leaving the list and coming back focuses the selected tab.
+- A panel with nothing focusable inside is itself focusable, so keyboard users can reach and read it.
+- Give `tec-tabs-list` an `aria-label` when no nearby heading names the set.
+- The selected tab and the focus ring stay visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-tabs", "tec-tabs-list", "tec-tabs-trigger", "tec-tabs-content"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A page or panel has two to about six sections the user moves between without navigating away.
+- Exactly one section is visible at a time and each one is a real chunk of content.
+- The strip belongs to the surface it sits on: a page header, a panel, a card.
+
+### Not for
+
+- a filter that narrows a list in place: use [Toggle Group](/docs/components/toggle-group)
+- picking a value for a form field: use [Select](/docs/components/select)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Match every `tec-tabs-trigger` to its `tec-tabs-content` by `value`, the same string on both.
+
+</Do>
+
+<Do>
+
+Select with the `value` attribute on `tec-tabs`, and follow the user with `tec-value-change` (`event.detail.value`).
+
+</Do>
+
+<Do>
+
+Choose the strip with `variant="default"` or `variant="line"` on `tec-tabs-list`, and a side strip with `orientation="vertical"` on `tec-tabs`.
+
+</Do>
+
+<Do>
+
+Give `tec-tabs-list` an `aria-label` when no nearby heading names the set; disable one tab with `disabled`.
+
+</Do>
+
+<Do>
+
+Use tabs only for sections the user can visit in any order, never for steps that must be done in sequence.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Listening for change or click instead of tec-value-change">
+
+<Wrong>
+
+```js
+tabs.addEventListener("change", (event) => setView(event.target.value))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+tabs.addEventListener("tec-value-change", (event) => setView(event.detail.value))
+```
+
+</Correct>
+
+Tabs are not a form control and never fire `change`; a `click` listener misses keyboard selection (arrow keys, Home/End). `tec-value-change` fires once for every selection the user makes, however it is made.
+
+</Dont>
+
+<Dont severity="HIGH" title="Rendering the panel yourself instead of tec-tabs-content">
+
+<Wrong>
+
+```html
+<tec-tabs value="overview">
+  <tec-tabs-list><tec-tabs-trigger value="overview">Overview</tec-tabs-trigger></tec-tabs-list>
+</tec-tabs>
+<div id="overview-panel">…</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-tabs value="overview">
+  <tec-tabs-list><tec-tabs-trigger value="overview">Overview</tec-tabs-trigger></tec-tabs-list>
+  <tec-tabs-content value="overview">…</tec-tabs-content>
+</tec-tabs>
+```
+
+</Correct>
+
+Only `tec-tabs-content` gets the `tabpanel` role, the label back to its tab and the focusable container, so a hand-rolled panel leaves the tab announcing a relationship the page does not have.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Hand-styling the selected tab with classes">
+
+<Wrong>
+
+```html
+<tec-tabs-trigger value="overview" class="bg-blue-600 text-white">Overview</tec-tabs-trigger>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-tabs-list variant="line">
+  <tec-tabs-trigger value="overview">Overview</tec-tabs-trigger>
+</tec-tabs-list>
+```
+
+</Correct>
+
+The visual tab is inside the trigger's shadow root, so host classes paint around it and apply to every state, not just the selected one; the stock palette is reset so `bg-blue-600` emits no CSS. The selected colours belong to the list variant — style further with `:state(selected)` and `::part(base)` if you must.
+
+</Dont>

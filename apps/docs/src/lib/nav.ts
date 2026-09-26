@@ -20,6 +20,7 @@ export const siteConfig = {
     { title: "Docs", href: "/docs" },
     { title: "Components", href: "/docs/components" },
     { title: "Tecton", href: "/docs/tecton" },
+    { title: "Themes", href: "/themes" },
   ],
 }
 

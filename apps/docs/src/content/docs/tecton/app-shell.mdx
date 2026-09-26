@@ -81,7 +81,7 @@ The regions are pure layout. Each column scrolls on its own; pad its content wit
   These controls belong to the micro-frontend host, not to the mounted application. Every application sees the same cluster, and a change to it ships once through the package.
 </Callout>
 
-`tec-app-shell-action` is a ghost icon button whose `label` is both the accessible name and the tooltip; `shortcut` adds the key hint in shortcut syntax (`"mod+k"`, `"?"`, `"g w"`), drawn for the platform. `tec-app-shell-command-trigger` looks like a search field from the `md` breakpoint up and collapses to an icon button below it; its hint defaults to `mod+k` (⌘ K on Apple keyboards, Ctrl + K elsewhere). Both hints only *display* keys — bind them with [Shortcuts](/docs/tecton/shortcuts).
+`tec-app-shell-action` is a ghost icon button whose `label` is both the accessible name and the text of its [Tooltip](/docs/components/tooltip) (shown below it, with the same hover timing as every other tooltip on the page); `shortcut` adds the key hint in shortcut syntax (`"mod+k"`, `"?"`, `"g w"`), drawn for the platform by [`tec-shortcut-keys`](/docs/tecton/shortcuts). `tec-app-shell-command-trigger` looks like a search field from the `md` breakpoint up and collapses to an icon button below it; its hint defaults to `mod+k` (⌘ K on Apple keyboards, Ctrl + K elsewhere). Both hints only *display* keys — bind them with [Shortcuts](/docs/tecton/shortcuts).
 
 ```html
 <tec-app-shell-actions>
@@ -95,7 +95,7 @@ The regions are pure layout. Each column scrolls on its own; pad its content wit
 </tec-app-shell-actions>
 ```
 
-The menus are ordinary [Dropdown Menus](/docs/components/dropdown-menu): the shell provides their triggers. `tec-app-shell-user-menu-trigger` shows the user's picture (or initials derived from `name`) and is named `Account: <name>`.
+The menus are ordinary [Dropdown Menus](/docs/components/dropdown-menu): the shell provides their triggers. `tec-app-shell-user-menu-trigger` shows the user's small [Avatar](/docs/components/avatar) — the picture, or the initials derived from `name` when there is none or it fails to load — and is named `Account: <name>`.
 
 ## Overflow
 
@@ -111,17 +111,19 @@ On a narrow header, hide the low-priority actions below a breakpoint (`class="hi
 
 ## Aside
 
-`tec-app-shell-aside` is a 320px right column on the card surface for tool panels; combine it with [Panel](/docs/tecton/panel).
+`tec-app-shell-aside` is a 320px right column on the card surface for tool panels; fill it with [Panels](/docs/tecton/panel) (`variant="flat"` inside the aside, whose surface already carries the edge).
 
 <ComponentPreview name="app-shell-aside" />
 
 ## Resizable split
 
-Wrap the main area and a full-height aside in `tec-app-shell-split`, each inside a `tec-app-shell-split-panel`, with a `tec-app-shell-split-handle` between them; the user drags the divider (or focuses it and uses the arrow keys) to resize. Panel sizes take `px`, `rem` or `%` (`default-size="240px"`, `min-size="40%"`, `max-size="20rem"`). An aside inside a split panel fills it and leaves the divider to the handle. The split fires `tec-layout-change` with the panel sizes in percent, so you can persist them and restore them through the `sizes` property.
+Wrap the main area and a full-height aside in `tec-app-shell-split`, each inside a `tec-app-shell-split-panel`, with a `tec-app-shell-split-handle` between them; the user drags the divider (or focuses it and uses the arrow keys) to resize. An aside inside a split panel fills it and leaves the divider to the handle; a [Panel](/docs/tecton/panel) inside it takes the full height (`variant="flat"`, `--tec-panel-radius: 0`).
+
+The split is the [Resizable](/docs/components/resizable) group specialised for the shell body: the same layout engine, keyboard model and window-splitter semantics, with the divider in the shell's colours (a subtle line that turns primary while hovered, focused or dragged). Panel sizes take `px`, `rem` or `%` (`default-size="240px"`, `min-size="40%"`, `max-size="20rem"`); `px` and `rem` sizes stay constant when the window resizes, until the user moves the divider. Double-clicking a handle restores the `default-size` of the panel before it. The split fires `tec-layout-change` with the panel sizes in percent (`detail.layout`, also `detail.sizes`), so you can persist them and restore them through the `layout` (or `sizes`) property; the panels also offer `resize()`, `collapse()` and `expand()`.
 
 <ComponentPreview name="app-shell-split" />
 
-Render the aside only on wide viewports by hiding its panel and handle with a class: a hidden panel leaves the layout and the other panels share the space.
+Render the aside only on wide viewports by hiding its panel and handle with a class: a hidden panel leaves the layout and the other panels share the space (this is what the split adds to `tec-resizable-group`). For resizable regions *inside* the work area, use `tec-resizable-group` directly.
 
 ```html
 <tec-app-shell-split>
@@ -150,9 +152,10 @@ The shell uses logical properties: the sidebar moves to the right, borders follo
     ["Tab / Shift+Tab", "Moves through the header controls, then the regions' content. Each split handle is one tab stop."],
     ["Enter / Space", "Activates the focused action or trigger."],
     ["Escape", "Hides the tooltip of the focused action."],
+    ["Double-click", "On a split handle: restores the `default-size` of the panel before it."],
     ["ArrowLeft / ArrowRight", "On a horizontal split handle: moves the divider by 5% (mirrored in right-to-left layouts)."],
     ["ArrowUp / ArrowDown", "On a vertical split handle: moves the divider by 5%."],
-    ["Home / End", "On a split handle: shrinks / grows the panel before it to its limit."],
+    ["Home / End", "On a split handle: shrinks / grows the panel before it to its limit (a `collapsible` panel collapses)."],
     ["Enter", "On a split handle: collapses or restores a `collapsible` panel before it."],
     ["F6 / Shift+F6", "On a split handle: moves focus to the next / previous handle."],
   ]}
@@ -161,7 +164,7 @@ The shell uses logical properties: the sidebar moves to the right, borders follo
 ## Accessibility
 
 - The header renders a native `<header>` (a `banner` landmark when the shell frames the page); `tec-app-shell-nav` is a `navigation` landmark, `tec-app-shell-main` the `main` landmark, and the sidebar and aside are `complementary` landmarks. Give every navigation and complementary region an `aria-label` when there is more than one.
-- `tec-app-shell-action` renders a ghost `tec-button` named by `label`; the tooltip opens on hover and on keyboard focus (not on a mouse press), closes on Escape, and the shortcut is announced as the button's description ("Shift + ?"), never as part of its name.
+- `tec-app-shell-action` renders a ghost `tec-button` named by `label` inside a `tec-tooltip`; the tooltip opens on hover and on keyboard focus (not on a mouse press), closes on Escape, and the shortcut is announced as the button's description ("Shift + ?"), never as part of its name. The label is not repeated in the description. The tooltip's own `tec-open-change` stays inside the action; style it with `::part(tooltip)` and watch `:state(tooltip-open)`.
 - The command trigger keeps its accessible name ("Search", or the slotted text) when it collapses to an icon.
 - The menu triggers forward the `aria-haspopup` and `aria-expanded` that `tec-dropdown-menu` sets on them to their inner button.
 - `tec-app-shell-divider` is a vertical `separator`. A split handle is a focusable window splitter (`role="separator"`) whose `aria-valuenow` / `aria-valuemin` / `aria-valuemax` give the size of the panel before it, which it controls (`aria-controls`).

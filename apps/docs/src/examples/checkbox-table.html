@@ -1,0 +1,58 @@
+<tec-table id="checkbox-table" class="w-full">
+  <table aria-label="Users">
+    <thead>
+      <tr>
+        <th scope="col" class="w-8"><tec-checkbox aria-label="Select all users" data-all></tec-checkbox></th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><tec-checkbox aria-label="Select Sarah Chen" name="users" value="1"></tec-checkbox></td>
+        <th scope="row">Sarah Chen</th>
+        <td>sarah.chen@example.com</td>
+        <td>Admin</td>
+      </tr>
+      <tr>
+        <td><tec-checkbox aria-label="Select Marcus Rodriguez" name="users" value="2"></tec-checkbox></td>
+        <th scope="row">Marcus Rodriguez</th>
+        <td>marcus.rodriguez@example.com</td>
+        <td>User</td>
+      </tr>
+      <tr>
+        <td><tec-checkbox aria-label="Select Priya Patel" name="users" value="3"></tec-checkbox></td>
+        <th scope="row">Priya Patel</th>
+        <td>priya.patel@example.com</td>
+        <td>User</td>
+      </tr>
+      <tr>
+        <td><tec-checkbox aria-label="Select David Kim" name="users" value="4"></tec-checkbox></td>
+        <th scope="row">David Kim</th>
+        <td>david.kim@example.com</td>
+        <td>Editor</td>
+      </tr>
+    </tbody>
+  </table>
+</tec-table>
+<script type="module">
+  const root = document.getElementById("checkbox-table")
+  const all = root.querySelector("[data-all]")
+  const rows = [...root.querySelectorAll("tbody tec-checkbox")]
+
+  const sync = () => {
+    const count = rows.filter((row) => row.checked).length
+    all.checked = count === rows.length
+    all.indeterminate = count > 0 && count < rows.length
+    for (const row of rows) {
+      if (row.checked) row.closest("tr").dataset.state = "selected"
+      else delete row.closest("tr").dataset.state
+    }
+  }
+  all.addEventListener("change", () => {
+    for (const row of rows) row.checked = all.checked
+    sync()
+  })
+  for (const row of rows) row.addEventListener("change", sync)
+</script>

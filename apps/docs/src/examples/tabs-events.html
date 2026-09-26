@@ -1,0 +1,20 @@
+<div id="tabs-events" class="flex w-full max-w-sm flex-col gap-3">
+  <tec-tabs value="wells" activation="manual">
+    <tec-tabs-list aria-label="Asset views">
+      <tec-tabs-trigger value="wells">Wells</tec-tabs-trigger>
+      <tec-tabs-trigger value="fields">Fields</tec-tabs-trigger>
+      <tec-tabs-trigger value="facilities">Facilities</tec-tabs-trigger>
+    </tec-tabs-list>
+    <tec-tabs-content value="wells" class="pt-2 text-muted-foreground">128 wells across 6 fields.</tec-tabs-content>
+    <tec-tabs-content value="fields" class="pt-2 text-muted-foreground">6 producing fields.</tec-tabs-content>
+    <tec-tabs-content value="facilities" class="pt-2 text-muted-foreground">14 platforms and 3 terminals.</tec-tabs-content>
+  </tec-tabs>
+  <p class="text-sm text-muted-foreground">Selected: <span class="font-mono text-foreground">wells</span></p>
+</div>
+<script type="module">
+  const root = document.getElementById("tabs-events")
+  const output = root.querySelector("p span")
+  root.querySelector("tec-tabs").addEventListener("tec-value-change", (event) => {
+    output.textContent = event.detail.value
+  })
+</script>

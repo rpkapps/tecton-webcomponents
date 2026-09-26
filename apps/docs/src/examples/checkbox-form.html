@@ -1,0 +1,17 @@
+<form id="checkbox-form" class="flex w-full max-w-sm flex-col gap-4">
+  <tec-checkbox name="newsletter" checked>Subscribe to the newsletter</tec-checkbox>
+  <tec-checkbox name="terms" value="accepted" required>Accept the terms of use</tec-checkbox>
+  <div class="flex gap-2">
+    <tec-button type="submit">Save</tec-button>
+    <tec-button type="reset" variant="outline">Reset</tec-button>
+  </div>
+  <output class="text-sm text-muted-foreground">Submit to see the form data.</output>
+</form>
+<script type="module">
+  const form = document.getElementById("checkbox-form")
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    const data = [...new FormData(form)].map(([k, v]) => `${k}=${v}`).join(", ")
+    form.querySelector("output").textContent = data || "(nothing submitted)"
+  })
+</script>

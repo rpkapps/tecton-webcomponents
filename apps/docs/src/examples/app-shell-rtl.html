@@ -31,7 +31,12 @@
       <tec-app-shell-split-handle></tec-app-shell-split-handle>
       <tec-app-shell-split-panel default-size="200px" min-size="140px" max-size="50%">
         <tec-app-shell-aside aria-label="الخصائص">
-          <div class="p-3 text-sm">الخصائص</div>
+          <tec-panel variant="flat" class="h-full" style="--tec-panel-radius: 0">
+            <tec-panel-header>
+              <tec-panel-title>الخصائص</tec-panel-title>
+            </tec-panel-header>
+            <tec-panel-content class="text-sm text-muted-foreground">محتوى لوحة الأدوات</tec-panel-content>
+          </tec-panel>
         </tec-app-shell-aside>
       </tec-app-shell-split-panel>
     </tec-app-shell-split>

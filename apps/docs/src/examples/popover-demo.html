@@ -1,0 +1,27 @@
+<tec-popover style="--tec-popover-width: 20rem">
+  <tec-button slot="trigger" variant="outline">Open popover</tec-button>
+  <div class="grid gap-4">
+    <tec-popover-header>
+      <tec-popover-title>Dimensions</tec-popover-title>
+      <tec-popover-description>Set the dimensions for the layer.</tec-popover-description>
+    </tec-popover-header>
+    <div class="grid gap-2">
+      <div class="grid grid-cols-3 items-center gap-4">
+        <tec-label for="popover-demo-width">Width</tec-label>
+        <tec-input id="popover-demo-width" value="100%" class="col-span-2"></tec-input>
+      </div>
+      <div class="grid grid-cols-3 items-center gap-4">
+        <tec-label for="popover-demo-max-width">Max. width</tec-label>
+        <tec-input id="popover-demo-max-width" value="300px" class="col-span-2"></tec-input>
+      </div>
+      <div class="grid grid-cols-3 items-center gap-4">
+        <tec-label for="popover-demo-height">Height</tec-label>
+        <tec-input id="popover-demo-height" value="25px" class="col-span-2"></tec-input>
+      </div>
+      <div class="grid grid-cols-3 items-center gap-4">
+        <tec-label for="popover-demo-max-height">Max. height</tec-label>
+        <tec-input id="popover-demo-max-height" value="none" class="col-span-2"></tec-input>
+      </div>
+    </div>
+  </div>
+</tec-popover>

@@ -1,0 +1,25 @@
+<div id="popover-controlled" class="flex flex-col items-center gap-3">
+  <tec-popover side="top">
+    <tec-button slot="trigger" variant="outline">Filter wells</tec-button>
+    <tec-popover-header>
+      <tec-popover-title>Filter wells</tec-popover-title>
+      <tec-popover-description>Show only the wells that are producing.</tec-popover-description>
+    </tec-popover-header>
+    <tec-button size="sm" data-apply>Apply</tec-button>
+  </tec-popover>
+  <p class="text-sm text-muted-foreground" aria-live="polite">Closed</p>
+</div>
+<script type="module">
+  const root = document.getElementById("popover-controlled")
+  const popover = root.querySelector("tec-popover")
+  const status = root.querySelector("p")
+
+  popover.addEventListener("tec-open-change", (event) => {
+    status.textContent = `${event.detail.open ? "Opened" : "Closed"} (${event.detail.reason})`
+  })
+  // Closing from code fires no event.
+  root.querySelector("[data-apply]").addEventListener("click", () => {
+    popover.hide()
+    status.textContent = "Closed (applied)"
+  })
+</script>

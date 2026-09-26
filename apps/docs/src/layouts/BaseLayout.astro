@@ -57,6 +57,8 @@ const pageTitle = title ? `${title} – ${siteConfig.title}` : siteConfig.title
       {footer && <SiteFooter />}
     </div>
     <CommandMenu />
+    <!-- One toaster for the whole site: toast() from @tecton/wc/sonner works on every page. -->
+    <tec-toaster position="top-center"></tec-toaster>
     <script>
       // Every tec-* element, on every page (examples need no imports).
       import "virtual:tecton-components"

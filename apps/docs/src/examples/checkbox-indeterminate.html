@@ -1,0 +1,23 @@
+<div id="checkbox-indeterminate" class="flex flex-col gap-3">
+  <tec-checkbox data-all indeterminate>Select all logs</tec-checkbox>
+  <div class="flex flex-col gap-3 ps-6">
+    <tec-checkbox name="logs" value="gamma-ray" checked>Gamma ray</tec-checkbox>
+    <tec-checkbox name="logs" value="resistivity">Resistivity</tec-checkbox>
+    <tec-checkbox name="logs" value="density" checked>Density</tec-checkbox>
+  </div>
+</div>
+<script type="module">
+  const root = document.getElementById("checkbox-indeterminate")
+  const all = root.querySelector("[data-all]")
+  const items = [...root.querySelectorAll("tec-checkbox[name=logs]")]
+
+  const sync = () => {
+    const count = items.filter((item) => item.checked).length
+    all.checked = count === items.length
+    all.indeterminate = count > 0 && count < items.length
+  }
+  all.addEventListener("change", () => {
+    for (const item of items) item.checked = all.checked
+  })
+  for (const item of items) item.addEventListener("change", sync)
+</script>

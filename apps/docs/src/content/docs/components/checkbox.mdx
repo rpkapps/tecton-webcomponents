@@ -1,0 +1,247 @@
+---
+title: Checkbox
+description: A control that allows the user to toggle between checked and not checked.
+tags: ["tec-checkbox"]
+---
+
+<ComponentPreview name="checkbox-demo" class="min-h-80" />
+
+## Usage
+
+```ts
+import "@tecton/wc/checkbox"
+```
+
+```html
+<tec-checkbox id="terms"></tec-checkbox>
+<tec-label for="terms">Accept terms and conditions</tec-label>
+```
+
+The import registers `<tec-checkbox>`. Label the checkbox with a `<label for>` (or [`<tec-label>`](/docs/components/label)), with `aria-label`, or by putting the text inside the element.
+
+## Checked State
+
+The `checked` attribute is the initial state; the `checked` property holds the current one. Listen for `change` and read `checked` to follow the user, or set the property to control it.
+
+```js
+const terms = document.querySelector("tec-checkbox#terms")
+terms.addEventListener("change", () => console.log(terms.checked))
+terms.checked = true // programmatic changes fire no event
+```
+
+## Label
+
+Text inside `<tec-checkbox>` is rendered next to the box, and clicking it toggles the checkbox. A checkbox without visible text needs an `aria-label`.
+
+<ComponentPreview name="checkbox-label" />
+
+## Invalid State
+
+Set `invalid` on the checkbox and on the [field](/docs/components/field) to show the invalid styles. The checkbox gets `aria-invalid="true"`; the field colours its label.
+
+<ComponentPreview name="checkbox-invalid" />
+
+## Basic
+
+Pair the checkbox with `tec-field` and `tec-field-label` in a horizontal field for the layout and the label.
+
+<ComponentPreview name="checkbox-basic" />
+
+## Description
+
+Use `tec-field-content` and `tec-field-description` for helper text. The field adds the description to the checkbox's `aria-describedby`.
+
+<ComponentPreview name="checkbox-description" />
+
+## Disabled
+
+Use the `disabled` attribute on the checkbox, and `disabled` on the `tec-field` so its label dims too. A `disabled` ancestor `<fieldset>` disables it as well.
+
+<ComponentPreview name="checkbox-disabled" />
+
+## Group
+
+Use several fields in a `tec-field-set` with a `tec-field-legend` for a checkbox list. Checkboxes sharing a `name` submit one entry per checked box.
+
+<ComponentPreview name="checkbox-group" />
+
+## Indeterminate
+
+The `indeterminate` attribute shows a dash for a parent that summarises partly selected children. It is cleared when the user toggles the checkbox; keep it in sync from the children's `change` events.
+
+<ComponentPreview name="checkbox-indeterminate" />
+
+## Table
+
+Put a checkbox with an `aria-label` in the first cell of each row of a [Table](/docs/components/table), and a select-all checkbox in the header. Mark selected rows with `data-state="selected"`.
+
+<ComponentPreview name="checkbox-table" class="p-4 md:p-8" />
+
+## Forms
+
+`<tec-checkbox>` is a form-associated custom element. While checked it submits `name=value` (`value` defaults to `"on"`); while unchecked, nothing. `required` blocks submission until it is checked, and the error shows after the first submit attempt. Form reset returns to the `checked` attribute. It fires `input` and `change` when the user toggles it — never for programmatic changes.
+
+<ComponentPreview name="checkbox-form" />
+
+## RTL
+
+The box sits at the inline start and the label follows it in right-to-left layouts.
+
+<ComponentPreview name="checkbox-rtl" direction="rtl" class="min-h-80" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space", "Toggles the checkbox (clears `indeterminate`)."],
+    ["Tab / Shift+Tab", "Moves focus to the next / previous focusable element. A disabled checkbox is skipped."],
+  ]}
+/>
+
+## Accessibility
+
+- A native `<input type="checkbox">` in the shadow root is the focusable control, so the checkbox is announced with its checked, unchecked or mixed state. `focus()` on the host focuses it.
+- The accessible name comes from a `<label for>` pointing at the element, a wrapping `<label>` or `tec-field-label`, `aria-label` / `aria-labelledby` on the host, or the slotted text. `aria-describedby` on the host is forwarded, so field descriptions are announced.
+- `invalid` and a failed `required` constraint set `aria-invalid="true"` on the control.
+- `readonly` keeps the checkbox focusable and submitted but ignores toggles.
+- The check and the dash stay visible in forced-colours mode, and so does the focus ring.
+
+## API Reference
+
+<ApiReference tags={["tec-checkbox"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- An independent yes/no value the user confirms by submitting the form.
+- Several options from a list may be picked at once.
+- A parent row summarising children that are partly selected (`indeterminate`).
+
+### Not for
+
+- one choice out of several mutually exclusive options: use [Radio Group](/docs/components/radio-group)
+- a setting that takes effect the moment it is flipped: use [Switch](/docs/components/switch)
+- a legend and shared description over a list of checkboxes: use [Field](/docs/components/field) (`tec-field-set`)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Read the state from the `checked` property in a `change` listener, or set `checked` to control it; the `checked` attribute is only the initial state.
+
+</Do>
+
+<Do>
+
+Put it in a `tec-field orientation="horizontal"` with a `tec-field-label`; add `tec-field-content` when there is a description.
+
+</Do>
+
+<Do>
+
+Disable with `disabled` and put `disabled` on the field so the label dims with it.
+
+</Do>
+
+<Do>
+
+Mark errors with `invalid` on the checkbox and on the field, then render the message in `tec-field-error`.
+
+</Do>
+
+<Do>
+
+In a table, give every row checkbox an `aria-label` naming the row, and drive the header checkbox's `indeterminate` from the rows.
+
+</Do>
+
+<Do>
+
+Keep checkbox lists to about seven options; longer ones (wells, formations) use a type-to-filter [Combobox](/docs/components/combobox) with multiple selection.
+
+</Do>
+
+<Do>
+
+A choice card, a `tec-field-label` wrapping a whole `tec-field`, holds no button or link; the whole card is the toggle.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title='checked="false" to uncheck a checkbox'>
+
+<Wrong>
+
+```html
+<tec-checkbox checked="false">Accept the terms</tec-checkbox>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-checkbox>Accept the terms</tec-checkbox>
+```
+
+</Correct>
+
+`checked` is a boolean attribute: any value, including `"false"`, checks the box. Leave the attribute out, or set the `checked` property.
+
+</Dont>
+
+<Dont severity="HIGH" title="Labelling the checkbox with a plain span">
+
+<Wrong>
+
+```html
+<div class="flex items-center gap-2">
+  <tec-checkbox></tec-checkbox>
+  <span class="text-sm">Accept the terms</span>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-field orientation="horizontal">
+  <tec-checkbox></tec-checkbox>
+  <tec-field-label>Accept the terms</tec-field-label>
+</tec-field>
+```
+
+</Correct>
+
+A `span` is not a label, so the checkbox has no accessible name and the text does not toggle it; `tec-field` also supplies the alignment and the disabled state of the label.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Colouring the checked box with a class">
+
+<Wrong>
+
+```html
+<tec-checkbox class="bg-emerald-600"></tec-checkbox>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-checkbox></tec-checkbox>
+```
+
+</Correct>
+
+The checked fill comes from the theme, a class on the host does not reach the box inside the shadow root, and `bg-emerald-600` is outside the Tecton palette so it generates no CSS. Re-theme with the `--tec-*` variables or `::part(control)` when you really must.
+
+</Dont>

@@ -22,7 +22,7 @@ import { toast } from "@tecton/wc/sonner"
 toast("Event has been created.")
 ```
 
-The import registers `<tec-toaster>` and exports `toast`. Toasts created before the toaster connects are shown as soon as it does. When several toasters share a `toaster-id` (e.g. one per example on this page), only the first one connected shows toasts; the next one takes over if it is removed.
+The import registers `<tec-toaster>` and exports `toast`. Toasts created before the toaster connects are shown as soon as it does. When several toasters share a `toaster-id`, only the first one connected shows toasts; the next one takes over if it is removed. The examples on this site call `toast()` only: the site mounts one `<tec-toaster position="top-center">` in its layout. A toaster with its own `toaster-id` shows only the toasts created with that `toasterId` option, next to the default one.
 
 ## Types
 

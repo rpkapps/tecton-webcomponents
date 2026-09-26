@@ -1,0 +1,212 @@
+---
+title: Popover
+description: Displays rich content in a portal, triggered by a button.
+tags: ["tec-popover", "tec-popover-header", "tec-popover-title", "tec-popover-description"]
+---
+
+<ComponentPreview name="popover-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/popover"
+```
+
+```html
+<tec-popover>
+  <tec-button slot="trigger" variant="outline">Open Popover</tec-button>
+  <tec-popover-header>
+    <tec-popover-title>Title</tec-popover-title>
+    <tec-popover-description>Description text here.</tec-popover-description>
+  </tec-popover-header>
+</tec-popover>
+```
+
+The import registers `<tec-popover>`, `<tec-popover-header>`, `<tec-popover-title>` and `<tec-popover-description>`.
+
+## Composition
+
+```text
+tec-popover
+├── [slot="trigger"] tec-button
+├── tec-popover-header
+│   ├── tec-popover-title
+│   └── tec-popover-description
+└── … content
+```
+
+The element in `slot="trigger"` opens and closes the popover. Everything else is the content of the panel, which renders in the top layer — above dialogs and outside any `overflow: hidden` container — and is a flex column with a `1rem` gap.
+
+## Basic
+
+A simple popover with a header, title, and description.
+
+<ComponentPreview name="popover-basic" />
+
+## Align
+
+Use the `align` attribute (`start`, `center`, `end`) to align the panel with the trigger edge. `start` and `end` are logical: they follow the text direction.
+
+<ComponentPreview name="popover-alignments" />
+
+## Side
+
+Use the `side` attribute (`top`, `right`, `bottom`, `left`, or the logical `inline-start` / `inline-end`) to place the panel. It flips to the opposite side when there is no room. `side-offset` (default 4px) sets the distance from the trigger and `align-offset` shifts it along the edge.
+
+<ComponentPreview name="popover-sides" />
+
+## Width
+
+The panel is 18rem wide by default. Set the `--tec-popover-width` custom property on the element to change it; the popover owns its padding, radius, shadow and surface.
+
+```html
+<tec-popover style="--tec-popover-width: 20rem">…</tec-popover>
+```
+
+## With Form
+
+A popover with form fields inside. Focus moves into the panel when it opens and Tab stays inside it until it closes.
+
+<ComponentPreview name="popover-form" />
+
+## Open State
+
+The `open` attribute opens the popover initially and reflects its state. The user opening or closing it fires a cancelable `tec-open-change` event with `detail: { open, reason }` (`trigger`, `escape`, `outside`, `focus-out`, `dismiss-button`); `preventDefault()` keeps the current state. `show()`, `hide()` and `toggle()` change the state from code without an event.
+
+<ComponentPreview name="popover-controlled" />
+
+## RTL
+
+Physical sides (`left`, `right`) stay put in right-to-left layouts; `inline-start` / `inline-end` and the `start` / `end` alignments mirror.
+
+<ComponentPreview name="popover-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space / Enter", "On the trigger: opens or closes the popover."],
+    ["Tab / Shift+Tab", "Moves focus through the panel's focusable elements; focus stays inside the panel while it is open."],
+    ["Escape", "Closes the popover and returns focus to the trigger. With nested popovers, only the innermost closes."],
+  ]}
+/>
+
+## Accessibility
+
+- The panel is a non-modal `role="dialog"`. It is named by its `tec-popover-title` (a heading, level 3 by default — change it with `level`), else by the `label` attribute, else by the trigger; `tec-popover-description` describes it.
+- The trigger gets `aria-haspopup="dialog"` and `aria-expanded`. Use a real button (`tec-button`) so it is focusable and activates with the keyboard.
+- Opening moves focus to the panel; closing (Escape, a press outside, the trigger) returns it to the trigger.
+- A visually hidden "Dismiss" button (`close-label`) at the end of the panel lets screen reader users close it without Escape.
+
+## API Reference
+
+<ApiReference tags={["tec-popover", "tec-popover-header", "tec-popover-title", "tec-popover-description"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A few controls belong to one trigger and should appear next to it: dimensions, a colour, a filter.
+- The user opens it deliberately by pressing, and the page behind it stays live.
+- The content is interactive — inputs, buttons, a small form — so a tooltip is out.
+
+### Not for
+
+- a short label on a control: use [Tooltip](/docs/components/tooltip)
+- a preview that appears when the pointer rests on a link: use [Hover Card](/docs/components/hover-card)
+- a decision that must block the rest of the page: use [Dialog](/docs/components/dialog)
+- a form long enough to need its own header and footer: use [Sheet](/docs/components/sheet)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the trigger `tec-button` in `slot="trigger"` of the `tec-popover`, and control it with the `open` attribute and the `tec-open-change` event.
+
+</Do>
+
+<Do>
+
+Position with `side` (`top`, `right`, `inline-end`…) and `align` (`start`, `center`, `end`), and nudge with `side-offset` / `align-offset`.
+
+</Do>
+
+<Do>
+
+Structure the top with `tec-popover-header`, `tec-popover-title` and `tec-popover-description`; the title names the dialog.
+
+</Do>
+
+<Do>
+
+Set only the width, with `--tec-popover-width`: the popover owns its padding, radius, shadow and surface.
+
+</Do>
+
+<Do>
+
+Never open a popover from inside another; a [Select](/docs/components/select), [Combobox](/docs/components/combobox) or [Dropdown Menu](/docs/components/dropdown-menu) inside one is fine.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="One placement string instead of side and align">
+
+<Wrong>
+
+```html
+<tec-popover placement="top start" offset="8">
+  <tec-button slot="trigger" variant="outline">Dimensions</tec-button>
+  <tec-popover-title>Dimensions</tec-popover-title>
+</tec-popover>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-popover side="top" align="start" side-offset="8">
+  <tec-button slot="trigger" variant="outline">Dimensions</tec-button>
+  <tec-popover-title>Dimensions</tec-popover-title>
+</tec-popover>
+```
+
+</Correct>
+
+`tec-popover` positions with separate `side`, `align` and `side-offset` attributes; `placement` and `offset` are unknown attributes, so the panel silently keeps the default bottom-centre placement.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Repainting the popover surface with classes">
+
+<Wrong>
+
+```html
+<tec-popover class="w-80 rounded-lg border border-gray-200 bg-white p-6 shadow-xl">
+  <tec-button slot="trigger" variant="outline">Filter wells</tec-button>
+  <tec-popover-title>Filter wells</tec-popover-title>
+</tec-popover>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-popover style="--tec-popover-width: 20rem">
+  <tec-button slot="trigger" variant="outline">Filter wells</tec-button>
+  <tec-popover-title>Filter wells</tec-popover-title>
+</tec-popover>
+```
+
+</Correct>
+
+The panel lives in the shadow root, so classes on the host never reach it; `border-gray-200` is outside the Tecton palette and emits no CSS at all, and the padding and radius duplicate what the component already owns.
+
+</Dont>
