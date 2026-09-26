@@ -344,6 +344,8 @@ export class ListLabelBase extends TectonElement {
     css`
       :host {
         display: block;
+      }
+      .base {
         padding: 0.375rem 0.5rem;
         font-size: var(--tec-text-xs);
         line-height: var(--tec-text-xs--line-height);
@@ -355,7 +357,7 @@ export class ListLabelBase extends TectonElement {
   ]
 
   protected override render() {
-    return html`<slot></slot>`
+    return html`<div class="base" part="base"><slot></slot></div>`
   }
 }
 

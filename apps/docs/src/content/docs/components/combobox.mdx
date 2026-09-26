@@ -1,0 +1,266 @@
+---
+title: Combobox
+description: Autocomplete input with a filterable list of suggestions.
+tags: ["tec-combobox", "tec-combobox-item", "tec-combobox-group", "tec-combobox-label", "tec-combobox-separator", "tec-combobox-empty"]
+---
+
+<ComponentPreview name="combobox-demo" class="min-h-80 items-start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/combobox"
+```
+
+```html
+<tec-combobox placeholder="Select a framework" aria-label="Framework">
+  <tec-combobox-item value="next">Next.js</tec-combobox-item>
+  <tec-combobox-item value="svelte">SvelteKit</tec-combobox-item>
+  <tec-combobox-item value="astro">Astro</tec-combobox-item>
+  <tec-combobox-empty>No items found.</tec-combobox-empty>
+</tec-combobox>
+```
+
+Typing in the input opens the list and filters it (case- and accent-insensitive `contains`; `filter="starts-with" | "fuzzy" | "none"` or a filter function change it). Choosing an option puts its text in the input and its `value` (its text when it has none) in the element's `value`; `change` fires. Leaving the field with text that matches nothing reverts it to the chosen option, unless `allow-custom-value` is set.
+
+It is a form control: `name`, `required`, `disabled`, `invalid`, form reset and `<fieldset disabled>` work as on a native input.
+
+## Composition
+
+```text
+tec-combobox
+├── svg (slot="start")          optional addon
+├── tec-combobox-group
+│   ├── tec-combobox-label
+│   ├── tec-combobox-item
+│   ├── tec-combobox-item
+│   └── tec-combobox-separator
+├── tec-combobox-group
+│   ├── tec-combobox-label
+│   └── tec-combobox-item
+└── tec-combobox-empty
+```
+
+## Basic
+
+A simple combobox with a list of frameworks.
+
+<ComponentPreview name="combobox-basic" class="min-h-80 items-start" />
+
+## Multiple
+
+With `multiple`, chosen options become chips in front of the input and the list stays open while choosing. <Kbd>Backspace</Kbd> in the empty input removes the last chip; <Kbd>←</Kbd> at the start of the input moves to the chips, where <Kbd>Delete</Kbd> removes one. `values` holds the choice; each value is submitted as its own form entry.
+
+<ComponentPreview name="combobox-multiple" class="min-h-80 items-start" />
+
+## Clear Button
+
+`show-clear` shows a clear button (in place of the chevron) while the input has text.
+
+<ComponentPreview name="combobox-clear" class="min-h-80 items-start" />
+
+## Groups
+
+Use `tec-combobox-group` with a `tec-combobox-label` (or a `label` attribute) and `tec-combobox-separator` to group items. Groups whose items are all filtered out hide, and separators hide while filtering.
+
+<ComponentPreview name="combobox-groups" class="min-h-96 items-start" />
+
+## Custom Items
+
+Items can hold any markup. Give them a `label`: it is what the filter matches and what the input shows once the item is chosen.
+
+<ComponentPreview name="combobox-custom" class="min-h-96 items-start" />
+
+## Custom Value
+
+`allow-custom-value` keeps typed text that matches no option as the value.
+
+<ComponentPreview name="combobox-custom-value" class="min-h-80 items-start" />
+
+## Invalid
+
+Use the `invalid` attribute to show the error state (inside a [Field](/docs/components/field), the field's error message is shown too).
+
+<ComponentPreview name="combobox-invalid" />
+
+## Disabled
+
+Use the `disabled` attribute to disable the combobox.
+
+<ComponentPreview name="combobox-disabled" />
+
+## Input Group
+
+Put an icon in `slot="start"` (or content in `slot="end"`). `--tec-combobox-content-width` and `align-offset` size and shift the popup.
+
+<ComponentPreview name="combobox-input-group" class="min-h-96 items-start" />
+
+## RTL
+
+Chips, addons and the check marks follow the text direction; <Kbd>→</Kbd> moves from the start of the input to the chips.
+
+<ComponentPreview name="combobox-rtl" direction="rtl" align="start" class="min-h-96 items-start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["A–Z", "Types into the input; the list opens (`menu-trigger=\"input\"`) and is filtered."],
+    ["ArrowDown", "Opens the list with every option, highlighting the chosen one (else the first). When open: highlights the next option (disabled ones are skipped)."],
+    ["ArrowUp", "Opens the list highlighting the chosen option (else the last). When open: highlights the previous option."],
+    ["Alt+ArrowDown", "Opens the list without highlighting an option."],
+    ["Alt+ArrowUp", "Closes the list, keeping the chosen option."],
+    ["PageUp / PageDown", "Moves the highlight by ten options."],
+    ["Enter", "Chooses the highlighted option (toggles it with `multiple`) and closes the list."],
+    ["Escape", "When open: closes the list and reverts unmatched text. When closed: clears the input and the value."],
+    ["Backspace", "With `multiple` and an empty input: removes the last chip."],
+    ["ArrowLeft", "With `multiple`, at the start of the input: focuses the last chip's remove button (ArrowRight in right-to-left). On a chip: ArrowLeft / ArrowRight move between chips and back to the input; Delete / Backspace remove the chip."],
+    ["Tab", "Commits the typed text (reverting it when it matches nothing) and moves focus on."],
+  ]}
+/>
+
+## Accessibility
+
+- Follows the WAI-ARIA combobox pattern with a listbox popup, as React Aria's ComboBox: the input is `role="combobox"` with `aria-autocomplete="list"`, `aria-expanded`, `aria-controls` and `aria-activedescendant`. DOM focus never leaves the input; the highlighted option is announced through the active descendant.
+- Name it with a [Field](/docs/components/field) label, `<label for>`, `aria-labelledby` or `aria-label` on `tec-combobox`; the listbox takes the same name (or "Suggestions", `list-label`).
+- Options are `role="option"` with `aria-selected` and `aria-disabled`; groups are `role="group"` named by their label; separators are decorative. `multiple` sets `aria-multiselectable`.
+- The chevron button is hidden from assistive technology (the keyboard does the same); the clear button is named "Clear" (`clear-label`), and chip remove buttons "Remove Apple" (`remove-label`). Chips form a list.
+- `invalid` and failed constraints set `aria-invalid` on the input; `required` sets `aria-required` and blocks form submission.
+
+## API Reference
+
+<ApiReference tags={["tec-combobox", "tec-combobox-item", "tec-combobox-group", "tec-combobox-label", "tec-combobox-separator", "tec-combobox-empty"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The list is long enough that typing to narrow it beats scrolling a popup.
+- The user picks several values and should see them as removable chips.
+- The field still resolves to values from a known collection — or, with `allow-custom-value`, to free text with suggestions.
+
+### Not for
+
+- a short fixed list that needs no typing: use [Select](/docs/components/select)
+- a palette that runs commands instead of setting a value: use [Command](/docs/components/command)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Give every `tec-combobox-item` a `value` (or rely on its text); read the choice from `value` / `values` and listen to `change`.
+
+</Do>
+
+<Do>
+
+Name the field: `aria-label` on `tec-combobox`, or a `tec-field-label` when it sits inside a `tec-field`.
+
+</Do>
+
+<Do>
+
+Add a `tec-combobox-empty` so a search without matches says so instead of closing the list.
+
+</Do>
+
+<Do>
+
+Add a `label` to any item whose content is markup, so filtering and the input text have a string.
+
+</Do>
+
+<Do>
+
+For multi-select add `multiple`; the chosen options become chips automatically.
+
+</Do>
+
+<Do>
+
+Open the suggestions on focus when recent picks (the last wells opened) help before typing (`menu-trigger="focus"`).
+
+</Do>
+
+<Do>
+
+Query a server-backed combobox after the user pauses typing, not on every keystroke (debounce `tec-input-change`, then replace the items).
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A combobox rendered with no accessible name">
+
+<Wrong>
+
+```html
+<tec-combobox placeholder="Framework">…</tec-combobox>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-combobox aria-label="Framework" placeholder="Select a framework">…</tec-combobox>
+```
+
+</Correct>
+
+A placeholder is not a label: it disappears as soon as the user types, so the control is announced as an unnamed combobox.
+
+</Dont>
+
+<Dont severity="HIGH" title="Reading the typed text as the value">
+
+<Wrong>
+
+```js
+combobox.addEventListener("input", () => save(combobox.inputValue))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+combobox.addEventListener("change", () => save(combobox.value))
+```
+
+</Correct>
+
+`inputValue` is whatever is typed right now ("Nex"); `value` is the chosen option's value ("next") and only changes when the user commits a choice. Listen to `tec-input-change` for the typed text (to fetch suggestions), and to `change` for the value.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="No empty state when the filter matches nothing">
+
+<Wrong>
+
+```html
+<tec-combobox aria-label="Framework">
+  <tec-combobox-item>Remix</tec-combobox-item>
+</tec-combobox>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-combobox aria-label="Framework">
+  <tec-combobox-item>Remix</tec-combobox-item>
+  <tec-combobox-empty>No items found.</tec-combobox-empty>
+</tec-combobox>
+```
+
+</Correct>
+
+Without an empty element the popup closes as soon as nothing matches, so the typist sees the list vanish instead of a "no results" message.
+
+</Dont>

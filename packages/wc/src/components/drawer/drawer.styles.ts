@@ -2,39 +2,49 @@ import { css } from "lit"
 
 /*
  * The panel transform is computed from private variables the element sets while swiping and
- * stacking: --_move (px, towards the closing edge), --_snap (px, snap point offset), --_nested
- * (open nested drawers in front), --_stack-height (px, height of the front-most nested drawer).
+ * stacking: --_d-move (px, towards the closing edge), --_d-snap (px, snap point offset), --_d-nested
+ * (open nested drawers in front), --_d-stack-height (px, height of the front-most nested drawer).
  */
 export const drawerStyles = css`
   :host {
-    --_exit: 450ms;
-    --_ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --_modal-exit: 450ms;
+    --_d-ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
   .dialog:popover-open {
     display: block;
   }
 
   .overlay {
-    opacity: max(var(--_overlay-min, 0), calc(1 - var(--_progress, 0)));
-  }
-  :host([snap-points]) .overlay {
-    --_overlay-min: var(--tec-drawer-overlay-min-opacity, 0.5);
+    opacity: max(var(--_d-overlay-min, 0), calc(1 - var(--_d-progress, 0)));
   }
   .dialog[data-state="closed"] .overlay {
     opacity: 0;
     pointer-events: none;
   }
 
+  .dialog {
+    --_d-progress: 0;
+    --_d-overlay-min: 0;
+  }
+  :host([snap-points]) .dialog {
+    --_d-overlay-min: var(--tec-drawer-overlay-min-opacity, 0.5);
+  }
   .content {
-    --_scale: calc(1 - var(--_nested, 0) * 0.05);
-    --_shrink: calc(var(--_nested, 0) * 0.05);
-    --_peek: calc(var(--_nested, 0) * 1rem);
-    --_inset: var(--tec-drawer-inset, 0px);
+    /* reset: an outer drawer's values would otherwise inherit into a nested one */
+    --_d-move: 0px;
+    --_d-snap: 0px;
+    --_d-nested: 0;
+    --_d-stack-height: 0px;
+    --_d-exit-duration: 450ms;
+    --_d-scale: calc(1 - var(--_d-nested, 0) * 0.05);
+    --_d-shrink: calc(var(--_d-nested, 0) * 0.05);
+    --_d-peek: calc(var(--_d-nested, 0) * 1rem);
+    --_d-inset: var(--tec-drawer-inset, 0px);
     position: fixed;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    margin: var(--_inset);
+    margin: var(--_d-inset);
     min-height: 0;
     background-color: var(--tec-popover);
     color: var(--tec-popover-foreground);
@@ -70,7 +80,7 @@ export const drawerStyles = css`
     height: 3rem;
   }
   :host(:state(nested-open)) .content[data-swipe-axis="y"] {
-    height: var(--_stack-height, auto);
+    height: var(--_d-stack-height, auto);
   }
   /* Axis x: 75% of the viewport, 24rem from sm. */
   .content[data-swipe-axis="x"] {
@@ -96,9 +106,9 @@ export const drawerStyles = css`
     border-top-width: 1px;
     border-start-start-radius: var(--tec-radius-xl);
     border-start-end-radius: var(--tec-radius-xl);
-    --_closed: translate3d(0, calc(100% + var(--_inset) + 2px), 0);
-    transform: translate3d(0, calc(var(--_snap, 0px) + var(--_move, 0px) - var(--_peek) - var(--_shrink) * var(--_stack-height, 0px)), 0)
-      scale(var(--_scale));
+    --_d-closed: translate3d(0, calc(100% + var(--_d-inset) + 2px), 0);
+    transform: translate3d(0, calc(var(--_d-snap, 0px) + var(--_d-move, 0px) - var(--_d-peek) - var(--_d-shrink) * var(--_d-stack-height, 0px)), 0)
+      scale(var(--_d-scale));
   }
   .content[data-swipe-direction="down"]::after {
     top: 100%;
@@ -109,9 +119,9 @@ export const drawerStyles = css`
     border-bottom-width: 1px;
     border-end-start-radius: var(--tec-radius-xl);
     border-end-end-radius: var(--tec-radius-xl);
-    --_closed: translate3d(0, calc(-100% - var(--_inset) - 2px), 0);
-    transform: translate3d(0, calc(-1 * (var(--_snap, 0px) + var(--_move, 0px)) + var(--_peek) + var(--_shrink) * var(--_stack-height, 0px)), 0)
-      scale(var(--_scale));
+    --_d-closed: translate3d(0, calc(-100% - var(--_d-inset) - 2px), 0);
+    transform: translate3d(0, calc(-1 * (var(--_d-snap, 0px) + var(--_d-move, 0px)) + var(--_d-peek) + var(--_d-shrink) * var(--_d-stack-height, 0px)), 0)
+      scale(var(--_d-scale));
   }
   .content[data-swipe-direction="up"]::after {
     bottom: 100%;
@@ -122,8 +132,8 @@ export const drawerStyles = css`
     border-left-width: 1px;
     border-top-left-radius: var(--tec-radius-xl);
     border-bottom-left-radius: var(--tec-radius-xl);
-    --_closed: translate3d(calc(100% + var(--_inset) + 2px), 0, 0);
-    transform: translate3d(calc(var(--_move, 0px) - var(--_peek) - var(--_shrink) * 100%), 0, 0) scale(var(--_scale));
+    --_d-closed: translate3d(calc(100% + var(--_d-inset) + 2px), 0, 0);
+    transform: translate3d(calc(var(--_d-move, 0px) - var(--_d-peek) - var(--_d-shrink) * 100%), 0, 0) scale(var(--_d-scale));
   }
   .content[data-swipe-direction="right"]::after {
     left: 100%;
@@ -134,14 +144,14 @@ export const drawerStyles = css`
     border-right-width: 1px;
     border-top-right-radius: var(--tec-radius-xl);
     border-bottom-right-radius: var(--tec-radius-xl);
-    --_closed: translate3d(calc(-100% - var(--_inset) - 2px), 0, 0);
-    transform: translate3d(calc(-1 * var(--_move, 0px) + var(--_peek) + var(--_shrink) * 100%), 0, 0) scale(var(--_scale));
+    --_d-closed: translate3d(calc(-100% - var(--_d-inset) - 2px), 0, 0);
+    transform: translate3d(calc(-1 * var(--_d-move, 0px) + var(--_d-peek) + var(--_d-shrink) * 100%), 0, 0) scale(var(--_d-scale));
   }
   .content[data-swipe-direction="left"]::after {
     right: 100%;
   }
   .dialog[data-state="closed"] .content {
-    transform: var(--_closed);
+    transform: var(--_d-closed);
   }
   :host(:state(nested-open)) .content {
     overflow: hidden;
@@ -155,12 +165,12 @@ export const drawerStyles = css`
     .content {
       transition-property: transform, height, opacity, filter;
       transition-duration: 450ms;
-      transition-timing-function: var(--_ease);
+      transition-timing-function: var(--_d-ease);
       interpolate-size: allow-keywords;
     }
     .dialog[data-state="closed"] .content,
     .dialog[data-state="closed"] .overlay {
-      transition-duration: var(--_exit-duration, 450ms);
+      transition-duration: var(--_d-exit-duration, 450ms);
     }
     .content[data-swiping],
     .dialog:has(.content[data-swiping]) .overlay {
@@ -168,7 +178,7 @@ export const drawerStyles = css`
     }
     @starting-style {
       .dialog[data-state="open"] .content {
-        transform: var(--_closed);
+        transform: var(--_d-closed);
       }
       .dialog[data-state="open"] .overlay {
         opacity: 0;

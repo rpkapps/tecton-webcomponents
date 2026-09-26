@@ -22,6 +22,8 @@ export interface DrawerSnapPointChangeDetail {
 /** Internal: a nested drawer opened (`delta: 1`) or closed (`-1`) inside an ancestor drawer. */
 const NESTED_EVENT = "tec-drawer-nested-change"
 
+const CLAIMED = Symbol("tec-drawer-swipe")
+
 /** Minimum movement (px) along the swipe axis before a drag becomes a swipe. */
 const SWIPE_SLOP = 6
 /** Release velocity (px/ms) that dismisses or moves to the next snap point regardless of distance. */
@@ -94,7 +96,7 @@ export class TecDrawer extends TecModalElement {
   @property({ type: Boolean, attribute: "non-modal", reflect: true }) nonModal = false
 
   /** With `non-modal`: keeps Tab inside the drawer anyway. */
-  @property({ type: Boolean, attribute: "trap-focus" }) trapFocusNonModal = false
+  @property({ type: Boolean, attribute: "trap-focus" }) trapFocus = false
 
   /** Ignores presses outside the drawer (Escape, swipes and close parts still close it). */
   @property({ type: Boolean, reflect: true }) persistent = false
@@ -141,8 +143,8 @@ export class TecDrawer extends TecModalElement {
     return "dialog"
   }
 
-  protected override get trapFocus(): boolean {
-    return this.modal || this.trapFocusNonModal
+  protected override get containsFocus(): boolean {
+    return this.modal || this.trapFocus
   }
 
   protected override get dismissOnOutsidePress(): boolean {
@@ -193,10 +195,10 @@ export class TecDrawer extends TecModalElement {
     if (!popup) return
     const count = this.#nested.length
     this.toggleState("nested-open", count > 0)
-    popup.style.setProperty("--_nested", String(count))
+    popup.style.setProperty("--_d-nested", String(count))
     const front = this.#nested[this.#nested.length - 1]
-    if (front) popup.style.setProperty("--_stack-height", `${front.height}px`)
-    else popup.style.removeProperty("--_stack-height")
+    if (front) popup.style.setProperty("--_d-stack-height", `${front.height}px`)
+    else popup.style.removeProperty("--_d-stack-height")
   }
 
   #announceNested(delta: 1 | -1): void {
@@ -227,21 +229,21 @@ export class TecDrawer extends TecModalElement {
     if (!popup) return
     if (!this.#hasSnapPoints) {
       this.#snapOffset = 0
-      popup.style.removeProperty("--_snap")
+      popup.style.removeProperty("--_d-snap")
       this.toggleState("expanded", false)
       popup.removeAttribute("data-expanded")
       return
     }
     const point = this.snapPoint ?? this.snapPoints[0]!
     this.#snapOffset = this.#offsetOf(point)
-    popup.style.setProperty("--_snap", `${this.#snapOffset}px`)
+    popup.style.setProperty("--_d-snap", `${this.#snapOffset}px`)
     const expanded = this.#snapOffset < 1
     this.toggleState("expanded", expanded)
     popup.toggleAttribute("data-expanded", expanded)
   }
 
   protected override willShow(): void {
-    this.popup?.style.removeProperty("--_exit-duration")
+    this.popup?.style.removeProperty("--_d-exit-duration")
     this.#setMove(0)
     if (this.#hasSnapPoints && this.snapPoint === null) this.snapPoint = this.snapPoints[0]!
   }
@@ -302,9 +304,9 @@ export class TecDrawer extends TecModalElement {
   #setMove(px: number): void {
     const popup = this.popup
     if (!popup) return
-    popup.style.setProperty("--_move", `${px}px`)
+    popup.style.setProperty("--_d-move", `${px}px`)
     const progress = Math.max(0, Math.min(1, (this.#snapOffset + px) / this.#size()))
-    this.dialog?.style.setProperty("--_progress", String(this.#hasSnapPoints ? Math.max(0, px) / this.#size() : progress))
+    this.dialog?.style.setProperty("--_d-progress", String(this.#hasSnapPoints ? Math.max(0, px) / this.#size() : progress))
   }
 
   /** The nearest scrollable ancestor of `target` inside the panel, along the swipe axis. */
@@ -332,6 +334,10 @@ export class TecDrawer extends TecModalElement {
   }
 
   #onPointerDown = (event: PointerEvent) => {
+    // A nested drawer (rendered inside this one) handles its own swipes.
+    const claimed = event as PointerEvent & { [CLAIMED]?: boolean }
+    if (claimed[CLAIMED]) return
+    claimed[CLAIMED] = true
     if (!event.isPrimary || event.button !== 0 || !this.open) return
     const target = event.composedPath()[0] as Element
     if (target instanceof Element && isEditable(target)) return
@@ -385,8 +391,7 @@ export class TecDrawer extends TecModalElement {
     this.#setMove(offset - this.#snapOffset)
   }
 
-  #velocity(): number {
-    const samples = this.#drag?.samples ?? []
+  #velocity(samples: { t: number; d: number }[]): number {
     const last = samples[samples.length - 1]
     if (!last) return 0
     const first = samples.find((s) => last.t - s.t <= 100) ?? samples[0]!
@@ -404,7 +409,7 @@ export class TecDrawer extends TecModalElement {
     this.popup.removeAttribute("data-swiping")
     this.toggleState("swiping", false)
     if (this.popup.hasPointerCapture(event.pointerId)) this.popup.releasePointerCapture(event.pointerId)
-    const velocity = this.#velocity()
+    const velocity = this.#velocity(drag.samples)
     const size = this.#size()
     const offset = drag.offset
 
@@ -442,9 +447,9 @@ export class TecDrawer extends TecModalElement {
   #dismissBySwipe(velocity: number, offset: number, size: number): void {
     const remaining = Math.max(0, size - offset)
     const ms = velocity > 0.05 ? Math.min(400, Math.max(120, remaining / velocity)) : 400
-    this.popup.style.setProperty("--_exit-duration", `${Math.round(ms)}ms`)
+    this.popup.style.setProperty("--_d-exit-duration", `${Math.round(ms)}ms`)
     if (!this.requestOpen(false, "swipe")) {
-      this.popup.style.removeProperty("--_exit-duration")
+      this.popup.style.removeProperty("--_d-exit-duration")
       this.#setMove(0)
     }
   }

@@ -1,0 +1,230 @@
+---
+title: Breadcrumb
+description: Displays the path to the current resource using a hierarchy of links.
+tags: ["tec-breadcrumb", "tec-breadcrumb-list", "tec-breadcrumb-item", "tec-breadcrumb-link", "tec-breadcrumb-page", "tec-breadcrumb-separator", "tec-breadcrumb-ellipsis"]
+---
+
+<ComponentPreview name="breadcrumb-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/breadcrumb"
+```
+
+```html
+<tec-breadcrumb>
+  <tec-breadcrumb-list>
+    <tec-breadcrumb-item>
+      <tec-breadcrumb-link href="/">Home</tec-breadcrumb-link>
+    </tec-breadcrumb-item>
+    <tec-breadcrumb-item>
+      <tec-breadcrumb-link href="/components">Components</tec-breadcrumb-link>
+    </tec-breadcrumb-item>
+    <tec-breadcrumb-item>
+      <tec-breadcrumb-page>Breadcrumb</tec-breadcrumb-page>
+    </tec-breadcrumb-item>
+  </tec-breadcrumb-list>
+</tec-breadcrumb>
+```
+
+## Composition
+
+```text
+tec-breadcrumb
+└── tec-breadcrumb-list
+    ├── tec-breadcrumb-item
+    │   └── tec-breadcrumb-link
+    ├── tec-breadcrumb-item
+    │   └── tec-breadcrumb-link
+    └── tec-breadcrumb-item
+        └── tec-breadcrumb-page
+```
+
+Every item but the last draws a chevron separator after its content; the last item is the current page. The chevron points the other way in right-to-left layouts.
+
+## Basic
+
+A basic breadcrumb with a home link and a components link.
+
+<ComponentPreview name="breadcrumb-basic" />
+
+## Custom separator
+
+Place `<tec-breadcrumb-separator>` elements between the items to choose the separator: as soon as the list contains one, the items stop drawing their chevrons. Its content is the glyph (slotted SVGs are sized to 0.875rem); empty, it draws the chevron. To change the separator of a single item, put the glyph in that item's `slot="separator"`.
+
+<ComponentPreview name="breadcrumb-separator" />
+
+## Icons
+
+Links and the page take a leading icon in their content.
+
+<ComponentPreview name="breadcrumb-icons" />
+
+## Dropdown
+
+Compose a `<tec-breadcrumb-item>` with a [`<tec-dropdown-menu>`](/docs/components/dropdown-menu) to put the levels below a crumb in a menu.
+
+<ComponentPreview name="breadcrumb-dropdown" />
+
+## Collapsed
+
+`<tec-breadcrumb-ellipsis>` stands for collapsed levels when the trail is too long. It is decorative; to keep the collapsed levels reachable, put it in a menu trigger with an `aria-label` (as in the demo at the top).
+
+<ComponentPreview name="breadcrumb-ellipsis" />
+
+## Link component
+
+With `href`, `<tec-breadcrumb-link>` renders a real `<a>` in its shadow root; client-side routers that intercept link clicks find it in `event.composedPath()`. When your router renders its own link element, leave out `href` and slot the `<a>` instead: the element styles it as a breadcrumb link.
+
+<ComponentPreview name="breadcrumb-link" />
+
+## RTL
+
+The list follows `dir="rtl"` on any ancestor and the chevrons mirror. Translate the landmark name with `aria-label`.
+
+<ComponentPreview name="breadcrumb-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus to the next / previous link. The current page and the ellipsis are not tab stops."],
+    ["Enter", "Follows the focused link."],
+  ]}
+/>
+
+## Accessibility
+
+- `<tec-breadcrumb>` is a `navigation` landmark named "breadcrumb"; set `aria-label` on it to rename it (for another language, or when a page has several breadcrumbs).
+- `<tec-breadcrumb-list>` is a `list` and each `<tec-breadcrumb-item>` a `listitem`, so screen readers announce the depth of the trail.
+- `<tec-breadcrumb-page>` is exposed as a disabled link with `aria-current="page"` — the pattern announced as "current page". A `<tec-breadcrumb-link>` in the last item gets the same treatment automatically (`aria-current="page"`, not followed).
+- Separators and the ellipsis are hidden from assistive technology. When the ellipsis is a menu trigger, the trigger needs an `aria-label`.
+
+## API Reference
+
+<ApiReference tags={["tec-breadcrumb", "tec-breadcrumb-list", "tec-breadcrumb-item", "tec-breadcrumb-link", "tec-breadcrumb-page", "tec-breadcrumb-separator", "tec-breadcrumb-ellipsis"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The path from the application root down to the record on screen, one link per level.
+- The trail is the eyebrow of a page title block, above the page title.
+- A deep path has to collapse in the middle, behind an ellipsis or a menu.
+
+### Not for
+
+- switching between sibling views of the same page: use [Tabs](/docs/components/tabs)
+- section tabs under a page title: use [Page Header](/docs/tecton/page-header)
+- moving through the pages of one list: use [Pagination](/docs/components/pagination)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose `tec-breadcrumb` > `tec-breadcrumb-list` > `tec-breadcrumb-item`, and end the trail with `tec-breadcrumb-page`, never a link restyled to look current.
+
+</Do>
+
+<Do>
+
+Let the items draw the separators; use `tec-breadcrumb-separator` (or `slot="separator"`) only to change the glyph.
+
+</Do>
+
+<Do>
+
+Give `tec-breadcrumb-link` an `href`, or slot the `<a>` your routing library renders.
+
+</Do>
+
+<Do>
+
+Collapse the middle with `tec-breadcrumb-ellipsis`, or put it in a dropdown menu trigger when those levels must stay reachable.
+
+</Do>
+
+<Do>
+
+Label each breadcrumb with the title of the page it opens ("Gullfaks", not "Gullfaks field overview").
+
+</Do>
+
+<Do>
+
+Breadcrumbs supplement the sidebar or top navigation; never make them the only way to reach other sections.
+
+</Do>
+
+<Do>
+
+Leave breadcrumbs off top-level pages; a trail with no parent only repeats the page title.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A trail hand-built from anchors and slashes">
+
+<Wrong>
+
+```html
+<nav class="flex items-center gap-2 text-sm text-zinc-500">
+  <a href="/fields">Fields</a>
+  <span>/</span>
+  <a href="/fields/gullfaks">Gullfaks</a>
+  <span>/</span>
+  <span class="text-zinc-900">34/10-A-12</span>
+</nav>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-breadcrumb>
+  <tec-breadcrumb-list>
+    <tec-breadcrumb-item><tec-breadcrumb-link href="/fields">Fields</tec-breadcrumb-link></tec-breadcrumb-item>
+    <tec-breadcrumb-item><tec-breadcrumb-link href="/fields/gullfaks">Gullfaks</tec-breadcrumb-link></tec-breadcrumb-item>
+    <tec-breadcrumb-item><tec-breadcrumb-page>34/10-A-12</tec-breadcrumb-page></tec-breadcrumb-item>
+  </tec-breadcrumb-list>
+</tec-breadcrumb>
+```
+
+</Correct>
+
+`zinc` is not a Tecton palette family, so both colour classes emit no CSS, and the row has none of the structure a breadcrumb is read by: the named `navigation` landmark, the list, and the element marked `aria-current="page"`.
+
+</Dont>
+
+<Dont severity="HIGH" title="A button restyled as the current page">
+
+<Wrong>
+
+```html
+<tec-breadcrumb-item>
+  <tec-button variant="link" disabled>34/10-A-12</tec-button>
+</tec-breadcrumb-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-breadcrumb-item>
+  <tec-breadcrumb-page>34/10-A-12</tec-breadcrumb-page>
+</tec-breadcrumb-item>
+```
+
+</Correct>
+
+A disabled button is announced as an unavailable action, not as the current location; `tec-breadcrumb-page` carries `aria-current="page"` and the breadcrumb's text colour.
+
+</Dont>

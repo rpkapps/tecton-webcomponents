@@ -1,0 +1,21 @@
+<form id="calendar-form" class="flex flex-col items-start gap-3">
+  <tec-calendar name="inspection" label="Inspection date" required class="rounded-lg border"></tec-calendar>
+  <tec-button type="submit">Book inspection</tec-button>
+  <output class="text-sm text-muted-foreground"></output>
+</form>
+<script type="module">
+  const form = document.getElementById("calendar-form")
+  const calendar = form.querySelector("tec-calendar")
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+  // Only the next 60 days, never on a weekend.
+  const start = new Date()
+  const end = new Date()
+  end.setDate(end.getDate() + 60)
+  calendar.min = iso(start)
+  calendar.max = iso(end)
+  calendar.isDateUnavailable = (date) => [0, 6].includes(new Date(date.year, date.month - 1, date.day).getDay())
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    form.querySelector("output").textContent = `inspection=${new FormData(form).get("inspection")}`
+  })
+</script>

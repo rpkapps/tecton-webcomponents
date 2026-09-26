@@ -19,9 +19,6 @@ export const chipStyles = css`
     border-radius: var(--tec-chip-radius, var(--tec-badge-radius, var(--tec-radius-4xl)));
     background-clip: padding-box;
   }
-  :host(:state(removable)) .base {
-    padding-inline-end: var(--_pad-icon);
-  }
 
   /* ---------------------------------------------------------------- states */
   :host(:state(interactive):hover) .base {

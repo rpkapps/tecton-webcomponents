@@ -1,0 +1,30 @@
+<tec-dialog id="dialog-rtl" style="--tec-dialog-max-width: 24rem" lang="ar" close-label="إغلاق">
+  <tec-button slot="trigger" variant="outline">فتح الحوار</tec-button>
+  <form class="contents">
+    <tec-dialog-header>
+      <tec-dialog-title>تعديل الملف الشخصي</tec-dialog-title>
+      <tec-dialog-description>قم بإجراء تغييرات على ملفك الشخصي هنا. انقر فوق حفظ عند الانتهاء.</tec-dialog-description>
+    </tec-dialog-header>
+    <tec-field-group>
+      <tec-field>
+        <tec-label for="dialog-rtl-name">الاسم</tec-label>
+        <tec-input id="dialog-rtl-name" name="name" value="Pedro Duarte"></tec-input>
+      </tec-field>
+      <tec-field>
+        <tec-label for="dialog-rtl-username">اسم المستخدم</tec-label>
+        <tec-input id="dialog-rtl-username" name="username" value="@peduarte"></tec-input>
+      </tec-field>
+    </tec-field-group>
+    <tec-dialog-footer>
+      <tec-dialog-close>إلغاء</tec-dialog-close>
+      <tec-button type="submit">حفظ التغييرات</tec-button>
+    </tec-dialog-footer>
+  </form>
+</tec-dialog>
+<script type="module">
+  const dialog = document.getElementById("dialog-rtl")
+  dialog.querySelector("form").addEventListener("submit", (event) => {
+    event.preventDefault()
+    dialog.hide()
+  })
+</script>

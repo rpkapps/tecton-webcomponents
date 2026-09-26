@@ -69,7 +69,7 @@ export class TecQuestionnaire extends TectonElement {
   /** The active item's name. Setting it moves to that question (the element does not fire `tec-item-change` then). */
   @property({ attribute: false })
   get item(): string {
-    return this.#item ?? this.defaultItem
+    return this.activeItem?.name ?? this.#item ?? this.defaultItem
   }
   set item(value: string) {
     const old = this.item
@@ -118,7 +118,8 @@ export class TecQuestionnaire extends TectonElement {
   /** The active item element. */
   get activeItem(): TecQuestionnaireItem | null {
     const items = this.items
-    return items.find((i) => i.name === this.item) ?? items[0] ?? null
+    const requested = this.#item ?? this.defaultItem
+    return items.find((i) => i.name === requested) ?? items[0] ?? null
   }
 
   /** Progress and navigation state. */

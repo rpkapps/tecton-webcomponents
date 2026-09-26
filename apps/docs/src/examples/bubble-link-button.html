@@ -1,0 +1,16 @@
+<div id="bubble-link-button" class="flex w-full max-w-sm flex-col gap-8 py-12">
+  <tec-bubble variant="muted"><tec-bubble-content>How can I help you today?</tec-bubble-content></tec-bubble>
+  <tec-bubble-group>
+    <tec-bubble variant="tinted" align="end"><tec-bubble-content type="button">I forgot my password</tec-bubble-content></tec-bubble>
+    <tec-bubble variant="tinted" align="end"><tec-bubble-content type="button">I need help with my subscription</tec-bubble-content></tec-bubble>
+    <tec-bubble variant="tinted" align="end"><tec-bubble-content href="#links-and-buttons">Something else. Talk to a human.</tec-bubble-content></tec-bubble>
+  </tec-bubble-group>
+  <p class="text-sm text-muted-foreground" role="status"></p>
+</div>
+<script type="module">
+  const root = document.getElementById("bubble-link-button")
+  const status = root.querySelector("[role=status]")
+  for (const reply of root.querySelectorAll('tec-bubble-content[type="button"]')) {
+    reply.addEventListener("click", () => (status.textContent = `You chose: ${reply.textContent.trim()}`))
+  }
+</script>

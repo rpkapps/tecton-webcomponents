@@ -65,7 +65,7 @@ describe("tec-color-swatch", () => {
     expect(changes.events).toHaveLength(1)
     await el.updateComplete
     expect(presets[1]!.getAttribute("aria-selected")).toBe("true")
-    expect(q<HTMLInputElement>(el, ".hex").value).toBe(el.color)
+    expect(q<HTMLInputElement>(el, ".hex").value).toBe(el.color.toUpperCase())
     await expectAccessible(el)
     await userEvent.keyboard("{Escape}")
     await waitUntil(() => !picker.matches(":popover-open"))
@@ -89,7 +89,7 @@ describe("tec-color-swatch", () => {
     await userEvent.clear(hex)
     await userEvent.type(hex, "zz{Enter}")
     expect(el.color).toBe("#12ab35")
-    expect(hex.value).toBe("#12ab35")
+    expect(hex.value).toBe("#12AB35")
     expect(await axNode(q(el, ".native input"))).toMatchObject({ name: "Pick a custom colour" })
   })
 

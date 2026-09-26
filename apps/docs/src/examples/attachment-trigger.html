@@ -1,0 +1,24 @@
+<div id="attachment-trigger" class="mx-auto w-full max-w-sm py-12">
+  <tec-attachment class="w-full">
+    <tec-attachment-media><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><circle cx="11.5" cy="14.5" r="2.5"/><path d="M13.3 16.3 15 18"/></svg></tec-attachment-media>
+    <tec-attachment-content>
+      <tec-attachment-title>research-summary.pdf</tec-attachment-title>
+      <tec-attachment-description>Open preview dialog</tec-attachment-description>
+    </tec-attachment-content>
+    <tec-attachment-actions>
+      <tec-attachment-action aria-label="Copy link to research-summary.pdf"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></tec-attachment-action>
+      <tec-attachment-action aria-label="Remove research-summary.pdf"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></tec-attachment-action>
+    </tec-attachment-actions>
+    <tec-attachment-trigger aria-label="Preview research-summary.pdf"></tec-attachment-trigger>
+  </tec-attachment>
+  <tec-dialog class="sm:max-w-md">
+    <tec-dialog-header>
+      <tec-dialog-title>research-summary.pdf</tec-dialog-title>
+      <tec-dialog-description>The attachment trigger fills the card and opens the dialog, while the actions stay independently clickable above it.</tec-dialog-description>
+    </tec-dialog-header>
+  </tec-dialog>
+</div>
+<script type="module">
+  const root = document.getElementById("attachment-trigger")
+  root.querySelector("tec-attachment-trigger").addEventListener("click", () => root.querySelector("tec-dialog").show())
+</script>

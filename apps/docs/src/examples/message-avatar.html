@@ -1,0 +1,40 @@
+<div class="flex w-full max-w-sm flex-col gap-6 py-12">
+  <tec-message>
+    <tec-message-avatar>
+      <tec-avatar>
+        <tec-avatar-image src="/avatars/03.png" alt="Build bot"></tec-avatar-image>
+        <tec-avatar-fallback>B</tec-avatar-fallback>
+      </tec-avatar>
+    </tec-message-avatar>
+    <tec-message-content>
+      <tec-bubble variant="muted"><tec-bubble-content>The build failed during dependency installation.</tec-bubble-content></tec-bubble>
+    </tec-message-content>
+  </tec-message>
+  <tec-message align="end">
+    <tec-message-avatar>
+      <tec-avatar>
+        <tec-avatar-image src="/avatars/10.png" alt="You"></tec-avatar-image>
+        <tec-avatar-fallback>ME</tec-avatar-fallback>
+      </tec-avatar>
+    </tec-message-avatar>
+    <tec-message-content>
+      <tec-bubble><tec-bubble-content>Can you share the exact error?</tec-bubble-content></tec-bubble>
+    </tec-message-content>
+  </tec-message>
+  <tec-message>
+    <tec-message-avatar>
+      <tec-avatar>
+        <tec-avatar-image src="/avatars/03.png" alt="Build bot"></tec-avatar-image>
+        <tec-avatar-fallback>B</tec-avatar-fallback>
+      </tec-avatar>
+    </tec-message-avatar>
+    <tec-message-content>
+      <tec-bubble-group>
+        <tec-bubble variant="muted"><tec-bubble-content>Here's the error from the logs</tec-bubble-content></tec-bubble>
+        <tec-bubble variant="muted">
+          <tec-bubble-content>Something went wrong with the build. The libraries are not installed correctly. Try running the build again.</tec-bubble-content>
+        </tec-bubble>
+      </tec-bubble-group>
+    </tec-message-content>
+  </tec-message>
+</div>

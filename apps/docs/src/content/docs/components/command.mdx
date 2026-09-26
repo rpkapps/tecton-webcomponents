@@ -1,0 +1,243 @@
+---
+title: Command
+description: Command menu for search and quick actions.
+tags: ["tec-command", "tec-command-input", "tec-command-list", "tec-command-group", "tec-command-item", "tec-command-shortcut", "tec-command-separator", "tec-command-empty", "tec-command-dialog"]
+---
+
+<ComponentPreview name="command-demo" align="start" class="min-h-[24.5rem]" />
+
+## Usage
+
+```ts
+import "@tecton/wc/command"
+```
+
+```html
+<tec-command class="max-w-sm rounded-xl border border-border">
+  <tec-command-input placeholder="Type a command or search..."></tec-command-input>
+  <tec-command-list>
+    <tec-command-group heading="Suggestions">
+      <tec-command-item>Calendar</tec-command-item>
+      <tec-command-item>Search Emoji</tec-command-item>
+      <tec-command-item>Calculator</tec-command-item>
+    </tec-command-group>
+    <tec-command-separator></tec-command-separator>
+    <tec-command-group heading="Settings">
+      <tec-command-item>Profile</tec-command-item>
+      <tec-command-item>Billing</tec-command-item>
+      <tec-command-item>Settings</tec-command-item>
+    </tec-command-group>
+    <tec-command-empty>No results found.</tec-command-empty>
+  </tec-command-list>
+</tec-command>
+```
+
+```js
+document.querySelector("tec-command").addEventListener("tec-select", (event) => {
+  run(event.detail.value) // the item's value, or its text
+})
+```
+
+Typing filters the items (case- and accent-insensitive `contains` over each item's text and `keywords`; `filter="fuzzy" | "starts-with"` or a filter function change it) and highlights the first match; groups without a match and separators hide, and `tec-command-empty` shows when nothing matches. <Kbd>Enter</Kbd> or a click fires `tec-select` on the item.
+
+## Composition
+
+```text
+tec-command-dialog              optional
+└── tec-command
+    ├── tec-command-input
+    └── tec-command-list
+        ├── tec-command-group
+        │   ├── tec-command-item
+        │   │   └── tec-command-shortcut
+        │   └── tec-command-item
+        ├── tec-command-separator
+        ├── tec-command-group
+        │   └── tec-command-item
+        └── tec-command-empty
+```
+
+## Basic
+
+A simple command menu in a dialog. `tec-command-dialog` is a modal dialog placed a third of the way down the viewport: `show()` opens it with an empty search in focus; <Kbd>Escape</Kbd>, a press on the backdrop or running a command closes it.
+
+<ComponentPreview name="command-basic" />
+
+## Dialog with a keyboard shortcut
+
+Open the palette from anywhere with a global shortcut. This page already uses <Kbd>Ctrl</Kbd> <Kbd>K</Kbd> for its own search, so the example listens to <Kbd>Ctrl</Kbd> <Kbd>J</Kbd> / <Kbd>⌘</Kbd> <Kbd>J</Kbd>; in an application <Kbd>⌘</Kbd> <Kbd>K</Kbd> is the usual choice. Cancel `tec-select` to keep the dialog open after a command.
+
+<ComponentPreview name="command-dialog" />
+
+## Shortcuts
+
+`tec-command-shortcut` shows a key hint at the end of an item (it is only a hint: bind the keys yourself).
+
+<ComponentPreview name="command-shortcuts" />
+
+## Groups
+
+A command menu with groups, icons and separators.
+
+<ComponentPreview name="command-groups" />
+
+## Scrollable
+
+The list scrolls past 18rem (`--tec-command-list-max-height`); the highlighted item is kept in view.
+
+<ComponentPreview name="command-scrollable" />
+
+## RTL
+
+<ComponentPreview name="command-rtl" direction="rtl" align="start" class="min-h-[24.5rem]" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["A–Z", "Types into the search field; the list filters and the first match is highlighted."],
+    ["ArrowDown / ArrowUp", "Highlights the next / previous item (disabled ones are skipped). From nothing: the first / last item."],
+    ["Home / End", "Highlights the first / last item."],
+    ["PageUp / PageDown", "Moves the highlight by ten items."],
+    ["Enter", "Runs the highlighted item (`tec-select`); in a dialog, also closes it."],
+    ["Escape", "Clears the search. With an empty search, closes the dialog and returns focus to where it was."],
+  ]}
+/>
+
+## Accessibility
+
+- As React Aria's Autocomplete: the search field (`type="search"`, `aria-autocomplete="list"`) keeps DOM focus and controls the list; the highlighted item is its `aria-activedescendant`, so screen readers announce items while the user types and navigates.
+- The list is a `menu` named "Suggestions" (`label` on `tec-command-list`); items are `menuitem` (or `menuitemcheckbox` / `menuitemradio` with `selection-mode`, with `aria-checked`) with `aria-disabled`; groups are `role="group"` named by their heading; separators are `role="separator"`. Shortcut text is part of the item's name.
+- The search field is named by its `label`, else its placeholder, else "Search".
+- `tec-command-dialog` is a native modal `<dialog>` (the page is inert, scrolling is locked) named "Command Palette" and described "Search for a command to run..." by visually hidden text (`label`, `description`). Closing returns focus to the element that had it.
+- Give items whose content is not plain text a `label`, so filtering and the accessible name use a clean string.
+
+## API Reference
+
+<ApiReference tags={["tec-command", "tec-command-input", "tec-command-list", "tec-command-group", "tec-command-item", "tec-command-shortcut", "tec-command-separator", "tec-command-empty", "tec-command-dialog"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The user should reach commands and records by typing, from anywhere in the application.
+- The surface is a palette, usually inside `tec-command-dialog`, rather than a field in a form.
+- The list mixes groups of actions and wants keyboard-shortcut hints beside them.
+
+### Not for
+
+- picking a value for a form field: use [Combobox](/docs/components/combobox)
+- a menu of actions opened from a button: use [Dropdown Menu](/docs/components/dropdown-menu)
+- a menu opened by right click: use [Context Menu](/docs/components/context-menu)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Run the action from `tec-select` (`event.detail.value`), handled once on the `tec-command` or the dialog, with a `value` per item.
+
+</Do>
+
+<Do>
+
+Add a `tec-command-empty` with the no-results message.
+
+</Do>
+
+<Do>
+
+Give a `label` to any item whose content is more than text, and `keywords` for synonyms ("profile, account").
+
+</Do>
+
+<Do>
+
+Group with `tec-command-group heading="…"`, divide with `tec-command-separator`, hint keys with `tec-command-shortcut`.
+
+</Do>
+
+<Do>
+
+Open the palette with `tec-command-dialog` (`show()`, `open`) wrapping a `tec-command`, from a button and a global shortcut.
+
+</Do>
+
+<Do>
+
+Keep the palette short: a few groups, with record results capped (the first ten wells) rather than every match.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Listening for click on the items">
+
+<Wrong>
+
+```js
+item.addEventListener("click", () => openWells())
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+command.addEventListener("tec-select", (event) => {
+  if (event.detail.value === "wells") openWells()
+})
+```
+
+</Correct>
+
+Focus stays in the search field, so <Kbd>Enter</Kbd> on a highlighted item never produces a `click` on it: keyboard users could not run the command. `tec-select` fires for both, only for enabled items.
+
+</Dont>
+
+<Dont severity="HIGH" title="Markup items with no label">
+
+<Wrong>
+
+```html
+<tec-command-item value="billing"><svg …></svg><span>Billing</span><span class="badge">3 due</span></tec-command-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-command-item value="billing" label="Billing"><svg …></svg><span>Billing</span><span class="badge">3 due</span></tec-command-item>
+```
+
+</Correct>
+
+Without a `label` the item's text is all of its text ("Billing 3 due"), so searching and the announced name include the badge.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="An empty search that renders nothing">
+
+<Wrong>
+
+```html
+<tec-command-list>…items…</tec-command-list>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-command-list>…items…<tec-command-empty>No results found.</tec-command-empty></tec-command-list>
+```
+
+</Correct>
+
+With no empty element, a search without matches leaves a blank palette and the user cannot tell a typo from a missing command.
+
+</Dont>

@@ -1,0 +1,16 @@
+<tec-dialog>
+  <tec-button slot="trigger" variant="outline">Share</tec-button>
+  <tec-dialog-header>
+    <tec-dialog-title>Share link</tec-dialog-title>
+    <tec-dialog-description>Anyone who has this link will be able to view this.</tec-dialog-description>
+  </tec-dialog-header>
+  <div class="flex items-center gap-2">
+    <div class="grid flex-1 gap-2">
+      <tec-label for="dialog-close-button-link" class="sr-only">Link</tec-label>
+      <tec-input id="dialog-close-button-link" value="https://tecton.example.com/docs/installation" readonly></tec-input>
+    </div>
+  </div>
+  <tec-dialog-footer class="sm:justify-start">
+    <tec-dialog-close>Close</tec-dialog-close>
+  </tec-dialog-footer>
+</tec-dialog>

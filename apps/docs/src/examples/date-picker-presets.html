@@ -1,0 +1,23 @@
+<tec-field class="mx-auto w-48">
+  <tec-field-label for="date-picker-presets">Due date</tec-field-label>
+  <tec-date-picker id="date-picker-presets">
+    <div slot="footer" class="flex flex-wrap gap-2 border-t p-3">
+      <tec-button variant="outline" size="sm" class="flex-1" data-days="0">Today</tec-button>
+      <tec-button variant="outline" size="sm" class="flex-1" data-days="1">Tomorrow</tec-button>
+      <tec-button variant="outline" size="sm" class="flex-1" data-days="7">In a week</tec-button>
+    </div>
+  </tec-date-picker>
+</tec-field>
+<script type="module">
+  const picker = document.getElementById("date-picker-presets")
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+  for (const button of picker.querySelectorAll("[data-days]")) {
+    button.addEventListener("click", () => {
+      const date = new Date()
+      date.setDate(date.getDate() + Number(button.dataset.days))
+      picker.value = iso(date)
+      picker.hide()
+      picker.focus()
+    })
+  }
+</script>

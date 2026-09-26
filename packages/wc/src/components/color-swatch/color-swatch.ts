@@ -261,7 +261,7 @@ export class TecColorSwatch extends TectonElement {
       const next = Math.min(0xffffff, Math.max(0, parseInt(current.slice(1), 16) + (event.key === "ArrowUp" ? 1 : -1)))
       event.preventDefault()
       const hex = `#${next.toString(16).padStart(6, "0")}`
-      input.value = hex
+      input.value = hex.toUpperCase()
       this.#commit(hex, "both")
     }
   }
@@ -269,10 +269,10 @@ export class TecColorSwatch extends TectonElement {
   #commitHexField(input: HTMLInputElement): void {
     const hex = parseHex(input.value)
     if (hex) {
-      input.value = hex
+      input.value = hex.toUpperCase()
       if (hex !== this._resolved.current) this.#commit(hex, "both")
     } else {
-      input.value = this._resolved.current ?? ""
+      input.value = (this._resolved.current ?? "").toUpperCase()
     }
   }
 
@@ -295,7 +295,7 @@ export class TecColorSwatch extends TectonElement {
     }
     // Keep the hex field in sync unless the user is typing in it.
     const hex = this._hex
-    if (hex && this.shadowRoot?.activeElement !== hex) hex.value = this._resolved.current ?? ""
+    if (hex && this.shadowRoot?.activeElement !== hex) hex.value = (this._resolved.current ?? "").toUpperCase()
   }
 
   #renderSwatch(decorative: boolean) {

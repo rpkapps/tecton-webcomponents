@@ -3,6 +3,10 @@ import { state } from "lit/decorators.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
 
+/** Internal event: the trigger switched between wrapper and bare-button mode. */
+export const TRIGGER_CHANGE = "tec-collapsible-trigger-change"
+const notify = (el: Element) => el.dispatchEvent(new Event(TRIGGER_CHANGE, { bubbles: true }))
+
 const styles = css`
   :host {
     display: inline-block;
@@ -83,7 +87,7 @@ export class TecCollapsibleTrigger extends TectonElement {
     if (wrapper !== this.wrapper) {
       this.wrapper = wrapper
       this.toggleState("wrapper", wrapper)
-      this.dispatchEvent(new Event("tec-trigger-change", { bubbles: true, composed: false }))
+      notify(this)
     }
   }
 

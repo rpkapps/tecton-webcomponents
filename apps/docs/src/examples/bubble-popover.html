@@ -1,0 +1,15 @@
+<div class="flex w-full max-w-sm flex-col gap-4 py-12">
+  <tec-bubble align="end"><tec-bubble-content>Run the build script.</tec-bubble-content></tec-bubble>
+  <tec-bubble variant="destructive">
+    <tec-bubble-content>Failed to run the command.</tec-bubble-content>
+    <tec-bubble-reactions>
+      <tec-popover>
+        <tec-button slot="trigger" variant="ghost" size="icon-xs" aria-label="Show error details"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></tec-button>
+        <tec-popover-header>
+          <tec-popover-title class="text-sm">Command failed with exit code 1</tec-popover-title>
+          <tec-popover-description class="text-sm">ENOENT: no such file or directory, open pnpm-lock.yaml</tec-popover-description>
+        </tec-popover-header>
+      </tec-popover>
+    </tec-bubble-reactions>
+  </tec-bubble>
+</div>

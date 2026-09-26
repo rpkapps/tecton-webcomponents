@@ -3,12 +3,12 @@ import { css } from "lit"
 /**
  * Shared styles of the modal families: the `<dialog>` is a transparent full-viewport layer (the same
  * box whether it is modal, non-modal or leaving the top layer) holding the overlay and the panel.
- * `--_exit` is how long the element stays in the top layer after closing (≥ the exit animation).
+ * `--_modal-exit` is how long the element stays in the top layer after closing (≥ the exit animation).
  */
 export const modalStyles = css`
   :host {
     display: contents;
-    --_exit: var(--tec-duration-fast);
+    --_modal-exit: var(--tec-duration-fast);
   }
   .dialog {
     position: fixed;
@@ -41,8 +41,8 @@ export const modalStyles = css`
   @media (prefers-reduced-motion: no-preference) {
     .dialog {
       transition:
-        display var(--_exit) allow-discrete,
-        overlay var(--_exit) allow-discrete;
+        display var(--_modal-exit) allow-discrete,
+        overlay var(--_modal-exit) allow-discrete;
     }
   }
 

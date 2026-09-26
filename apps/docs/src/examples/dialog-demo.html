@@ -1,0 +1,30 @@
+<tec-dialog id="dialog-demo" style="--tec-dialog-max-width: 24rem">
+  <tec-button slot="trigger" variant="outline">Open Dialog</tec-button>
+  <form class="contents">
+    <tec-dialog-header>
+      <tec-dialog-title>Edit profile</tec-dialog-title>
+      <tec-dialog-description>Make changes to your profile here. Click save when you&apos;re done.</tec-dialog-description>
+    </tec-dialog-header>
+    <tec-field-group>
+      <tec-field>
+        <tec-label for="dialog-demo-name">Name</tec-label>
+        <tec-input id="dialog-demo-name" name="name" value="Pedro Duarte"></tec-input>
+      </tec-field>
+      <tec-field>
+        <tec-label for="dialog-demo-username">Username</tec-label>
+        <tec-input id="dialog-demo-username" name="username" value="@peduarte"></tec-input>
+      </tec-field>
+    </tec-field-group>
+    <tec-dialog-footer>
+      <tec-dialog-close>Cancel</tec-dialog-close>
+      <tec-button type="submit">Save changes</tec-button>
+    </tec-dialog-footer>
+  </form>
+</tec-dialog>
+<script type="module">
+  const dialog = document.getElementById("dialog-demo")
+  dialog.querySelector("form").addEventListener("submit", (event) => {
+    event.preventDefault()
+    dialog.hide()
+  })
+</script>

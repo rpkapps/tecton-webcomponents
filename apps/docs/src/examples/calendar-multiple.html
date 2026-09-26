@@ -1,0 +1,12 @@
+<div id="calendar-multiple" class="flex flex-col items-center gap-3">
+  <tec-calendar multiple class="rounded-lg border"></tec-calendar>
+  <p class="text-sm text-muted-foreground" aria-live="polite">No days selected</p>
+</div>
+<script type="module">
+  const root = document.getElementById("calendar-multiple")
+  const calendar = root.querySelector("tec-calendar")
+  calendar.addEventListener("change", () => {
+    const count = calendar.values.length
+    root.querySelector("p").textContent = count ? `${count} day${count > 1 ? "s" : ""} selected` : "No days selected"
+  })
+</script>

@@ -1,0 +1,334 @@
+---
+title: Sidebar
+description: A composable, themeable and customizable sidebar component.
+tags: ["tec-sidebar-provider", "tec-sidebar", "tec-sidebar-header", "tec-sidebar-content", "tec-sidebar-footer", "tec-sidebar-group", "tec-sidebar-group-label", "tec-sidebar-group-action", "tec-sidebar-group-content", "tec-sidebar-menu", "tec-sidebar-menu-item", "tec-sidebar-menu-button", "tec-sidebar-menu-action", "tec-sidebar-menu-badge", "tec-sidebar-menu-skeleton", "tec-sidebar-menu-sub", "tec-sidebar-menu-sub-item", "tec-sidebar-menu-sub-button", "tec-sidebar-separator", "tec-sidebar-input", "tec-sidebar-trigger", "tec-sidebar-rail", "tec-sidebar-inset"]
+---
+
+<ComponentPreview name="sidebar-demo" class="p-4" caption="A project sidebar that collapses to icons. Press Ctrl/⌘+B, the trigger in the header, or the rail on the sidebar's edge." />
+
+A sidebar is the navigation rail of an application: groups of destinations, an active row, a collapse control, a sheet on phones. It is built from small parts you compose.
+
+## Usage
+
+```ts
+import "@tecton/wc/sidebar"
+```
+
+```html title="index.html"
+<tec-sidebar-provider>
+  <tec-sidebar>
+    <tec-sidebar-header></tec-sidebar-header>
+    <tec-sidebar-content>
+      <tec-sidebar-group></tec-sidebar-group>
+      <tec-sidebar-group></tec-sidebar-group>
+    </tec-sidebar-content>
+    <tec-sidebar-footer></tec-sidebar-footer>
+  </tec-sidebar>
+  <tec-sidebar-inset>
+    <header><tec-sidebar-trigger></tec-sidebar-trigger></header>
+    <!-- the page -->
+  </tec-sidebar-inset>
+</tec-sidebar-provider>
+```
+
+## Composition
+
+```text
+tec-sidebar-provider
+├── tec-sidebar
+│   ├── tec-sidebar-header
+│   ├── tec-sidebar-content
+│   │   ├── tec-sidebar-group
+│   │   │   ├── tec-sidebar-group-label
+│   │   │   ├── tec-sidebar-group-action
+│   │   │   └── tec-sidebar-group-content
+│   │   │       └── tec-sidebar-menu
+│   │   │           ├── tec-sidebar-menu-item
+│   │   │           │   ├── tec-sidebar-menu-button
+│   │   │           │   ├── tec-sidebar-menu-action
+│   │   │           │   └── tec-sidebar-menu-badge
+│   │   │           └── tec-sidebar-menu-item
+│   │   │               ├── tec-sidebar-menu-button
+│   │   │               └── tec-sidebar-menu-sub
+│   │   │                   └── tec-sidebar-menu-sub-item
+│   │   │                       └── tec-sidebar-menu-sub-button
+│   │   └── tec-sidebar-group
+│   ├── tec-sidebar-footer
+│   └── tec-sidebar-rail
+└── tec-sidebar-inset
+    └── tec-sidebar-trigger
+```
+
+## Structure
+
+- **`tec-sidebar-provider`** — holds the state (expanded/collapsed, the mobile sheet), persists it, listens for the keyboard shortcut and lays the sidebar and the content out as a full-height row.
+- **`tec-sidebar`** — the collapsible panel.
+- **`tec-sidebar-header`** / **`tec-sidebar-footer`** — sticky at the top and the bottom: branding, workspace switcher, user menu.
+- **`tec-sidebar-content`** — the scrollable region between them.
+- **`tec-sidebar-group`** — a section with a label, an optional action and content.
+- **`tec-sidebar-menu`** / **`tec-sidebar-menu-item`** — rows of links and buttons, with badges, actions and sub menus.
+- **`tec-sidebar-rail`** — a handle on the sidebar's edge that toggles it.
+- **`tec-sidebar-inset`** — the main content.
+- **`tec-sidebar-trigger`** — the button that toggles the sidebar.
+
+## Provider
+
+`<tec-sidebar-provider>` must wrap the sidebar, the content and every trigger. It fills the viewport height (`min-height: 100svh`); set a height with a class to embed it in a region (`class="h-full min-h-0"`).
+
+- **State**: the `collapsed` attribute (and the `open` property, its inverse) is the desktop state; `open-mobile` is the mobile sheet. `toggle()` toggles whichever applies. Programmatic changes fire no event; user changes fire the cancelable `tec-open-change` (`detail: { open, mobile, reason }`).
+- **Persistence**: the desktop state is written to a `sidebar_state` cookie for 7 days (readable by a server rendering the page) and restored when the provider connects. `persist="local-storage"` uses `localStorage` instead, `persist="none"` writes nothing; `persist-key` changes the name.
+- **Keyboard shortcut**: <Kbd>Ctrl</Kbd>+<Kbd>B</Kbd> (<Kbd>⌘</Kbd>+<Kbd>B</Kbd> on macOS) toggles the sidebar. `shortcut="k"` picks another key, `shortcut=""` registers no listener.
+- **Mobile**: below `mobile-breakpoint` (768px) the sidebar renders as a modal sheet.
+
+### Width
+
+Set `--tec-sidebar-width` (16rem), `--tec-sidebar-width-icon` (3rem) and `--tec-sidebar-width-mobile` (18rem) on the provider or any ancestor.
+
+```html
+<tec-sidebar-provider style="--tec-sidebar-width: 20rem; --tec-sidebar-width-mobile: 20rem">…</tec-sidebar-provider>
+```
+
+## Sidebar
+
+| Attribute | Values | |
+| --- | --- | --- |
+| `side` | `left` (default), `right` | The edge. Logical: `left` is the inline start, the right edge in RTL. |
+| `variant` | `sidebar` (default), `floating`, `inset` | The surface. |
+| `collapsible` | `offcanvas` (default), `icon`, `none` | How it collapses. |
+
+On desktop the sidebar keeps a gap in the page flow and draws itself as a full-height fixed panel. The nearest ancestor with a `transform` or `contain: layout` bounds it instead of the viewport — the previews on this page use `[contain:layout]`.
+
+### Off-canvas
+
+The sidebar slides out of view.
+
+<ComponentPreview name="sidebar-offcanvas" class="p-4" />
+
+### Icon
+
+The sidebar collapses to an icon rail. Labels, badges, actions and sub menus hide; `tooltip` on a menu button shows its label on hover and focus while collapsed.
+
+<ComponentPreview name="sidebar-icon" class="p-4" />
+
+### Floating
+
+<ComponentPreview name="sidebar-floating" class="p-4" />
+
+### Inset
+
+With `variant="inset"` the content becomes a raised card inset from the edges. Wrap the content in `<tec-sidebar-inset>`.
+
+<ComponentPreview name="sidebar-inset" class="p-4" />
+
+### Right side
+
+<ComponentPreview name="sidebar-right" class="p-4" />
+
+## Menu
+
+`<tec-sidebar-menu-button>` renders a link with `href`, else a button (make it the `slot="trigger"` of a dropdown menu or a collapsible). `active` marks the current destination and sets `aria-current="page"` on a link; `size` is `default`, `sm` or `lg`, `variant` `default` or `outline`. Wrap the label in a `<span>` so it truncates.
+
+`<tec-sidebar-menu-action>` is an icon button at the end of a row (`show-on-hover` reveals it with the row), `<tec-sidebar-menu-badge>` a count, `<tec-sidebar-menu-sub>` a nested list, `<tec-sidebar-menu-skeleton>` a loading row. `<tec-sidebar-group-action>` is the action of a group, `<tec-sidebar-input>` a compact search field. This example uses `collapsible="none"`: a plain column.
+
+<ComponentPreview name="sidebar-menu" class="p-4" />
+
+Sub menus that expand from their row go in a [collapsible](/docs/components/collapsible), with the menu button as its trigger — see the demo at the top.
+
+```html
+<tec-sidebar-menu-item>
+  <tec-collapsible>
+    <tec-sidebar-menu-button slot="trigger" tooltip="Wells"><svg>…</svg><span>Wells</span></tec-sidebar-menu-button>
+    <tec-collapsible-content>
+      <tec-sidebar-menu-sub>…</tec-sidebar-menu-sub>
+    </tec-collapsible-content>
+  </tec-collapsible>
+</tec-sidebar-menu-item>
+```
+
+## Controlled
+
+Set `collapsed` (or `open`) to change the state, and call `preventDefault()` on `tec-open-change` to veto a user change.
+
+<ComponentPreview name="sidebar-controlled" class="p-4" />
+
+## Styling by state
+
+The parts expose their state as custom states, so your own CSS can follow the sidebar:
+
+```css
+/* hide a group while the sidebar is collapsed to icons */
+tec-sidebar:state(icon) .projects { display: none; }
+/* the provider knows whether the desktop sidebar is collapsed */
+tec-sidebar-provider:state(collapsed) .page-title { margin-inline-start: 0; }
+```
+
+## Several sidebars in one document
+
+A page that mounts independently deployed applications can end up with more than one provider. Two defaults get in the way: every provider writes the same `sidebar_state` cookie, and every provider listens on `window` for <Kbd>Ctrl</Kbd>/<Kbd>⌘</Kbd>+<Kbd>B</Kbd>. Give each mounted application its own `persist-key` (or `persist="none"`) and another `shortcut` (or `shortcut=""`).
+
+```html
+<tec-sidebar-provider persist-key="asset_tracker_sidebar" shortcut="">…</tec-sidebar-provider>
+```
+
+## RTL
+
+The sidebar follows `dir="rtl"` on any ancestor: `left` becomes the right edge, the rail, the sub menu guide line and the trigger icon mirror, and tooltips open towards the content.
+
+<ComponentPreview name="sidebar-rtl" direction="rtl" class="p-4" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Ctrl+B / Meta+B", "Toggles the sidebar (the mobile sheet on small screens). Configurable with `shortcut`."],
+    ["Tab / Shift+Tab", "Moves through the sidebar's links, buttons and actions. The rail is not a tab stop."],
+    ["Enter", "Follows a link, or activates a menu button, action or trigger."],
+    ["Space", "Activates a menu button, action or trigger."],
+    ["Escape", "Closes the mobile sheet (focus returns to the trigger), or hides a menu button's tooltip."],
+  ]}
+/>
+
+## Accessibility
+
+- `tec-sidebar-menu` and `tec-sidebar-menu-sub` are lists of `listitem`s; menu buttons are real links (`href`) or buttons. Give destinations an `href` so they can be opened in a new tab and shared.
+- `active` sets `aria-current="page"` on a link, so the current destination is announced and not only shown by colour.
+- `tec-sidebar-trigger` is a button named "Toggle Sidebar" (`label`) with `aria-expanded`. The rail is a second, pointer-only handle (`tabindex="-1"`).
+- On mobile the sidebar is a modal `<dialog>` named "Sidebar" (`label`): the page is inert, focus moves into the sheet and returns to the trigger when it closes.
+- While collapsed to icons, labels stay in the accessibility tree; the `tooltip` also describes the button.
+- `tec-sidebar-inset` renders a `<main>` landmark. Wrap the sidebar content in a `<nav aria-label="…">` if it is the page's primary navigation.
+- Group actions and menu actions are icon buttons: give them an `aria-label`.
+
+## API Reference
+
+<ApiReference tags={["tec-sidebar-provider", "tec-sidebar", "tec-sidebar-header", "tec-sidebar-content", "tec-sidebar-footer", "tec-sidebar-group", "tec-sidebar-group-label", "tec-sidebar-group-action", "tec-sidebar-group-content", "tec-sidebar-menu", "tec-sidebar-menu-item", "tec-sidebar-menu-button", "tec-sidebar-menu-action", "tec-sidebar-menu-badge", "tec-sidebar-menu-skeleton", "tec-sidebar-menu-sub", "tec-sidebar-menu-sub-item", "tec-sidebar-menu-sub-button", "tec-sidebar-separator", "tec-sidebar-input", "tec-sidebar-trigger", "tec-sidebar-rail", "tec-sidebar-inset"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The application's navigation rail: groups of destinations, an active row, a collapse control.
+- The rail has to survive a phone — below the mobile breakpoint the sidebar renders itself as a sheet.
+- Rows carry a count, a per-row action or a second level of destinations.
+
+### Not for
+
+- a fixed navigation column inside the application frame: use [App Shell](/docs/tecton/app-shell)
+- a panel that floats over the content and is dismissed: use [Sheet](/docs/components/sheet)
+- a hierarchy of folders and records expanded in place: use [Tree View](/docs/tecton/tree-view)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Wrap the sidebar, the content and every trigger in one `tec-sidebar-provider`; the trigger, the rail and the menu buttons all talk to it.
+
+</Do>
+
+<Do>
+
+Render a row as `tec-sidebar-menu-item` > `tec-sidebar-menu-button`, with `href` for a destination and `active` for the current one.
+
+</Do>
+
+<Do>
+
+Pick the behaviour with `collapsible="offcanvas" | "icon" | "none"` and the surface with `variant="sidebar" | "floating" | "inset"`.
+
+</Do>
+
+<Do>
+
+Set `tooltip="Wells"` on `tec-sidebar-menu-button`: it shows only while the rail is collapsed to icons, which is exactly when the label is gone.
+
+</Do>
+
+<Do>
+
+Mark the current destination with a filled icon, not by background alone: the active row's Tecton glyph takes `variant="filled"` (`<tec-icon name="well" variant="filled">`), the other rows stay outlined.
+
+</Do>
+
+<Do>
+
+Announce the current page to screen readers, not only by colour: `active` on a link sets `aria-current="page"`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A navigation row built as a button with a handler">
+
+<Wrong>
+
+```html
+<tec-sidebar-menu-button onclick="location.href = '/wells'">Wells</tec-sidebar-menu-button>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-sidebar-menu-button href="/wells" active>Wells</tec-sidebar-menu-button>
+```
+
+</Correct>
+
+Without `href` the row renders a `<button>`, so it is no destination for middle-click, Ctrl/⌘-click or "copy link address", and `active` cannot mark it as the current page.
+
+</Dont>
+
+<Dont severity="HIGH" title="Two providers sharing one cookie and one Ctrl+B">
+
+<Wrong>
+
+```html
+<tec-sidebar-provider>
+  <asset-tracker-sidebar></asset-tracker-sidebar>
+</tec-sidebar-provider>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-sidebar-provider persist-key="asset_tracker_sidebar" shortcut="">
+  <asset-tracker-sidebar></asset-tracker-sidebar>
+</tec-sidebar-provider>
+```
+
+</Correct>
+
+Every provider writes the `sidebar_state` cookie and adds a `window` keydown listener for Ctrl/⌘+B by default, so a rail mounted beside the shell's own overwrites the state both restore from, and one key press toggles the pair.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A hand-built sheet for the mobile rail">
+
+<Wrong>
+
+```html
+<tec-sheet side="left"><tec-sidebar-menu>…</tec-sidebar-menu></tec-sheet>
+<tec-sidebar class="hidden md:block">…</tec-sidebar>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-sidebar collapsible="offcanvas">
+  <tec-sidebar-content><tec-sidebar-menu>…</tec-sidebar-menu></tec-sidebar-content>
+</tec-sidebar>
+```
+
+</Correct>
+
+`tec-sidebar` already turns into a sheet bound to the provider's `open-mobile` state below the mobile breakpoint, so a hand-built sheet is a second one that `tec-sidebar-trigger` never opens.
+
+</Dont>

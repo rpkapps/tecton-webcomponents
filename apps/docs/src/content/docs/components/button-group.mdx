@@ -1,0 +1,301 @@
+---
+title: Button Group
+description: A container that groups related buttons together with consistent styling.
+tags: ["tec-button-group", "tec-button-group-separator", "tec-button-group-text"]
+---
+
+<ComponentPreview name="button-group-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/button-group"
+```
+
+```html
+<tec-button-group aria-label="Message actions">
+  <tec-button variant="outline">Archive</tec-button>
+  <tec-button variant="outline">Report</tec-button>
+</tec-button-group>
+```
+
+## Composition
+
+```text
+tec-button-group
+├── tec-button, tec-input, tec-select, tec-input-group …
+├── tec-dropdown-menu / tec-popover / tec-tooltip (its slot="trigger" button is joined)
+├── tec-button-group-separator
+├── tec-button-group-text
+└── tec-button-group (nested: spaced 0.5rem apart)
+```
+
+The group joins its children into one shape: inner corners are squared, neighbouring borders overlap by 1px, and the hovered, focused or open control is drawn on top of its neighbours. The corners are logical, so the shape mirrors in right-to-left layouts. Filled buttons next to an outlined control get a matching border.
+
+## Accessibility
+
+- `<tec-button-group>` has `role="group"`. Name it with `aria-label` or `aria-labelledby`.
+- Every control stays its own tab stop: use <Kbd>Tab</Kbd> to move between them. For one tab stop with arrow-key navigation, use a toolbar.
+- Icon-only buttons need an `aria-label`.
+
+## ButtonGroup vs ToggleGroup
+
+- Use `<tec-button-group>` to group buttons that perform an action.
+- Use [`<tec-toggle-group>`](/docs/components/toggle-group) to group buttons that toggle a state.
+
+## Orientation
+
+Set `orientation="vertical"` to stack the controls.
+
+<ComponentPreview name="button-group-orientation" />
+
+## Size
+
+Control the size with the `size` attribute of the buttons; give every button of a group the same size.
+
+<ComponentPreview name="button-group-size" />
+
+## Nested
+
+Nest `<tec-button-group>` elements to create clusters with spacing: a group that contains groups adds a 0.5rem gap between them.
+
+<ComponentPreview name="button-group-nested" />
+
+## Separator
+
+`<tec-button-group-separator>` visually divides the controls. Buttons with `variant="outline"` do not need one since they have a border; for the other variants a separator improves the visual hierarchy. It is vertical by default and horizontal in a vertical group.
+
+<ComponentPreview name="button-group-separator" />
+
+## Split
+
+Create a split button with two buttons and a separator.
+
+<ComponentPreview name="button-group-split" />
+
+## Input
+
+Join an input with buttons.
+
+<ComponentPreview name="button-group-input" />
+
+## Input Group
+
+Wrap an [input group](/docs/components/input-group) to create complex input layouts. The `--tec-button-group-radius` custom property sets the outer corners of the group — here a pill.
+
+<ComponentPreview name="button-group-input-group" />
+
+## Dropdown Menu
+
+A [dropdown menu](/docs/components/dropdown-menu) placed directly in the group is joined through its `slot="trigger"` button: a split button with a menu.
+
+<ComponentPreview name="button-group-dropdown" />
+
+## Select
+
+Pair with a [select](/docs/components/select).
+
+<ComponentPreview name="button-group-select" />
+
+## Popover
+
+Use with a [popover](/docs/components/popover).
+
+<ComponentPreview name="button-group-popover" />
+
+## Text
+
+`<tec-button-group-text>` puts static text — a unit, a prefix, or a `<label for>` for the input next to it — in the joined shape.
+
+<ComponentPreview name="button-group-text" />
+
+## RTL
+
+The joined corners are logical: the first control is rounded on the right in right-to-left layouts. Flip direction-dependent icons yourself (`rtl:rotate-180`).
+
+<ComponentPreview name="button-group-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus to the next / previous control of the group (each control is a tab stop)."],
+    ["Space / Enter", "Activates the focused button."],
+  ]}
+/>
+
+## How children are joined
+
+- Direct children get the corner radii through custom properties (`--tec-button-radius`, `--tec-select-radius`, `--tec-input-radius`, `--tec-input-group-radius`, `--tec-textarea-radius`, `--tec-button-group-text-radius`) and a `-1px` start margin; nested groups are left alone and spaced instead.
+- For a `tec-dropdown-menu`, `tec-popover`, `tec-tooltip`, `tec-hover-card` or `tec-context-menu` child, the group styles its `slot="trigger"` element (inline custom properties and margin), so the menu or popover content is not affected.
+- `--tec-button-group-radius` (default `--tec-radius-md`) sets the radius of the outer corners.
+
+## API Reference
+
+<ApiReference tags={["tec-button-group", "tec-button-group-separator", "tec-button-group-text"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Two or more controls belong to one object: a split button, a toolbar cluster, an input with a button.
+- The controls should read as a single joined shape rather than separate buttons.
+- Text, an input, an input group or a select has to sit flush against a button.
+
+### Not for
+
+- options that hold an on or off state: use [Toggle Group](/docs/components/toggle-group)
+- sections of content the user moves between: use [Tabs](/docs/components/tabs)
+- a long list of actions behind one trigger: use [Dropdown Menu](/docs/components/dropdown-menu)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the controls in the group and let it join them; use `orientation="vertical"` for a stacked cluster.
+
+</Do>
+
+<Do>
+
+Give the group an `aria-label` or `aria-labelledby`; it is a `role="group"`.
+
+</Do>
+
+<Do>
+
+Put a `tec-button-group-separator` between filled buttons; `variant="outline"` buttons already carry a border.
+
+</Do>
+
+<Do>
+
+Use `tec-button-group-text` for static text, with a `<label for>` inside when the text labels the input next to it.
+
+</Do>
+
+<Do>
+
+Nest groups to separate clusters; the outer group adds the gap itself.
+
+</Do>
+
+<Do>
+
+Every button in a group shares the same variant and size.
+
+</Do>
+
+<Do>
+
+Keep a destructive button out of a button group, set apart from neighbouring actions by a gap.
+
+</Do>
+
+<Do>
+
+When a row of buttons must be one tab stop with arrow-key movement, use a labelled toolbar, not a button group.
+
+</Do>
+
+<Do>
+
+While an action runs, the button that started it keeps focus and shows it is working (a spinner in its `start` slot, not `disabled`); only conflicting actions become unavailable.
+
+</Do>
+
+<Do>
+
+In a toolbar or action bar, back and secondary actions come first and the primary button comes last, at the inline end.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Joining the buttons by hand with classes">
+
+<Wrong>
+
+```html
+<div class="flex">
+  <tec-button variant="outline" style="--tec-button-radius: 4px 0 0 4px">Archive</tec-button>
+  <tec-button variant="outline" class="-ml-px" style="--tec-button-radius: 0 4px 4px 0">Report</tec-button>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-button-group aria-label="Message actions">
+  <tec-button variant="outline">Archive</tec-button>
+  <tec-button variant="outline">Report</tec-button>
+</tec-button-group>
+```
+
+</Correct>
+
+The group already squares the inner corners and overlaps the borders with logical properties; hand-written physical corners duplicate the work, flip to the wrong side in RTL, and lose the group semantics.
+
+</Dont>
+
+<Dont severity="HIGH" title="A button group holding a selected state">
+
+<Wrong>
+
+```html
+<tec-button-group aria-label="View">
+  <tec-button variant="secondary">List</tec-button>
+  <tec-button variant="ghost">Map</tec-button>
+</tec-button-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-toggle-group aria-label="View" value="list">
+  <tec-toggle-group-item value="list">List</tec-toggle-group-item>
+  <tec-toggle-group-item value="map">Map</tec-toggle-group-item>
+</tec-toggle-group>
+```
+
+</Correct>
+
+A button group is a presentational `role="group"`, so a colour swap is the only signal: nothing sets `aria-pressed` and assistive technology cannot tell which view is current.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Adding gap utilities inside a button group">
+
+<Wrong>
+
+```html
+<tec-button-group class="gap-2" aria-label="Mail actions">
+  <tec-button variant="outline">Archive</tec-button>
+  <tec-button variant="outline">Snooze</tec-button>
+</tec-button-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-button-group aria-label="Mail actions">
+  <tec-button-group><tec-button variant="outline">Archive</tec-button></tec-button-group>
+  <tec-button-group><tec-button variant="outline">Snooze</tec-button></tec-button-group>
+</tec-button-group>
+```
+
+</Correct>
+
+The corner and negative-margin rules stay active whatever the gap is, so a bare `gap-2` yields separated buttons with flattened inner edges; nested groups are what the group spaces apart.
+
+</Dont>

@@ -1,0 +1,22 @@
+<tec-card class="mx-auto w-fit p-0">
+  <tec-card-content class="p-0">
+    <tec-range-calendar
+      id="calendar-custom-days"
+      caption-layout="dropdown"
+      header-format='{"month":"long"}'
+      class="[--tec-calendar-cell-size:2.5rem] md:[--tec-calendar-cell-size:3rem]"
+    ></tec-range-calendar>
+  </tec-card-content>
+</tec-card>
+<script type="module">
+  const calendar = document.getElementById("calendar-custom-days")
+  const year = new Date().getFullYear()
+  calendar.value = `${year}-12-08/${year}-12-18`
+  // A price under every day of the month; <span> children render as a smaller second line.
+  calendar.renderDay = (day) => {
+    if (day.isOutsideMonth) return day.formatted
+    const price = document.createElement("span")
+    price.textContent = day.isWeekend ? "$120" : "$100"
+    return [day.formatted, price]
+  }
+</script>

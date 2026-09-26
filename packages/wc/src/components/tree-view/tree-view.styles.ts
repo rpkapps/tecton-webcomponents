@@ -109,6 +109,9 @@ export const treeViewItemStyles = css`
     width: 0.75rem;
     height: 0.75rem;
     border-radius: 0.125rem;
+    /* A tec-color-swatch sizes its own inner box. */
+    --tec-color-swatch-size: 0.75rem;
+    --tec-color-swatch-radius: 0.125rem;
   }
   .label {
     flex: 1 1 0%;

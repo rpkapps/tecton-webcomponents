@@ -1,0 +1,9 @@
+<div lang="ar">
+  <tec-calendar id="calendar-rtl" caption-layout="dropdown" class="rounded-lg border [--tec-calendar-cell-size:2.25rem]"></tec-calendar>
+</div>
+<script type="module">
+  const calendar = document.getElementById("calendar-rtl")
+  const today = new Date()
+  const iso = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+  calendar.value = iso(today)
+</script>

@@ -1,0 +1,25 @@
+<tec-card id="calendar-time" size="sm" class="mx-auto w-fit">
+  <tec-card-content>
+    <tec-calendar class="[--tec-calendar-padding:0]"></tec-calendar>
+  </tec-card-content>
+  <tec-card-footer class="border-t bg-card">
+    <tec-field-group>
+      <tec-field>
+        <tec-field-label for="calendar-time-from">Start Time</tec-field-label>
+        <tec-time-field id="calendar-time-from" granularity="second" value="10:30:00" class="w-full">
+          <svg slot="end" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4-2" /></svg>
+        </tec-time-field>
+      </tec-field>
+      <tec-field>
+        <tec-field-label for="calendar-time-to">End Time</tec-field-label>
+        <tec-time-field id="calendar-time-to" granularity="second" value="12:30:00" class="w-full">
+          <svg slot="end" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4-2" /></svg>
+        </tec-time-field>
+      </tec-field>
+    </tec-field-group>
+  </tec-card-footer>
+</tec-card>
+<script type="module">
+  const now = new Date()
+  document.querySelector("#calendar-time tec-calendar").value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-12`
+</script>

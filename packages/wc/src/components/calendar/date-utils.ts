@@ -229,8 +229,10 @@ export function validateDate(
   if (!value) return null
   const format = (d: DateLike) =>
     dateFormatter(locale, {
-      dateStyle: "short",
-      ...(granularity !== "day" && "hour" in d ? { timeStyle: granularity === "second" ? "medium" : "short" } : {}),
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      ...(granularity !== "day" && "hour" in d ? { hour: "numeric", minute: "2-digit", ...(granularity === "second" ? { second: "2-digit" } : {}) } : {}),
       timeZone: "UTC",
     }).format(d.toDate("UTC"))
   if (min && value.compare(min) < 0) return { flags: { rangeUnderflow: true }, message: validationMessages.rangeUnderflow(format(min)) }

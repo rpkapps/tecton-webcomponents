@@ -160,13 +160,13 @@ export const alertTitleStyles = css`
     color: inherit;
     font-weight: var(--tec-font-weight-medium);
   }
+  /* !important: page resets (\`a { text-decoration: inherit }\`) beat ::slotted rules otherwise. */
   ::slotted(a) {
-    color: inherit;
-    text-decoration-line: underline;
-    text-underline-offset: 3px;
+    text-decoration-line: underline !important;
+    text-underline-offset: 3px !important;
   }
   ::slotted(a:hover) {
-    color: var(--tec-foreground);
+    color: var(--tec-foreground) !important;
   }
 `
 
@@ -183,15 +183,15 @@ export const alertDescriptionStyles = css`
       text-wrap: pretty;
     }
   }
+  /* !important: page resets (\`a { text-decoration: inherit }\`) beat ::slotted rules otherwise. */
   ::slotted(a) {
-    color: inherit;
-    text-decoration-line: underline;
-    text-underline-offset: 3px;
+    text-decoration-line: underline !important;
+    text-underline-offset: 3px !important;
   }
   ::slotted(a:hover) {
-    color: var(--tec-foreground);
+    color: var(--tec-foreground) !important;
   }
   ::slotted(p:not(:last-child)) {
-    margin-block-end: 1rem;
+    margin-block-end: 1rem !important;
   }
 `

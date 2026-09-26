@@ -362,6 +362,7 @@ export class TecAppShellCommandTrigger extends TectonElement {
   constructor() {
     super()
     new AriaDelegateController(this, { target: () => this.control, exclude: ["aria-label"] })
+    new MutationObserver(() => this.requestUpdate()).observe(this, { attributes: true, attributeFilter: ["aria-label"] })
   }
 
   override click(): void {
@@ -380,15 +381,6 @@ export class TecAppShellCommandTrigger extends TectonElement {
       <span class="label"><slot @slotchange=${this.#onSlotChange}>Search</slot></span>
       ${this.shortcut && !this.hideShortcut ? shortcutKeys(this.shortcut, { spoken: false }) : nothing}
     </button>`
-  }
-
-  static override get observedAttributes(): string[] {
-    return [...super.observedAttributes, "aria-label"]
-  }
-
-  override attributeChangedCallback(name: string, old: string | null, value: string | null): void {
-    super.attributeChangedCallback(name, old, value)
-    if (name === "aria-label") this.requestUpdate()
   }
 }
 

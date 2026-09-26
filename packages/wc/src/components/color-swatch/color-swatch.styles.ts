@@ -52,11 +52,13 @@ export const colorSwatchStyles = css`
   .text {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     min-width: 0;
     line-height: 1.25;
   }
   .label,
   .value {
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -65,6 +67,8 @@ export const colorSwatchStyles = css`
     font-weight: var(--tec-font-weight-medium);
   }
   .value {
+    /* Hex codes and CSS values read left to right even in RTL text. */
+    unicode-bidi: plaintext;
     font-family: var(--tec-font-mono);
     font-size: var(--tec-text-xs);
     color: var(--tec-muted-foreground);

@@ -4,7 +4,7 @@ import { uniqueId } from "../../internal/id.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
 import type { TecCollapsibleContent } from "./collapsible-content.js"
-import type { TecCollapsibleTrigger } from "./collapsible-trigger.js"
+import { TRIGGER_CHANGE, type TecCollapsibleTrigger } from "./collapsible-trigger.js"
 
 export type CollapsibleOpenChangeReason = "trigger" | "find"
 
@@ -51,7 +51,7 @@ export class TecCollapsible extends TectonElement {
   constructor() {
     super()
     this.addEventListener("click", this.#onClick)
-    this.addEventListener("tec-trigger-change", () => this.requestUpdate())
+    this.addEventListener(TRIGGER_CHANGE, () => this.requestUpdate())
   }
 
   override connectedCallback(): void {

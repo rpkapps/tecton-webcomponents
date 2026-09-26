@@ -50,7 +50,10 @@ export class TecInputGroup extends TectonElement {
   constructor() {
     super()
     this.addEventListener("focusin", () => this.#syncFocus())
-    this.addEventListener("focusout", () => requestAnimationFrame(() => this.#syncFocus()))
+    this.addEventListener("focusout", (event) => {
+      const next = event.relatedTarget as Node | null
+      this.toggleState("focused", !!next && this.#controls.some((c) => c.contains(next)))
+    })
     for (const type of ["input", "change"]) this.addEventListener(type, () => this.#syncState())
   }
 

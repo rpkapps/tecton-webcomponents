@@ -2,7 +2,7 @@ import { css } from "lit"
 
 export const sheetStyles = css`
   :host {
-    --_exit: var(--tec-duration-slow);
+    --_modal-exit: var(--tec-duration-slow);
   }
   .content {
     position: fixed;

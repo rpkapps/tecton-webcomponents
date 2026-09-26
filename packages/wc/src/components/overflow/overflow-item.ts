@@ -44,6 +44,7 @@ function isRow(el: Element | null): el is OverflowRowLike {
  * @tag tec-overflow-item
  *
  * @slot - The control (a `tec-button`, toggle, select, input …). Put its label text in a `tec-overflow-label`.
+ * @slot icon - An icon for the menu entry when the control shows none (a select, a text field). Not rendered in the row.
  *
  * @csspart tooltip - The tooltip that shows the label while the item is icon-only.
  * @csspart dialog - The dialog that holds a text field while it is in the More menu.
@@ -157,7 +158,7 @@ export class TecOverflowItem extends TectonElement {
 
   /** The label behaviour in effect (see `label-behavior`). */
   get resolvedLabelBehavior(): OverflowLabelBehavior {
-    const hasIcon = iconOf(this) !== null
+    const hasIcon = [...this.children].some((el) => el.getAttribute("slot") !== "icon" && (el.matches("svg, tec-icon, img, [data-icon]") || iconOf(el) !== null))
     if (this.labelBehavior) {
       if (this.labelBehavior === "collapse" && !hasIcon && !this.#warned) {
         this.#warned = true
@@ -198,7 +199,7 @@ export class TecOverflowItem extends TectonElement {
     const label = this.resolvedLabel
     const base = {
       label,
-      icon: iconOf(this),
+      icon: this.querySelector(":scope > [slot=icon]") ?? iconOf(this),
       shortcut: this.shortcut || undefined,
       disabled: control ? isDisabled(control) : false,
       destructive: (this.variant ?? control?.getAttribute("variant")) === "destructive",

@@ -93,8 +93,8 @@ export class TecSidebarMenuItem extends TectonElement {
     const button = this.#own<TecSidebarMenuButton>("tec-sidebar-menu-button")[0]
     const value: SidebarMenuItemContextValue = {
       hasAction: this.#own("tec-sidebar-menu-action").length > 0,
-      buttonSize: button?.size ?? "default",
-      buttonActive: !!button?.active,
+      buttonSize: (button?.getAttribute("size") as SidebarMenuItemContextValue["buttonSize"] | null) ?? "default",
+      buttonActive: !!button?.hasAttribute("active"),
       engaged: this.#engaged,
     }
     this.#provider.setValue(value, true)

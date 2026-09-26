@@ -120,7 +120,7 @@ export class TecButtonGroup extends TectonElement {
       this.#styled.delete(el)
     }
     this.#raise()
-    for (const sep of this.querySelectorAll<TecButtonGroupSeparator>(":scope > tec-button-group-separator")) sep.requestUpdate()
+    for (const sep of this.querySelectorAll<TecButtonGroupSeparator>(":scope > tec-button-group-separator")) sep.requestUpdate?.()
   }
 
   /** z-index for wrapped triggers (direct children are handled in CSS). */

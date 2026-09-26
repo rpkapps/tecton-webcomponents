@@ -1,0 +1,6 @@
+<tec-range-calendar id="calendar-range" visible-months="2" class="rounded-lg border"></tec-range-calendar>
+<script type="module">
+  const year = new Date().getFullYear()
+  // January 12 to February 11 of this year.
+  document.getElementById("calendar-range").value = `${year}-01-12/${year}-02-11`
+</script>

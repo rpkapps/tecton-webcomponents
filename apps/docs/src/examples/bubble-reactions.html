@@ -1,0 +1,27 @@
+<div id="bubble-reactions" class="flex w-full max-w-sm flex-col gap-12 py-12">
+  <tec-bubble variant="muted" align="end">
+    <tec-bubble-content>I don't need tests, I know my code works.</tec-bubble-content>
+    <tec-bubble-reactions align="start" role="img" aria-label="Reactions: thumbs up, surprised"><span>👍</span><span>😮</span></tec-bubble-reactions>
+  </tec-bubble>
+  <tec-bubble variant="muted">
+    <tec-bubble-content>Bold. Fine I'll add some tests. I'll let you know when they're done.</tec-bubble-content>
+    <tec-bubble-reactions role="img" aria-label="Reactions: eyes, rocket, and 2 more"><span>👀</span><span>🚀</span><span>+2</span></tec-bubble-reactions>
+  </tec-bubble>
+  <tec-bubble align="end">
+    <tec-bubble-content>Tests passed on the first try. All 142 of them. Looking good!</tec-bubble-content>
+    <tec-bubble-reactions side="top" align="start" role="img" aria-label="Reactions: party popper, clapping hands"><span>🎉</span><span>👏</span></tec-bubble-reactions>
+  </tec-bubble>
+  <tec-bubble variant="destructive">
+    <tec-bubble-content>Are you sure I can run this command?</tec-bubble-content>
+    <tec-bubble-reactions>
+      <tec-button variant="ghost" size="xs">Yes, run it</tec-button>
+    </tec-bubble-reactions>
+  </tec-bubble>
+  <p class="text-sm text-muted-foreground" role="status"></p>
+</div>
+<script type="module">
+  const root = document.getElementById("bubble-reactions")
+  root.querySelector("tec-bubble-reactions tec-button").addEventListener("click", () => {
+    root.querySelector("[role=status]").textContent = "Running the command…"
+  })
+</script>

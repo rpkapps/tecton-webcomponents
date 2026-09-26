@@ -69,7 +69,7 @@ export class TecBreadcrumbList extends TectonElement {
   }
 
   #syncItems(): void {
-    for (const item of this.querySelectorAll<TecBreadcrumbItem>(":scope > tec-breadcrumb-item")) item.requestUpdate()
+    for (const item of this.querySelectorAll<TecBreadcrumbItem>(":scope > tec-breadcrumb-item")) item.requestUpdate?.()
   }
 
   protected override render() {

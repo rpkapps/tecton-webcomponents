@@ -7,6 +7,10 @@ import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
 import { accordionTriggerStyles } from "./accordion.styles.js"
 
+/** Internal event: the heading text changed (the item re-labels its panel). */
+export const LABEL_CHANGE = "tec-accordion-label-change"
+const notify = (el: Element) => el.dispatchEvent(new Event(LABEL_CHANGE, { bubbles: true }))
+
 /** What the item tells its trigger. @internal */
 export interface AccordionTriggerState {
   expanded: boolean
@@ -116,7 +120,7 @@ export class TecAccordionTrigger extends TectonElement {
           ?disabled=${disabled}
         >
           <span class="start" part="start"><slot name="start"></slot></span>
-          <span class="label" part="label"><slot @slotchange=${() => this.dispatchEvent(new Event("tec-label-change", { bubbles: true }))}></slot></span>
+          <span class="label" part="label"><slot @slotchange=${() => notify(this)}></slot></span>
           <span class="secondary" part="secondary"><slot name="secondary"></slot></span>
           <span class="icon" part="icon">${expanded ? icon(ChevronUp, { size: 20 }) : icon(ChevronDown, { size: 20 })}</span>
         </button>

@@ -1,0 +1,12 @@
+<tec-card class="mx-auto w-fit p-0">
+  <tec-card-content class="p-0">
+    <tec-calendar id="calendar-booked-dates"></tec-calendar>
+  </tec-card-content>
+</tec-card>
+<script type="module">
+  const calendar = document.getElementById("calendar-booked-dates")
+  const year = new Date().getFullYear()
+  calendar.value = `${year}-02-03`
+  // February 12–26 are booked: struck through, focusable, not selectable.
+  calendar.isDateUnavailable = (date) => date.year === year && date.month === 2 && date.day >= 12 && date.day <= 26
+</script>

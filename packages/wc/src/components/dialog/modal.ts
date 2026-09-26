@@ -123,7 +123,7 @@ export class TecModalElement extends TectonElement {
   }
 
   /** @internal Whether Tab is kept inside the panel. */
-  protected get trapFocus(): boolean {
+  protected get containsFocus(): boolean {
     return this.modal
   }
 
@@ -280,7 +280,7 @@ export class TecModalElement extends TectonElement {
       dialog.showPopover()
     }
     this.#dismiss.activate()
-    if (this.trapFocus) this.#trap.activate()
+    if (this.containsFocus) this.#trap.activate()
     this.initialFocus()?.focus({ preventScroll: true })
     this.didShow()
   }

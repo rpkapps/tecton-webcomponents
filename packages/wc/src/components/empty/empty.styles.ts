@@ -110,13 +110,13 @@ export const emptyDescriptionStyles = css`
     font-size: var(--tec-text-sm);
     line-height: 1.625;
   }
+  /* !important: page resets (\`a { text-decoration: inherit }\`) beat ::slotted rules otherwise. */
   ::slotted(a) {
-    color: inherit;
-    text-decoration-line: underline;
-    text-underline-offset: 4px;
+    text-decoration-line: underline !important;
+    text-underline-offset: 4px !important;
   }
   ::slotted(a:hover) {
-    color: var(--tec-primary);
+    color: var(--tec-primary) !important;
   }
 `
 

@@ -4,7 +4,7 @@ import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
 import type { TecAccordion } from "./accordion.js"
 import type { TecAccordionContent } from "./accordion-content.js"
-import type { TecAccordionTrigger } from "./accordion-trigger.js"
+import { LABEL_CHANGE, type TecAccordionTrigger } from "./accordion-trigger.js"
 import { accordionItemStyles } from "./accordion.styles.js"
 
 /**
@@ -40,7 +40,7 @@ export class TecAccordionItem extends TectonElement {
   constructor() {
     super()
     this.addEventListener("click", this.#onClick)
-    this.addEventListener("tec-label-change", (e) => {
+    this.addEventListener(LABEL_CHANGE, (e) => {
       if (e.target !== this) this.requestUpdate()
     })
   }

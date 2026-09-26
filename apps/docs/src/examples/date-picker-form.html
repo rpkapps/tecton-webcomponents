@@ -1,0 +1,22 @@
+<form id="date-picker-form" class="mx-auto grid w-full max-w-xs gap-4">
+  <tec-field>
+    <tec-field-label for="date-picker-form-start">Start date</tec-field-label>
+    <tec-date-picker id="date-picker-form-start" name="start" required min="2026-01-01" max="2026-12-31"></tec-date-picker>
+    <tec-field-description>A weekday in 2026.</tec-field-description>
+  </tec-field>
+  <tec-field>
+    <tec-field-label for="date-picker-form-stay">Stay</tec-field-label>
+    <tec-date-range-picker id="date-picker-form-stay" start-name="check-in" end-name="check-out" required></tec-date-range-picker>
+  </tec-field>
+  <tec-button type="submit">Submit</tec-button>
+  <output class="text-sm text-muted-foreground"></output>
+</form>
+<script type="module">
+  const form = document.getElementById("date-picker-form")
+  form.querySelector("#date-picker-form-start").isDateUnavailable = (date) =>
+    [0, 6].includes(new Date(date.year, date.month - 1, date.day).getDay())
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    form.querySelector("output").textContent = new URLSearchParams(new FormData(form)).toString()
+  })
+</script>

@@ -88,7 +88,7 @@ Choosing an item fires `tec-select` on it (bubbling, `detail: { value }`) and cl
 
 ## Accessibility
 
-- The trigger is a button named "Switch application, current: <name>" (override with `aria-label`) with `aria-haspopup="dialog"` and `aria-expanded`.
+- The trigger is a button named `Switch application, current: <name>` (override with `aria-label`) with `aria-haspopup="dialog"` and `aria-expanded`.
 - The finder is a non-modal `dialog` named by `label` ("Applications"). Focus goes to the search field and stays there: the highlighted application is its `aria-activedescendant` in a `menu` of `menuitem`s grouped by category (`group`, named by the heading).
 - Matches are marked with `<mark>`; the empty state is a `status` that is announced when nothing matches.
 - Pressing outside or Escape closes the finder; focus returns to the trigger.

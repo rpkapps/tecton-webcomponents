@@ -1,0 +1,243 @@
+---
+title: Pagination
+description: Pagination with page navigation, next and previous links.
+tags: ["tec-pagination", "tec-pagination-content", "tec-pagination-item", "tec-pagination-link", "tec-pagination-previous", "tec-pagination-next", "tec-pagination-ellipsis"]
+---
+
+<ComponentPreview name="pagination-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/pagination"
+```
+
+```html
+<tec-pagination>
+  <tec-pagination-content>
+    <tec-pagination-item>
+      <tec-pagination-previous href="?page=1"></tec-pagination-previous>
+    </tec-pagination-item>
+    <tec-pagination-item>
+      <tec-pagination-link href="?page=1">1</tec-pagination-link>
+    </tec-pagination-item>
+    <tec-pagination-item>
+      <tec-pagination-link href="?page=2" active>2</tec-pagination-link>
+    </tec-pagination-item>
+    <tec-pagination-item>
+      <tec-pagination-link href="?page=3">3</tec-pagination-link>
+    </tec-pagination-item>
+    <tec-pagination-item>
+      <tec-pagination-ellipsis></tec-pagination-ellipsis>
+    </tec-pagination-item>
+    <tec-pagination-item>
+      <tec-pagination-next href="?page=3"></tec-pagination-next>
+    </tec-pagination-item>
+  </tec-pagination-content>
+</tec-pagination>
+```
+
+## Composition
+
+```text
+tec-pagination
+└── tec-pagination-content
+    ├── tec-pagination-item
+    │   └── tec-pagination-previous
+    ├── tec-pagination-item
+    │   └── tec-pagination-link
+    ├── tec-pagination-item
+    │   └── tec-pagination-ellipsis
+    └── tec-pagination-item
+        └── tec-pagination-next
+```
+
+The links are [`tec-button`](/docs/components/button) links: `ghost`, and `outline` for the page marked `active`. Page links are square (`size="icon"`); Previous and Next show a chevron and a label that is hidden below 640px.
+
+## Simple
+
+A simple pagination with only page numbers.
+
+<ComponentPreview name="pagination-simple" />
+
+## Icons Only
+
+Use just the previous and next links without page numbers — for example under a data table with a rows-per-page selector.
+
+<ComponentPreview name="pagination-icons-only" />
+
+## First and last page
+
+Show the total next to the pagination, and disable Previous on the first page (and Next on the last): a disabled link has no `href` and is announced as unavailable.
+
+<ComponentPreview name="pagination-states" />
+
+## RTL
+
+The chevrons of Previous and Next mirror in right-to-left layouts. Translate the visible labels with `text`, the accessible names with `label`, and the landmark name with `aria-label`.
+
+<ComponentPreview name="pagination-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus to the next / previous page link. Disabled links and the ellipsis are skipped."],
+    ["Enter", "Follows the focused link."],
+  ]}
+/>
+
+## Accessibility
+
+- `<tec-pagination>` is a `navigation` landmark named "pagination" (rename it with `aria-label`); the content is a `list` of `listitem`s.
+- `active` sets `aria-current="page"` on the current page's link, so it is announced as the current page and not only shown in another style.
+- Previous and Next keep their accessible names ("Go to previous page", "Go to next page") when their visible labels are hidden on small screens; change them with `label`.
+- The ellipsis is hidden from assistive technology.
+
+## API Reference
+
+<ApiReference tags={["tec-pagination", "tec-pagination-content", "tec-pagination-item", "tec-pagination-link", "tec-pagination-previous", "tec-pagination-next", "tec-pagination-ellipsis"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A list is served one page at a time and the user chooses which page.
+- The page has to be a URL: bookmarked, shared, opened in a new tab, restored on reload.
+- Only "previous" and "next" are wanted, next to a rows-per-page select.
+
+### Not for
+
+- paging driven by a table's own sorting and filtering state: use [Data Table](/docs/components/data-table)
+- switching between sibling sections of one page: use [Tabs](/docs/components/tabs)
+- the rows-per-page picker beside the controls: use [Select](/docs/components/select)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose `tec-pagination` > `tec-pagination-content` > one `tec-pagination-item` per control.
+
+</Do>
+
+<Do>
+
+Mark the page with `active` on `tec-pagination-link`: it swaps `ghost` for `outline` and sets `aria-current="page"`.
+
+</Do>
+
+<Do>
+
+Give every control an `href`; a press is a navigation, not a state change.
+
+</Do>
+
+<Do>
+
+Elide the middle with `tec-pagination-ellipsis`, and relabel the ends with `text` and `label` on `tec-pagination-previous` and `tec-pagination-next`.
+
+</Do>
+
+<Do>
+
+Keep `class` to placement (`w-auto`); the controls own their size, shape and colour.
+
+</Do>
+
+<Do>
+
+Place pagination directly below the table or list it pages, never above the rows.
+
+</Do>
+
+<Do>
+
+Show the known total next to the pagination ("51–100 of 1,284 wells"); it displays no count on its own.
+
+</Do>
+
+<Do>
+
+Show no pagination when every row fits on one page.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Page buttons wired to local state">
+
+<Wrong>
+
+```html
+<div class="flex justify-center gap-1">
+  <tec-button size="icon" variant="outline">1</tec-button>
+  <tec-button size="icon" variant="ghost">2</tec-button>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-pagination>
+  <tec-pagination-content>
+    <tec-pagination-item><tec-pagination-link href="?page=1" active>1</tec-pagination-link></tec-pagination-item>
+    <tec-pagination-item><tec-pagination-link href="?page=2">2</tec-pagination-link></tec-pagination-item>
+  </tec-pagination-content>
+</tec-pagination>
+```
+
+</Correct>
+
+The hand-built row has no `navigation` landmark and no list, every page is a button rather than a URL, so nothing is shareable, and `aria-current="page"` — which `active` sets — is never announced.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="The current page marked with a class">
+
+<Wrong>
+
+```html
+<tec-pagination-link href="?page=2" class="bg-blue-600 text-white">2</tec-pagination-link>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-pagination-link href="?page=2" active>2</tec-pagination-link>
+```
+
+</Correct>
+
+`active` is the one switch: it sets the `outline` variant and `aria-current="page"`. Classes on the element cannot restyle the inner link, and `blue-600` is not a Tecton step, so the marker would be invisible as well as unannounced.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A live link to a page that does not exist">
+
+<Wrong>
+
+```html
+<tec-pagination-previous href="?page=0"></tec-pagination-previous>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-pagination-previous disabled></tec-pagination-previous>
+```
+
+</Correct>
+
+On the first page there is no previous page: `disabled` removes the link from the tab order and announces it as unavailable.
+
+</Dont>
