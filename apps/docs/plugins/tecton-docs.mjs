@@ -1,9 +1,8 @@
 // Vite plugin of the docs site.
 //
-// 1. `virtual:tecton-components` registers every `tec-*` element. It imports the
-//    package entry (`@tecton/wc`) when the package exposes one, and otherwise every
-//    family's `src/components/<name>/define.ts`, so a page never breaks while the
-//    library is incomplete: an element that is not built yet simply stays undefined.
+// 1. `virtual:tecton-components` registers every `tec-*` element by importing every
+//    family's `src/components/<name>/define.ts` from the library source, so pages always
+//    show the current components and a new family needs no edit here.
 //
 // 2. `/src/examples/<name>.html?example-script` is the `<script type="module">` of an
 //    example as a real module, so its imports (`import "@tecton/wc/dialog"`) go
@@ -71,12 +70,17 @@ export function tectonDocs() {
     },
     async load(id) {
       if (id === "\0" + COMPONENTS_ID) {
-        const entry = await this.resolve("@tecton/wc", join(docsRoot, "src/index.ts"), { skipSelf: true }).catch(
-          () => null,
-        )
-        if (entry && !entry.external) return `import "@tecton/wc";\n`
+        // Every family's define.ts from the library source. In dev each family loads on its
+        // own, so one broken family (work in progress) cannot take the others down; the
+        // build imports them statically and fails loudly instead.
         const files = defineFiles()
         for (const file of files) this.addWatchFile(file)
+        if (server)
+          return (
+            `const families = ${JSON.stringify(files)};\n` +
+            `await Promise.all(families.map((f) => import(/* @vite-ignore */ "/@fs" + f).catch((e) => console.error("[tecton-docs] could not load", f, e))));\n` +
+            "export {};\n"
+          )
         return files.map((file) => `import ${JSON.stringify(file)};`).join("\n") + "\nexport {};\n"
       }
       if (id.startsWith(EXAMPLE_PREFIX)) {
