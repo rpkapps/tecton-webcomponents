@@ -1,0 +1,250 @@
+---
+title: Attachment
+description: Displays a file or image attachment with media, metadata, upload state, and actions.
+tags: ["tec-attachment", "tec-attachment-media", "tec-attachment-content", "tec-attachment-title", "tec-attachment-description", "tec-attachment-actions", "tec-attachment-action", "tec-attachment-trigger", "tec-attachment-group"]
+---
+
+<ComponentPreview name="attachment-demo" />
+
+`<tec-attachment>` displays a file or image attachment — its media, name and metadata — with optional actions and upload state. Use it for files and images in chat composers, message threads and upload lists.
+
+## Usage
+
+```ts
+import "@tecton/wc/attachment"
+```
+
+```html
+<tec-attachment>
+  <tec-attachment-media><svg aria-hidden="true" …></svg></tec-attachment-media>
+  <tec-attachment-content>
+    <tec-attachment-title>sales-dashboard.pdf</tec-attachment-title>
+    <tec-attachment-description>PDF · 2.4 MB</tec-attachment-description>
+  </tec-attachment-content>
+  <tec-attachment-actions>
+    <tec-attachment-action aria-label="Remove sales-dashboard.pdf"><svg aria-hidden="true" …></svg></tec-attachment-action>
+  </tec-attachment-actions>
+</tec-attachment>
+```
+
+## Composition
+
+```text
+tec-attachment
+├── tec-attachment-media
+├── tec-attachment-content
+│   ├── tec-attachment-title
+│   └── tec-attachment-description
+├── tec-attachment-actions
+│   └── tec-attachment-action
+└── tec-attachment-trigger
+```
+
+Lay several attachments out in a scrollable row with `tec-attachment-group`:
+
+```text
+tec-attachment-group
+├── tec-attachment
+└── tec-attachment
+```
+
+## Image
+
+Set `variant="image"` on `tec-attachment-media` and put an `<img>` with meaningful `alt` text inside. Use `orientation="vertical"` to stack the media above the content; the actions then float over the corner of the image.
+
+<ComponentPreview name="attachment-image" />
+
+## States
+
+Set `state` to follow the upload lifecycle. `uploading` and `processing` shimmer the title (not under reduced motion), `idle` dashes the border, and `error` switches to a destructive treatment.
+
+<ComponentPreview name="attachment-states" />
+
+## Sizes
+
+Use `size` to switch between `default`, `sm` and `xs`.
+
+<ComponentPreview name="attachment-sizes" />
+
+## Group
+
+`tec-attachment-group` lays attachments out in a horizontally scrollable, snapping row whose edges fade while there is more to scroll.
+
+<ComponentPreview name="attachment-group" />
+
+## Trigger
+
+Add a `tec-attachment-trigger` to make the whole card open a link (`href`) or a dialog (listen for `click`). It covers the card behind the actions, so the actions stay clickable.
+
+<ComponentPreview name="attachment-trigger" />
+
+```html
+<tec-attachment>
+  …
+  <tec-attachment-trigger aria-label="Preview research-summary.pdf"></tec-attachment-trigger>
+</tec-attachment>
+<script type="module">
+  trigger.addEventListener("click", () => dialog.show())
+</script>
+```
+
+## RTL
+
+The media, the actions (also in the vertical corner position) and the group's fades follow the reading direction.
+
+<ComponentPreview name="attachment-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves to the trigger and then the actions of each attachment. A focusable group (`tabindex=\"0\"`) is a stop of its own."],
+    ["Enter", "Activates the focused trigger or action."],
+    ["Space", "Activates the focused button trigger or action."],
+    ["ArrowLeft / ArrowRight", "Scrolls a focused group horizontally."],
+  ]}
+/>
+
+## Accessibility
+
+- `tec-attachment-action` is a [`tec-button`](/docs/components/button) (ghost, `icon-xs`). It is usually icon-only: give each one an `aria-label` naming the action and the file ("Remove sales-dashboard.pdf").
+- `tec-attachment-trigger` renders a real `<button>` (or `<a>` with `href`) with no text of its own: give it an `aria-label` for what activating it does ("Preview research-summary.pdf"). It sits behind the actions, so both stay separately focusable and clickable. The card shows a focus ring while anything inside it has focus.
+- Images need meaningful `alt` text; file-type icons are decorative (`aria-hidden="true"`).
+- **Keyboard scrolling**: when the attachments of a group are interactive, keyboard users reach off-screen ones by tabbing. For a row of presentational attachments, make the group scrollable from the keyboard with `tabindex="0"`, `role="group"` and an `aria-label`.
+- **Meaning beyond colour**: keep the failure reason of an `error` state in `tec-attachment-description`.
+
+## API Reference
+
+<ApiReference tags={["tec-attachment", "tec-attachment-media", "tec-attachment-content", "tec-attachment-title", "tec-attachment-description", "tec-attachment-actions", "tec-attachment-action", "tec-attachment-trigger", "tec-attachment-group"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A file or an image the user attached: in the composer before sending, or inside a message.
+- The upload lifecycle has to be visible: selected, uploading, processing, failed, done.
+- The card opens something — a preview dialog, a download — while remove or retry stays separate.
+
+### Not for
+
+- a short static label such as a file type or a count: use [Badge](/docs/components/badge)
+- a tag the user can select or remove from a filter row: use [Chip](/docs/tecton/chip)
+- a row of a file browser or a settings list: use [Item](/docs/components/item)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `tec-attachment-media`, then `tec-attachment-content` with a title and a description, then `tec-attachment-actions`.
+
+</Do>
+
+<Do>
+
+Drive the look with `state` (`idle`, `uploading`, `processing`, `error`, `done`), `size` and `orientation`.
+
+</Do>
+
+<Do>
+
+Use `tec-attachment-media variant="image"` around an `<img>` and `orientation="vertical"` for a thumbnail; lay several cards out in a `tec-attachment-group`.
+
+</Do>
+
+<Do>
+
+Give every `tec-attachment-action` an `aria-label` naming the action and the file.
+
+</Do>
+
+<Do>
+
+Limit the file picker to the formats the import can read (LAS, DLIS, SEG-Y), and state the accepted formats and size limit under the file input ("LAS or DLIS, up to 200 MB").
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A file rendered as a badge with a paperclip">
+
+<Wrong>
+
+```html
+<tec-badge variant="info"><svg slot="start" …></svg> sales-dashboard.pdf</tec-badge>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-attachment size="sm">
+  <tec-attachment-media><svg aria-hidden="true" …></svg></tec-attachment-media>
+  <tec-attachment-content>
+    <tec-attachment-title>sales-dashboard.pdf</tec-attachment-title>
+    <tec-attachment-description>PDF · 2.4 MB</tec-attachment-description>
+  </tec-attachment-content>
+</tec-attachment>
+```
+
+</Correct>
+
+A badge is a one-line label: the name is not truncated, the size and upload status have nowhere to go, and there is no `state` to move the card through.
+
+</Dont>
+
+<Dont severity="HIGH" title="Hand-painting the failed upload">
+
+<Wrong>
+
+```html
+<tec-attachment class="border-red-500 text-red-600">…</tec-attachment>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-attachment state="error">
+  <tec-attachment-content>
+    <tec-attachment-title>financial-model.xlsx</tec-attachment-title>
+    <tec-attachment-description>Upload failed. Try again.</tec-attachment-description>
+  </tec-attachment-content>
+</tec-attachment>
+```
+
+</Correct>
+
+`state="error"` tints the border, the media and the description together; stock Tailwind colours emit no CSS with the Tecton palette.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Opening the preview from a click on the card">
+
+<Wrong>
+
+```html
+<tec-attachment onclick="openPreview()">…</tec-attachment>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-attachment>
+  …
+  <tec-attachment-trigger aria-label="Preview workspace.png" onclick="openPreview()"></tec-attachment-trigger>
+</tec-attachment>
+```
+
+</Correct>
+
+The card itself is not a control, so the listener answers a mouse only; the trigger is a real button that covers the card and stays under the actions.
+
+</Dont>

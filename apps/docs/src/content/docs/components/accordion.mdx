@@ -1,0 +1,279 @@
+---
+title: Accordion
+description: A vertically stacked set of interactive headings that each reveal a section of content.
+tags: ["tec-accordion", "tec-accordion-item", "tec-accordion-trigger", "tec-accordion-content"]
+---
+
+<ComponentPreview name="accordion-demo" align="start" class="h-[300px] items-start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/accordion"
+```
+
+```html
+<tec-accordion value="item-1">
+  <tec-accordion-item value="item-1">
+    <tec-accordion-trigger>Is it accessible?</tec-accordion-trigger>
+    <tec-accordion-content>Yes. It adheres to the WAI-ARIA design pattern.</tec-accordion-content>
+  </tec-accordion-item>
+</tec-accordion>
+```
+
+The import registers the four elements. Each `<tec-accordion-item>` holds one trigger and one content; its `value` identifies it in the accordion's `value`, `values` and `tec-value-change`.
+
+## Composition
+
+```text
+tec-accordion
+├── tec-accordion-item
+│   ├── tec-accordion-trigger
+│   └── tec-accordion-content
+└── tec-accordion-item
+    ├── tec-accordion-trigger
+    └── tec-accordion-content
+```
+
+## Basic
+
+One item is expanded at a time. The `value` attribute expands an item initially; the open item collapses again when its trigger is pressed.
+
+<ComponentPreview name="accordion-basic" align="start" class="h-[300px] items-start" />
+
+## Multiple
+
+Set `multiple` to let several items stay expanded. Read or set them all with the `values` property.
+
+<ComponentPreview name="accordion-multiple" align="start" class="h-[450px] items-start" />
+
+## Disabled
+
+Set `disabled` on a `<tec-accordion-item>` to disable one item (its trigger leaves the tab order), or on `<tec-accordion>` to disable them all.
+
+<ComponentPreview name="accordion-disabled" align="start" class="h-[300px] items-start" />
+
+## Borders
+
+`variant="outline"` draws a rounded border around the group and widens the inline padding of triggers and panels to 1rem.
+
+<ComponentPreview name="accordion-borders" align="start" class="h-[300px] items-start" />
+
+## Dividers
+
+The default variant separates items with dividers; `variant="plain"` removes them.
+
+<ComponentPreview name="accordion-dividers" align="start" class="h-[300px] items-start" />
+
+## Card
+
+Put the accordion in a [`<tec-card>`](/docs/components/card).
+
+<ComponentPreview name="accordion-card" align="start" class="h-[435px] items-start" />
+
+## Secondary text and actions
+
+The trigger row takes a leading icon (`slot="start"`), secondary text (`slot="secondary"`) and action buttons (`slot="actions"`), shown before the chevron. The actions sit next to the toggle button, not inside it, so each one is its own tab stop and pressing it does not toggle the item. Name repeated icon buttons with their object (`aria-label="Delete Facies Model 01"`).
+
+<ComponentPreview name="accordion-secondary" align="start" class="h-[300px] items-start" />
+
+## Keep one open
+
+In single mode, `no-collapse` stops the expanded item from collapsing when its trigger is pressed: one item is always open, and its button is announced as disabled (`aria-disabled="true"`) while it cannot be pressed.
+
+```html
+<tec-accordion value="general" no-collapse>…</tec-accordion>
+```
+
+## Events
+
+`tec-value-change` fires when the user expands or collapses an item, with `detail.value` (the first expanded item, `""` for none) and `detail.values` (all of them). It is cancelable: `preventDefault()` keeps the current state. Setting `value`, `values` or an item's `open` from code fires nothing.
+
+```js
+accordion.addEventListener("tec-value-change", (event) => {
+  localStorage.setItem("sections", JSON.stringify(event.detail.values))
+})
+accordion.values = JSON.parse(localStorage.getItem("sections") ?? "[]")
+```
+
+## Find in page
+
+A collapsed panel stays in the document with `hidden="until-found"`: it is not rendered and not announced, but the browser's find-in-page searches it and expands its item when it finds a match (a cancelable `tec-value-change` fires first).
+
+## RTL
+
+Triggers, chevrons and padding use logical properties and follow `dir="rtl"` on any ancestor.
+
+<ComponentPreview name="accordion-rtl" direction="rtl" align="start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Enter / Space", "Expands or collapses the item of the focused trigger."],
+    ["Tab / Shift+Tab", "Moves to the next / previous focusable element: triggers, action buttons and focusable content of expanded panels. Disabled triggers are skipped."],
+    ["ArrowDown", "Moves focus to the next trigger (wraps to the first)."],
+    ["ArrowUp", "Moves focus to the previous trigger (wraps to the last)."],
+    ["Home / End", "Moves focus to the first / last trigger."],
+  ]}
+/>
+
+## Accessibility
+
+- Follows the WAI-ARIA accordion pattern. Each trigger renders a heading (`aria-level` from `heading-level`, default 3, or the trigger's own `heading-level`) containing a native `<button>` with `aria-expanded` and `aria-controls` pointing at its panel.
+- Each panel is a `group` named by its trigger's text. Collapsed panels are hidden from assistive technology.
+- A disabled item's button is disabled. With `no-collapse`, the expanded item's button has `aria-disabled="true"`.
+- Pick `heading-level` to fit the page outline: an accordion under an `<h2>` uses `heading-level="3"`.
+- The chevron is decorative; do not add your own. Slotted icons in `slot="start"` should be `aria-hidden="true"`. Secondary text is part of the button's name.
+- The height animation is skipped under `prefers-reduced-motion: reduce`. Focus rings and the outline border stay visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-accordion", "tec-accordion-item", "tec-accordion-trigger", "tec-accordion-content"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Several independent sections stack vertically and the reader opens the ones they need: an FAQ, grouped settings, a long form in parts.
+- Every section stays on the page; opening one does not replace another.
+- The set is small and known, so rendering every panel up front costs nothing.
+
+### Not for
+
+- one region that opens and closes on its own: use [Collapsible](/docs/components/collapsible)
+- sections that replace each other in the same space: use [Tabs](/docs/components/tabs)
+- an expandable hierarchy of folders and records: use [Tree View](/docs/tecton/tree-view)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Give every `<tec-accordion-item>` a `value`: it is what the accordion's `value` / `values` and `tec-value-change` refer to.
+
+</Do>
+
+<Do>
+
+Allow several sections at once with `multiple` (the default is one), and disable one with `disabled` on its item, which disables its trigger too.
+
+</Do>
+
+<Do>
+
+Put the heading text straight into `<tec-accordion-trigger>`: it renders the heading, the button and the chevron itself. `class` on `<tec-accordion>` is for width and layout only (`max-w-lg`); use `variant` for the frame.
+
+</Do>
+
+<Do>
+
+When users compare sections (two casing strings, successive well tests), use `multiple` so opening one leaves the others open.
+
+</Do>
+
+<Do>
+
+Start sections open when their content is needed on first view (`value` / `values`); collapse only secondary detail.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Radix accordion attributes">
+
+<Wrong>
+
+```html
+<tec-accordion type="single" collapsible default-value="shipping">
+  <tec-accordion-item value="shipping">…</tec-accordion-item>
+</tec-accordion>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-accordion value="shipping">
+  <tec-accordion-item value="shipping">…</tec-accordion-item>
+</tec-accordion>
+```
+
+</Correct>
+
+`type`, `collapsible` and `default-value` are not attributes of `<tec-accordion>`: they are ignored, so nothing opens. Single mode is the default, `multiple` switches it, items are always collapsible (`no-collapse` turns that off) and `value` is the initially expanded item.
+
+</Dont>
+
+<Dont severity="HIGH" title="Tracking the open section with click on the trigger">
+
+<Wrong>
+
+```js
+trigger.addEventListener("click", () => (section = "privacy"))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+accordion.addEventListener("tec-value-change", (event) => (sections = event.detail.values))
+```
+
+</Correct>
+
+A click fires on the collapse as well as the expand, never fires when another item closes because of single mode, and also fires for clicks on the action buttons. `tec-value-change` reports the whole expanded set.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A chevron added to the trigger">
+
+<Wrong>
+
+```html
+<tec-accordion-trigger>Billing <svg class="ms-auto">…</svg></tec-accordion-trigger>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-accordion-trigger>Billing</tec-accordion-trigger>
+```
+
+</Correct>
+
+The trigger already draws a chevron that turns when the item expands; a hand-added icon becomes a second, static chevron in the middle of the row.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Buttons inside the heading text">
+
+<Wrong>
+
+```html
+<tec-accordion-trigger>Facies Model 01 <tec-button>Edit</tec-button></tec-accordion-trigger>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-accordion-trigger>
+  Facies Model 01
+  <tec-button slot="actions" size="icon-xs" variant="ghost" aria-label="Edit Facies Model 01">…</tec-button>
+</tec-accordion-trigger>
+```
+
+</Correct>
+
+Text in the default slot is inside the toggle button: a nested button is invalid HTML, is announced as part of the heading and toggles the item. The `actions` slot renders the buttons beside the toggle.
+
+</Dont>

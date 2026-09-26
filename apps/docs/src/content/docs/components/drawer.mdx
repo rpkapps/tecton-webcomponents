@@ -1,0 +1,225 @@
+---
+title: Drawer
+description: A panel attached to an edge of the screen that the user drags in and swipes away.
+tags: ["tec-drawer", "tec-drawer-header", "tec-drawer-title", "tec-drawer-description", "tec-drawer-footer", "tec-drawer-close"]
+---
+
+<ComponentPreview name="drawer-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/drawer"
+```
+
+```html
+<tec-drawer>
+  <tec-button slot="trigger" variant="outline">Open</tec-button>
+  <tec-drawer-header>
+    <tec-drawer-title>Are you absolutely sure?</tec-drawer-title>
+    <tec-drawer-description>This action cannot be undone.</tec-drawer-description>
+  </tec-drawer-header>
+  <div class="p-4"><!-- Content here --></div>
+  <tec-drawer-footer>
+    <tec-button>Submit</tec-button>
+    <tec-drawer-close>Cancel</tec-drawer-close>
+  </tec-drawer-footer>
+</tec-drawer>
+```
+
+## Composition
+
+```text
+tec-drawer
+├── tec-button slot="trigger"
+├── tec-drawer-header
+│   ├── tec-drawer-title
+│   └── tec-drawer-description
+├── (body)
+└── tec-drawer-footer
+    └── tec-drawer-close
+```
+
+Like a [dialog](/docs/components/dialog), a drawer has `open`, `show()` / `hide()` and a cancelable `tec-open-change`; a swipe that dismisses it reports `reason: "swipe"`.
+
+## Swiping
+
+Drag the panel towards its edge with a pointer, a finger or a pen: it follows the pointer and the overlay fades with it. Release it past half its size, or flick it, and it closes; otherwise it springs back. Dragging it the other way stretches it a little. A scrollable region inside scrolls first and swipes the drawer once it reaches its edge; text fields and anything marked `data-swipe-ignore` never start a swipe. With `prefers-reduced-motion`, the panel still follows the pointer but opens, closes and snaps without animation.
+
+## Custom Sizes
+
+A vertical drawer sizes itself to its content and is capped at `calc(100dvh - 6rem)`. A side drawer spans 75% of the viewport width, or `24rem` from the `sm` breakpoint. Change them with custom properties on the element:
+
+```html
+<tec-drawer style="--tec-drawer-height: 50vh">…</tec-drawer>
+<tec-drawer swipe-direction="right" style="--tec-drawer-width: 32rem">…</tec-drawer>
+```
+
+To make a region scrollable, make it a flex item — `<div class="flex-1 overflow-y-auto p-4">` — because `h-full` does not resolve inside a content-sized drawer.
+
+## Styling
+
+| Custom property | Default | Description |
+| --- | --- | --- |
+| `--tec-drawer-height` | `auto` | Height of a vertical drawer. |
+| `--tec-drawer-max-height` | `calc(100dvh - 6rem)` | Maximum height of a vertical drawer. |
+| `--tec-drawer-width` | `75%` / `24rem` | Width of a side drawer. |
+| `--tec-drawer-inset` | `0px` | Floats the drawer away from the viewport edges. |
+| `--tec-drawer-bleed-background` | `--tec-popover` | Fills the gap behind the drawer when it is dragged past its open position. |
+| `--tec-drawer-overlay-min-opacity` | `0` (`0.5` with snap points) | Minimum overlay opacity while swiping. |
+
+The element reflects `swipe-direction` and exposes the custom states `:state(swiping)`, `:state(expanded)` (at the full snap point) and `:state(nested-open)`, so content can adapt: `tec-drawer[swipe-direction="down"] .preview { aspect-ratio: 16 / 9 }`.
+
+## Position
+
+Use `swipe-direction` to attach the drawer to an edge: `down` (bottom, default), `up` (top), `left` or `right`. It names the gesture that dismisses it.
+
+<ComponentPreview name="drawer-sides" />
+
+## Swipe Handle
+
+Use `show-swipe-handle` to render a grab handle at the inner edge.
+
+<ComponentPreview name="drawer-swipe-handle" />
+
+## Nested
+
+Open drawers from inside another drawer. Parent drawers stay open and stack behind the front-most one, scaled down and peeking out; <Kbd>Esc</Kbd> closes the front-most first.
+
+<ComponentPreview name="drawer-nested" />
+
+## Non Modal
+
+Set `non-modal` to keep the rest of the page interactive while the drawer is open: there is no overlay, no scroll lock and no focus trap (add `trap-focus` to keep <Kbd>Tab</Kbd> inside anyway). Combine with `persistent` so presses outside do not close it.
+
+<ComponentPreview name="drawer-non-modal" />
+
+## Snap Points
+
+Use `snap-points` to let a vertical drawer rest at preset heights, smallest first: numbers up to `1` are fractions of the viewport height, larger numbers are pixels, and strings take `px` or `rem` (`snap-points="31rem 1"`). The drawer opens at the first one; a swipe moves to the nearest in its direction (or closes it below the first). Read or set the active one with the `snapPoint` property; `tec-snap-point-change` fires when a swipe changes it, and `:state(expanded)` matches at the full height.
+
+<ComponentPreview name="drawer-snap-points" />
+
+## Responsive
+
+Combine a dialog and a drawer to get a responsive dialog: a `tec-dialog` from the `md` breakpoint up and a `tec-drawer` below it.
+
+<ComponentPreview name="drawer-dialog" />
+
+## RTL
+
+`swipe-direction` is physical; the header, footer and content follow the text direction.
+
+<ComponentPreview name="drawer-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space / Enter", "On the trigger: opens the drawer."],
+    ["Tab", "Moves focus to the next focusable element in the drawer; wraps from the last to the first (modal, or `trap-focus`)."],
+    ["Shift+Tab", "Moves focus to the previous focusable element in the drawer; wraps from the first to the last."],
+    ["Esc", "Closes the front-most drawer."],
+  ]}
+/>
+
+## Accessibility
+
+- A native `<dialog>` opened with `showModal()` (top layer, page inert, scroll locked); with `non-modal` a non-modal dialog in the top layer (`aria-modal="false"`).
+- Named by `tec-drawer-title` and described by `tec-drawer-description`. The trigger gets `aria-haspopup="dialog"` and `aria-expanded`.
+- On open, focus moves to the drawer (or an `autofocus` element); on close it returns to the trigger.
+- Swiping is an enhancement: every drawer can also be closed with <Kbd>Esc</Kbd> and should have a `tec-drawer-close`, so keyboard and switch users never need the gesture. The swipe handle is decorative (`aria-hidden`).
+
+## API Reference
+
+<ApiReference tags={["tec-drawer", "tec-drawer-header", "tec-drawer-title", "tec-drawer-description", "tec-drawer-footer", "tec-drawer-close"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A touch screen: the panel is dragged in and flicked away with a thumb.
+- The content should be able to rest at a partial height (`snap-points`) before it is opened fully.
+- A responsive pair, where the same content is a dialog on the desktop and a drawer on a phone.
+
+### Not for
+
+- a side panel on a pointer-driven screen: use [Sheet](/docs/components/sheet)
+- a modal decision or a short form on the desktop: use [Dialog](/docs/components/dialog)
+- a confirmation of a destructive action: use [Alert Dialog](/docs/components/alert-dialog)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the trigger in `slot="trigger"` and close from the footer with `tec-drawer-close`.
+
+</Do>
+
+<Do>
+
+Pick the edge with `swipe-direction="down" | "up" | "left" | "right"` and add the grab handle with `show-swipe-handle`.
+
+</Do>
+
+<Do>
+
+Make the scrolling region a flex item — `<div class="flex-1 overflow-y-auto p-4">` — because `h-full` does not resolve inside a content-sized drawer.
+
+</Do>
+
+<Do>
+
+Always offer a visible close button: the swipe is a shortcut, not the only way out.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Sheet-style side names on swipe-direction">
+
+<Wrong>
+
+```html
+<tec-drawer swipe-direction="bottom">…</tec-drawer>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-drawer swipe-direction="down">…</tec-drawer>
+```
+
+</Correct>
+
+`swipe-direction` takes `up`, `down`, `left` or `right` — the direction of the dismissing swipe. Any other value matches none of the edge styles: the panel gets no edge, no radius and no closed position.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Setting the height of a snap-point drawer">
+
+<Wrong>
+
+```html
+<tec-drawer snap-points="0.4 1" style="--tec-drawer-height: 40vh">…</tec-drawer>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-drawer snap-points="0.4 1">…</tec-drawer>
+```
+
+</Correct>
+
+With snap points the panel is as tall as the viewport and the snap point decides how much of it shows; a fixed height leaves nothing to snap to.
+
+</Dont>
