@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
-    <tec-toggle-group aria-label="Effect" size="sm" variant="outline" value="seismic" data-option="effect" class="flex-wrap">
+    <tec-toggle-group aria-label="Effect" size="sm" variant="outline" value="seismic" data-option="effect" disallow-empty class="flex-wrap">
       <tec-toggle-group-item value="seismic">seismic</tec-toggle-group-item>
       <tec-toggle-group-item value="contour">contour</tec-toggle-group-item>
       <tec-toggle-group-item value="strata">strata</tec-toggle-group-item>
@@ -36,7 +36,7 @@
       <tec-toggle-group-item value="horizon">horizon</tec-toggle-group-item>
       <tec-toggle-group-item value="terrain-grid">terrain-grid</tec-toggle-group-item>
     </tec-toggle-group>
-    <tec-toggle-group aria-label="Tone" size="sm" variant="outline" value="azure" data-option="tone">
+    <tec-toggle-group aria-label="Tone" size="sm" variant="outline" value="azure" data-option="tone" disallow-empty>
       <tec-toggle-group-item value="neutral">neutral</tec-toggle-group-item>
       <tec-toggle-group-item value="primary">primary</tec-toggle-group-item>
       <tec-toggle-group-item value="azure">azure</tec-toggle-group-item>
@@ -44,7 +44,7 @@
       <tec-toggle-group-item value="lime">lime</tec-toggle-group-item>
       <tec-toggle-group-item value="blue">blue</tec-toggle-group-item>
     </tec-toggle-group>
-    <tec-toggle-group aria-label="Intensity" size="sm" variant="outline" value="medium" data-option="intensity">
+    <tec-toggle-group aria-label="Intensity" size="sm" variant="outline" value="medium" data-option="intensity" disallow-empty>
       <tec-toggle-group-item value="low">low</tec-toggle-group-item>
       <tec-toggle-group-item value="medium">medium</tec-toggle-group-item>
       <tec-toggle-group-item value="high">high</tec-toggle-group-item>
@@ -57,10 +57,9 @@
   const background = tile.querySelector("tec-background")
 
   // Each toggle group sets one attribute of the background (effect, tone, intensity).
-  root.addEventListener("change", (event) => {
+  root.addEventListener("tec-value-change", (event) => {
     const group = event.target.closest("[data-option]")
-    const value = [group?.value].flat()[0]
-    if (group && value) background.setAttribute(group.dataset.option, value)
+    if (group && event.detail.value) background.setAttribute(group.dataset.option, event.detail.value)
   })
 
   // "View fullscreen" shows the same effect and content full screen; the same button (or Escape) leaves.
