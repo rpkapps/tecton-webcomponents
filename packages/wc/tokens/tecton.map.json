@@ -1,0 +1,531 @@
+{
+  "$schema": "./tecton.map.schema.json",
+  "version": 2,
+  "meta": {
+    "dataSource": "generated-css-export",
+    "nameReconstructed": false,
+    "note": "src/styles/tecton-tokens.css is the generated CSS export of the Tecton design system (light + dark). Every shadcn variable references a Tecton token in both modes; `light` defaults to the same token as `dark`."
+  },
+  "shadcn": {
+    "background": {
+      "dark": "--tecton-color-bg-default",
+      "confidence": "exact",
+      "note": "App/page background."
+    },
+    "foreground": {
+      "dark": "--tecton-color-text-primary",
+      "confidence": "exact",
+      "note": "Default product UI text."
+    },
+    "card": {
+      "dark": "--tecton-color-bg-paper",
+      "confidence": "exact",
+      "note": "Paper surface (cards, panels, docks)."
+    },
+    "card-foreground": {
+      "dark": "--tecton-color-text-primary",
+      "confidence": "exact",
+      "note": "Tecton has no card-specific text token; text-primary is used on every surface."
+    },
+    "popover": {
+      "dark": "--tecton-color-bg-elevated",
+      "confidence": "exact",
+      "note": "Elevated surface for menus and popovers."
+    },
+    "popover-foreground": {
+      "dark": "--tecton-color-text-primary",
+      "confidence": "exact",
+      "note": "See card-foreground."
+    },
+    "primary": {
+      "dark": "--tecton-color-action-primary-bg",
+      "confidence": "exact",
+      "note": "Filled primary action surface."
+    },
+    "primary-foreground": {
+      "dark": "--tecton-color-action-primary-text",
+      "confidence": "exact",
+      "note": "Text on the primary action surface (Tecton switches to #ffffff on hover; Vega uses primary/80 instead)."
+    },
+    "secondary": {
+      "dark": "--tecton-color-action-secondary-bg",
+      "confidence": "exact",
+      "note": "Filled secondary action surface."
+    },
+    "secondary-foreground": {
+      "dark": "--tecton-color-action-secondary-text",
+      "confidence": "exact",
+      "note": "Text on the secondary action surface."
+    },
+    "muted": {
+      "dark": "--tecton-color-input-filled-bg",
+      "confidence": "approximated",
+      "note": "Tecton has no generic 'muted surface'; the filled-input background (also the table footer) is the closest subdued surface."
+    },
+    "muted-foreground": {
+      "dark": "--tecton-color-text-secondary",
+      "confidence": "exact",
+      "note": "Secondary labels, descriptions and metadata."
+    },
+    "accent": {
+      "dark": "--tecton-color-action-tertiary-bg-hover",
+      "confidence": "approximated",
+      "note": "shadcn uses accent for hover/selected rows and ghost hover; Tecton's tertiary hover surface (same as the table hover row) plays that role."
+    },
+    "accent-foreground": {
+      "dark": "--tecton-color-text-primary",
+      "confidence": "exact",
+      "note": "Text on hovered/selected surfaces."
+    },
+    "destructive": {
+      "dark": "--tecton-color-status-error",
+      "confidence": "exact",
+      "note": "Error status main colour; shadcn draws destructive text on background and destructive buttons with destructive/10."
+    },
+    "border": {
+      "dark": "--tecton-color-divider",
+      "confidence": "exact",
+      "note": "Default divider/border."
+    },
+    "input": {
+      "dark": "--tecton-color-input-outlined-border-hover",
+      "confidence": "approximated",
+      "note": "Outlined input border. Uses Tecton's hovered value as the resting one so the border does not change under the pointer; the field keeps a steadier outline at the cost of its hover affordance, and focus / invalid still recolour it."
+    },
+    "ring": {
+      "dark": "--tecton-color-focus-ring",
+      "confidence": "exact",
+      "note": "Keyboard focus outline. Vega renders it as ring-3 ring-ring/50; Tecton draws a solid 2px ring."
+    },
+    "chart-1": {
+      "dark": "--tecton-color-accent-azure-fill",
+      "confidence": "approximated",
+      "note": "Chart series colours are chosen from the 7 Tecton accents in the order used by the Cost-vs-Risk panel."
+    },
+    "chart-2": {
+      "dark": "--tecton-color-accent-saffron-fill",
+      "confidence": "approximated",
+      "note": "See chart-1."
+    },
+    "chart-3": {
+      "dark": "--tecton-color-accent-lime-fill",
+      "confidence": "approximated",
+      "note": "See chart-1."
+    },
+    "chart-4": {
+      "dark": "--tecton-color-accent-blue-fill",
+      "confidence": "approximated",
+      "note": "See chart-1."
+    },
+    "chart-5": {
+      "dark": "--tecton-color-accent-pink-fill",
+      "confidence": "approximated",
+      "note": "See chart-1."
+    },
+    "sidebar": {
+      "dark": "--tecton-color-bg-paper",
+      "confidence": "exact",
+      "note": "Sidebar sits on the paper surface, like Tecton's side panels."
+    },
+    "sidebar-foreground": {
+      "dark": "--tecton-color-text-primary",
+      "confidence": "exact",
+      "note": ""
+    },
+    "sidebar-primary": {
+      "dark": "--tecton-color-action-primary-bg",
+      "confidence": "exact",
+      "note": ""
+    },
+    "sidebar-primary-foreground": {
+      "dark": "--tecton-color-action-primary-text",
+      "confidence": "exact",
+      "note": ""
+    },
+    "sidebar-accent": {
+      "dark": "--tecton-color-action-tertiary-bg-hover",
+      "confidence": "approximated",
+      "note": "See accent."
+    },
+    "sidebar-accent-foreground": {
+      "dark": "--tecton-color-text-primary",
+      "confidence": "exact",
+      "note": ""
+    },
+    "sidebar-border": {
+      "dark": "--tecton-color-divider-subtle",
+      "confidence": "exact",
+      "note": "Low-emphasis separator inside panels."
+    },
+    "sidebar-ring": {
+      "dark": "--tecton-color-focus-ring",
+      "confidence": "exact",
+      "note": ""
+    },
+    "radius": {
+      "dark": "--tecton-radius-50",
+      "confidence": "exact",
+      "note": "Default Tecton corner radius (4px). Non-colour, declared in :root only."
+    }
+  },
+  "extra": {
+    "success": {
+      "dark": "--tecton-color-status-success",
+      "confidence": "exact",
+      "note": "Status success main colour: text, borders and icons (alert/badge outline and default appearance) and a solid surface with `success-foreground`."
+    },
+    "success-foreground": {
+      "dark": "--tecton-color-status-success-filled-text",
+      "confidence": "exact",
+      "note": "Text on a `success` surface."
+    },
+    "warning": {
+      "dark": "--tecton-color-status-warning",
+      "confidence": "exact",
+      "note": "Status warning main colour: text, borders and icons (alert/badge outline and default appearance) and a solid surface with `warning-foreground`."
+    },
+    "warning-foreground": {
+      "dark": "--tecton-color-text-inverse",
+      "confidence": "approximated",
+      "note": "Text on a `warning` surface: Tecton's filled-text is meant for the pale `warning-surface`, so the inverse text colour is used on the main colour."
+    },
+    "info": {
+      "dark": "--tecton-color-status-info",
+      "confidence": "exact",
+      "note": "Status info main colour: text, borders and icons (alert/badge outline and default appearance) and a solid surface with `info-foreground`."
+    },
+    "info-foreground": {
+      "dark": "--tecton-color-status-info-filled-text",
+      "confidence": "exact",
+      "note": "Text on an `info` surface."
+    },
+    "neutral": {
+      "dark": "--tecton-color-status-neutral",
+      "confidence": "exact",
+      "note": "Status neutral main colour: text, borders and icons (alert/badge outline and default appearance) and a solid surface with `neutral-foreground`."
+    },
+    "neutral-foreground": {
+      "dark": "--tecton-color-text-inverse",
+      "confidence": "approximated",
+      "note": "Text on a `neutral` surface (Tecton's filled-text is meant for the `neutral-surface`)."
+    },
+    "destructive-foreground": {
+      "dark": "--tecton-color-status-error-filled-text",
+      "confidence": "exact",
+      "note": "Text on the filled error surface. shadcn v4 dropped this token; Tecton restores it for filled error chips/alerts."
+    },
+    "success-surface": {
+      "dark": "--tecton-color-status-success-filled-bg",
+      "confidence": "exact",
+      "note": "Tecton's filled success surface (alert and badge `appearance=\"filled\"` / solid)."
+    },
+    "success-surface-foreground": {
+      "dark": "--tecton-color-status-success-filled-text",
+      "confidence": "exact",
+      "note": "Text on `success-surface`."
+    },
+    "warning-surface": {
+      "dark": "--tecton-color-status-warning-filled-bg",
+      "confidence": "exact",
+      "note": "Tecton's filled warning surface (alert and badge `appearance=\"filled\"` / solid)."
+    },
+    "warning-surface-foreground": {
+      "dark": "--tecton-color-status-warning-filled-text",
+      "confidence": "exact",
+      "note": "Text on `warning-surface`."
+    },
+    "info-surface": {
+      "dark": "--tecton-color-status-info-filled-bg",
+      "confidence": "exact",
+      "note": "Tecton's filled info surface (alert and badge `appearance=\"filled\"` / solid)."
+    },
+    "info-surface-foreground": {
+      "dark": "--tecton-color-status-info-filled-text",
+      "confidence": "exact",
+      "note": "Text on `info-surface`."
+    },
+    "neutral-surface": {
+      "dark": "--tecton-color-status-neutral-filled-bg",
+      "confidence": "exact",
+      "note": "Tecton's filled neutral surface (alert and badge `appearance=\"filled\"` / solid)."
+    },
+    "neutral-surface-foreground": {
+      "dark": "--tecton-color-status-neutral-filled-text",
+      "confidence": "exact",
+      "note": "Text on `neutral-surface`."
+    },
+    "destructive-surface": {
+      "dark": "--tecton-color-status-error-filled-bg",
+      "confidence": "exact",
+      "note": "Tecton's filled error surface (alert and badge `appearance=\"filled\"` / solid)."
+    },
+    "destructive-surface-foreground": {
+      "dark": "--tecton-color-status-error-filled-text",
+      "confidence": "exact",
+      "note": "Text on `destructive-surface`."
+    },
+    "surface-alt": {
+      "dark": "--tecton-color-table-cell-bg-alt",
+      "confidence": "exact",
+      "note": "Alternate table row surface."
+    },
+    "border-subtle": {
+      "dark": "--tecton-color-divider-subtle",
+      "confidence": "exact",
+      "note": "Low-emphasis divider (Divider emphasis=\"subtle\", panel separators)."
+    },
+    "border-strong": {
+      "dark": "--tecton-color-divider-strong",
+      "confidence": "exact",
+      "note": "High-emphasis divider (Divider emphasis=\"strong\")."
+    },
+    "primary-hover": {
+      "dark": "--tecton-color-action-primary-bg-hover",
+      "confidence": "exact",
+      "note": "Button variant=default hovered / focused surface (Tecton lightens on hover)."
+    },
+    "primary-hover-foreground": {
+      "dark": "--tecton-color-action-primary-text-hover",
+      "confidence": "exact",
+      "note": "Text on the hovered primary surface."
+    },
+    "primary-pressed": {
+      "dark": "--tecton-color-action-primary-bg-press",
+      "confidence": "exact",
+      "note": "Button variant=default pressed surface."
+    },
+    "primary-pressed-foreground": {
+      "dark": "--tecton-color-action-primary-text-press",
+      "confidence": "exact",
+      "note": "Text on the pressed primary surface."
+    },
+    "primary-active": {
+      "dark": "--tecton-color-action-primary-bg-active",
+      "confidence": "exact",
+      "note": "Button variant=default activated surface (aria-expanded / selected)."
+    },
+    "primary-active-foreground": {
+      "dark": "--tecton-color-action-primary-text-active",
+      "confidence": "exact",
+      "note": "Text on the activated primary surface."
+    },
+    "secondary-hover": {
+      "dark": "--tecton-color-action-secondary-bg-hover",
+      "confidence": "exact",
+      "note": "Button variant=secondary hovered / focused surface."
+    },
+    "secondary-hover-foreground": {
+      "dark": "--tecton-color-action-secondary-text-hover",
+      "confidence": "exact",
+      "note": "Text on the hovered secondary surface."
+    },
+    "secondary-pressed": {
+      "dark": "--tecton-color-action-secondary-bg-press",
+      "confidence": "exact",
+      "note": "Button variant=secondary pressed surface."
+    },
+    "secondary-pressed-foreground": {
+      "dark": "--tecton-color-action-secondary-text-press",
+      "confidence": "exact",
+      "note": "Text on the pressed secondary surface."
+    },
+    "secondary-active": {
+      "dark": "--tecton-color-action-secondary-bg-active",
+      "confidence": "exact",
+      "note": "Button variant=secondary activated surface."
+    },
+    "secondary-active-foreground": {
+      "dark": "--tecton-color-action-secondary-text-active",
+      "confidence": "exact",
+      "note": "Text on the activated secondary surface."
+    },
+    "ghost-foreground": {
+      "dark": "--tecton-color-action-tertiary-text",
+      "confidence": "exact",
+      "note": "Button variant=ghost (Tecton tertiary) resting text."
+    },
+    "ghost-hover": {
+      "dark": "--tecton-color-action-tertiary-bg-hover",
+      "confidence": "exact",
+      "note": "Button variant=ghost hovered / focused surface (same token as accent)."
+    },
+    "ghost-hover-foreground": {
+      "dark": "--tecton-color-action-tertiary-text-hover",
+      "confidence": "exact",
+      "note": "Text on the hovered ghost surface."
+    },
+    "ghost-pressed": {
+      "dark": "--tecton-color-action-tertiary-bg-press",
+      "confidence": "exact",
+      "note": "Button variant=ghost pressed surface."
+    },
+    "ghost-pressed-foreground": {
+      "dark": "--tecton-color-action-tertiary-text-press",
+      "confidence": "exact",
+      "note": "Text on the pressed ghost surface."
+    },
+    "ghost-active": {
+      "dark": "--tecton-color-action-tertiary-bg-active",
+      "confidence": "exact",
+      "note": "Button variant=ghost activated surface."
+    },
+    "ghost-active-foreground": {
+      "dark": "--tecton-color-action-tertiary-text-active",
+      "confidence": "exact",
+      "note": "Text on the activated ghost surface."
+    },
+    "outline-border": {
+      "dark": "--tecton-color-input-outlined-border-hover",
+      "confidence": "approximated",
+      "note": "Button variant=outline resting border. Tracks --input so a button flush against a field draws the same line (button group, input group, a Date button beside a Time input), and takes Tecton's hovered value as the resting one so hover does not move the border. Tecton's own resting Button border is --tecton-color-action-outlined-border-strong."
+    },
+    "outline-foreground": {
+      "dark": "--tecton-color-action-outlined-text",
+      "confidence": "exact",
+      "note": "Button variant=outline resting text."
+    },
+    "outline-hover": {
+      "dark": "--tecton-color-action-outlined-bg-hover",
+      "confidence": "exact",
+      "note": "Button variant=outline hovered / focused surface."
+    },
+    "outline-hover-border": {
+      "dark": "--tecton-color-input-outlined-border-hover",
+      "confidence": "approximated",
+      "note": "Button variant=outline hovered border. Equal to the resting border on purpose: hover changes the surface, not the outline."
+    },
+    "outline-hover-foreground": {
+      "dark": "--tecton-color-action-outlined-text-hover",
+      "confidence": "exact",
+      "note": "Text on the hovered outline surface."
+    },
+    "outline-pressed": {
+      "dark": "--tecton-color-action-outlined-bg-press",
+      "confidence": "exact",
+      "note": "Button variant=outline pressed surface."
+    },
+    "outline-pressed-border": {
+      "dark": "--tecton-color-action-outlined-border-press",
+      "confidence": "exact",
+      "note": "Button variant=outline pressed border."
+    },
+    "outline-pressed-foreground": {
+      "dark": "--tecton-color-action-outlined-text-press",
+      "confidence": "exact",
+      "note": "Text on the pressed outline surface."
+    },
+    "outline-active": {
+      "dark": "--tecton-color-action-outlined-bg-active",
+      "confidence": "exact",
+      "note": "Button variant=outline activated surface."
+    },
+    "outline-active-border": {
+      "dark": "--tecton-color-action-outlined-border-active",
+      "confidence": "exact",
+      "note": "Button variant=outline activated border."
+    },
+    "outline-active-foreground": {
+      "dark": "--tecton-color-action-outlined-text-active",
+      "confidence": "exact",
+      "note": "Text on the activated outline surface."
+    },
+    "link-foreground": {
+      "dark": "--tecton-color-action-text-only-text",
+      "confidence": "exact",
+      "note": "Button variant=link (Tecton textOnly) resting text."
+    },
+    "link-hover-foreground": {
+      "dark": "--tecton-color-action-text-only-text-hover",
+      "confidence": "exact",
+      "note": "Button variant=link hovered / focused text."
+    },
+    "link-pressed-foreground": {
+      "dark": "--tecton-color-action-text-only-text-press",
+      "confidence": "exact",
+      "note": "Button variant=link pressed text."
+    },
+    "link-active-foreground": {
+      "dark": "--tecton-color-action-text-only-text-active",
+      "confidence": "exact",
+      "note": "Button variant=link activated text."
+    },
+    "avatar": {
+      "dark": "--tecton-color-avatar-fill",
+      "confidence": "exact",
+      "note": "Avatar fallback surface (Tecton's default avatar fill)."
+    },
+    "avatar-foreground": {
+      "dark": "--tecton-color-avatar-text",
+      "confidence": "exact",
+      "note": "Initials / icon on the avatar fallback surface."
+    },
+    "input-hover": {
+      "dark": "--tecton-color-input-outlined-border-hover",
+      "confidence": "exact",
+      "note": "Outlined input, textarea and select border while hovered."
+    },
+    "table-header": {
+      "dark": "--tecton-color-table-header-bg",
+      "confidence": "exact",
+      "note": "Table header row surface (Tecton draws the header as a filled band)."
+    },
+    "table-active": {
+      "dark": "--tecton-color-table-cell-bg-active",
+      "confidence": "exact",
+      "note": "Selected table row surface; the hovered row uses accent."
+    },
+    "slider": {
+      "dark": "--tecton-color-accent-graphite-fill",
+      "confidence": "approximated",
+      "note": "Slider range, thumb and (at 60%) track: Tecton's default slider is the graphite accent, not the primary action colour."
+    },
+    "progress": {
+      "dark": "--tecton-color-accent-graphite-fill",
+      "confidence": "approximated",
+      "note": "Linear progress indicator and (at 38%) track, same graphite accent as the slider."
+    }
+  },
+  "theme": {
+    "--font-sans": "var(--tecton-font-family-sans), ui-sans-serif, system-ui, sans-serif",
+    "--font-mono": "var(--tecton-font-family-mono), ui-monospace, monospace",
+    "--radius-sm": "var(--tecton-radius-25)",
+    "--radius-md": "var(--tecton-radius-50)",
+    "--radius-lg": "var(--tecton-radius-100)",
+    "--radius-xl": "var(--tecton-radius-150)",
+    "--radius-2xl": "var(--tecton-radius-200)"
+  },
+  "light": {
+    "strategy": "tecton-light-tokens",
+    "note": "The Tecton export defines both modes, so light and dark both reference the same Tecton token; tecton-tokens.css switches the value under `.dark` / `[data-theme=\"dark\"]`. No value is derived."
+  },
+  "palette": {
+    "source": "tecton.tokens.json",
+    "note": "Foundational colour ramps from the Tecton Figma variables export (`foundational/color`). Each family has one 23-step contrast ramp per mode (50 … 1570; the direct steps, or `contrasts` for gray on dark). A step is the same perceived distance from the page background in both modes, so `bg-red-140` needs no `dark:` counterpart. Exposed as `--tecton-palette-<family>-<step>` in `:root` / `.dark` and as the Tailwind `--color-<family>-<step>` theme entries; Tailwind's stock palette is reset first (`--color-*: initial`) so only Tecton colours can appear. The `core`, `surface`, `transparent`, `saturations` and `washes` sub-ramps, the data-vis colormaps (`MPL`, `Colorcet`) and `custom/appColors` are not exposed.",
+    "prefix": "tecton-palette",
+    "resetTailwind": true,
+    "shades": ["white", "black"],
+    "families": [
+      "gray",
+      "graphite",
+      "mauve",
+      "violet",
+      "lilac",
+      "orchid",
+      "pink",
+      "red",
+      "saffron",
+      "yellow",
+      "lemon",
+      "lime",
+      "green",
+      "azure",
+      "blue"
+    ]
+  },
+  "checks": {
+    "allow": ["palette:--tecton-color-focus-ring"],
+    "allowNotes": {
+      "palette:--tecton-color-focus-ring": "The focus ring is Tecton's single `hotPink/460 (focus outline)` value, not a step of a 23-step ramp, so the palette does not expose a hot-pink family."
+    }
+  }
+}

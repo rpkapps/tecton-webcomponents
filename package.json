@@ -1,0 +1,19 @@
+{
+  "name": "tecton-webcomponents",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter @tecton/wc build && pnpm --filter docs build",
+    "dev": "pnpm --filter docs dev",
+    "test": "pnpm --filter @tecton/wc test",
+    "typecheck": "pnpm -r run typecheck"
+  },
+  "packageManager": "pnpm@10.33.4",
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "playwright-core": "1.63.0"
+  }
+}

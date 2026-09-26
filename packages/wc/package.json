@@ -1,0 +1,30 @@
+{
+  "name": "@tecton/wc",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.8.0",
+    "@fontsource/figtree": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@internationalized/date": "^3.12.4",
+    "@lit/context": "^1.1.6",
+    "@tanstack/table-core": "^9.2.4",
+    "lit": "^3.3.3",
+    "lucide": "^1.48.0"
+  },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.11.0",
+    "@vitest/browser": "^5.0.2",
+    "@vitest/browser-playwright": "^5.0.2",
+    "axe-core": "^4.13.0",
+    "playwright": "1.63.0",
+    "typescript": "^6",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2"
+  },
+  "customElements": "custom-elements.json"
+}
