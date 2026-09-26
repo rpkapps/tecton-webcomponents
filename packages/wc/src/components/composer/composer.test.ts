@@ -211,7 +211,10 @@ describe("tec-composer-suggestions", () => {
       "button: Draft",
       "button: Custom",
     ])
-    expect([fill, send, custom].map((s) => s!.tabIndex)).toEqual([0, -1, -1])
+    // The roving tabindex sits on the inner <button>s, never on the wrapper hosts.
+    const inner = (s: TecComposerSuggestion) => s.shadowRoot!.querySelector("tec-button")!.shadowRoot!.querySelector("button")!
+    expect([fill, send, custom].map((s) => inner(s!).tabIndex)).toEqual([0, -1, -1])
+    expect([fill, send, custom].some((s) => s!.hasAttribute("tabindex"))).toBe(false)
     await userEvent.click(fill!)
     expect(el.value).toBe("Explain this")
     expect(deepActiveElement()).toBe(el.querySelector("tec-composer-input")!.shadowRoot!.querySelector("textarea"))

@@ -2,9 +2,10 @@ import { html, LitElement } from "lit"
 import { describe, expect, it, vi } from "vitest"
 import { userEvent } from "vitest/browser"
 import { defineElement } from "./define.js"
+import { focusTargetOf } from "./focus.js"
 import { ListNavigationController } from "./list-navigation.js"
 import { RovingFocusController } from "./roving-focus.js"
-import { axNode, deepActiveElement, fixture } from "./test-utils.js"
+import { axNode, deepActiveElement, expectAccessible, fixture } from "./test-utils.js"
 import { Typeahead } from "./typeahead.js"
 
 class TestToolbar extends LitElement {
@@ -22,6 +23,26 @@ class TestToolbar extends LitElement {
   }
 }
 defineElement("test-toolbar", TestToolbar)
+
+/** A wrapper around a native button (like tec-button): no role on the host, focus delegated. */
+class TestWrapped extends LitElement {
+  static shadowRootOptions: ShadowRootInit = { ...LitElement.shadowRootOptions, delegatesFocus: true }
+  render() {
+    return html`<button><slot></slot></button>`
+  }
+}
+defineElement("test-wrapped", TestWrapped)
+
+class TestWrapperToolbar extends LitElement {
+  roving = new RovingFocusController(this, {
+    items: () => [...this.querySelectorAll<HTMLElement>(":scope > *")],
+    focusTarget: focusTargetOf,
+  })
+  render() {
+    return html`<div role="toolbar" aria-label="Actions"><slot></slot></div>`
+  }
+}
+defineElement("test-wrapper-toolbar", TestWrapperToolbar)
 
 class TestCombo extends LitElement {
   get input() {
@@ -81,6 +102,31 @@ describe("RovingFocusController", () => {
     expect(deepActiveElement()?.id).toBe("strike")
     await userEvent.keyboard("i") // "si" matches nothing, stays
     expect(deepActiveElement()?.id).toBe("strike")
+  })
+
+  it("focusTarget puts the roving tabindex on the control inside wrapper hosts", async () => {
+    const root = await fixture<HTMLElement>(html`<div>
+      <button id="before">before</button>
+      <test-wrapper-toolbar>
+        <test-wrapped id="a" aria-expanded="false">A</test-wrapped><test-wrapped id="b">B</test-wrapped><span id="c"><button>C</button></span>
+      </test-wrapper-toolbar>
+    </div>`)
+    const el = root.querySelector<TestWrapperToolbar>("test-wrapper-toolbar")!
+    await el.updateComplete
+    const inner = (id: string) => root.querySelector(`#${id}`)!.shadowRoot?.querySelector("button") ?? root.querySelector(`#${id} button`)!
+    await expect.poll(() => ["a", "b", "c"].map((id) => inner(id).getAttribute("tabindex"))).toEqual(["0", "-1", "-1"])
+    expect([...el.children].some((c) => c.hasAttribute("tabindex"))).toBe(false)
+    root.querySelector<HTMLElement>("#before")!.focus()
+    await userEvent.keyboard("{Tab}")
+    expect(deepActiveElement()).toBe(inner("a"))
+    await userEvent.keyboard("{ArrowRight}")
+    expect(deepActiveElement()).toBe(inner("b"))
+    await userEvent.keyboard("{ArrowRight}")
+    expect(deepActiveElement()).toBe(inner("c"))
+    expect(["a", "b", "c"].map((id) => inner(id).tabIndex)).toEqual([-1, -1, 0])
+    el.roving.focus()
+    expect(deepActiveElement()).toBe(inner("c"))
+    await expectAccessible(root)
   })
 
   it("RTL mirrors horizontal arrows", async () => {

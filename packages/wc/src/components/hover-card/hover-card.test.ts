@@ -25,7 +25,7 @@ const basic = (o: { delay?: number; closeDelay?: number; side?: string } = {}) =
 
 describe("tec-hover-card", () => {
   it("opens on hover after the delay, below the trigger, and describes it", async () => {
-    const root = await fixture<HTMLElement>(basic({ delay: 150 }))
+    const root = await fixture<HTMLElement>(basic({ delay: 500 }))
     const el = root.querySelector("tec-hover-card")!
     const trigger = el.querySelector("tec-button")!
     expect(await axNode(innerButton(trigger))).toMatchObject({ hasPopup: "dialog", expanded: "false" })

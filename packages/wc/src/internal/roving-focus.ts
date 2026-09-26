@@ -75,6 +75,7 @@ export class RovingFocusController<T extends HTMLElement = HTMLElement> implemen
   #active: T | null = null
   /** Where the tabindex of each item was put (to move it when the target changes). */
   #applied = new WeakMap<T, HTMLElement>()
+  #retry = false
 
   constructor(host: ReactiveControllerHost & HTMLElement, options: RovingFocusOptions<T>) {
     this.#host = host
@@ -112,7 +113,19 @@ export class RovingFocusController<T extends HTMLElement = HTMLElement> implemen
 
   /** The element that takes tabindex and focus for `item` (see `focusTarget`). */
   targetOf(item: T): HTMLElement {
-    return this.#options.focusTarget?.(item) ?? item
+    if (!this.#options.focusTarget) return item
+    const target = this.#options.focusTarget(item)
+    if (target) return target
+    // Not rendered yet (a Lit host before its first update): use the item for now, retry after it.
+    const pending = (item as Partial<{ updateComplete: Promise<unknown> }>).updateComplete
+    if (pending && !this.#retry) {
+      this.#retry = true
+      void pending.then(() => {
+        this.#retry = false
+        this.update()
+      })
+    }
+    return item
   }
 
   /** Makes `item` the tab stop (and focuses it with `{ focus: true }`). */

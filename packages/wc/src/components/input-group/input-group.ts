@@ -33,6 +33,7 @@ function matches(el: Element, selector: string): boolean {
  * @slot - The control and `tec-input-group-addon` elements.
  *
  * @csspart base - The bordered box (flex row; a column with block addons).
+ * @cssprop --tec-input-group-radius - Corner radius of the box (default `--tec-radius-md`; set by `tec-button-group`).
  *
  * @cssstate focused - The control has focus (the ring is shown).
  * @cssstate invalid - The control displays invalidity.

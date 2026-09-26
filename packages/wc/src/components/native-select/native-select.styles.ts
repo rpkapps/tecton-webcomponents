@@ -30,7 +30,7 @@ export const nativeSelectStyles = css`
     padding-block: 0.25rem;
     padding-inline: 0.625rem 2rem;
     border: 1px solid var(--tec-input);
-    border-radius: var(--tec-radius-md);
+    border-radius: var(--tec-native-select-radius, var(--tec-radius-md));
     background-color: transparent;
     color: inherit;
     font: inherit;

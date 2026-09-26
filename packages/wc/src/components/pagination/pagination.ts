@@ -116,7 +116,10 @@ export class TecPaginationLink extends TecButton {
   }
 }
 
-/** Shared rendering of Previous / Next (chevron + label hidden on small screens). */
+/**
+ * Shared rendering of Previous / Next (chevron + label hidden on small screens).
+ * @hideInherited download - a page link is never a download.
+ */
 abstract class PaginationStep extends TecPaginationLink {
   static override styles = [...TecButton.styles, paginationStepStyles]
 

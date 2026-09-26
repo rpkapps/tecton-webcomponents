@@ -26,6 +26,7 @@ import { nativeSelectStyles } from "./native-select.styles.js"
  * @csspart base - The wrapper of the select and the chevron.
  * @csspart select - The native `<select>` (border, padding, focus ring).
  * @csspart icon - The chevron.
+ * @cssprop --tec-native-select-radius - Corner radius of the select (default `--tec-radius-md`; set by `tec-button-group`).
  *
  * @cssstate invalid - The value fails validation.
  * @cssstate user-invalid - Invalidity is displayed.

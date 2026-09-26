@@ -81,14 +81,15 @@ describe("tec-breadcrumb", () => {
   })
 
   it("links are real anchors in the tab order; the page and ellipsis are not", async () => {
-    const el = await fixture<HTMLElement>(html`<div><button>before</button>${trail}</div>`)
+    const el = await fixture<HTMLElement>(html`<div><button>before</button>${trail}<button>after</button></div>`)
     el.querySelector("button")!.focus()
     await userEvent.keyboard("{Tab}")
     expect((deepActiveElement() as HTMLAnchorElement).getAttribute("href")).toBe("#home")
     await userEvent.keyboard("{Tab}")
     expect((deepActiveElement() as HTMLAnchorElement).getAttribute("href")).toBe("#components")
     await userEvent.keyboard("{Tab}")
-    expect(deepActiveElement()).toBe(document.body)
+    // The page and the ellipsis are skipped: the next stop is the button after the trail.
+    expect(deepActiveElement()).toBe(el.querySelectorAll("button")[1])
   })
 
   it("styles a slotted router anchor as a breadcrumb link", async () => {

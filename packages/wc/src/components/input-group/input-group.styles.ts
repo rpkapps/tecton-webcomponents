@@ -20,8 +20,16 @@ export const inputGroupStyles = css`
     height: 100%;
     min-width: 0;
     border: 1px solid var(--tec-input);
-    border-radius: var(--tec-radius-md);
+    border-radius: var(--tec-input-group-radius, var(--tec-radius-md));
     outline: none;
+  }
+  /* The corner properties a button group sets on the group must not reach the slotted addons' buttons. */
+  slot {
+    --tec-button-radius: initial;
+    --tec-input-radius: initial;
+    --tec-textarea-radius: initial;
+    --tec-input-group-radius: initial;
+    --tec-select-radius: initial;
   }
   :host(:state(block)) .base {
     flex-direction: column;

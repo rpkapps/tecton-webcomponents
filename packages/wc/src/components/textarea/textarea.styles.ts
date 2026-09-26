@@ -12,6 +12,7 @@ export const textareaStyles = css`
     field-sizing: content;
     min-height: 4rem;
     padding: 0.375rem 0.5rem;
+    border-radius: var(--tec-textarea-radius, var(--tec-radius-md));
     resize: vertical;
   }
   :host([resize="none"]) .base {

@@ -7,7 +7,10 @@ import { TecButton, type ButtonSize, type ButtonVariant } from "../button/button
 import { carouselContext } from "./carousel-context.js"
 import { carouselControlStyles, carouselNavStyles } from "./carousel.styles.js"
 
-/** Shared base of the carousel buttons: a `tec-button` (outline, `icon-sm`, round) wired to the carousel. */
+/**
+ * Shared base of the carousel buttons: a `tec-button` (outline, `icon-sm`, round) wired to the carousel.
+ * @hideInherited href, target, rel, download - it always renders a `<button>`.
+ */
 abstract class CarouselControl extends TecButton {
   static override styles = [...(TecButton.styles as CSSResult[]), carouselControlStyles]
 

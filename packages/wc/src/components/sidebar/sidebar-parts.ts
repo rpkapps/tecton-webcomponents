@@ -184,6 +184,7 @@ export class TecSidebarSeparator extends TectonElement {
  * @tag tec-sidebar-trigger
  * @slot - Replaces the panel icon.
  * @csspart base - The inner `<button>`.
+ * @hideInherited href, target, rel, download - it always renders a `<button>`.
  */
 export class TecSidebarTrigger extends TecButton {
   static override styles = [...TecButton.styles, sidebarTriggerStyles]

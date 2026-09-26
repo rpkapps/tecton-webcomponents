@@ -26,7 +26,7 @@ export const textFieldStyles = css`
     min-width: 0;
     margin: 0;
     border: 1px solid var(--tec-input);
-    border-radius: var(--tec-radius-md);
+    border-radius: var(--tec-input-radius, var(--tec-radius-md));
     background-color: transparent;
     color: inherit;
     font: inherit;

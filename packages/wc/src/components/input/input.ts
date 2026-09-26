@@ -39,6 +39,7 @@ export type InputType =
  * @tag tec-input
  *
  * @csspart base - The native `<input>` (border, padding, background, focus ring).
+ * @cssprop --tec-input-radius - Corner radius (default `--tec-radius-md`; set by `tec-button-group`).
  *
  * @cssstate invalid - The value fails validation.
  * @cssstate user-invalid - Invalidity is displayed (`invalid`, a failed constraint after the user changed the value or a submit attempt, or an invalid `tec-field`).

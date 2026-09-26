@@ -2,7 +2,12 @@ import { html } from "lit"
 import { describe, expect, it } from "vitest"
 import { userEvent } from "vitest/browser"
 import { axNode, axTree, expectAccessible, fixture } from "../../internal/test-utils.js"
+import "../input/define.js"
+import "../input-group/define.js"
+import "../native-select/define.js"
 import "../popover/define.js"
+import "../select/define.js"
+import "../textarea/define.js"
 import "./define.js"
 import type { TecButtonGroup } from "./button-group.js"
 
@@ -138,5 +143,47 @@ describe("tec-button-group-text", () => {
     expect(radius(text)).toBe(`${R} 0px 0px ${R}`)
     expect(await axNode(el.querySelector("input")!)).toMatchObject({ role: "textbox", name: "https://" })
     await expectAccessible(el)
+  })
+})
+
+describe("joined form controls", () => {
+  const box = (el: Element, selector = ".base") => {
+    const s = getComputedStyle(el.shadowRoot!.querySelector(selector)!)
+    return [s.borderTopLeftRadius, s.borderTopRightRadius, s.borderBottomRightRadius, s.borderBottomLeftRadius].join(" ")
+  }
+
+  it("joins inputs, textareas, selects, native selects and input groups", async () => {
+    const root = await fixture<HTMLElement>(`<div>
+      <tec-button-group id="a">
+        <tec-input aria-label="Search"></tec-input>
+        <tec-button variant="outline">Go</tec-button>
+      </tec-button-group>
+      <tec-button-group id="b">
+        <tec-select value="$" aria-label="Currency"><tec-select-item value="$">$</tec-select-item></tec-select>
+        <tec-textarea aria-label="Note"></tec-textarea>
+        <tec-native-select aria-label="Unit"><option>m</option></tec-native-select>
+      </tec-button-group>
+      <tec-button-group id="c">
+        <tec-button variant="outline" size="icon" aria-label="Add">+</tec-button>
+        <tec-input-group>
+          <tec-input-group-input aria-label="Message"></tec-input-group-input>
+          <tec-input-group-addon align="inline-end"><tec-input-group-button size="icon-xs" aria-label="Voice">v</tec-input-group-button></tec-input-group-addon>
+        </tec-input-group>
+      </tec-button-group>
+    </div>`)
+    const [a, b, c] = ["#a", "#b", "#c"].map((id) => root.querySelector(id)!)
+    expect(box(a!.querySelector("tec-input")!)).toBe(`${R} 0px 0px ${R}`)
+    expect(box(b!.querySelector("tec-select")!, ".trigger")).toBe(`${R} 0px 0px ${R}`)
+    expect(box(b!.querySelector("tec-textarea")!)).toBe("0px 0px 0px 0px")
+    expect(box(b!.querySelector("tec-native-select")!, "select")).toBe(`0px ${R} ${R} 0px`)
+    const group = c!.querySelector("tec-input-group")!
+    expect(box(group)).toBe(`0px ${R} ${R} 0px`)
+    // The joined corners do not leak into the group's own control and addon button.
+    expect(box(group.querySelector("tec-input-group-input")!)).toBe("0px 0px 0px 0px")
+    const button = group.querySelector("tec-input-group-button")!
+    expect(box(button)).not.toBe("0px 0px 0px 0px")
+    const rtl = await fixture<HTMLElement>(`<tec-button-group dir="rtl"><tec-input aria-label="A"></tec-input><tec-textarea aria-label="B"></tec-textarea></tec-button-group>`)
+    expect(box(rtl.querySelector("tec-input")!)).toBe(`0px ${R} ${R} 0px`)
+    expect(box(rtl.querySelector("tec-textarea")!)).toBe(`${R} 0px 0px ${R}`)
   })
 })

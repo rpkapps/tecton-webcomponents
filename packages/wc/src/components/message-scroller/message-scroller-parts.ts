@@ -118,6 +118,7 @@ export class TecMessageScrollerItem extends TectonElement {
  * @tag tec-message-scroller-button
  * @slot - Custom content (an icon and a hidden label). Defaults to an arrow and `label`.
  * @cssstate inactive - Nothing to scroll to in `direction` (the button is hidden and inert).
+ * @hideInherited href, target, rel, download - it always renders a `<button>`.
  */
 export class TecMessageScrollerButton extends TecButton {
   static styles = [...TecButton.styles, srOnly, messageScrollerButtonStyles]

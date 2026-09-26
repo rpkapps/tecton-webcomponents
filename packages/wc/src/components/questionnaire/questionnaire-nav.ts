@@ -111,7 +111,10 @@ const column = (n: number, justify: string) => css`
   }
 `
 
-/** Shared behaviour of the four navigation buttons. */
+/**
+ * Shared behaviour of the four navigation buttons.
+ * @hideInherited href, target, rel, download - it always renders a `<button>`.
+ */
 class QuestionnaireNavButton extends TecButton {
   protected navKind: NavKind = "next"
   protected defaultLabel = "Next"

@@ -99,7 +99,9 @@ declare global {
   and `@tag tec-x`. The docs site's API tables are generated from these — **undocumented = missing**.
   Free prose goes **before** the first tag (text after the last tag is glued onto that tag). Private
   (`#x`, `_x`), `private`/`protected` members and `@internal` ones are left out of the manifest.
-  Check with `pnpm --filter @tecton/wc analyze` and look at your tags in `custom-elements.json`.
+  A subclass that ignores inherited API (a `tec-button` subclass that always renders a `<button>`)
+  hides it with a class tag: `@hideInherited href, target, rel, download - reason` (applies to its
+  subclasses too; see `custom-elements-manifest.config.mjs`). Check with `pnpm --filter @tecton/wc analyze` and look at your tags in `custom-elements.json`.
 - No runtime dependencies beyond `lit`, `@lit/context`, `@floating-ui/dom`, `lucide` (icon nodes),
   `@internationalized/date` (calendar), `@tanstack/table-core` (data table). Anything else needs a
   strong reason (and is written down in the component's JSDoc).
@@ -327,18 +329,24 @@ components show every piece in context. Unit tests: `src/internal/*.test.ts`.
 | `styles.ts` | `hostStyles`, `focusRing(sel)`, `focusRingStyles`, `srOnly`, `motionSafe()`, `forcedColors()`, `prefersReducedMotion()`, `slottedIconStyles` |
 | `animations.ts` | `animationStyles` (keyframes), `popupMotion(sel)`, `animateOut(el)` |
 | `aria.ts` | `AriaDelegateController`, `setAriaElements()`, `resolveIdRefs()` |
-| `focus.ts` | `getTabbables()`, `containsFlat()`, `deepActiveElement()`, `focusFirst()`, `FocusTrap`, `FocusVisibleController` |
+| `labelable.ts` | `isLabelable()`, `isFieldControl()`, `findDescendant(s)()`, `updateIdRefs()` (label / field / input-group) |
+| `focus.ts` | `getTabbables()`, `containsFlat()`, `deepActiveElement()`, `focusFirst()`, `focusTargetOf()`, `FocusTrap`, `FocusVisibleController` |
 | `form-control.ts` | `FormControlMixin`, `requiredValidator()`, `nativeValueMissingMessage()` |
 | `popup.ts` | `PopupController`, `popupStyles` |
 | `dismiss.ts` | `DismissController` (Escape / outside press / focus-out, layer stack) |
 | `roving-focus.ts` | `RovingFocusController` |
 | `list-navigation.ts` | `ListNavigationController` (aria-activedescendant) |
+| `listbox-core.ts` | the collection engine of select / combobox / command: `ListItemBase` & co., `syncCollection()`, `observeCollection()`, filtering |
 | `typeahead.ts` | `Typeahead` |
 | `slot.ts` | `HasSlotController` |
+| `light-dom-observer.ts` | `LightDomObserver` (re-derive `:state(has-…)` when light children change) |
+| `scroll-fade.ts` | `ScrollFadeController` (edge fades of a shadow scroll container) |
+| `hover-delay.ts` | `HoverDelayState` (tooltip / hover card warm-up and cool-down) |
+| `locale.ts` | `localeOf(el)` (closest `lang`, across shadow roots), `formatRangeValue()` |
 | `icons.ts` | `icon(LucideNode, opts)` → `<svg>` template |
 | `scroll-lock.ts` | `lockScroll(owner)` / `unlockScroll(owner)` |
 | `id.ts`, `direction.ts` | `uniqueId()`, `isRtl()`, `horizontalStep()` |
-| `test-utils.ts` | `fixture`, `expectAccessible`, `axNode`, `axTree`, `oneEvent`, `recordEvents`, `waitUntil`, `animationsFinished`, `nextFrame`, `aTimeout`, `deepActiveElement` |
+| `test-utils.ts` | `fixture`, `expectAccessible`, `axNode`, `axTree`, `axActiveDescendant`, `oneEvent`, `recordEvents`, `waitUntil`, `animationsFinished`, `nextFrame`, `aTimeout`, `deepActiveElement` |
 
 ### Element skeleton
 
@@ -395,7 +403,8 @@ export class TecToggle extends TectonElement {
 ```
 
 `AriaDelegateController` options: `target()` (re-read on every sync), `exclude` (attributes you
-render yourself), `labels()` (fallback label elements when the host has no `aria-label(ledby)`).
+render yourself; an array or a function re-read on every sync), `labels()` (fallback label elements
+when the host has no `aria-label(ledby)`).
 
 ### Form controls — `FormControlMixin`
 
@@ -429,7 +438,9 @@ export class TecInput extends FormControlMixin(TectonElement) {
 - Style invalid as `:host(:state(user-invalid)) .base` and disabled as `:host(:disabled)`.
 - Override hooks as needed: `formValue()` (what is submitted — `null` for nothing, `FormData` for
   several entries, e.g. multi-select), `formState()`, `formResetValue()` (call `super`),
-  `formRestoreState(state)`, `formLabels()`, and `validators` for controls without a native inner
+  `formRestoreState(state)`, `formLabels()`, `ariaDelegationExclude` (host `aria-*` attributes the
+  component manages on `formControl` itself, e.g. `tec-select` names its trigger "<value> <label>"
+  and excludes `aria-label` / `aria-labelledby`), and `validators` for controls without a native inner
   control:
 
   ```ts
@@ -510,9 +521,25 @@ Items take real focus (tabs, toolbar, radio group, toggle group, menu, tree, lis
 // this.#roving.setActive(item) (add { focus: true } to also focus it).
 ```
 
-Items are the hosts (`tabIndex` is managed on them; hosts with `delegatesFocus` work too); give them
-semantics with `internals.role` / `internals.ariaSelected` etc. Disabled = `disabled` attribute,
-`aria-disabled="true"` or `:disabled` (override with `isDisabled`). See `tec-tabs-list`.
+Items are the hosts (`tabIndex` is managed on them); give them semantics with `internals.role` /
+`internals.ariaSelected` etc. Disabled = `disabled` attribute, `aria-disabled="true"` or `:disabled`
+(override with `isDisabled`). See `tec-tabs-list`.
+
+**Where the tabindex goes.** Items that carry the widget role on their host (tab, radio, toggle-group
+item, row) take the tabindex themselves (the default). Items that only **wrap** a control — a
+`tec-button`, a menu trigger or any slotted element in a toolbar — must not: pass
+`focusTarget: focusTargetOf` (from `focus.ts`) so tabindex and focus go to the native control inside
+(through `delegatesFocus` shadow roots and light wrappers). A wrapper host with `tabindex` is a
+focusable generic node, and the ARIA forwarded to it (`aria-expanded`, `aria-haspopup` set by a popup
+on its trigger) then trips axe's `aria-allowed-attr`. See `tec-composer-toolbar`, `tec-canvas-toolbar`,
+`tec-overflow`.
+
+**Gotcha: `tabindex="-1"` on a shadow host removes its slotted content from the Tab order.** A host
+with a negative tabindex is a "focus navigation scope owner" whose whole flat subtree (its shadow
+root *and* the light children slotted into it) is skipped by sequential navigation. Never put
+`tabindex="-1"` on a host whose slotted descendants must stay tabbable (nested rows, controls in a
+row): remove the attribute instead (`removeAttribute("tabindex")`) and focus such hosts only
+programmatically after making them the tab stop — see `#applyTabIndex()` in `tec-tree-view`.
 
 ### Active-descendant lists — `ListNavigationController`
 
