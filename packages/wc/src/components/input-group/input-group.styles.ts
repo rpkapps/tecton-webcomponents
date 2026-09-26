@@ -198,25 +198,33 @@ export const inputGroupTextareaStyles = css`
   }
 `
 
+/*
+ * The input group button is the default-size button with its own size axis (the button's own xs/sm
+ * sizes do not apply): xs = 1.5rem, sm = 2rem, icon-xs = 1.5rem square, icon-sm = 2rem square.
+ */
 export const inputGroupButtonStyles = css`
-  :host {
+  :host,
+  :host([size]) {
+    height: 2rem;
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
     --_gap: 0.5rem;
+    --_pad: 0.5rem;
+    --_pad-icon: 0.375rem;
+    --_radius: var(--tec-radius-md);
+    --tec-icon-size: 1rem;
   }
   :host([size="xs"]) {
     height: 1.5rem;
     --_gap: 0.25rem;
     --_radius: var(--tec-radius-sm);
     --_pad: 0.375rem;
-    --_pad-icon: 0.375rem;
     --tec-icon-size: 0.875rem;
-    font-size: var(--tec-text-sm);
-    line-height: var(--tec-text-sm--line-height);
   }
-  :host([size="sm"]) {
-    font-size: var(--tec-text-sm);
-    line-height: var(--tec-text-sm--line-height);
+  :host([size="icon-xs"]),
+  :host([size="icon-sm"]) {
+    --_pad: 0;
+    --_pad-icon: 0;
   }
   :host([size="icon-xs"]) {
     width: 1.5rem;

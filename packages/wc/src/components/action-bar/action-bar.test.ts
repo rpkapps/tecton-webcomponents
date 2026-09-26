@@ -1,7 +1,7 @@
 import { html } from "lit"
 import { describe, expect, it } from "vitest"
 import { userEvent } from "vitest/browser"
-import { aTimeout, axNode, expectAccessible, fixture, nextFrame, recordEvents, waitUntil } from "../../internal/test-utils.js"
+import { animationsFinished, aTimeout, axNode, expectAccessible, fixture, nextFrame, recordEvents, waitUntil } from "../../internal/test-utils.js"
 import type { TecActionBarSelection } from "./action-bar.js"
 import "./define.js"
 
@@ -30,6 +30,7 @@ describe("tec-action-bar", () => {
     const sel = root.querySelector<TecActionBarSelection>("tec-action-bar-selection")!
     await waitUntil(() => sel.shadowRoot!.querySelector("[aria-live]")!.textContent === "12 of 340 wells selected")
     expect(visibleText(sel)).toEqual(["12 of 340 wells selected"])
+    await animationsFinished(el.shadowRoot!.querySelector(".base")!)
     await expectAccessible(root)
   })
 
