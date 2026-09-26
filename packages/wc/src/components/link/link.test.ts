@@ -15,6 +15,7 @@ describe("tec-link", () => {
     const probe = document.createElement("span")
     probe.style.color = "var(--tec-link-foreground)"
     el.after(probe)
+    el.style.pointerEvents = "none" // not hovered by a pointer left over from an earlier test
     for (const a of anchor(el).getAnimations()) a.finish()
     expect(getComputedStyle(anchor(el)).color).toBe(getComputedStyle(probe).color)
     await expectAccessible(el)

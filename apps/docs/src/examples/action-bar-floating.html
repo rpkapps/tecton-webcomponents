@@ -1,0 +1,99 @@
+<!-- The bar is sticky inside the scroll container, so it stays within the panel. -->
+<div id="action-bar-floating" class="relative h-72 w-full max-w-xl overflow-y-auto rounded-md border border-border">
+  <ul class="divide-y divide-border">
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 01.pdf" value="doc-1"></tec-checkbox>
+      Daily drilling report 01.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 02.pdf" value="doc-2" checked></tec-checkbox>
+      Daily drilling report 02.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 03.pdf" value="doc-3"></tec-checkbox>
+      Daily drilling report 03.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 04.pdf" value="doc-4"></tec-checkbox>
+      Daily drilling report 04.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 05.pdf" value="doc-5" checked></tec-checkbox>
+      Daily drilling report 05.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 06.pdf" value="doc-6"></tec-checkbox>
+      Daily drilling report 06.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 07.pdf" value="doc-7"></tec-checkbox>
+      Daily drilling report 07.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 08.pdf" value="doc-8"></tec-checkbox>
+      Daily drilling report 08.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 09.pdf" value="doc-9"></tec-checkbox>
+      Daily drilling report 09.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 10.pdf" value="doc-10"></tec-checkbox>
+      Daily drilling report 10.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 11.pdf" value="doc-11"></tec-checkbox>
+      Daily drilling report 11.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 12.pdf" value="doc-12"></tec-checkbox>
+      Daily drilling report 12.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 13.pdf" value="doc-13"></tec-checkbox>
+      Daily drilling report 13.pdf
+    </li>
+    <li class="flex items-center gap-3 px-3 py-2 text-sm">
+      <tec-checkbox aria-label="Select Daily drilling report 14.pdf" value="doc-14"></tec-checkbox>
+      Daily drilling report 14.pdf
+    </li>
+  </ul>
+  <tec-action-bar placement="floating" aria-label="Selected documents" class="mb-4">
+    <tec-action-bar-selection count="2" label="documents" clearable></tec-action-bar-selection>
+    <tec-action-bar-actions aria-label="Document actions">
+      <tec-overflow-item value="move" priority="2">
+        <tec-button variant="outline" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1"/><path d="M2 13h10"/><path d="m9 16 3-3-3-3"/></svg><tec-overflow-label>Move to</tec-overflow-label></tec-button>
+      </tec-overflow-item>
+      <tec-overflow-item value="tag" priority="1">
+        <tec-button variant="outline" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg><tec-overflow-label>Add tag</tec-overflow-label></tec-button>
+      </tec-overflow-item>
+      <tec-overflow-item value="archive">
+        <tec-button variant="outline" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg><tec-overflow-label>Archive</tec-overflow-label></tec-button>
+      </tec-overflow-item>
+      <tec-overflow-divider></tec-overflow-divider>
+      <tec-overflow-item value="delete" label-behavior="keep">
+        <tec-button variant="destructive" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete</tec-button>
+      </tec-overflow-item>
+    </tec-action-bar-actions>
+  </tec-action-bar>
+</div>
+<script type="module">
+  const root = document.getElementById("action-bar-floating")
+  const bar = root.querySelector("tec-action-bar")
+  const summary = root.querySelector("tec-action-bar-selection")
+  const boxes = [...root.querySelectorAll("tec-checkbox")]
+
+  const render = () => {
+    const count = boxes.filter((box) => box.checked).length
+    summary.count = count
+    bar.hidden = count === 0
+  }
+  const clear = () => {
+    for (const box of boxes) box.checked = false
+    render()
+  }
+  for (const box of boxes) box.addEventListener("change", render)
+  bar.addEventListener("tec-clear", clear)
+  bar.addEventListener("tec-dismiss", clear)
+  render()
+</script>

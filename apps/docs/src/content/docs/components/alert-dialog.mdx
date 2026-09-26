@@ -1,0 +1,217 @@
+---
+title: Alert Dialog
+description: A modal dialog that interrupts the user with important content and expects a response.
+tags: ["tec-alert-dialog", "tec-alert-dialog-header", "tec-alert-dialog-media", "tec-alert-dialog-title", "tec-alert-dialog-description", "tec-alert-dialog-footer", "tec-alert-dialog-cancel", "tec-alert-dialog-action"]
+---
+
+<ComponentPreview name="alert-dialog-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/alert-dialog"
+```
+
+```html
+<tec-alert-dialog>
+  <tec-button slot="trigger" variant="outline">Show Dialog</tec-button>
+  <tec-alert-dialog-header>
+    <tec-alert-dialog-title>Are you absolutely sure?</tec-alert-dialog-title>
+    <tec-alert-dialog-description>
+      This action cannot be undone. This will permanently delete your account from our servers.
+    </tec-alert-dialog-description>
+  </tec-alert-dialog-header>
+  <tec-alert-dialog-footer>
+    <tec-alert-dialog-cancel>Cancel</tec-alert-dialog-cancel>
+    <tec-alert-dialog-action>Continue</tec-alert-dialog-action>
+  </tec-alert-dialog-footer>
+</tec-alert-dialog>
+```
+
+## Composition
+
+```text
+tec-alert-dialog
+├── tec-button slot="trigger"
+├── tec-alert-dialog-header
+│   ├── tec-alert-dialog-media
+│   ├── tec-alert-dialog-title
+│   └── tec-alert-dialog-description
+└── tec-alert-dialog-footer
+    ├── tec-alert-dialog-cancel
+    └── tec-alert-dialog-action
+```
+
+## Responding to the answer
+
+`tec-alert-dialog-action` and `tec-alert-dialog-cancel` are `tec-button`s that close the dialog after their `click`. Run the action in a `click` listener on the action; `tec-open-change` reports `reason: "action"`, `"cancel"` or `"escape"`. A `click` listener that calls `preventDefault()` keeps the dialog open (for example while a request runs).
+
+```ts
+dialog.querySelector("tec-alert-dialog-action").addEventListener("click", () => deleteWell(id))
+```
+
+## Basic
+
+A basic alert dialog with a title, description, and cancel and continue buttons.
+
+<ComponentPreview name="alert-dialog-basic" />
+
+## Small
+
+Use `size="sm"` for a narrow, centred prompt with a two-column footer.
+
+<ComponentPreview name="alert-dialog-small" />
+
+## Media
+
+Use `tec-alert-dialog-media` to add an icon or image. From the `sm` breakpoint it sits beside the title and description.
+
+<ComponentPreview name="alert-dialog-media" />
+
+## Small with Media
+
+<ComponentPreview name="alert-dialog-small-media" />
+
+## Destructive
+
+Use `variant="destructive"` on the action. Tint the media tile with `--tec-alert-dialog-media-background` and the icon with `color`.
+
+<ComponentPreview name="alert-dialog-destructive" />
+
+## RTL
+
+<ComponentPreview name="alert-dialog-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space / Enter", "On the trigger: opens the alert dialog. On Cancel or the action: answers and closes it."],
+    ["Tab", "Moves focus to the next button; wraps from the last to the first."],
+    ["Shift+Tab", "Moves focus to the previous button; wraps from the first to the last."],
+    ["Esc", "Closes the alert dialog (`reason: \"escape\"`), like Cancel."],
+  ]}
+/>
+
+## Accessibility
+
+- A native `<dialog>` with `role="alertdialog"`, opened with `showModal()`: top layer, the rest of the page inert, scrolling locked.
+- Named by `tec-alert-dialog-title` and described by `tec-alert-dialog-description` (ARIA element reflection), so screen readers read the question and its consequence when it opens.
+- On open, focus moves to `tec-alert-dialog-cancel` — the least destructive choice, as the WAI-ARIA alert dialog pattern recommends (an element with `autofocus` wins). <Kbd>Tab</Kbd> stays inside; on close focus returns to the trigger.
+- A press on the overlay does nothing (add `dismissable` to change that) and there is no ✕ button: the user answers.
+
+## API Reference
+
+<ApiReference tags={["tec-alert-dialog", "tec-alert-dialog-header", "tec-alert-dialog-media", "tec-alert-dialog-title", "tec-alert-dialog-description", "tec-alert-dialog-footer", "tec-alert-dialog-cancel", "tec-alert-dialog-action"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- An action destroys or overwrites something: delete, discard, overwrite, revoke.
+- The consequence cannot be undone once the user continues.
+- The user must answer: there is no overlay dismissal and no close button.
+
+### Not for
+
+- a form, or a decision the user may walk away from: use [Dialog](/docs/components/dialog)
+- a confirmation of something the user can undo afterwards: use a [toast](/docs/components/sonner)
+- a side panel listing what is about to change: use [Sheet](/docs/components/sheet)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the trigger in `slot="trigger"` of the `tec-alert-dialog`, as for `tec-dialog`.
+
+</Do>
+
+<Do>
+
+End the title with a question and state the consequence in `tec-alert-dialog-description`.
+
+</Do>
+
+<Do>
+
+Use `tec-alert-dialog-cancel` and `tec-alert-dialog-action` in the footer; both close the dialog.
+
+</Do>
+
+<Do>
+
+Colour the confirm with `variant="destructive"` on `tec-alert-dialog-action` — never with classes — and use `size="sm"` with `tec-alert-dialog-media` for a short, centred prompt.
+
+</Do>
+
+<Do>
+
+Name the confirm button for its action and object ("Delete well"), never "OK", "Yes" or "Confirm".
+
+</Do>
+
+<Do>
+
+Put `tec-alert-dialog-cancel` before `tec-alert-dialog-action` in the footer: it takes focus when the dialog opens and comes first for keyboard users.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Confirming with a plain tec-button">
+
+<Wrong>
+
+```html
+<tec-alert-dialog-footer>
+  <tec-alert-dialog-cancel>Cancel</tec-alert-dialog-cancel>
+  <tec-button variant="destructive" onclick="deleteWell()">Delete</tec-button>
+</tec-alert-dialog-footer>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-alert-dialog-footer>
+  <tec-alert-dialog-cancel>Cancel</tec-alert-dialog-cancel>
+  <tec-alert-dialog-action variant="destructive" onclick="deleteWell()">Delete</tec-alert-dialog-action>
+</tec-alert-dialog-footer>
+```
+
+</Correct>
+
+A plain button runs the action and leaves the prompt on screen over the deleted record; the action part closes the dialog after its `click`.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Letting an overlay press answer the question">
+
+<Wrong>
+
+```html
+<tec-alert-dialog dismissable>
+  <tec-alert-dialog-title>Discard 12 unsaved edits?</tec-alert-dialog-title>
+</tec-alert-dialog>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-alert-dialog>
+  <tec-alert-dialog-title>Discard 12 unsaved edits?</tec-alert-dialog-title>
+</tec-alert-dialog>
+```
+
+</Correct>
+
+Ignoring overlay presses is what separates an alert dialog from a dialog; with `dismissable` a stray click answers the question.
+
+</Dont>

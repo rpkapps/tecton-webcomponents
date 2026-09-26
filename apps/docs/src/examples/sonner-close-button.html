@@ -1,0 +1,26 @@
+<div id="sonner-close-button" class="flex flex-wrap gap-2">
+  <tec-button variant="outline" data-kind="close">Close button</tec-button>
+  <tec-button variant="outline" data-kind="cancel">Action and cancel</tec-button>
+  <tec-button variant="outline" data-kind="replace">Replace by id</tec-button>
+  <tec-toaster></tec-toaster>
+</div>
+<script type="module">
+  import { toast } from "@tecton/wc/sonner"
+
+  const show = {
+    close: () => toast.info("Export queued", { description: "LAS files for 12 wells", closeButton: true, duration: 8000 }),
+    cancel: () =>
+      toast.warning("Delete 3 horizons?", {
+        action: { label: "Delete", onClick: () => toast.success("Horizons deleted") },
+        cancel: { label: "Keep" },
+        duration: Infinity,
+      }),
+    // Repeating an action updates its toast instead of stacking another one.
+    replace: () => toast.success("Model saved", { id: "save-model", description: new Date().toLocaleTimeString() }),
+  }
+
+  document.getElementById("sonner-close-button").addEventListener("click", (event) => {
+    const button = event.target.closest("tec-button[data-kind]")
+    if (button) show[button.dataset.kind]()
+  })
+</script>

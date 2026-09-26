@@ -1,0 +1,66 @@
+<div id="overflow-forms" class="flex w-full max-w-2xl flex-col gap-2">
+  <div class="min-w-40 resize-x overflow-hidden rounded-md border border-border p-2">
+    <tec-toolbar aria-label="List tools">
+      <!-- Elastic: shrinks before anything collapses; in the menu it opens a dialog holding the same field. -->
+      <tec-overflow-item value="search" label="Search" priority="3" elastic style="--tec-overflow-item-min: 8rem; --tec-overflow-item-max: 20rem">
+        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        <tec-input aria-label="Search wells" placeholder="Search wells"></tec-input>
+      </tec-overflow-item>
+      <!-- A select becomes a submenu of radio items. -->
+      <tec-overflow-item value="field" label="Field" priority="2">
+        <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"/></svg>
+        <tec-select aria-label="Field" value="All fields" class="w-36">
+          <tec-select-item value="All fields">All fields</tec-select-item>
+          <tec-select-item value="Gullfaks">Gullfaks</tec-select-item>
+          <tec-select-item value="Statfjord">Statfjord</tec-select-item>
+          <tec-select-item value="Snorre">Snorre</tec-select-item>
+        </tec-select>
+      </tec-overflow-item>
+      <tec-overflow-divider></tec-overflow-divider>
+      <!-- A toggle becomes a checkbox item. -->
+      <tec-overflow-item value="preview" label="Preview pane" priority="1">
+        <tec-toggle variant="outline" aria-label="Preview pane" pressed><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg></tec-toggle>
+      </tec-overflow-item>
+      <!-- A dropdown keeps its label and chevron; it becomes a submenu with the same items. -->
+      <tec-overflow-group label="Export">
+        <tec-overflow-item value="export" label="Export" label-behavior="keep">
+          <tec-dropdown-menu>
+            <tec-button slot="trigger" variant="outline"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>Export<svg slot="end" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></tec-button>
+            <tec-dropdown-menu-label>Format</tec-dropdown-menu-label>
+            <tec-dropdown-menu-item value="csv">CSV</tec-dropdown-menu-item>
+            <tec-dropdown-menu-item value="excel">Excel</tec-dropdown-menu-item>
+            <tec-dropdown-menu-item value="pdf">PDF</tec-dropdown-menu-item>
+          </tec-dropdown-menu>
+        </tec-overflow-item>
+      </tec-overflow-group>
+    </tec-toolbar>
+  </div>
+  <p class="text-xs text-muted-foreground">Drag the corner to resize. <span data-status></span></p>
+</div>
+<script type="module">
+  const root = document.getElementById("overflow-forms")
+  const status = root.querySelector("[data-status]")
+  const input = root.querySelector("tec-input")
+  const select = root.querySelector("tec-select")
+  const toggle = root.querySelector("tec-toggle")
+  let exported = ""
+
+  // The same listeners serve the row and the More menu: the menu acts through the controls.
+  const render = () => {
+    const parts = [select.value]
+    if (input.value) parts.push(`"${input.value}"`)
+    if (toggle.pressed) parts.push("preview on")
+    if (exported) parts.push(`exported as ${exported}`)
+    status.textContent = parts.join(" · ")
+  }
+  root.addEventListener("input", render)
+  root.addEventListener("change", render)
+  root.addEventListener("click", () => queueMicrotask(render))
+  root.addEventListener("tec-select", (event) => {
+    if (event.target.localName === "tec-dropdown-menu-item") {
+      exported = event.target.textContent.trim()
+      render()
+    }
+  })
+  customElements.whenDefined("tec-select").then(render)
+</script>

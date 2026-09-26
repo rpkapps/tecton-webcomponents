@@ -1,0 +1,23 @@
+<tec-resizable-group orientation="horizontal" class="max-w-sm rounded-lg border border-border">
+  <tec-resizable-panel default-size="50%">
+    <div class="flex h-[200px] items-center justify-center p-6">
+      <span class="font-semibold">One</span>
+    </div>
+  </tec-resizable-panel>
+  <tec-resizable-handle with-handle aria-label="Resize panel One"></tec-resizable-handle>
+  <tec-resizable-panel default-size="50%">
+    <tec-resizable-group orientation="vertical">
+      <tec-resizable-panel default-size="25%">
+        <div class="flex h-full items-center justify-center p-6">
+          <span class="font-semibold">Two</span>
+        </div>
+      </tec-resizable-panel>
+      <tec-resizable-handle with-handle aria-label="Resize panel Two"></tec-resizable-handle>
+      <tec-resizable-panel default-size="75%">
+        <div class="flex h-full items-center justify-center p-6">
+          <span class="font-semibold">Three</span>
+        </div>
+      </tec-resizable-panel>
+    </tec-resizable-group>
+  </tec-resizable-panel>
+</tec-resizable-group>

@@ -1,0 +1,186 @@
+---
+title: Sheet
+description: Extends the Dialog component to display content that complements the main content of the screen.
+tags: ["tec-sheet", "tec-sheet-header", "tec-sheet-title", "tec-sheet-description", "tec-sheet-footer", "tec-sheet-close"]
+---
+
+<ComponentPreview name="sheet-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/sheet"
+```
+
+```html
+<tec-sheet>
+  <tec-button slot="trigger">Open</tec-button>
+  <tec-sheet-header>
+    <tec-sheet-title>Are you absolutely sure?</tec-sheet-title>
+    <tec-sheet-description>This action cannot be undone.</tec-sheet-description>
+  </tec-sheet-header>
+</tec-sheet>
+```
+
+## Composition
+
+```text
+tec-sheet
+├── tec-button slot="trigger"
+├── tec-sheet-header
+│   ├── tec-sheet-title
+│   └── tec-sheet-description
+├── (body: class="flex-1 px-4")
+└── tec-sheet-footer
+    └── tec-sheet-close
+```
+
+A sheet is a [dialog](/docs/components/dialog) attached to an edge of the screen: `open`, `show()` / `hide()`, the cancelable `tec-open-change`, `persistent` and `close-label` work the same way. The header and footer carry their own `1rem` padding; give the body `px-4` (and `flex-1` to push the footer down).
+
+## Side
+
+Use the `side` attribute to set the edge the sheet slides in from: `top`, `right` (default), `bottom` or `left`. Side sheets are 75% wide, at most `24rem` from the `sm` breakpoint (`--tec-sheet-width`, `--tec-sheet-max-width`); limit top and bottom sheets with `--tec-sheet-max-height`.
+
+<ComponentPreview name="sheet-side" />
+
+## No Close Button
+
+Use `hide-close` to hide the ✕ button and close from the footer with `tec-sheet-close`.
+
+<ComponentPreview name="sheet-no-close-button" />
+
+## RTL
+
+`side` is physical: in a right-to-left layout the example uses `side="left"`, the edge where the reading order starts. The ✕ button sits at the inline end.
+
+<ComponentPreview name="sheet-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space / Enter", "On the trigger: opens the sheet."],
+    ["Tab", "Moves focus to the next focusable element in the sheet; wraps from the last to the first."],
+    ["Shift+Tab", "Moves focus to the previous focusable element in the sheet; wraps from the first to the last."],
+    ["Esc", "Closes the sheet."],
+  ]}
+/>
+
+## Accessibility
+
+- A native modal `<dialog>` (top layer, page inert, scrolling locked), named by `tec-sheet-title` and described by `tec-sheet-description`.
+- On open, focus moves to the sheet (or an `autofocus` element), <Kbd>Tab</Kbd> stays inside, and on close focus returns to the trigger, which carries `aria-expanded`.
+- A press on the overlay closes the sheet unless it is `persistent`. Motion respects `prefers-reduced-motion`.
+
+## API Reference
+
+<ApiReference tags={["tec-sheet", "tec-sheet-header", "tec-sheet-title", "tec-sheet-description", "tec-sheet-footer", "tec-sheet-close"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Details, filters or settings that belong to what is on screen: the page stays behind the overlay.
+- The content is taller than it is wide — a form, a property list, a history.
+- The user should be able to leave by clicking the page behind it.
+
+### Not for
+
+- a decision that must be finished before anything else: use [Dialog](/docs/components/dialog)
+- a bottom sheet the user drags with a thumb on touch: use [Drawer](/docs/components/drawer)
+- a panel that belongs to the page instead of floating over it: use [Panel](/docs/tecton/panel)
+- content anchored to the control that opened it: use [Popover](/docs/components/popover)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the trigger in `slot="trigger"` of the `tec-sheet`, exactly as for `tec-dialog`.
+
+</Do>
+
+<Do>
+
+Pick the edge with `side="right" | "left" | "top" | "bottom"`.
+
+</Do>
+
+<Do>
+
+Let `tec-sheet-header` and `tec-sheet-footer` carry their own padding; the body is yours, so give it `px-4` and `flex-1`.
+
+</Do>
+
+<Do>
+
+Drop the corner control with `hide-close` and close from the footer with `tec-sheet-close`.
+
+</Do>
+
+<Do>
+
+Set the size with `--tec-sheet-max-width` / `--tec-sheet-max-height` only; the sheet owns the surface, the edge and the animation.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Positioning the sheet with classes">
+
+<Wrong>
+
+```html
+<tec-sheet class="fixed top-0 left-0 h-full w-96 bg-white p-6">
+  <tec-sheet-title>Well properties</tec-sheet-title>
+</tec-sheet>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-sheet side="left" style="--tec-sheet-max-width: 28rem">
+  <tec-sheet-header>
+    <tec-sheet-title>Well properties</tec-sheet-title>
+  </tec-sheet-header>
+</tec-sheet>
+```
+
+</Correct>
+
+The panel lives in the top layer inside the element's shadow root; classes on the element do not reach it, and `side` sets the edge, size and slide direction together.
+
+</Dont>
+
+<Dont severity="HIGH" title="Body content with no padding of its own">
+
+<Wrong>
+
+```html
+<tec-sheet>
+  <tec-sheet-header><tec-sheet-title>Filters</tec-sheet-title></tec-sheet-header>
+  <tec-field-group>…</tec-field-group>
+</tec-sheet>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-sheet>
+  <tec-sheet-header><tec-sheet-title>Filters</tec-sheet-title></tec-sheet-header>
+  <tec-field-group class="flex-1 px-4">…</tec-field-group>
+</tec-sheet>
+```
+
+</Correct>
+
+The padding lives on the header and footer, not on the sheet, so anything in between runs edge to edge against the panel border.
+
+</Dont>

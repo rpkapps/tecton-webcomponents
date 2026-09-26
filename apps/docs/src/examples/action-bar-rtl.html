@@ -1,0 +1,16 @@
+<div class="w-full max-w-2xl" lang="ar">
+  <tec-action-bar aria-label="الآبار المحددة">
+    <tec-action-bar-selection count="2" total="5" clearable clear-label="مسح التحديد"></tec-action-bar-selection>
+    <tec-action-bar-actions aria-label="إجراءات التحديد" menu-label="إجراءات أخرى">
+      <tec-overflow-item value="assign" priority="2">
+        <tec-button variant="outline" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg><tec-overflow-label>تعيين</tec-overflow-label></tec-button>
+      </tec-overflow-item>
+      <tec-overflow-item value="tag" priority="1">
+        <tec-button variant="outline" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg><tec-overflow-label>إضافة وسم</tec-overflow-label></tec-button>
+      </tec-overflow-item>
+      <tec-overflow-item value="delete" label-behavior="keep">
+        <tec-button variant="destructive" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>حذف</tec-button>
+      </tec-overflow-item>
+    </tec-action-bar-actions>
+  </tec-action-bar>
+</div>

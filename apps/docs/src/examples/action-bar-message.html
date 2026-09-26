@@ -1,0 +1,42 @@
+<form id="action-bar-message" class="flex w-full max-w-md flex-col gap-4">
+  <tec-field>
+    <tec-field-label for="action-bar-message-name">Well</tec-field-label>
+    <tec-input id="action-bar-message-name" name="name" value="34/10-A-12"></tec-input>
+  </tec-field>
+  <tec-field>
+    <tec-field-label for="action-bar-message-operator">Operator</tec-field-label>
+    <tec-input id="action-bar-message-operator" name="operator" value="Equinor"></tec-input>
+  </tec-field>
+  <tec-action-bar aria-label="Unsaved changes" hidden>
+    <tec-action-bar-message>You have unsaved changes</tec-action-bar-message>
+    <tec-action-bar-actions aria-label="Save or discard">
+      <tec-overflow-item value="discard" label-behavior="keep">
+        <tec-button variant="ghost" size="sm" data-discard>Discard</tec-button>
+      </tec-overflow-item>
+      <!-- Not wrapped: the primary action is fixed. -->
+      <tec-button size="sm" data-save>Save</tec-button>
+    </tec-action-bar-actions>
+  </tec-action-bar>
+</form>
+<script type="module">
+  const root = document.getElementById("action-bar-message")
+  const bar = root.querySelector("tec-action-bar")
+  const inputs = [...root.querySelectorAll("tec-input")]
+  let saved = inputs.map((input) => input.value)
+
+  const render = () => {
+    bar.hidden = inputs.every((input, index) => input.value === saved[index])
+  }
+  const discard = () => {
+    inputs.forEach((input, index) => (input.value = saved[index]))
+    render()
+  }
+  root.addEventListener("input", render)
+  // The same handler runs from the row and from the More menu.
+  root.querySelector("[data-discard]").addEventListener("click", discard)
+  root.querySelector("[data-save]").addEventListener("click", () => {
+    saved = inputs.map((input) => input.value)
+    render()
+  })
+  bar.addEventListener("tec-dismiss", discard)
+</script>

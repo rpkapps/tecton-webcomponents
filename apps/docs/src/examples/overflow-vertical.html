@@ -1,0 +1,44 @@
+<div id="overflow-vertical" class="flex flex-col gap-2">
+  <!-- Drag the bottom edge: a vertical row measures heights; the More menu sits at the bottom and opens to the side. -->
+  <div class="h-80 min-h-32 w-fit resize-y overflow-hidden rounded-md border border-border p-1">
+    <tec-toolbar aria-label="Tools" orientation="vertical" labels="never" class="h-full">
+      <!-- One tool at a time: each becomes a radio item in the menu. -->
+      <tec-overflow-item value="select" label="Select" priority="3" menu-type="radio">
+        <tec-toggle aria-label="Select" pressed><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"/></svg></tec-toggle>
+      </tec-overflow-item>
+      <tec-overflow-item value="pan" label="Pan" priority="2" menu-type="radio">
+        <tec-toggle aria-label="Pan"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg></tec-toggle>
+      </tec-overflow-item>
+      <tec-overflow-item value="draw" label="Draw" priority="1" menu-type="radio">
+        <tec-toggle aria-label="Draw"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></tec-toggle>
+      </tec-overflow-item>
+      <tec-overflow-item value="shape" label="Shape" menu-type="radio">
+        <tec-toggle aria-label="Shape"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/></svg></tec-toggle>
+      </tec-overflow-item>
+      <tec-overflow-item value="text" label="Text" menu-type="radio">
+        <tec-toggle aria-label="Text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16"/><path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"/><path d="M9 20h6"/></svg></tec-toggle>
+      </tec-overflow-item>
+      <tec-overflow-item value="measure" label="Measure" menu-type="radio">
+        <tec-toggle aria-label="Measure"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg></tec-toggle>
+      </tec-overflow-item>
+      <tec-overflow-divider></tec-overflow-divider>
+      <tec-overflow-spacer></tec-overflow-spacer>
+      <!-- Not wrapped: the zoom buttons never leave the rail. -->
+      <tec-button variant="ghost" size="icon" aria-label="Zoom in"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="11" x2="11" y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/></svg></tec-button>
+      <tec-button variant="ghost" size="icon" aria-label="Zoom out"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="8" x2="14" y1="11" y2="11"/></svg></tec-button>
+    </tec-toolbar>
+  </div>
+  <p class="text-xs text-muted-foreground">Drag the bottom edge to resize. Tool: <span data-tool>select</span></p>
+</div>
+<script type="module">
+  const root = document.getElementById("overflow-vertical")
+  const toggles = [...root.querySelectorAll("tec-toggle")]
+
+  // The tools are exclusive: pressing one releases the others (in the row and from the menu alike).
+  root.addEventListener("click", (event) => {
+    const pressed = event.target.closest?.("tec-toggle")
+    if (!pressed) return
+    for (const toggle of toggles) toggle.pressed = toggle === pressed
+    root.querySelector("[data-tool]").textContent = pressed.closest("tec-overflow-item").value
+  })
+</script>

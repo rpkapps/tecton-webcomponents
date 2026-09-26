@@ -1,0 +1,236 @@
+---
+title: Marker
+description: Displays an inline status, system note, bordered row, or labeled separator in a conversation.
+tags: ["tec-marker", "tec-marker-icon", "tec-marker-content"]
+---
+
+<ComponentPreview name="marker-demo" />
+
+`<tec-marker>` displays inline conversation markers: status updates, system notes, bordered rows and labelled separators. Compose it with [`<tec-message>`](/docs/components/message) in a conversation thread.
+
+## Usage
+
+```ts
+import "@tecton/wc/marker"
+```
+
+```html
+<tec-marker>
+  <tec-marker-icon><svg …></svg></tec-marker-icon>
+  <tec-marker-content>Explored 4 files</tec-marker-content>
+</tec-marker>
+```
+
+## Composition
+
+```text
+tec-marker
+├── tec-marker-icon
+└── tec-marker-content
+```
+
+## Variants
+
+Use `variant` to switch between an inline marker, a bordered row and a labelled separator.
+
+<ComponentPreview name="marker-variants" />
+
+| Variant | Description |
+| --- | --- |
+| `default` | An inline marker for status, notes and actions. |
+| `border` | A default marker with a bottom border under the row. |
+| `separator` | A centred label with divider lines on each side. |
+
+## Status
+
+Set `role="status"` and put a [`<tec-spinner>`](/docs/components/spinner) in the icon for streaming or in-progress markers, so updates are announced.
+
+<ComponentPreview name="marker-status" />
+
+## Shimmer
+
+Add the [`shimmer`](/docs/utils/shimmer) utility class to `tec-marker-content` for an animated streaming-text effect.
+
+<ComponentPreview name="marker-shimmer" />
+
+## Separator
+
+Use the `separator` variant for labelled dividers, such as dates or section breaks.
+
+<ComponentPreview name="marker-separator" />
+
+## Border
+
+Use the `border` variant for status rows that keep the default alignment while separating the next row.
+
+<ComponentPreview name="marker-border" />
+
+## With Icon
+
+`tec-marker-icon` renders a decorative 16px icon next to the content. Add `class="flex-col"` to the marker to stack the icon above the content.
+
+<ComponentPreview name="marker-icon" />
+
+## Links and Buttons
+
+Set `href` to render the marker as a link, or `type="button"` to render it as a native button (listen for `click`). It is named by its text.
+
+<ComponentPreview name="marker-link-button" />
+
+```html
+<tec-marker href="/pull/482">
+  <tec-marker-content>View the pull request</tec-marker-content>
+</tec-marker>
+```
+
+## RTL
+
+The icon, the separator lines and the text follow the reading direction.
+
+<ComponentPreview name="marker-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves to a link or button marker. Other markers are not focusable."],
+    ["Enter", "Follows a link marker or activates a button marker."],
+    ["Space", "Activates a button marker."],
+  ]}
+/>
+
+## Accessibility
+
+A marker has no role by default; choose one by intent rather than relying on a default.
+
+- **Status and progress**: for streaming or progress markers ("Thinking…", a running tool) set `role="status"` so the update is announced as it appears.
+- **Labelled separators** need no role: the lines are decorative and the text is read as ordinary content. Do not add `role="separator"` to a labelled divider — a separator takes its name from `aria-label` and hides its content, so the visible label would not be announced. Reserve `role="separator"` for a divider with no text.
+- **Bordered markers** keep the semantics of the default marker; the border is decorative.
+- **Icons**: `tec-marker-icon` is hidden from assistive technology, so the content carries the meaning. An icon-only marker needs an `aria-label` on the `tec-marker`.
+- **Interactive markers** render a real `<a>` or `<button>`, focusable with a visible focus ring and named by the marker text.
+
+## API Reference
+
+<ApiReference tags={["tec-marker", "tec-marker-icon", "tec-marker-content"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A full-width row between turns: "Thinking...", "Explored 4 files", "Marcus joined the chat".
+- A labelled divider inside a transcript: a date, a section break, an unread line.
+- The row leads back to what the agent touched: a file, a diff, a pull request.
+
+### Not for
+
+- a status or category label that sits inside a line of text: use [Badge](/docs/components/badge)
+- a keyboard key or a shortcut hint: use [Kbd](/docs/components/kbd)
+- a link inside a sentence: use [Link](/docs/tecton/link)
+- a divider with no label on it: use [Separator](/docs/components/separator)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `tec-marker-icon` for the glyph, `tec-marker-content` for the text, which carries the meaning on its own.
+
+</Do>
+
+<Do>
+
+Pick the layout with `variant`: `default`, `border` or `separator`; `separator` draws its own lines.
+
+</Do>
+
+<Do>
+
+Announce work in progress with `role="status"` and a `tec-spinner` in `tec-marker-icon`.
+
+</Do>
+
+<Do>
+
+Shimmer streaming text with `class="shimmer"` on `tec-marker-content`.
+
+</Do>
+
+<Do>
+
+Make it interactive with `href` or `type="button"`, and wrap it in a `tec-message-scroller-item` to anchor it.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A status line faked with a coloured span">
+
+<Wrong>
+
+```html
+<span class="flex items-center gap-2 text-xs text-gray-500"><svg …></svg> Explored 4 files</span>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-marker>
+  <tec-marker-icon><svg …></svg></tec-marker-icon>
+  <tec-marker-content>Explored 4 files</tec-marker-content>
+</tec-marker>
+```
+
+</Correct>
+
+Stock Tailwind colours emit no CSS with the Tecton palette, and the span loses the hidden icon and the 16px icon size that keeps every glyph in the transcript the same.
+
+</Dont>
+
+<Dont severity="HIGH" title='role="separator" on a labelled divider'>
+
+<Wrong>
+
+```html
+<tec-marker variant="separator" role="separator"><tec-marker-content>Today</tec-marker-content></tec-marker>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-marker variant="separator"><tec-marker-content>Today</tec-marker-content></tec-marker>
+```
+
+</Correct>
+
+A separator takes its name from `aria-label` and its content is presentational, so "Today" would never be announced; the lines are decorative and need no role.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="An anchor wrapped around the marker">
+
+<Wrong>
+
+```html
+<a href="/pull/482"><tec-marker><tec-marker-content>View the pull request</tec-marker-content></tec-marker></a>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-marker href="/pull/482"><tec-marker-content>View the pull request</tec-marker-content></tec-marker>
+```
+
+</Correct>
+
+With `href` the marker renders the link itself, with the underline, the hover colour and a focus ring; an outer anchor nests a full-width row inside an inline element and gets none of them.
+
+</Dont>

@@ -1,0 +1,31 @@
+<div id="sonner-types" class="flex flex-wrap gap-2">
+  <tec-button variant="outline" data-type="default">Default</tec-button>
+  <tec-button variant="outline" data-type="success">Success</tec-button>
+  <tec-button variant="outline" data-type="info">Info</tec-button>
+  <tec-button variant="outline" data-type="warning">Warning</tec-button>
+  <tec-button variant="outline" data-type="error">Error</tec-button>
+  <tec-button variant="outline" data-type="promise">Promise</tec-button>
+  <tec-toaster></tec-toaster>
+</div>
+<script type="module">
+  import { toast } from "@tecton/wc/sonner"
+
+  const show = {
+    default: () => toast("Event has been created"),
+    success: () => toast.success("Event has been created"),
+    info: () => toast.info("Be at the area 10 minutes before the event time"),
+    warning: () => toast.warning("Event start time cannot be earlier than 8am"),
+    error: () => toast.error("Event has not been created"),
+    promise: () =>
+      toast.promise(() => new Promise((resolve) => setTimeout(() => resolve({ name: "Event" }), 2000)), {
+        loading: "Loading...",
+        success: (data) => `${data.name} has been created`,
+        error: "Error",
+      }),
+  }
+
+  document.getElementById("sonner-types").addEventListener("click", (event) => {
+    const button = event.target.closest("tec-button[data-type]")
+    if (button) show[button.dataset.type]()
+  })
+</script>

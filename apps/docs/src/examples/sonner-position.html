@@ -1,0 +1,17 @@
+<div id="sonner-position" class="flex flex-wrap justify-center gap-2">
+  <tec-button variant="outline" data-position="top-left">Top Left</tec-button>
+  <tec-button variant="outline" data-position="top-center">Top Center</tec-button>
+  <tec-button variant="outline" data-position="top-right">Top Right</tec-button>
+  <tec-button variant="outline" data-position="bottom-left">Bottom Left</tec-button>
+  <tec-button variant="outline" data-position="bottom-center">Bottom Center</tec-button>
+  <tec-button variant="outline" data-position="bottom-right">Bottom Right</tec-button>
+  <tec-toaster></tec-toaster>
+</div>
+<script type="module">
+  import { toast } from "@tecton/wc/sonner"
+
+  document.getElementById("sonner-position").addEventListener("click", (event) => {
+    const button = event.target.closest("tec-button[data-position]")
+    if (button) toast("Event has been created", { position: button.dataset.position })
+  })
+</script>

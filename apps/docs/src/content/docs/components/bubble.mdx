@@ -1,0 +1,249 @@
+---
+title: Bubble
+description: Displays conversational content in a message bubble. Supports variants, alignment, grouping, reactions, and collapsible content.
+tags: ["tec-bubble", "tec-bubble-content", "tec-bubble-reactions", "tec-bubble-group"]
+---
+
+<ComponentPreview name="bubble-demo" />
+
+`<tec-bubble>` displays framed conversational content: chat text, short structured output, quoted replies, suggestions and reactions. It is scoped to the surface; put avatars, names, timestamps and message actions in a [`<tec-message>`](/docs/components/message).
+
+## Usage
+
+```ts
+import "@tecton/wc/bubble"
+```
+
+```html
+<tec-bubble>
+  <tec-bubble-content>I checked the registry output and removed the stale route.</tec-bubble-content>
+  <tec-bubble-reactions role="img" aria-label="Reactions: thumbs up"><span>👍</span></tec-bubble-reactions>
+</tec-bubble>
+```
+
+## Composition
+
+```text
+tec-bubble
+├── tec-bubble-content
+└── tec-bubble-reactions
+```
+
+Group consecutive bubbles from the same sender in a `tec-bubble-group`:
+
+```text
+tec-bubble-group
+├── tec-bubble
+└── tec-bubble
+```
+
+## Variants
+
+Use `variant` to change the treatment of the surface. A bubble sizes to its content, up to 80% of the row; `ghost` removes the frame and the cap, so assistant text and rich content can span the full row.
+
+<ComponentPreview name="bubble-variants" />
+
+| Variant | Description |
+| --- | --- |
+| `default` | A strong primary bubble, usually for the current user. |
+| `secondary` | The standard neutral bubble for conversation content. |
+| `muted` | A lower-emphasis bubble for quiet supporting content. |
+| `tinted` | A subtle primary-tinted bubble. |
+| `outline` | A bordered bubble for secondary or rich content. |
+| `ghost` | Unframed content for assistant text or rich content. |
+| `destructive` | An error or a failed action. |
+
+## Alignment
+
+Use `align="end"` to put the bubble at the end of the conversation. Inside a [`<tec-message align="end">`](/docs/components/message) the bubble follows the message side on its own.
+
+<ComponentPreview name="bubble-alignment" />
+
+## Bubble Group
+
+`tec-bubble-group` stacks consecutive bubbles with a tighter gap. Set `align` on each bubble, not on the group.
+
+<ComponentPreview name="bubble-group-demo" />
+
+## Links and Buttons
+
+Set `type="button"` on `tec-bubble-content` to render the surface as a native button (listen for `click`), or `href` to render a link. The surface gets hover and focus styles and is named by its text.
+
+<ComponentPreview name="bubble-link-button" />
+
+```html
+<tec-bubble variant="tinted" align="end">
+  <tec-bubble-content type="button">I forgot my password</tec-bubble-content>
+</tec-bubble>
+```
+
+## Reactions
+
+`tec-bubble-reactions` anchors a row of reactions or quick actions to the bubble edge. Use `side="top"` to anchor it to the upper edge and `align="start"` to move it to the start. Reactions overlap the bubble, so leave vertical space between rows (the examples use a larger `gap`).
+
+<ComponentPreview name="bubble-reactions" />
+
+## Show More / Collapsible
+
+Compose long content with a [`<tec-collapsible>`](/docs/components/collapsible) for a show more / show less interaction.
+
+<ComponentPreview name="bubble-collapsible" />
+
+## Tooltip
+
+Put a [`<tec-tooltip>`](/docs/components/tooltip) in the reactions to reveal metadata on hover or focus, such as when a message was read.
+
+<ComponentPreview name="bubble-tooltip" />
+
+## Popover
+
+Pair a bubble with a [`<tec-popover>`](/docs/components/popover) to surface more information on demand, such as the full error of a failed action.
+
+<ComponentPreview name="bubble-popover" />
+
+## RTL
+
+Alignment and the reactions' position use logical directions, so they mirror under `dir="rtl"`.
+
+<ComponentPreview name="bubble-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves to an interactive bubble (`type=\"button\"` or `href`) and to buttons in the reactions."],
+    ["Enter", "Activates a button or link bubble."],
+    ["Space", "Activates a button bubble."],
+  ]}
+/>
+
+## Accessibility
+
+- The bubble is presentational; keep the conversation semantics on the surrounding [message scroller](/docs/components/message-scroller) and the sender on the [message](/docs/components/message).
+- **Reactions**: a row of emoji is read glyph by glyph, and a counter like `+8` as "plus eight". Give a static row `role="img"` and an `aria-label` ("Reactions: thumbs up, fire, and 8 more") so it is announced once. Interactive reactions are buttons, each with its own label.
+- **Interactive bubbles** render a real `<button>` or `<a>`: focusable, with a visible focus ring, and named by the bubble text.
+- **Meaning beyond colour**: variants signal role and tone with colour. Keep the error in the text of a `destructive` bubble rather than relying on the colour.
+
+## API Reference
+
+<ApiReference tags={["tec-bubble", "tec-bubble-content", "tec-bubble-reactions", "tec-bubble-group"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The framed surface one message is printed on: chat text, a quoted reply, a short structured answer.
+- Assistant prose or rich content must span the row: `variant="ghost"` drops the frame and the 80% cap.
+- The surface itself is pressable: a suggestion, a quick reply, a failed action that opens its error.
+
+### Not for
+
+- the whole turn, with avatar, sender name and message actions: use [Message](/docs/components/message)
+- a row of an application list, with media, title and actions: use [Item](/docs/components/item)
+- a file or an image card inside a message or a composer: use [Attachment](/docs/components/attachment)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Always put the text in `tec-bubble-content`; the variants paint that part, not the bubble.
+
+</Do>
+
+<Do>
+
+Pick the role with `variant`: `default`, `secondary`, `muted`, `tinted`, `outline`, `ghost` or `destructive`.
+
+</Do>
+
+<Do>
+
+Set the side with `align="end"` on the bubble, or let the surrounding `tec-message align="end"` do it.
+
+</Do>
+
+<Do>
+
+Anchor emoji or quick actions with `tec-bubble-reactions side="top"` or `"bottom"`; give a static row `role="img"` and an `aria-label`.
+
+</Do>
+
+<Do>
+
+Keep classes for width and inner layout; the padding, radius and fill belong to the variant.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Text dropped straight into the bubble">
+
+<Wrong>
+
+```html
+<tec-bubble variant="ghost">The flowline pressure recovered after 04:00.</tec-bubble>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-bubble variant="ghost">
+  <tec-bubble-content>The flowline pressure recovered after 04:00.</tec-bubble-content>
+</tec-bubble>
+```
+
+</Correct>
+
+The padding, radius, fill and text size live on `tec-bubble-content`, so bare text renders unpadded and unframed.
+
+</Dont>
+
+<Dont severity="HIGH" title="Painting the user bubble with classes">
+
+<Wrong>
+
+```html
+<tec-bubble class="ms-auto bg-blue-600 text-white"><tec-bubble-content>…</tec-bubble-content></tec-bubble>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-bubble align="end"><tec-bubble-content>…</tec-bubble-content></tec-bubble>
+```
+
+</Correct>
+
+The fill belongs to the content surface, not the bubble box, and stock Tailwind colours emit no CSS with the Tecton palette; the side comes from `align`.
+
+</Dont>
+
+<Dont severity="HIGH" title="A clickable bubble built with a click listener on plain content">
+
+<Wrong>
+
+```html
+<tec-bubble variant="muted"><tec-bubble-content onclick="reply()">Talk to a human</tec-bubble-content></tec-bubble>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-bubble variant="muted"><tec-bubble-content type="button" onclick="reply()">Talk to a human</tec-bubble-content></tec-bubble>
+```
+
+</Correct>
+
+Without `type="button"` the surface is a plain block: no tab stop, no Enter or Space, no role, no hover or focus styles.
+
+</Dont>
