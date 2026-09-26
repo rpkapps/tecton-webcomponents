@@ -32,8 +32,12 @@ export const questionnaireTitleStyles = css`
     font-weight: var(--tec-font-weight-semibold);
     text-wrap: pretty;
   }
-  :host(:state(alone)) .base {
+  /* Like a fieldset legend: no flex gap after the title, only its own margin when no description follows. */
+  :host(:state(alone):not(:state(in-item))) .base {
     margin-block-end: 1.25rem;
+  }
+  :host(:state(in-item):not(:state(alone))) .base {
+    margin-block-end: -1.25rem;
   }
   .base {
     display: block;

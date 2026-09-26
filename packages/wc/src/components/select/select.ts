@@ -424,7 +424,7 @@ export class TecSelect extends FormControlMixin(TectonElement) {
     let value: unknown
     if (!selected.length) value = this.placeholder
     else if (!this.multiple) value = cloneItemContent(selected[0]!)
-    else value = new Intl.ListFormat(this.lang || document.documentElement.lang || undefined, { type: "conjunction" }).format(selected.map((i) => i.textValue))
+    else value = new Intl.ListFormat(this.closest<HTMLElement>("[lang]")?.lang || undefined, { type: "conjunction" }).format(selected.map((i) => i.textValue))
     return html`<button
         class="trigger"
         part="trigger"

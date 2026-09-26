@@ -77,6 +77,8 @@
   "sideEffects": [
     "./dist/index.js",
     "./dist/components/*/define.js",
+    "./src/index.ts",
+    "./src/components/*/define.ts",
     "*.css"
   ]
 }

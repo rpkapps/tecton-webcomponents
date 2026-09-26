@@ -500,7 +500,7 @@ export class TecDrawer extends TecModalElement {
 }
 
 /**
- * Centred on a vertical drawer below the `md` breakpoint (48rem), start-aligned otherwise.
+ * Centred on a vertical drawer, start-aligned on a side drawer.
  *
  * @summary Groups the title and description at the top of a drawer.
  * @tag tec-drawer-header

@@ -342,6 +342,7 @@ export class TecQuestionnaireItem extends TectonElement {
  * @slot - The question text.
  * @csspart base - The text block.
  * @cssstate alone - No description follows the title (it keeps a larger gap to the answers).
+ * @cssstate in-item - The title is a direct child of the item (it sits right above the description, like a legend).
  */
 export class TecQuestionnaireTitle extends TectonElement {
   static styles = [hostStyles, questionnaireTitleStyles]
@@ -359,6 +360,7 @@ export class TecQuestionnaireTitle extends TectonElement {
       next = next.nextElementSibling
     }
     this.toggleState("alone", !described)
+    this.toggleState("in-item", this.parentElement?.localName === "tec-questionnaire-item")
   }
 
   protected override updated(changed: PropertyValues): void {

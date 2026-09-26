@@ -62,5 +62,5 @@
       render()
     }
   })
-  customElements.whenDefined("tec-select").then(render)
+  Promise.all(["tec-select", "tec-toggle", "tec-input"].map((tag) => customElements.whenDefined(tag))).then(render)
 </script>

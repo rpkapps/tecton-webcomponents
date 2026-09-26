@@ -367,8 +367,11 @@ export const overflowDividerStyles = css`
     height: 1rem;
     background: var(--tec-border);
   }
+  :host(:state(vertical)) {
+    align-self: stretch;
+  }
   :host(:state(vertical)) .base {
-    width: 1rem;
+    width: 100%;
     height: 1px;
   }
   @media (forced-colors: active) {

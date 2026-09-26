@@ -267,7 +267,7 @@ export const drawerStyles = css`
   }
 `
 
-/* flex shrink-0 flex-col gap-0.5 p-4 pb-0; centred on a vertical drawer; md: gap-1.5 text-left */
+/* flex shrink-0 flex-col gap-0.5 p-4 pb-0; centred on a vertical drawer; md: gap-1.5 (text-start on a side drawer) */
 export const drawerHeaderStyles = css`
   :host {
     display: block;
@@ -285,9 +285,6 @@ export const drawerHeaderStyles = css`
   @media (min-width: 48rem) {
     .base {
       gap: 0.375rem;
-    }
-    :host(:state(axis-y)) .base {
-      text-align: start;
     }
   }
 `

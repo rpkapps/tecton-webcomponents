@@ -238,6 +238,20 @@ describe("tec-combobox", () => {
     expect(el.values).toEqual(["next"])
   })
 
+  it("rtl: ArrowRight at the start of the input moves to the chips", async () => {
+    const el = await fixture<TecCombobox>(html`<tec-combobox multiple aria-label="الفئات" value="a">
+      <tec-combobox-item value="a">التكنولوجيا</tec-combobox-item>
+      <tec-combobox-item value="b">التصميم</tec-combobox-item>
+    </tec-combobox>`, { dir: "rtl" })
+    el.focus()
+    await userEvent.keyboard("{ArrowRight}")
+    const button = el.shadowRoot!.querySelector<HTMLButtonElement>(".chip-remove")!
+    expect(el.shadowRoot!.activeElement).toBe(button)
+    await userEvent.keyboard("{ArrowLeft}")
+    expect(el.shadowRoot!.activeElement).toBe(input(el))
+    await expectAccessible(el)
+  })
+
   it("required, invalid, disabled", async () => {
     const form = await fixture<HTMLFormElement>(html`<form>
       <tec-combobox name="a" required aria-label="A">${frameworks}</tec-combobox>
