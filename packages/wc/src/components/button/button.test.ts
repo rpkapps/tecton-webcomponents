@@ -36,7 +36,7 @@ describe("tec-button", () => {
     const el = await fixture<HTMLElement>(html`<div>
       <tec-button>a</tec-button><tec-button variant="outline">b</tec-button><tec-button variant="ghost">c</tec-button>
     </div>`)
-    const [primary, outline, ghost] = [...el.querySelectorAll("tec-button")].map((b) => getComputedStyle(b))
+    const [primary, outline, ghost] = [...el.querySelectorAll("tec-button")].map((b) => getComputedStyle(inner(b)))
     const probe = document.createElement("div")
     probe.style.color = "var(--tec-primary)"
     el.append(probe)
@@ -91,7 +91,7 @@ describe("tec-button", () => {
     el.querySelector("input")!.focus()
     await userEvent.keyboard("{Tab}")
     expect(button.matches(":state(focus-visible)")).toBe(true)
-    expect(getComputedStyle(button).boxShadow).not.toBe("none")
+    expect(getComputedStyle(inner(button)).boxShadow).not.toBe("none")
   })
 
   it("disabled: not focusable, no clicks", async () => {
@@ -178,5 +178,20 @@ describe("tec-button", () => {
       ${["default", "outline", "secondary", "ghost", "destructive", "link"].map((v) => html`<tec-button variant=${v}>${v}</tec-button>`)}
     </div>`)
     await expectAccessible(el)
+  })
+})
+
+describe("tec-button under a document reset", () => {
+  it("keeps its border and padding when the page resets * { border: 0; padding: 0 } (Tailwind preflight)", async () => {
+    const el = await fixture<TecButton>(html`<tec-button variant="outline">Outline</tec-button>`)
+    const base = getComputedStyle(inner(el))
+    expect(base.borderTopWidth).toBe("1px")
+    expect(base.paddingInlineStart).toBe("8px")
+  })
+
+  it("layout utilities on the host resize the button", async () => {
+    const el = await fixture<TecButton>(html`<tec-button style="height: 40px; width: 200px">Wide</tec-button>`)
+    expect(inner(el).getBoundingClientRect().height).toBe(40)
+    expect(inner(el).getBoundingClientRect().width).toBe(200)
   })
 })

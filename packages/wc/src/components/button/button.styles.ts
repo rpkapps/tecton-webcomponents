@@ -1,10 +1,13 @@
 import { css } from "lit"
 
 /*
- * The host is the button's box (background, border, radius, height, ring), so utility classes and
- * parent components styling the host (`class="w-full rounded-full shadow-md"`, a button group's
- * `::slotted(tec-button)` corners) just work. The inner <button>/<a> (`part="base"`) fills it and
- * carries the padding, gap and semantics.
+ * The visual box (border, padding, background, radius, ring) is the inner <button>/<a>
+ * (`part="base"`). The host only carries display, sizing and the private variant variables:
+ * document-level resets such as Tailwind's preflight (`* { border: 0; padding: 0; margin: 0 }`)
+ * beat \`:host\` rules, so box styles on the host would be wiped out in Tailwind apps.
+ *
+ * Height and width live on the host (size variants) and the base fills it, so layout utilities on
+ * the host (`class="w-full h-10"`) resize the button. Round it with `--tec-button-radius`.
  *
  * Each variant only sets private custom properties; the state rules below read them.
  */
@@ -27,6 +30,7 @@ export const buttonStyles = css`
     --_border-expanded: var(--_border);
     --_ring-border: var(--tec-ring);
     --_ring: var(--tec-focus-ring);
+    --_radius: var(--tec-radius-md);
     --_pad: 0.5rem;
     --_pad-icon: 0.375rem;
     --tec-icon-size: 1rem;
@@ -36,11 +40,6 @@ export const buttonStyles = css`
     flex-shrink: 0;
     position: relative;
     height: 2rem;
-    border: 1px solid var(--_border);
-    border-radius: var(--tec-button-radius, var(--tec-radius-md));
-    background-color: var(--_bg);
-    background-clip: padding-box;
-    color: var(--_fg);
     font-family: var(--tec-font-sans);
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
@@ -48,7 +47,6 @@ export const buttonStyles = css`
     white-space: nowrap;
     user-select: none;
     -webkit-user-select: none;
-    outline: none;
   }
 
   .base {
@@ -60,13 +58,17 @@ export const buttonStyles = css`
     justify-content: center;
     gap: var(--_gap, 0.25rem);
     min-width: 0;
+    width: 100%;
     height: 100%;
     padding-inline: var(--_pad);
-    border-radius: inherit;
+    border: 1px solid var(--_border);
+    border-radius: var(--tec-button-radius, var(--_radius));
+    background-color: var(--_bg);
+    background-clip: padding-box;
+    color: var(--_fg);
     font: inherit;
-    color: inherit;
     text-decoration: inherit;
-    text-underline-offset: inherit;
+    text-underline-offset: var(--_underline-offset, auto);
     cursor: inherit;
     outline: none;
   }
@@ -155,23 +157,23 @@ export const buttonStyles = css`
     --_fg-pressed: var(--tec-link-pressed-foreground);
     --_bg-expanded: transparent;
     --_fg-expanded: var(--tec-link-active-foreground);
-    text-underline-offset: 4px;
+    --_underline-offset: 4px;
   }
-  :host([variant="link"]:hover) {
+  :host([variant="link"]:hover) .base {
     text-decoration-line: underline;
   }
 
   /* ---------------------------------------------------------------- sizes */
   :host([size="xs"]) {
     height: 1.5rem;
-    border-radius: var(--tec-button-radius, min(var(--tec-radius-md), 8px));
+    --_radius: min(var(--tec-radius-md), 8px);
     font-size: var(--tec-text-xs);
     line-height: var(--tec-text-xs--line-height);
     --tec-icon-size: 0.75rem;
   }
   :host([size="sm"]) {
     height: 1.75rem;
-    border-radius: var(--tec-button-radius, min(var(--tec-radius-md), 10px));
+    --_radius: min(var(--tec-radius-md), 10px);
     font-size: var(--tec-text-xs);
     line-height: var(--tec-text-xs--line-height);
   }
@@ -192,13 +194,13 @@ export const buttonStyles = css`
   :host([size="icon-xs"]) {
     width: 1.5rem;
     height: 1.5rem;
-    border-radius: var(--tec-button-radius, min(var(--tec-radius-md), 8px));
+    --_radius: min(var(--tec-radius-md), 8px);
     --tec-icon-size: 0.75rem;
   }
   :host([size="icon-sm"]) {
     width: 1.75rem;
     height: 1.75rem;
-    border-radius: var(--tec-button-radius, min(var(--tec-radius-md), 10px));
+    --_radius: min(var(--tec-radius-md), 10px);
   }
   :host([size="icon-lg"]) {
     width: 2.25rem;
@@ -206,31 +208,31 @@ export const buttonStyles = css`
   }
 
   /* ---------------------------------------------------------------- states (Tailwind variant order) */
-  :host(:hover) {
+  :host(:hover) .base {
     background-color: var(--_bg-hover);
     color: var(--_fg-hover);
     border-color: var(--_border-hover);
   }
-  :host(:state(focus-visible)) {
+  :host(:state(focus-visible)) .base {
     background-color: var(--_bg-focus);
     color: var(--_fg-focus);
     border-color: var(--_ring-border);
     box-shadow: var(--_ring);
   }
-  :host(:active) {
+  :host(:active) .base {
     background-color: var(--_bg-pressed);
     color: var(--_fg-pressed);
     border-color: var(--_border-pressed);
   }
-  :host(:active:not([aria-haspopup])) {
+  :host(:active:not([aria-haspopup])) .base {
     translate: 0 1px;
   }
-  :host([aria-expanded="true"]) {
+  :host([aria-expanded="true"]) .base {
     background-color: var(--_bg-expanded);
     color: var(--_fg-expanded);
     border-color: var(--_border-expanded);
   }
-  :host([aria-invalid="true"]) {
+  :host([aria-invalid="true"]) .base {
     border-color: light-dark(var(--tec-destructive), color-mix(in oklab, var(--tec-destructive) 50%, transparent));
     box-shadow: var(--tec-focus-ring-invalid);
   }
@@ -241,22 +243,22 @@ export const buttonStyles = css`
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    :host {
+    .base {
       transition-property: color, background-color, border-color, box-shadow, translate, opacity;
       transition-duration: var(--tec-duration);
       transition-timing-function: var(--tec-ease);
     }
   }
   @media (forced-colors: active) {
-    :host {
+    .base {
       border-color: ButtonText;
     }
-    :host(:state(focus-visible)) {
+    :host(:state(focus-visible)) .base {
       outline: 2px solid Highlight;
       outline-offset: 2px;
     }
-    :host([disabled]),
-    :host(:disabled) {
+    :host([disabled]) .base,
+    :host(:disabled) .base {
       border-color: GrayText;
       color: GrayText;
     }

@@ -15,6 +15,8 @@ import { tabsListStyles } from "./tabs.styles.js"
  *
  * @slot - `tec-tabs-trigger` elements.
  *
+ * @csspart base - The track holding the triggers.
+ *
  * @cssstate vertical - The parent `tec-tabs` is vertical.
  */
 export class TecTabsList extends TectonElement {
@@ -70,7 +72,7 @@ export class TecTabsList extends TectonElement {
   }
 
   protected override render() {
-    return html`<slot @slotchange=${() => this.#roving.update()}></slot>`
+    return html`<div class="base" part="base"><slot @slotchange=${() => this.#roving.update()}></slot></div>`
   }
 }
 

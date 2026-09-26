@@ -15,6 +15,11 @@ export const tabsListStyles = css`
   :host {
     display: inline-flex;
     width: fit-content;
+    vertical-align: middle;
+  }
+  .base {
+    display: flex;
+    flex: 1 1 auto;
     align-items: center;
     justify-content: center;
     height: 2.75rem;
@@ -23,21 +28,21 @@ export const tabsListStyles = css`
     background-color: var(--tec-card);
     color: var(--tec-muted-foreground);
   }
-  :host(:state(vertical)) {
+  :host(:state(vertical)) .base {
     flex-direction: column;
     height: fit-content;
   }
-  :host([variant="line"]) {
+  :host([variant="line"]) .base {
     gap: 0.25rem;
     padding: 0;
     border-radius: 0;
     background-color: transparent;
   }
-  :host([variant="line"]:not(:state(vertical))) {
+  :host([variant="line"]:not(:state(vertical))) .base {
     height: 2rem;
   }
   @media (forced-colors: active) {
-    :host {
+    .base {
       border: 1px solid CanvasText;
     }
   }
@@ -49,14 +54,7 @@ export const tabsTriggerStyles = css`
     position: relative;
     display: inline-flex;
     flex: 1 1 0%;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
     height: calc(100% - 1px);
-    padding: 0.25rem 0.5rem;
-    border: 1px solid transparent;
-    border-radius: var(--tec-radius-md);
-    color: var(--tec-link-foreground);
     font-family: var(--tec-font-sans);
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
@@ -67,21 +65,35 @@ export const tabsTriggerStyles = css`
     -webkit-user-select: none;
     outline: none;
   }
-  :host(:hover) {
+  :host(:state(vertical)) {
+    width: 100%;
+  }
+  .base {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--tec-radius-md);
+    color: var(--tec-link-foreground);
+  }
+  :host(:hover) .base {
     color: var(--tec-link-hover-foreground);
   }
-  :host(:state(selected)) {
+  :host(:state(selected)) .base {
     color: var(--tec-link-active-foreground);
   }
-  :host(:state(selected):not(:state(line))) {
+  :host(:state(selected):not(:state(line))) .base {
     background-color: var(--tec-secondary-active);
     color: var(--tec-secondary-active-foreground);
   }
-  :host(:state(vertical)) {
-    width: 100%;
+  :host(:state(vertical)) .base {
     justify-content: flex-start;
   }
-  :host(:focus-visible) {
+  :host(:focus-visible) .base {
     border-color: var(--tec-ring);
     box-shadow: var(--tec-focus-ring);
   }
@@ -89,15 +101,15 @@ export const tabsTriggerStyles = css`
     pointer-events: none;
     opacity: 0.5;
   }
-  :host(:state(has-start)) {
+  :host(:state(has-start)) .base {
     padding-inline-start: 0.375rem;
   }
-  :host(:state(has-end)) {
+  :host(:state(has-end)) .base {
     padding-inline-end: 0.375rem;
   }
 
   /* Line indicator. */
-  :host::after {
+  .base::after {
     content: "";
     position: absolute;
     opacity: 0;
@@ -106,14 +118,13 @@ export const tabsTriggerStyles = css`
     bottom: -5px;
     height: 2px;
   }
-  :host(:state(vertical))::after {
+  :host(:state(vertical)) .base::after {
     inset-inline: auto -0.25rem;
     inset-block: 0;
-    bottom: 0;
     width: 2px;
     height: auto;
   }
-  :host(:state(line):state(selected))::after {
+  :host(:state(line):state(selected)) .base::after {
     opacity: 1;
   }
 
@@ -126,23 +137,23 @@ export const tabsTriggerStyles = css`
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    :host {
-      transition-property: color, background-color, border-color, box-shadow, opacity;
+    .base {
+      transition-property: color, background-color, border-color, box-shadow;
       transition-duration: var(--tec-duration);
       transition-timing-function: var(--tec-ease);
     }
-    :host::after {
+    .base::after {
       transition: opacity var(--tec-duration) var(--tec-ease);
     }
   }
   @media (forced-colors: active) {
-    :host(:state(selected)) {
+    :host(:state(selected)) .base {
       border-color: Highlight;
     }
-    :host(:state(line):state(selected))::after {
+    :host(:state(line):state(selected)) .base::after {
       background-color: Highlight;
     }
-    :host(:focus-visible) {
+    :host(:focus-visible) .base {
       outline: 2px solid Highlight;
       outline-offset: 2px;
     }

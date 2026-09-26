@@ -16,6 +16,8 @@ import { tabsTriggerStyles } from "./tabs.styles.js"
  * @slot start - A leading icon (tightens the leading padding).
  * @slot end - A trailing icon (tightens the trailing padding).
  *
+ * @csspart base - The visual tab (padding, border, background, line indicator).
+ *
  * @cssstate selected - This tab is selected.
  * @cssstate line - The list uses the `line` variant.
  * @cssstate vertical - The tabs are vertical.
@@ -69,7 +71,7 @@ export class TecTabsTrigger extends TectonElement {
   }
 
   protected override render() {
-    return html`<slot name="start"></slot><slot></slot><slot name="end"></slot>`
+    return html`<span class="base" part="base"><slot name="start"></slot><slot></slot><slot name="end"></slot></span>`
   }
 }
 
