@@ -7,14 +7,14 @@
 // `/src/examples/<name>.html?example-script` is the `<script type="module">` of an example as a
 // real module, so its imports (`import "@tecton/wc/dialog"`) go through Vite in dev and in the
 // build. <ComponentPreview> strips the script from the inline markup and loads this module
-// instead. The module first waits for the page's components to be defined, so example code can
-// call element methods right away.
+// instead. The module first imports the families the example uses and waits for the page's
+// components to be defined, so example code can call element methods right away.
 import { existsSync, readFileSync } from "node:fs"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 const EXAMPLE_QUERY = "?example-script"
-const EXAMPLE_PREFIX = "\0tecton-example:"
+export const EXAMPLE_PREFIX = "\0tecton-example:"
 
 const docsRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..")
 
@@ -25,6 +25,29 @@ export function wcPackageDir() {
 
 /** Every `<script type="module">…</script>` block of an example file. */
 export const EXAMPLE_SCRIPT_RE = /<script\b[^>]*type=["']module["'][^>]*>([\s\S]*?)<\/script>/gi
+
+const TAG_RE = /<(tec-[a-z0-9-]+)[\s/>]/g
+
+/** tag → family, read from the library's generated autoloader map. */
+export function familyOfTag() {
+  const source = readFileSync(join(wcPackageDir(), "src/autoloader-map.ts"), "utf8")
+  const map = new Map()
+  for (const [, tag, family] of source.matchAll(/"(tec-[a-z0-9-]+)":\s*\(\)\s*=>\s*import\("\.\/components\/([a-z0-9-]+)\/define\.js"\)/g)) {
+    map.set(tag, family)
+  }
+  if (!map.size) throw new Error("tecton-docs: no tags found in @tecton/wc/src/autoloader-map.ts")
+  return map
+}
+
+/** Families whose tags appear in `html` (markup only: HTML-escaped code samples do not match). */
+export function familiesIn(html, families = familyOfTag()) {
+  const found = new Set()
+  for (const [, tag] of html.matchAll(TAG_RE)) {
+    const family = families.get(tag)
+    if (family) found.add(family)
+  }
+  return [...found].sort()
+}
 
 export function extractExampleScript(source) {
   const blocks = [...source.matchAll(EXAMPLE_SCRIPT_RE)].map((m) => m[1])
@@ -48,9 +71,14 @@ export function tectonDocs() {
         const file = id.slice(EXAMPLE_PREFIX.length, -".js".length)
         this.addWatchFile(file)
         if (!existsSync(file)) return "export {};\n"
-        const code = extractExampleScript(readFileSync(file, "utf8"))
+        const source = readFileSync(file, "utf8")
+        const code = extractExampleScript(source)
         if (!code.trim()) return "export {};\n"
-        return `import { discover as __tecDiscover } from "@tecton/wc/autoloader";\nawait __tecDiscover();\n${code}\nexport {};\n`
+        // The families of every tag in the file (markup and script, e.g. elements a table's
+        // cells render) load before the example runs; discover() catches anything else.
+        const families = familiesIn(source, familyOfTag())
+        const imports = families.map((family) => `import "@tecton/wc/${family}";\n`).join("")
+        return `${imports}import { discover as __tecDiscover } from "@tecton/wc/autoloader";\nawait __tecDiscover();\n${code}\nexport {};\n`
       }
     },
   }

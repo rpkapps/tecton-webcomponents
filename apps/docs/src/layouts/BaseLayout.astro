@@ -1,6 +1,10 @@
 ---
 import "../styles/app.css"
 
+// The Figtree weights the first screen uses: preloaded so text does not re-flow when they arrive.
+import figtree400 from "@fontsource/figtree/files/figtree-latin-400-normal.woff2?url"
+import figtree500 from "@fontsource/figtree/files/figtree-latin-500-normal.woff2?url"
+
 import CommandMenu from "../components/CommandMenu.astro"
 import SiteFooter from "../components/SiteFooter.astro"
 import SiteHeader from "../components/SiteHeader.astro"
@@ -29,6 +33,8 @@ const pageTitle = title ? `${title} – ${siteConfig.title}` : siteConfig.title
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/manifest.json" />
+    <link rel="preload" href={figtree400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={figtree500} as="font" type="font/woff2" crossorigin />
     <script is:inline>
       // Before first paint: the stored mode (default dark), so the page never flashes.
       ;(() => {

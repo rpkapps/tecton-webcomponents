@@ -32,7 +32,7 @@ const status = page.status && page.status !== "stable" ? page.status : undefined
     <div class="flex min-h-min flex-1 items-start px-0 lg:grid lg:grid-cols-[var(--sidebar-width)_minmax(0,1fr)]">
       <DocsSidebar sections={sections} pathname={Astro.url.pathname} />
       <div class="h-full w-full">
-        <div data-slot="docs" class="flex items-stretch pb-8 text-[1.05rem] sm:text-[15px] xl:w-full">
+        <div data-slot="docs" class="flex items-stretch pb-8 text-[1.05rem] sm:text-[15px] xl:grid xl:w-full xl:grid-cols-[minmax(0,1fr)_var(--sidebar-width)]">
           <div class="flex min-w-0 flex-1 flex-col">
             <div class="h-0 shrink-0 lg:h-4"></div>
             <div class="mx-auto flex w-full max-w-160 min-w-0 flex-1 flex-col gap-6 px-4 py-6 text-foreground md:px-0 lg:py-8">

@@ -138,7 +138,8 @@ shown as the code, so write it the way a user would copy it.
 | `src/pages/search-index.json.ts` | Index of the command menu (<kbd>Ctrl</kbd>/<kbd>⌘</kbd> <kbd>K</kbd>, <kbd>/</kbd>). |
 | `src/components/ComponentPreview.astro` | Example rendering + code; loads example scripts. |
 | `src/components/ApiReference.astro`, `src/lib/manifest.ts` | API tables from the Custom Elements Manifest. |
-| `plugins/tecton-docs.mjs` | Vite plugin: `virtual:tecton-components` (registers every element) and example scripts as modules. |
+| `plugins/tecton-docs.mjs` | Vite plugin: example scripts as modules (they import the families they use first). |
+| `plugins/component-preload.mjs` | Astro integration: a render-blocking `<script type="module">` per page that imports its families and example scripts, so pages paint with every element defined (no pop-in or layout shift when navigating). |
 | `src/lib/shiki-transformers.mjs` | Code block markup (title, copy button) for fences and generated code. |
 | `src/styles/app.css`, `typeset.css` | Site CSS. Prose styles apply only inside `.typeset` and skip `[data-not-typeset]`, so examples render exactly as in an application. Keep new rules inside `@layer base` / `@layer components`. |
 | `docs-*` classes (`docs-container`, `docs-no-scrollbar`…) | Site-only utilities in `app.css`; never use them in examples. |

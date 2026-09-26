@@ -64,6 +64,9 @@
   /* Anchor jumps clear the sticky header. */
   html {
     scroll-padding-top: calc(var(--header-height) + 1rem);
+    /* Classic (non-overlay) scrollbars: short and long pages keep the same width, so the
+       centred layout does not shift sideways between pages. */
+    scrollbar-gutter: stable;
     overscroll-behavior-y: none;
   }
   body {

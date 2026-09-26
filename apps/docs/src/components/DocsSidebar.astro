@@ -65,4 +65,29 @@ const statusDot: Record<string, string> = {
       ))
     }
   </nav>
+  <script is:inline>
+    // Runs as soon as the nav is parsed, before the first paint: the sidebar keeps its scroll
+    // position across pages (a deferred script would paint it at the top, then jump), and the
+    // current page is scrolled into view when it is outside.
+    ;(() => {
+      const nav = document.currentScript.parentElement.querySelector("[data-docs-sidebar]")
+      const key = "tecton-docs:sidebar-scroll"
+      try {
+        nav.scrollTop = Number(sessionStorage.getItem(key)) || 0
+      } catch {}
+      const item = nav.querySelector("[aria-current=page]")
+      if (item) {
+        const box = nav.getBoundingClientRect()
+        const rect = item.getBoundingClientRect()
+        if (rect.top < box.top || rect.bottom > box.bottom) nav.scrollTop += rect.top - box.top - (nav.clientHeight - rect.height) / 2
+      }
+      const save = () => {
+        try {
+          sessionStorage.setItem(key, String(Math.round(nav.scrollTop)))
+        } catch {}
+      }
+      nav.addEventListener("scroll", save, { passive: true })
+      save()
+    })()
+  </script>
 </aside>

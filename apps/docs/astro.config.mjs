@@ -4,6 +4,7 @@ import mdx from "@astrojs/mdx"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 
+import { chunkFileNames, componentPreload } from "./plugins/component-preload.mjs"
 import { tectonDocs } from "./plugins/tecton-docs.mjs"
 import { codeBlockTransformer, SHIKI_THEMES } from "./src/lib/shiki-transformers.mjs"
 
@@ -22,7 +23,7 @@ export default defineConfig({
       transformers: [codeBlockTransformer()],
     },
   },
-  integrations: [mdx()],
+  integrations: [mdx(), componentPreload()],
   vite: {
     plugins: [tailwindcss(), tectonDocs()],
     // Resolve @tecton/wc to its TypeScript source (the "source" export condition), so the
@@ -37,6 +38,10 @@ export default defineConfig({
         { find: /^@tecton\/wc\/utilities\.css$/, replacement: wcSource("src/utilities/utilities.css") },
         { find: /^@tecton\/wc\/tailwind-utilities\.css$/, replacement: wcSource("src/utilities/tailwind-utilities.css") },
       ],
+    },
+    // Family chunks get stable names (_astro/tec-<family>.<hash>.js) for componentPreload().
+    environments: {
+      client: { build: { rolldownOptions: { output: { chunkFileNames: chunkFileNames() } } } },
     },
     build: {
       rollupOptions: {

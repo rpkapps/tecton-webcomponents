@@ -295,31 +295,6 @@ if (tocLinks.length) {
   for (const target of targets) observer.observe(target)
 }
 
-/* Sidebar: keep the current page in view ---------------------------------------------- */
-
-const sidebar = document.querySelector<HTMLElement>("[data-docs-sidebar]")
-const current = sidebar?.querySelector<HTMLElement>("[aria-current=page]")
-if (sidebar && current) {
-  const key = "tecton-docs:sidebar-scroll"
-  let saved: { path: string; top: number } | null = null
-  try {
-    saved = JSON.parse(sessionStorage.getItem(key) ?? "null")
-  } catch {
-    // ignore
-  }
-  if (saved && saved.path !== location.pathname) sidebar.scrollTop = saved.top
-  const box = sidebar.getBoundingClientRect()
-  const item = current.getBoundingClientRect()
-  if (item.top < box.top || item.bottom > box.bottom) sidebar.scrollTop += item.top - box.top - (sidebar.clientHeight - item.height) / 2
-  addEventListener("pagehide", () => {
-    try {
-      sessionStorage.setItem(key, JSON.stringify({ path: location.pathname, top: sidebar.scrollTop }))
-    } catch {
-      // ignore
-    }
-  })
-}
-
 /* Scrollable tables: keyboard-reachable only while they overflow ---------------------- */
 
 // A wrapper that scrolls must be focusable (and then named) so keyboard users can scroll it;
