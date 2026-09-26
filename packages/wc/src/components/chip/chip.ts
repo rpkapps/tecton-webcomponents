@@ -5,6 +5,7 @@ import { icon } from "../../internal/icons.js"
 import { HasSlotController } from "../../internal/slot.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
+import { badgeStyles } from "../badge/badge.styles.js"
 import { chipStyles } from "./chip.styles.js"
 
 /** The badge colours a chip can take. */
@@ -50,7 +51,7 @@ interface ChipGroupLink {
  * @cssstate has-end - The `end` slot has content.
  */
 export class TecChip extends TectonElement {
-  static styles = [hostStyles, chipStyles]
+  static styles = [hostStyles, badgeStyles, chipStyles]
 
   /** Identifies the chip in the group's `values` and in `tec-remove`. Defaults to the label text. */
   @property({ reflect: true }) value = ""

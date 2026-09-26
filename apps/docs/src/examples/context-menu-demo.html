@@ -1,0 +1,37 @@
+<tec-context-menu style="--tec-context-menu-width: 12rem">
+  <div slot="trigger" tabindex="0" class="flex aspect-video w-full max-w-xs items-center justify-center rounded-xl border border-dashed text-sm">Right click here</div>
+  <tec-context-menu-group>
+    <tec-context-menu-item>Back <tec-context-menu-shortcut>⌘[</tec-context-menu-shortcut></tec-context-menu-item>
+    <tec-context-menu-item disabled>Forward <tec-context-menu-shortcut>⌘]</tec-context-menu-shortcut></tec-context-menu-item>
+    <tec-context-menu-item>Reload <tec-context-menu-shortcut>⌘R</tec-context-menu-shortcut></tec-context-menu-item>
+    <tec-context-menu-sub>
+      <tec-context-menu-sub-trigger>More Tools</tec-context-menu-sub-trigger>
+      <tec-context-menu-sub-content style="--tec-menu-sub-width: 11rem">
+        <tec-context-menu-group>
+          <tec-context-menu-item>Save Page...</tec-context-menu-item>
+          <tec-context-menu-item>Create Shortcut...</tec-context-menu-item>
+          <tec-context-menu-item>Name Window...</tec-context-menu-item>
+        </tec-context-menu-group>
+        <tec-context-menu-separator></tec-context-menu-separator>
+        <tec-context-menu-group>
+          <tec-context-menu-item>Developer Tools</tec-context-menu-item>
+        </tec-context-menu-group>
+        <tec-context-menu-separator></tec-context-menu-separator>
+        <tec-context-menu-group>
+          <tec-context-menu-item variant="destructive">Delete</tec-context-menu-item>
+        </tec-context-menu-group>
+      </tec-context-menu-sub-content>
+    </tec-context-menu-sub>
+  </tec-context-menu-group>
+  <tec-context-menu-separator></tec-context-menu-separator>
+  <tec-context-menu-group selection-mode="multiple">
+    <tec-context-menu-item value="bookmarks" checked>Show Bookmarks</tec-context-menu-item>
+    <tec-context-menu-item value="urls">Show Full URLs</tec-context-menu-item>
+  </tec-context-menu-group>
+  <tec-context-menu-separator></tec-context-menu-separator>
+  <tec-context-menu-group selection-mode="single">
+    <tec-context-menu-label>People</tec-context-menu-label>
+    <tec-context-menu-item value="pedro" checked>Pedro Duarte</tec-context-menu-item>
+    <tec-context-menu-item value="colm">Colm Tuite</tec-context-menu-item>
+  </tec-context-menu-group>
+</tec-context-menu>

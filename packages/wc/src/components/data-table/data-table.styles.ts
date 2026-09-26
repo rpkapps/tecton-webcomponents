@@ -242,6 +242,17 @@ export const dataTableLightStyles = unsafeCSS(`
 :where(tec-data-table th[data-align="center"] .tec-data-table-sort) {
   margin: 0;
 }
+.tec-data-table-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
 @layer components {
   ${S} {
     display: inline-flex;

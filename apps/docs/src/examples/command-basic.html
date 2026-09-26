@@ -1,0 +1,21 @@
+<div id="command-basic" class="flex flex-col gap-4">
+  <tec-button variant="outline" class="w-fit">Open Menu</tec-button>
+  <tec-command-dialog>
+    <tec-command>
+      <tec-command-input placeholder="Type a command or search..."></tec-command-input>
+      <tec-command-list>
+        <tec-command-group heading="Suggestions">
+          <tec-command-item><span>Calendar</span></tec-command-item>
+          <tec-command-item><span>Search Emoji</span></tec-command-item>
+          <tec-command-item><span>Calculator</span></tec-command-item>
+        </tec-command-group>
+        <tec-command-empty>No results found.</tec-command-empty>
+      </tec-command-list>
+    </tec-command>
+  </tec-command-dialog>
+</div>
+<script type="module">
+  const root = document.getElementById("command-basic")
+  const dialog = root.querySelector("tec-command-dialog")
+  root.querySelector("tec-button").addEventListener("click", () => dialog.show())
+</script>

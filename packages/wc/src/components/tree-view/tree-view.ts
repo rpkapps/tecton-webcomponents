@@ -115,7 +115,7 @@ export class TecTreeView extends TectonElement {
     for (const item of this.items) item.expanded = false
   }
 
-  /** Focuses the tree's tab stop. */
+  /** Focuses the tree's tab stop (the selected row, else the last focused or first row). */
   override focus(options?: FocusOptions): void {
     this.#sync()
     ;(this.#active ?? undefined)?.focus(options)
@@ -127,6 +127,11 @@ export class TecTreeView extends TectonElement {
 
   #enabledVisible(): TecTreeViewItem[] {
     return this.visibleItems.filter((i) => !i.disabled)
+  }
+
+  /** Makes `item` the tab stop and focuses it. @internal */
+  focusItem(item: TecTreeViewItem): void {
+    this.#setActive(item, true)
   }
 
   /** A row was pressed (pointer, Enter, Space). @internal */
@@ -163,9 +168,17 @@ export class TecTreeView extends TectonElement {
       const candidates = [...visible].filter((i) => !i.disabled)
       this.#active = candidates.find((i) => i.selected && this.selectionMode !== "none") ?? candidates[0] ?? null
     }
+    // A shadow host with a negative tabindex takes its whole flat subtree (the slotted child rows and
+    // their controls) out of the Tab order, so the ancestors of the tab stop carry no tabindex at all
+    // (they are focused through focusItem(), which makes them the tab stop first).
+    const ancestors = new Set<TecTreeViewItem>()
+    for (let p = this.#active?.parentItem ?? null; p; p = p.parentItem) ancestors.add(p)
     for (const item of this.items) {
-      const tabIndex = item === this.#active ? 0 : -1
-      if (item.tabIndex !== tabIndex) item.tabIndex = tabIndex
+      if (ancestors.has(item)) item.removeAttribute("tabindex")
+      else {
+        const tabIndex = item === this.#active ? 0 : -1
+        if (item.getAttribute("tabindex") !== String(tabIndex)) item.tabIndex = tabIndex
+      }
       item.setControlsTabbable(item === this.#active)
     }
   }

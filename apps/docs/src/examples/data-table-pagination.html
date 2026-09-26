@@ -1,0 +1,40 @@
+<div id="data-table-pagination" class="w-full max-w-3xl">
+  <tec-data-table label="Wells" pagination page-size="5" page-sizes="5 10 25" empty-label="No wells.">
+    <span slot="summary" class="tabular-nums"></span>
+  </tec-data-table>
+</div>
+<script type="module">
+  import { html } from "@tecton/wc/data-table/data-table.js"
+
+  const statusVariant = { Producing: "success", "Shut in": "warning", Drilling: "info" }
+  const fields = ["Gullfaks", "Statfjord", "Snorre", "Visund"]
+  const statuses = ["Producing", "Producing", "Shut in", "Drilling"]
+  const wells = Array.from({ length: 23 }, (_, i) => ({
+    id: `w${i + 1}`,
+    name: `34/10-${String.fromCharCode(65 + (i % 6))}-${i + 1}`,
+    field: fields[i % fields.length],
+    status: statuses[(i * 7) % statuses.length],
+    depth: 1800 + ((i * 137) % 2200),
+    operator: i % 5 === 4 ? "Petoro" : "Equinor",
+  }))
+
+  const table = document.querySelector("#data-table-pagination tec-data-table")
+  table.columns = [
+    { accessor: "name", header: "Well", rowHeader: true },
+    { accessor: "field", header: "Field" },
+    {
+      accessor: "status",
+      header: "Status",
+      cell: ({ value }) => html`<tec-badge variant=${statusVariant[value]} appearance="outline">${value}</tec-badge>`,
+    },
+    {
+      accessor: "depth",
+      header: "TD (m)",
+      align: "end",
+      cell: ({ value }) => html`<span class="font-mono tabular-nums">${value.toLocaleString("en-US")}</span>`,
+    },
+    { accessor: "operator", header: "Operator" },
+  ]
+  table.data = wells
+  table.querySelector("[slot=summary]").textContent = `${wells.length} wells`
+</script>

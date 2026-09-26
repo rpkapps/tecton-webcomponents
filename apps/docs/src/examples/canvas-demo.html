@@ -1,0 +1,30 @@
+<tec-canvas class="h-72 w-full max-w-2xl rounded-lg border border-border">
+  <tec-canvas-surface class="bg-[radial-gradient(circle,var(--tec-border)_1px,transparent_1px)] bg-size-[20px_20px]"></tec-canvas-surface>
+  <tec-canvas-overlay position="top-left">
+    <tec-canvas-toolbar aria-label="Navigation">
+      <tec-button variant="ghost" size="icon-sm" aria-label="Zoom in">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="11" x2="11" y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/></svg>
+      </tec-button>
+      <tec-button variant="ghost" size="icon-sm" aria-label="Zoom out">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="8" x2="14" y1="11" y2="11"/></svg>
+      </tec-button>
+      <tec-button variant="ghost" size="icon-sm" aria-label="Pan">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
+      </tec-button>
+    </tec-canvas-toolbar>
+  </tec-canvas-overlay>
+  <tec-canvas-overlay position="top-right">
+    <tec-canvas-toolbar orientation="horizontal" aria-label="Measure">
+      <tec-button variant="ghost" size="icon-sm" aria-label="Measure">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z"/><path d="m14.5 12.5 2-2"/><path d="m11.5 9.5 2-2"/><path d="m8.5 6.5 2-2"/><path d="m17.5 15.5 2-2"/></svg>
+      </tec-button>
+    </tec-canvas-toolbar>
+  </tec-canvas-overlay>
+  <tec-canvas-overlay position="bottom-left">
+    <tec-canvas-legend aria-label="Legend">
+      <tec-canvas-legend-item swatch="var(--tec-chart-1)">Existing fields</tec-canvas-legend-item>
+      <tec-canvas-legend-item swatch="var(--tec-chart-2)">Sub-basin</tec-canvas-legend-item>
+      <tec-canvas-legend-item swatch="var(--tec-chart-5)">Water bodies</tec-canvas-legend-item>
+    </tec-canvas-legend>
+  </tec-canvas-overlay>
+</tec-canvas>

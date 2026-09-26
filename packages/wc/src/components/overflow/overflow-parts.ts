@@ -39,7 +39,7 @@ export class TecOverflowGroup extends TectonElement {
     super.updated(changed)
     this.internals.ariaLabel = this.label || null
     const row = rowOf(this)
-    if (row && (changed.has("label") || changed.has("collapse"))) row.itemChanged(this as never)
+    if (row && (changed.has("label") || changed.has("collapse"))) row.itemChanged(this)
   }
 
   protected override render() {
@@ -67,7 +67,7 @@ export class TecOverflowDivider extends TectonElement {
   override connectedCallback(): void {
     super.connectedCallback()
     this.internals.role = "separator"
-    rowOf(this)?.itemChanged(this as never)
+    rowOf(this)?.itemChanged(this)
   }
 
   /** Applies the row's layout decision. @internal */
@@ -97,8 +97,8 @@ export class TecOverflowSpacer extends TectonElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
-    this.setAttribute("aria-hidden", "true")
-    rowOf(this)?.itemChanged(this as never)
+    this.internals.ariaHidden = "true"
+    rowOf(this)?.itemChanged(this)
   }
 
   /** Applies the row's layout decision. @internal */

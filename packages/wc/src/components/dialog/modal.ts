@@ -132,6 +132,11 @@ export class TecModalElement extends TectonElement {
     return true
   }
 
+  /** @internal `aria-haspopup` of the trigger (`null`: none, like React Aria's modal triggers). */
+  protected get triggerHasPopup(): string | null {
+    return null
+  }
+
   /** @internal The ARIA role of the dialog. */
   protected get dialogRole(): "dialog" | "alertdialog" {
     return "dialog"
@@ -239,8 +244,13 @@ export class TecModalElement extends TectonElement {
   /** Mirrors the open state on the trigger (`aria-expanded`; a `tec-button` delegates it to its inner button). */
   #syncTrigger(): void {
     const trigger = this.trigger
-    if (this.#lastTrigger && this.#lastTrigger !== trigger) this.#lastTrigger.removeAttribute("aria-expanded")
+    if (this.#lastTrigger && this.#lastTrigger !== trigger) {
+      this.#lastTrigger.removeAttribute("aria-expanded")
+      if (this.triggerHasPopup) this.#lastTrigger.removeAttribute("aria-haspopup")
+    }
     this.#lastTrigger = trigger
+    const haspopup = this.triggerHasPopup
+    if (trigger && haspopup && trigger.getAttribute("aria-haspopup") !== haspopup) trigger.setAttribute("aria-haspopup", haspopup)
     if (trigger && trigger.getAttribute("aria-expanded") !== String(this.open)) trigger.setAttribute("aria-expanded", String(this.open))
   }
 

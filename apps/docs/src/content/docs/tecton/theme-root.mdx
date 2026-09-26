@@ -1,0 +1,170 @@
+---
+title: Theme Root
+description: "Pins a subtree — or the whole application — to light, dark or the system mode, persists the choice, and carries per-root theme overrides into every overlay it opens."
+tags: ["tec-theme-root"]
+---
+
+<ComponentPreview name="theme-root-demo" class="min-h-80 items-start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/theme-root"
+```
+
+```html
+<tec-theme-root theme="dark">
+  …
+</tec-theme-root>
+```
+
+The Tecton theme switches mode with `data-theme="dark" | "light"` (or the `.dark` / `.light` class) on any element: every `--tec-*` variable, the palette ramps and `color-scheme` follow below it, through every shadow root. `tec-theme-root` manages that attribute for you:
+
+| `theme` | Effect |
+| --- | --- |
+| `inherit` (default) | No attribute: the subtree follows its ancestors (the page's mode). |
+| `light` / `dark` | Pins the subtree — a dark island such as a map or a log viewer in a light application, or the other way round. |
+| `system` | Follows the operating system (`prefers-color-scheme`), live. |
+
+It also re-resolves the text colour of a pinned subtree. Give an island its own surface with a class (`class="block bg-background"`); the element sets no layout of its own.
+
+## Overlays need no portal
+
+Dialogs, sheets, popovers, menus, selects and tooltips open in the browser's **top layer** but stay in the DOM where they are declared. They escape every `overflow: hidden` and `z-index` without being moved, and they keep inheriting from their place in the tree: the root's mode, its variable overrides (`--tec-primary` above) and its `dir`. There is no overlay container to create, mirror or clean up — see [Portal](/docs/tecton/portal).
+
+## Theme toggle
+
+With `storage-key`, the element stores its `theme` in `localStorage`, restores it when it connects (the stored value wins over the attribute) and follows changes made in other tabs. A toggle only has to set `theme`.
+
+<ComponentPreview name="theme-root-toggle" />
+
+## Inverted islands
+
+<ComponentPreview name="theme-root-island" />
+
+## The whole page
+
+For the page itself, wrap the application in a `tec-theme-root`, or use the small helpers in `@tecton/wc/theme-root/theme.js`, which work on `<html>` without an element:
+
+```ts
+import { getTheme, resolveTheme, setTheme } from "@tecton/wc/theme-root/theme.js"
+
+setTheme(getTheme()) // on start-up: apply the stored preference ("system" if none)
+
+toggle.addEventListener("click", () => {
+  setTheme(resolveTheme(getTheme()) === "dark" ? "light" : "dark")
+})
+```
+
+| Helper | Does |
+| --- | --- |
+| `setTheme(theme, { root?, storageKey? })` | Sets `data-theme` on `root` (default `<html>`), follows the system for `"system"`, stores the preference (`storageKey` default `"tecton-theme"`, `null` to skip). On a `tec-theme-root` it sets its `theme`. |
+| `getTheme({ root?, storageKey? })` | The current preference: a root's `theme`, else the last one applied, else the stored one, else `"system"`. |
+| `resolveTheme(theme)` | `"light"` or `"dark"` for a preference. |
+
+To avoid a flash of the wrong mode on load, apply the stored value before the first paint with an inline script in `<head>`:
+
+```html
+<script>
+  try {
+    const t = localStorage.getItem("tecton-theme") || "system"
+    const dark = t === "dark" || (t === "system" && matchMedia("(prefers-color-scheme: dark)").matches)
+    document.documentElement.dataset.theme = dark ? "dark" : "light"
+  } catch {}
+</script>
+```
+
+## Accessibility
+
+- `tec-theme-root` has no role and renders nothing but its content; it does not affect the accessibility tree.
+- `system` respects the user's operating system preference; offer it (and make it the default) in a theme toggle.
+- Contrast is guaranteed by the Tecton tokens in both modes; overriding `--tec-primary` on a root is your responsibility — keep the primary text contrast at 4.5:1.
+
+## API Reference
+
+<ApiReference tags={["tec-theme-root"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A subtree must be pinned against the page's mode — a dark map or log viewer in a light application.
+- An application offers a light / dark / system choice that should persist.
+- One mounted application (a micro-frontend) retints its own subtree with variable overrides, overlays included.
+
+### Not for
+
+- the frame of the application (header, rail, work area): use [App Shell](/docs/tecton/app-shell)
+- a right-to-left subtree: set `dir="rtl"` on any ancestor
+
+### Do
+
+<DoList>
+
+<Do>
+
+Keep `theme="inherit"` inside a themed shell and pin `light` or `dark` only for an inverted island; use `system` as the default of a user choice.
+
+</Do>
+
+<Do>
+
+Retint one root with custom properties on it (`style="--tec-primary: var(--tecton-palette-green-560)"`); its overlays follow automatically.
+
+</Do>
+
+<Do>
+
+Persist a user's choice with `storage-key` and drive it from a toggle by setting `theme`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Colour-scheme-only dark mode">
+
+<Wrong>
+
+```html
+<div style="color-scheme: dark">…</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-theme-root theme="dark">…</tec-theme-root>
+```
+
+</Correct>
+
+`color-scheme` alone switches only the browser's own controls; the Tecton variables and palette ramps switch on `data-theme`, which the element sets.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Moving overlays to the body to theme them">
+
+<Wrong>
+
+```ts
+document.body.append(dialog) // so it picks up the page theme
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-theme-root theme="dark">
+  <tec-dialog>…</tec-dialog>
+</tec-theme-root>
+```
+
+</Correct>
+
+Overlays use the top layer and inherit from where they are declared; moving them out of the root is what loses its mode and overrides.
+
+</Dont>

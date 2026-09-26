@@ -1,0 +1,278 @@
+---
+title: Select
+description: Displays a list of options for the user to pick from — triggered by a button.
+tags: ["tec-select", "tec-select-item", "tec-select-group", "tec-select-label", "tec-select-separator", "tec-select-empty"]
+---
+
+<ComponentPreview name="select-demo" class="min-h-80 items-start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/select"
+```
+
+```html
+<tec-select placeholder="Theme" class="w-[180px]">
+  <tec-select-item value="light">Light</tec-select-item>
+  <tec-select-item value="dark">Dark</tec-select-item>
+  <tec-select-item value="system">System</tec-select-item>
+</tec-select>
+```
+
+`tec-select` is the trigger and the popup in one element: its children are the options. The popup opens in the top layer below the trigger, start-aligned and as wide as the trigger (at least 9rem; `--tec-select-content-width` changes it). Read the choice from `value` (or `values` with `multiple`) and listen to `change`.
+
+It is a form control: give it a `name` and it submits with its `<form>`; `required`, `disabled`, `invalid`, form reset and `<fieldset disabled>` work as on a native `<select>`.
+
+## Composition
+
+```text
+tec-select
+├── tec-select-group
+│   ├── tec-select-label
+│   ├── tec-select-item
+│   └── tec-select-item
+├── tec-select-separator
+├── tec-select-group
+│   ├── tec-select-label
+│   ├── tec-select-item
+│   └── tec-select-item
+└── tec-select-empty        (searchable selects)
+```
+
+## Groups
+
+Use `tec-select-group`, `tec-select-label` and `tec-select-separator` to organize items. A group can also take its heading from a `label` attribute.
+
+<ComponentPreview name="select-groups" class="min-h-96 items-start" />
+
+## Scrollable
+
+A select with many items scrolls inside the popup, which never grows past the space left in the viewport.
+
+<ComponentPreview name="select-scrollable" class="min-h-96 items-start" />
+
+## Disabled
+
+`disabled` on `tec-select` disables the whole control; on a `tec-select-item` it disables one option (skipped by the arrow keys and typeahead).
+
+<ComponentPreview name="select-disabled" />
+
+## Invalid
+
+Add `invalid` to show the error state immediately. Inside a [Field](/docs/components/field) the label, the error message and `aria-describedby` are wired for you; with `required`, the error shows after a submit attempt.
+
+```html
+<tec-field>
+  <tec-field-label>Fruit</tec-field-label>
+  <tec-select invalid>…</tec-select>
+  <tec-field-error>Please select a fruit.</tec-field-error>
+</tec-field>
+```
+
+<ComponentPreview name="select-invalid" />
+
+## Searchable
+
+`searchable` adds a search field at the top of the popup. Typing filters the options (case- and accent-insensitive `contains`; `filter="starts-with" | "fuzzy"` or a filter function change it) and highlights the first match; put a `tec-select-empty` in the select for the no-match message.
+
+<ComponentPreview name="select-autocomplete" class="min-h-96 items-start" />
+
+## Multiple
+
+With `multiple` the popup stays open while the user toggles options; the trigger lists the chosen items. Items marked `selected` are the initial choice; the `values` property holds the current one, and each value is submitted as its own form entry.
+
+<ComponentPreview name="select-multiple" class="min-h-72 items-start" />
+
+## Variants
+
+`variant="outline" | "filled" | "text"` chooses the trigger surface, the same surfaces as [Input](/docs/components/input). Label, description and error message come from [Field](/docs/components/field) (see [Forms](/docs/forms)).
+
+<ComponentPreview name="select-variants" />
+
+## Size
+
+`size="sm"` makes the trigger 28px tall; the default is 32px.
+
+<ComponentPreview name="select-size" />
+
+## Form
+
+A required select in a form: submitting without a choice shows the browser's message in the field's error; reset returns to the `value` attribute.
+
+<ComponentPreview name="select-form" class="min-h-72 items-start" />
+
+## RTL
+
+The chevron, the check marks and the popup alignment follow the text direction.
+
+<ComponentPreview name="select-rtl" direction="rtl" class="min-h-96 items-start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Enter / Space", "On the trigger: opens the list and highlights the chosen option (else the first). In the list: chooses the highlighted option and closes (toggles it and stays open with `multiple`)."],
+    ["ArrowDown", "On the trigger: opens the list on the chosen option, else the first. In the list: highlights the next option (disabled ones are skipped)."],
+    ["ArrowUp", "On the trigger: opens the list on the chosen option, else the last. In the list: highlights the previous option."],
+    ["Home / End", "In the list: highlights the first / last option."],
+    ["PageUp / PageDown", "In the list: moves the highlight by ten options."],
+    ["A–Z", "On the closed trigger: chooses the next option whose label starts with the typed characters. In the list: highlights it. (In a searchable select, typing goes to the search field.)"],
+    ["Escape", "In the search field: clears the search. Otherwise closes the list and returns focus to the trigger."],
+    ["Tab", "Closes the list and moves focus on."],
+  ]}
+/>
+
+## Accessibility
+
+- The trigger is a native `<button>` with `aria-haspopup="listbox"`, `aria-expanded` and `aria-controls`. Like React Aria's Select it is named by the chosen value followed by the field label ("Banana Fruit"), so the value is announced on focus.
+- Label the select with a [Field](/docs/components/field) label, `<label for>`, `aria-labelledby` or `aria-label` on `tec-select`. Without one, the listbox is named by the placeholder.
+- While open, focus is on the `listbox` (or on the search field of a searchable select, `aria-autocomplete="list"`) and the highlighted option is its `aria-activedescendant` — screen readers announce each option as it is highlighted. Options are `role="option"` with `aria-selected` and `aria-disabled`; groups are `role="group"` named by their label; `multiple` sets `aria-multiselectable`.
+- Invalid state is exposed as `aria-invalid` on the trigger; `required` blocks form submission with the browser's localized message.
+- Closing returns focus to the trigger. The popup renders in the top layer, so `overflow` or `z-index` on an ancestor never clips it.
+
+## API Reference
+
+<ApiReference tags={["tec-select", "tec-select-item", "tec-select-group", "tec-select-label", "tec-select-separator", "tec-select-empty"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A field picks one value out of a known, closed list: a datum, a unit, a status.
+- The list is short enough to scan and needs no typing to get through (or add `searchable` when it is long).
+- The trigger must match the other controls in a field row: `variant="outline" | "filled" | "text"`.
+
+### Not for
+
+- a list the user narrows by typing, or free text: use [Combobox](/docs/components/combobox)
+- the browser's own dropdown, for a dense form or a phone: use [Native Select](/docs/components/native-select)
+- two to five options that all stay visible: use [Radio Group](/docs/components/radio-group)
+- a menu of actions rather than a value: use [Dropdown Menu](/docs/components/dropdown-menu)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Label it with a `tec-field-label` in a `tec-field` (or `<label for>`, `aria-labelledby`, `aria-label` on `tec-select`); put `placeholder` on `tec-select`.
+
+</Do>
+
+<Do>
+
+Give every `tec-select-item` a `value`, read the choice from `value` (`values` with `multiple`) and listen to `change`.
+
+</Do>
+
+<Do>
+
+Choose the surface with `variant` and the height with `size="sm" | "default"`.
+
+</Do>
+
+<Do>
+
+Structure long lists with `tec-select-group` and `tec-select-label`, divided by `tec-select-separator`.
+
+</Do>
+
+<Do>
+
+To make it searchable, add `searchable` and a `tec-select-empty` with the no-match message.
+
+</Do>
+
+<Do>
+
+Navigate with a link or [Tabs](/docs/components/tabs), never from a select; a select sets a value and leaves the user in place.
+
+</Do>
+
+<Do>
+
+Use a [Switch](/docs/components/switch) (applies at once) or a [Checkbox](/docs/components/checkbox) (submitted with the form) for yes/no choices, not a two-option select.
+
+</Do>
+
+<Do>
+
+Word the placeholder as the choice it asks for ("Choose a datum"), never a bare "Select…".
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Listening for click on the options">
+
+<Wrong>
+
+```js
+for (const item of select.querySelectorAll("tec-select-item")) {
+  item.addEventListener("click", () => setDatum(item.value))
+}
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+select.addEventListener("change", () => setDatum(select.value))
+```
+
+</Correct>
+
+Options are chosen with the keyboard (Enter, Space, typeahead on the closed trigger) as often as with the pointer, and none of those produce a `click` on the option. `change` fires once per user choice, whatever the input method.
+
+</Dont>
+
+<Dont severity="HIGH" title="Restyling the trigger with classes instead of variant">
+
+<Wrong>
+
+```html
+<tec-select class="h-10 rounded-full bg-muted">…</tec-select>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-select variant="filled" size="sm">…</tec-select>
+```
+
+</Correct>
+
+The trigger's border, surface and height come from `variant` and `size`; classes on the host only reach the host box, so a background or radius there sits behind the trigger instead of replacing it. Use `::part(trigger)` or `--tec-select-radius` for the rare custom tweak.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A select with no label">
+
+<Wrong>
+
+```html
+<tec-select placeholder="Datum">…</tec-select>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-field>
+  <tec-field-label>Datum</tec-field-label>
+  <tec-select placeholder="Choose a datum">…</tec-select>
+</tec-field>
+```
+
+</Correct>
+
+The placeholder disappears as soon as a value is chosen, so a select labelled only by it is announced as just "Kelly bushing, button" — the question is gone.
+
+</Dont>

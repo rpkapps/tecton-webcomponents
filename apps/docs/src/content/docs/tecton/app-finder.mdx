@@ -1,0 +1,219 @@
+---
+title: App Finder
+description: "Application switcher for the shell header: a compact badge for the current app and a searchable, category-grouped palette of every registered application."
+tags: ["tec-app-finder", "tec-app-finder-trigger", "tec-app-finder-group", "tec-app-finder-item", "tec-app-finder-icon"]
+---
+
+<ComponentPreview name="app-finder-demo" class="min-h-[30rem] items-start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/app-finder"
+```
+
+```html
+<tec-app-finder>
+  <tec-app-finder-trigger slot="trigger" name="Well Planning" tone="green">DWP</tec-app-finder-trigger>
+  <tec-app-finder-group heading="Recent" hide-while-searching>
+    <tec-app-finder-item value="recent-dsg" icon="DSG" tone="blue" name="Discovery"></tec-app-finder-item>
+  </tec-app-finder-group>
+  <tec-app-finder-group heading="Subsurface">
+    <tec-app-finder-item value="dsg" icon="DSG" tone="blue" name="Discovery" description="Regional geology" keywords="DSG Subsurface"></tec-app-finder-item>
+  </tec-app-finder-group>
+  <tec-app-finder-group heading="Wells">
+    <tec-app-finder-item value="dwp" icon="DWP" tone="green" name="Well Planning" keywords="DWP Wells" current></tec-app-finder-item>
+  </tec-app-finder-group>
+</tec-app-finder>
+```
+
+```ts
+finder.addEventListener("tec-select", (event) => navigateTo(event.detail.value))
+```
+
+<Callout>
+  The app finder is owned by the micro-frontend host and replaces the static brand in `tec-app-shell-brand`. It is a searchable menu inside a popover: typing filters every group at once and highlights the match, the arrow keys move through the results, and the list scrolls, so a catalogue of a hundred applications stays usable. Group by category, give each category a `tone` so the tiles carry the app's identity, and put a "Recent" or "Favourites" group first with `hide-while-searching`.
+</Callout>
+
+## Composition
+
+```text
+tec-app-finder
+├── tec-app-finder-trigger [slot=trigger]
+└── tec-app-finder-group (heading)
+    └── tec-app-finder-item …
+```
+
+The search field, the list and the empty state are part of `tec-app-finder`; set their texts with `placeholder`, `label`, `empty-message` and `empty-hint`.
+
+## In the shell header
+
+Put the finder in `tec-app-shell-brand`, where the product name would be.
+
+<ComponentPreview name="app-finder-shell" class="min-h-80 items-start" />
+
+## Large catalogues
+
+Keep item values unique across groups: an app listed under both "Recent" and its category needs two values (`recent-dwp` and `dwp`). Mark the "Recent" group `hide-while-searching` so a search lists each app once, and leave the current app out of it. Put the short code and the category name in `keywords` so a search for either finds the app. The list is capped at 24rem or 60% of the viewport and scrolls (`--tec-app-finder-list-height`); the filter runs in the browser, which is fine for a few hundred entries.
+
+<ComponentPreview name="app-finder-recent" class="min-h-[28rem] items-start" />
+
+## Tones
+
+`tec-app-finder-trigger` and `tec-app-finder-item` take a `tone` that colours the code tile from the Tecton palette: `neutral` (default), `blue`, `azure`, `green`, `lime`, `yellow`, `saffron`, `red`, `pink`, `orchid`, `mauve`, `violet` or `lilac`. Assign one tone per category so a user scanning the list can find a family by colour. `tec-app-finder-icon` renders the same tile on its own, for a launcher grid or a command palette row.
+
+<ComponentPreview name="app-finder-tones" />
+
+## Events
+
+Choosing an item fires `tec-select` on it (bubbling, `detail: { value }`) and closes the finder; call `preventDefault()` to keep it open. Update the trigger (`name`, `tone`, its text) and the items' `current` yourself when the application changes. `tec-open-change` reports opening and closing (`reason`: `trigger`, `select`, `escape`, `outside`) and is cancelable.
+
+## RTL
+
+<ComponentPreview name="app-finder-rtl" direction="rtl" class="min-h-96 items-start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Enter / Space", "On the trigger: opens the finder and focuses the search field."],
+    ["Any character", "Filters the applications and highlights the first match."],
+    ["ArrowDown / ArrowUp", "Highlights the next / previous application (disabled ones are skipped)."],
+    ["PageDown / PageUp", "Moves the highlight by ten applications."],
+    ["Enter", "Chooses the highlighted application and closes the finder."],
+    ["Escape", "Clears the search; with an empty search, closes the finder and returns focus to the trigger."],
+    ["Tab", "Stays in the finder (focus is kept on the search field)."],
+  ]}
+/>
+
+## Accessibility
+
+- The trigger is a button named "Switch application, current: <name>" (override with `aria-label`) with `aria-haspopup="dialog"` and `aria-expanded`.
+- The finder is a non-modal `dialog` named by `label` ("Applications"). Focus goes to the search field and stays there: the highlighted application is its `aria-activedescendant` in a `menu` of `menuitem`s grouped by category (`group`, named by the heading).
+- Matches are marked with `<mark>`; the empty state is a `status` that is announced when nothing matches.
+- Pressing outside or Escape closes the finder; focus returns to the trigger.
+
+## API Reference
+
+<ApiReference tags={["tec-app-finder", "tec-app-finder-trigger", "tec-app-finder-group", "tec-app-finder-item", "tec-app-finder-icon"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The shell header switches between independently deployed applications.
+- The catalogue is large enough that a flat menu stops working: categories, search, short codes.
+- The current application has to stay visible in the header as a tinted code tile.
+
+### Not for
+
+- a short list of actions opened from a header button: use [Dropdown Menu](/docs/components/dropdown-menu)
+- a palette of commands and records inside one application: use [Command](/docs/components/command)
+- the global action cluster at the end of the shell header: use [App Shell](/docs/tecton/app-shell)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose `tec-app-finder` > (`tec-app-finder-trigger` in `slot="trigger"`, `tec-app-finder-group` > `tec-app-finder-item`).
+
+</Do>
+
+<Do>
+
+Describe the current app on the trigger: the short code as its text, `name` for the label beside the tile, the category's `tone`.
+
+</Do>
+
+<Do>
+
+Navigate from `tec-select`; `event.detail.value` is the item's `value` and the finder closes afterwards.
+
+</Do>
+
+<Do>
+
+Give every item a unique `value` across groups, `keywords` for its short code and category, and `current` on the mounted one.
+
+</Do>
+
+<Do>
+
+Reuse `tec-app-finder-icon` wherever else the tile is needed — a launcher grid, a command palette row.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Hand-tinting the app tile with a class">
+
+<Wrong>
+
+```html
+<tec-app-finder-item value="dwp" icon="DWP" name="Well Planning" class="bg-emerald-100 text-emerald-800"></tec-app-finder-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-app-finder-item value="dwp" icon="DWP" tone="green" name="Well Planning"></tec-app-finder-item>
+```
+
+</Correct>
+
+A class lands on the row, never on the tile inside it, and `emerald` is not a Tecton palette family, so it produces no CSS — `tone` paints the tile from the palette in both modes.
+
+</Dont>
+
+<Dont severity="HIGH" title="A search field of your own above the list">
+
+<Wrong>
+
+```html
+<tec-app-finder>
+  <tec-input placeholder="Search"></tec-input>
+  …
+</tec-app-finder>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-app-finder placeholder="Search applications…">…</tec-app-finder>
+```
+
+</Correct>
+
+The finder owns its search field: a second input neither filters nor highlights, and the arrow keys and `aria-activedescendant` only work from the built-in one.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A Recent group left visible while searching">
+
+<Wrong>
+
+```html
+<tec-app-finder-group heading="Recent">…</tec-app-finder-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-app-finder-group heading="Recent" hide-while-searching>…</tec-app-finder-group>
+```
+
+</Correct>
+
+The filter runs across every group at once, so without `hide-while-searching` a search lists the same application twice under two values.
+
+</Dont>

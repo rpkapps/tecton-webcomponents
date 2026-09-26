@@ -1,0 +1,292 @@
+---
+title: Carousel
+description: A carousel with swipe, scroll snapping and previous / next controls.
+tags: ["tec-carousel", "tec-carousel-content", "tec-carousel-item", "tec-carousel-previous", "tec-carousel-next", "tec-carousel-autoplay-toggle"]
+---
+
+<ComponentPreview name="carousel-demo" class="min-h-80 sm:min-h-[32rem]" />
+
+## About
+
+The carousel scrolls natively: slides are a horizontal (or vertical) scroll container with CSS scroll
+snapping, so touch swipes, trackpads and <Kbd>Shift</Kbd> + wheel feel like the platform, and a mouse can
+drag the slides. The previous / next buttons and the arrow keys move one snap position at a time. No
+carousel library is involved.
+
+## Usage
+
+```ts
+import "@tecton/wc/carousel"
+```
+
+```html
+<tec-carousel aria-label="Featured wells">
+  <tec-carousel-content>
+    <tec-carousel-item>...</tec-carousel-item>
+    <tec-carousel-item>...</tec-carousel-item>
+    <tec-carousel-item>...</tec-carousel-item>
+  </tec-carousel-content>
+  <tec-carousel-previous></tec-carousel-previous>
+  <tec-carousel-next></tec-carousel-next>
+</tec-carousel>
+```
+
+## Composition
+
+```text
+tec-carousel
+├── tec-carousel-content
+│   ├── tec-carousel-item
+│   └── tec-carousel-item
+├── tec-carousel-previous
+├── tec-carousel-next
+└── tec-carousel-autoplay-toggle   (with autoplay)
+```
+
+The previous and next buttons are positioned outside the carousel's start and end edges (3rem), like the
+shadcn/ui carousel: leave room for them, or place them elsewhere with a class (`static`, other insets).
+
+## Sizes
+
+To set the size of the slides, use a `basis` utility class on `<tec-carousel-item>` (the default is the full
+width).
+
+<ComponentPreview name="carousel-size" class="min-h-80" />
+
+```html
+<!-- 33% of the carousel width. -->
+<tec-carousel-content>
+  <tec-carousel-item class="basis-1/3">...</tec-carousel-item>
+  <tec-carousel-item class="basis-1/3">...</tec-carousel-item>
+  <tec-carousel-item class="basis-1/3">...</tec-carousel-item>
+</tec-carousel-content>
+
+<!-- 50% on small screens and 33% on larger screens. -->
+<tec-carousel-item class="md:basis-1/2 lg:basis-1/3">...</tec-carousel-item>
+```
+
+`snap-align` sets where a slide lands when it is snapped: `center` (default), `start` or `end`. It only
+matters when slides are narrower than the viewport; the size example uses `start`.
+
+## Spacing
+
+The space between slides is the `--tec-carousel-spacing` custom property (default `1rem`) on `<tec-carousel>`.
+
+<ComponentPreview name="carousel-spacing" class="min-h-80" />
+
+```html
+<tec-carousel class="[--tec-carousel-spacing:0.5rem] md:[--tec-carousel-spacing:1rem]">...</tec-carousel>
+```
+
+## Orientation
+
+`orientation="vertical"` scrolls up and down; give `<tec-carousel-content>` a height. The buttons move above
+and below the slides.
+
+<ComponentPreview name="carousel-orientation" class="min-h-[32rem]" />
+
+## Loop
+
+With `loop`, previous on the first slide goes to the last one and next on the last slide goes back to the
+first, and the buttons never disable.
+
+```html
+<tec-carousel loop>...</tec-carousel>
+```
+
+## API
+
+The element is the API: `selectedIndex` and `snapCount` read the position, `scrollPrev()`, `scrollNext()`
+and `goTo(index)` move it, and `tec-slide-change` fires whenever the selected position changes.
+
+<ComponentPreview name="carousel-api" class="min-h-80 sm:min-h-[32rem]" />
+
+```js
+const carousel = document.querySelector("tec-carousel")
+carousel.addEventListener("tec-slide-change", (event) => {
+  console.log(`Slide ${event.detail.index + 1} of ${carousel.snapCount}`)
+})
+carousel.goTo(2)
+```
+
+## Autoplay
+
+`autoplay` advances the slides every `autoplay-delay` milliseconds (4000 by default); with `loop`
+it wraps around. To meet WCAG 2.2.2 (Pause, Stop, Hide):
+
+- it pauses while the pointer is over the carousel or focus is inside it;
+- it stops for good when the user navigates (buttons, keys, swipe, drag);
+- it never starts when the user prefers reduced motion;
+- add a `<tec-carousel-autoplay-toggle>`: a visible pause / play button (hidden without `autoplay`).
+
+`play()` and `pause()` do the same from code; `:state(playing)` styles a running carousel.
+
+<ComponentPreview name="carousel-plugin" class="min-h-80 sm:min-h-[32rem]" />
+
+## RTL
+
+The slides, the buttons and the arrow keys follow the text direction: in right-to-left layouts the first
+slide is on the right, previous sits on the right edge and <Kbd>ArrowLeft</Kbd> goes to the next slide. The
+chevrons mirror automatically. Localise the slide names with `slide-label` and `announcement-label`, and
+the buttons with `label`; numbers are formatted for the nearest `lang`.
+
+<ComponentPreview name="carousel-rtl" direction="rtl" class="min-h-80 sm:min-h-[32rem]" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["ArrowRight / ArrowLeft", "With focus inside the carousel: next / previous slide (mirrored in right-to-left layouts)."],
+    ["ArrowDown / ArrowUp", "In a vertical carousel: next / previous slide."],
+    ["Tab / Shift+Tab", "Moves through the slide content and the buttons. When no slide contains a focusable element, the slide viewport is a tab stop itself."],
+    ["Enter / Space", "On the previous / next / autoplay buttons: activates them."],
+  ]}
+/>
+
+Arrow keys are left alone when focus is in a text field or a widget that uses them (menu, listbox, slider,
+tabs, radio group, grid).
+
+## Accessibility
+
+Follows the [WAI-ARIA APG carousel pattern](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/):
+
+- `<tec-carousel>` is a `region` with `aria-roledescription="carousel"`: name it with `aria-label` (what it holds, "Featured wells").
+- Every slide is a `group` with `aria-roledescription="slide"`, named "1 of 5" (`slide-label`); an `aria-label` on a slide replaces that name.
+- The previous / next buttons are real buttons named "Previous slide" / "Next slide" (`label`) and disabled at the ends (without `loop`).
+- After a button press or an arrow key, the new position is announced through a polite live region ("Slide 2 of 5", `announcement-label`). Autoplay does not announce.
+- Autoplay pauses on hover and focus, stops on interaction, respects reduced motion and has a visible pause control (see [Autoplay](#autoplay)).
+- Programmatic scrolling is instant when the user prefers reduced motion.
+
+## API Reference
+
+<ApiReference tags={["tec-carousel", "tec-carousel-content", "tec-carousel-item", "tec-carousel-previous", "tec-carousel-next", "tec-carousel-autoplay-toggle"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A short, ordered set of equal tiles does not fit and stepping through them is the point: onboarding slides, a gallery, featured records.
+- Nothing is lost if the reader never reaches the last slide.
+- The set is small enough that every slide can be in the DOM at once.
+
+### Not for
+
+- sections the reader chooses by name: use [Tabs](/docs/components/tabs)
+- a row of cards the reader scrolls freely: use [Scroll Area](/docs/components/scroll-area)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `tec-carousel`, then `tec-carousel-content` holding `tec-carousel-item`s, then `tec-carousel-previous` and `tec-carousel-next` as siblings of the content.
+
+</Do>
+
+<Do>
+
+Set how many slides show with `basis-*` on `tec-carousel-item` and the gutter with `--tec-carousel-spacing`; switch the axis with `orientation="vertical"` and give the content a height.
+
+</Do>
+
+<Do>
+
+Read the position with `selectedIndex` / `snapCount` and react to moves with `tec-slide-change`.
+
+</Do>
+
+<Do>
+
+Give every carousel an accessible name for what it holds ("Featured wells").
+
+</Do>
+
+<Do>
+
+Prefer letting the reader move at their own pace; if a carousel must auto-advance, add `tec-carousel-autoplay-toggle`.
+
+</Do>
+
+<Do>
+
+Never put a carousel inside another carousel.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Slide width set with w-* instead of basis-*">
+
+<Wrong>
+
+```html
+<tec-carousel-item class="w-1/3">...</tec-carousel-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-carousel-item class="basis-1/3">...</tec-carousel-item>
+```
+
+</Correct>
+
+A slide is a flex item with `flex: 0 0 100%`: in a flex row `flex-basis` sets the main size, so `w-1/3` changes nothing and every slide still fills the viewport.
+
+</Dont>
+
+<Dont severity="HIGH" title="Autoplay without a pause control">
+
+<Wrong>
+
+```html
+<tec-carousel autoplay aria-label="News">...</tec-carousel>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-carousel autoplay aria-label="News">
+  ...
+  <tec-carousel-autoplay-toggle></tec-carousel-autoplay-toggle>
+</tec-carousel>
+```
+
+</Correct>
+
+Moving content that starts automatically and lasts more than five seconds needs a mechanism to pause it (WCAG 2.2.2); hover and focus pausing alone do not help touch and screen reader users.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A vertical carousel without a height">
+
+<Wrong>
+
+```html
+<tec-carousel orientation="vertical">
+  <tec-carousel-content>...</tec-carousel-content>
+</tec-carousel>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-carousel orientation="vertical">
+  <tec-carousel-content class="h-80">...</tec-carousel-content>
+</tec-carousel>
+```
+
+</Correct>
+
+Vertical slides size themselves against the content's height; without one there is nothing to scroll and `basis-1/2` has no reference.
+
+</Dont>

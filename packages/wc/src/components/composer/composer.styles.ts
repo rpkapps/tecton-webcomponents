@@ -375,6 +375,11 @@ export const composerAttachmentStyles = css`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  /* The description gives way before the label (which keeps its whole width up to the chip's). */
+  .label {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
   .description {
     color: var(--tec-muted-foreground);
     font-weight: var(--tec-font-weight-normal);

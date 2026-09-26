@@ -1,0 +1,24 @@
+<div id="tree-view-events" class="flex w-full max-w-sm flex-col gap-3">
+  <tec-tree-view label="Project" selection-mode="single">
+    <tec-tree-view-item value="wells" kind="folder" expanded>
+      Wells
+      <tec-tree-view-item value="a12">34/10-A-12</tec-tree-view-item>
+      <tec-tree-view-item value="b3">34/10-B-3</tec-tree-view-item>
+    </tec-tree-view-item>
+    <tec-tree-view-item value="horizons" kind="folder">
+      Horizons
+      <tec-tree-view-item value="balder">Top Balder</tec-tree-view-item>
+    </tec-tree-view-item>
+  </tec-tree-view>
+  <p class="text-sm text-muted-foreground" aria-live="polite">Nothing selected.</p>
+</div>
+<script type="module">
+  const root = document.getElementById("tree-view-events")
+  const output = root.querySelector("p")
+  root.addEventListener("tec-value-change", (event) => {
+    output.textContent = event.detail.value ? `Selected: ${event.detail.value}` : "Nothing selected."
+  })
+  root.addEventListener("tec-expanded-change", (event) => {
+    output.textContent = `${event.target.value} ${event.detail.expanded ? "expanded" : "collapsed"}`
+  })
+</script>

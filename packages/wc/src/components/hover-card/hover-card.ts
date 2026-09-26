@@ -123,7 +123,7 @@ export class TecHoverCard extends TectonElement {
     trigger: () => this.trigger,
     haspopup: "dialog",
     placement: () => ({ side: this.side, align: this.align, sideOffset: this.sideOffset, alignOffset: this.alignOffset }),
-    focus: { initial: "none", trap: false, restore: true },
+    focus: { initial: "none", trap: false, restore: false },
     dismiss: { escape: true, outsidePress: false, focusOut: false },
     onRequestClose: () => {
       this.#reason = "escape"
@@ -319,6 +319,12 @@ export class TecHoverCard extends TectonElement {
     const trigger = this.trigger
     if (this.panel) setAriaElements(this.panel, "ariaLabelledByElements", !this.label && trigger ? [trigger] : null)
     if (changed.has("open")) {
+      // Focus returns to the trigger only when it was inside the card (not when nothing had focus).
+      if (!this.open && containsFlat(this.panel, deepActiveElement())) {
+        this.#ignoreFocus = true
+        setTimeout(() => (this.#ignoreFocus = false), 0)
+        trigger?.focus({ preventScroll: true })
+      }
       void this.#popup.setOpen(this.open).then(() => {
         if (this.open && this.#focusOnOpen) this.panel?.focus({ preventScroll: true })
         this.#focusOnOpen = false

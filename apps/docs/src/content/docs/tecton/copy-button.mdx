@@ -1,0 +1,181 @@
+---
+title: Copy Button
+description: Copies a value to the clipboard and shows a check mark for a moment, or a cross when the copy fails.
+tags: ["tec-copy-button"]
+---
+
+<ComponentPreview name="copy-button-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/copy-button"
+```
+
+```html
+<tec-copy-button value="34/10-A-12"></tec-copy-button>
+```
+
+## Labelled
+
+Put a label in the element for a labelled button; the size then defaults to `sm` instead of `icon-sm`. Every [Button](/docs/components/button) `variant` and `size` is available (`variant` defaults to `ghost`).
+
+<ComponentPreview name="copy-button-labelled" />
+
+## Feedback
+
+Listen to `tec-copy` (`detail.value`) to react to a successful copy, and use `timeout` to control how long the check is shown.
+
+<ComponentPreview name="copy-button-feedback" />
+
+## Errors
+
+When the clipboard refuses the write (an insecure context, a denied permission, a browser without the Clipboard API) the button shows a cross in the destructive colour for `timeout` ms instead of the check, and fires `tec-copy-error` with the clipboard's error. Both outcomes are announced politely through one shared live region: "Copied" or "Copy failed". An icon-only button also takes that text as its accessible name for as long as the state lasts ("Copy" otherwise).
+
+```js
+button.addEventListener("tec-copy-error", () => toast.error("Could not copy the well ID"))
+```
+
+The element has the custom states `:state(copied)` and `:state(error)` while the feedback is shown.
+
+## RTL
+
+The icon precedes the label in the reading direction. Translate the names with `copy-label`, `copied-label` and `error-label`.
+
+<ComponentPreview name="copy-button-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Enter / Space", "Copies the value."],
+    ["Tab / Shift+Tab", "Moves focus to the next / previous focusable element."],
+  ]}
+/>
+
+## Accessibility
+
+- Renders a [`tec-button`](/docs/components/button) (a native `<button>`) in its shadow root; `aria-*` attributes on the element are forwarded to it.
+- Without a label the button names itself "Copy", then "Copied" or "Copy failed" while the feedback lasts. An `aria-label` on the element wins over that (name the object when several buttons sit side by side: "Copy Top Balder").
+- The outcome is announced through one polite live region at the end of the document, shared by every copy button, so button groups and toolbars get no extra nodes.
+
+## API Reference
+
+<ApiReference tags={["tec-copy-button"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A value on screen is meant to be pasted elsewhere: an identifier, a URL, a snippet.
+- The user needs the copy confirmed in place, without a toast or a dialog.
+- The control sits next to the value, usually as a quiet icon button.
+
+### Not for
+
+- any action on a value other than copying it: use [Button](/docs/components/button)
+- a confirmation that appears away from the control: use [toast](/docs/components/sonner)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the text in `value` and let the element do the copying.
+
+</Do>
+
+<Do>
+
+Leave it icon-only for a quiet affordance, or put a text label in it for a prominent one.
+
+</Do>
+
+<Do>
+
+Set the weight with `variant` (it defaults to `ghost`) and the hold time with `timeout`.
+
+</Do>
+
+<Do>
+
+React to a successful copy with `tec-copy`, and to a refused one with `tec-copy-error`, not with your own click handler.
+
+</Do>
+
+<Do>
+
+Let the element name itself; set `aria-label` only to name the object ("Copy Top Balder").
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A button with a hand-written clipboard handler">
+
+<Wrong>
+
+```html
+<tec-button variant="ghost" size="icon-sm" onclick="navigator.clipboard.writeText(wellId)">…</tec-button>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-copy-button value="34/10-A-12"></tec-copy-button>
+```
+
+</Correct>
+
+The hand-rolled version drops everything the element adds: the copied state and check-mark swap, the name that flips to "Copied", the announcement, and the "Copy failed" state for a denied or insecure clipboard, which otherwise rejects unhandled.
+
+</Dont>
+
+<Dont severity="HIGH" title="Tracking copies with a click listener">
+
+<Wrong>
+
+```js
+copyButton.addEventListener("click", () => track("copy"))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+copyButton.addEventListener("tec-copy", () => track("copy"))
+```
+
+</Correct>
+
+`click` fires before the clipboard answers, and also when the copy fails; `tec-copy` fires only once the value is on the clipboard.
+
+</Dont>
+
+<Dont severity="HIGH" title="Supplying the icon as the content">
+
+<Wrong>
+
+```html
+<tec-copy-button value="34/10-A-12"><svg>…</svg></tec-copy-button>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-copy-button value="34/10-A-12"></tec-copy-button>
+```
+
+</Correct>
+
+The element already draws the copy / check / cross icon, so a slotted icon is drawn twice, switches the size default from `icon-sm` to `sm`, and suppresses the automatic accessible name because the button now has content.
+
+</Dont>

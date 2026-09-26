@@ -1,0 +1,29 @@
+<tec-button-group id="button-group-input-group" style="--tec-button-group-radius: 9999px">
+  <tec-button-group>
+    <tec-button variant="outline" size="icon" aria-label="Add attachment"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></tec-button>
+  </tec-button-group>
+  <tec-button-group>
+    <tec-input-group>
+      <tec-input-group-input placeholder="Send a message..." aria-label="Message"></tec-input-group-input>
+      <tec-input-group-addon align="inline-end">
+        <tec-tooltip>
+          <tec-input-group-button slot="trigger" size="icon-xs" aria-pressed="false" aria-label="Voice Mode"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10v3"/><path d="M6 6v11"/><path d="M10 3v18"/><path d="M14 8v7"/><path d="M18 5v13"/><path d="M22 10v3"/></svg></tec-input-group-button>
+          Voice Mode
+        </tec-tooltip>
+      </tec-input-group-addon>
+    </tec-input-group>
+  </tec-button-group>
+</tec-button-group>
+<script type="module">
+  const root = document.getElementById("button-group-input-group")
+  const voice = root.querySelector("[aria-label='Voice Mode']")
+  const input = root.querySelector("tec-input-group-input")
+  voice.addEventListener("click", () => {
+    const on = voice.getAttribute("aria-pressed") !== "true"
+    voice.setAttribute("aria-pressed", String(on))
+    voice.classList.toggle("bg-saffron-120", on)
+    voice.classList.toggle("text-saffron-830", on)
+    input.disabled = on
+    input.placeholder = on ? "Record and send audio..." : "Send a message..."
+  })
+</script>

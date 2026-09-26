@@ -50,16 +50,19 @@ describe("tec-tree-view", () => {
     const { root, tree } = await setup()
     expect(await axTree(tree)).toEqual([
       "tree: Project",
-      "treeitem: Wells [selected=false, expanded]",
+      "treeitem: Wells [expanded]",
       "group",
-      "treeitem: 34/10-A-12 [selected=false]",
-      "treeitem: 34/10-B-3 [selected=false, disabled]",
-      "treeitem: 34/10-C-7 [selected=false]",
-      "treeitem: Horizons [selected=false, expanded=false]",
-      "treeitem: Faults [selected=false, expanded=false]",
-    ].map((s) => s.replace("selected=false, ", "").replace(" [selected=false]", "")))
-    expect(await axNode(row(tree, "a12"))).toMatchObject({ role: "treeitem", level: "2", setSize: "3", posInSet: "1", selected: "false" })
-    expect(await axNode(row(tree, "horizons"))).toMatchObject({ level: "1", setSize: "3", posInSet: "2", expanded: "false" })
+      "treeitem: 34/10-A-12",
+      "treeitem: 34/10-B-3 [disabled]",
+      "treeitem: 34/10-C-7",
+      "treeitem: Horizons",
+      "treeitem: Faults",
+    ])
+    expect(await axNode(row(tree, "a12"))).toMatchObject({ role: "treeitem", level: "2", selected: "false" })
+    // Chrome's CDP tree does not report set size / position; check the default semantics directly.
+    const internals = (row(tree, "a12") as unknown as { internals: ElementInternals }).internals
+    expect([internals.ariaSetSize, internals.ariaPosInSet]).toEqual(["3", "1"])
+    expect(await axNode(row(tree, "horizons"))).toMatchObject({ level: "1", expanded: "false" })
     expect(tree.items.map((i) => i.tabIndex)).toEqual([0, -1, -1, -1, -1, -1, -1, -1, -1])
     await expectAccessible(root)
   })
@@ -171,7 +174,7 @@ describe("tec-tree-view", () => {
     await userEvent.click(row(tree, "horizons").shadowRoot!.querySelector(".chevron")!)
     expect(row(tree, "horizons").expanded).toBe(false)
     expect(expands.map((e) => e.detail.expanded)).toEqual([true, false])
-    expect(await axNode(row(tree, "horizons"))).not.toHaveProperty("selected")
+    expect(row(tree, "horizons").matches(":state(selected)")).toBe(false)
     // Canceling keeps the state.
     tree.addEventListener("tec-expanded-change", (e) => e.preventDefault(), { once: true })
     row(tree, "horizons").focus()

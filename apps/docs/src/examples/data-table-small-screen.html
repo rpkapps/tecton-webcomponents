@@ -1,0 +1,46 @@
+<div id="data-table-small-screen" class="flex w-full max-w-3xl flex-col gap-2">
+  <tec-data-table label="Wells" empty-label="No wells."></tec-data-table>
+  <p class="text-xs text-muted-foreground">
+    Resize the viewport: below <code>md</code> the Field and Operator columns collapse into the Well cell.
+  </p>
+</div>
+<script type="module">
+  import { html } from "@tecton/wc/data-table/data-table.js"
+
+  const wells = [
+    { id: "a12", name: "34/10-A-12", field: "Gullfaks", status: "Producing", depth: 3250, operator: "Equinor" },
+    { id: "b3", name: "34/10-B-3", field: "Gullfaks", status: "Shut in", depth: 2980, operator: "Equinor" },
+    { id: "c7", name: "33/9-C-7", field: "Statfjord", status: "Drilling", depth: 1420, operator: "Equinor" },
+    { id: "d2", name: "34/7-D-2", field: "Snorre", status: "Producing", depth: 2735, operator: "Equinor" },
+  ]
+  const statusVariant = { Producing: "success", "Shut in": "warning", Drilling: "info" }
+
+  const table = document.querySelector("#data-table-small-screen tec-data-table")
+  table.columns = [
+    // Primary column: on small screens it also carries the field and operator as a subtitle,
+    // because their own columns are hidden below `md`.
+    {
+      accessor: "name",
+      header: "Well",
+      rowHeader: true,
+      cell: ({ value, row }) => html`<div class="flex flex-col">
+        <span class="font-medium">${value}</span>
+        <span class="text-xs font-normal text-muted-foreground md:hidden">${row.field} · ${row.operator}</span>
+      </div>`,
+    },
+    { accessor: "field", header: "Field", class: "hidden md:table-cell" },
+    {
+      accessor: "status",
+      header: "Status",
+      cell: ({ value }) => html`<tec-badge variant=${statusVariant[value]} appearance="outline">${value}</tec-badge>`,
+    },
+    {
+      accessor: "depth",
+      header: "TD (m)",
+      align: "end",
+      cell: ({ value }) => html`<span class="font-mono tabular-nums">${value.toLocaleString("en-US")}</span>`,
+    },
+    { accessor: "operator", header: "Operator", class: "hidden md:table-cell" },
+  ]
+  table.data = wells
+</script>

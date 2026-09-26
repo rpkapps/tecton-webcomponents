@@ -1,0 +1,16 @@
+<div id="context-menu-events" class="flex w-full flex-col items-center gap-3">
+  <tec-context-menu>
+    <div slot="trigger" tabindex="0" class="flex aspect-video w-full max-w-xs items-center justify-center rounded-xl border border-dashed text-sm">Right click the well</div>
+    <tec-context-menu-item value="open"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" slot="start"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"></path></svg>Open log</tec-context-menu-item>
+    <tec-context-menu-item value="duplicate"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" slot="start"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>Duplicate</tec-context-menu-item>
+    <tec-context-menu-separator></tec-context-menu-separator>
+    <tec-context-menu-item value="delete" variant="destructive"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" slot="start"><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>Delete</tec-context-menu-item>
+  </tec-context-menu>
+  <p class="text-sm text-muted-foreground" aria-live="polite">No action yet.</p>
+</div>
+<script type="module">
+  const root = document.getElementById("context-menu-events")
+  root.addEventListener("tec-select", (event) => {
+    root.querySelector("p").textContent = `Action: ${event.detail.value}`
+  })
+</script>

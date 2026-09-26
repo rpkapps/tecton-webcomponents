@@ -1,0 +1,33 @@
+<tec-app-shell class="h-72 w-full max-w-3xl overflow-hidden rounded-lg border border-border">
+  <tec-app-shell-header>
+    <tec-app-shell-brand>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Tecton
+    </tec-app-shell-brand>
+    <tec-app-shell-nav aria-label="Application">
+      <tec-button variant="ghost" size="sm">Wells</tec-button>
+      <tec-button variant="ghost" size="sm">FDA</tec-button>
+    </tec-app-shell-nav>
+    <tec-app-shell-actions>
+      <tec-app-shell-action label="Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+      </tec-app-shell-action>
+    </tec-app-shell-actions>
+  </tec-app-shell-header>
+  <tec-app-shell-body>
+    <tec-app-shell-sidebar aria-label="Project" class="w-48">
+      <div class="p-2">
+        <tec-tree-view label="Project">
+          <tec-tree-view-item value="wells" kind="folder" expanded>
+            Wells
+            <tec-tree-view-item value="a12">34/10-A-12</tec-tree-view-item>
+          </tec-tree-view-item>
+          <tec-tree-view-item value="horizons" kind="folder">Horizons</tec-tree-view-item>
+        </tec-tree-view>
+      </div>
+    </tec-app-shell-sidebar>
+    <tec-app-shell-main>
+      <div class="p-4 text-sm text-muted-foreground">Map view</div>
+    </tec-app-shell-main>
+  </tec-app-shell-body>
+</tec-app-shell>

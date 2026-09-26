@@ -31,7 +31,8 @@ export const fieldStyles = css`
     translate: 0 1px;
   }
 
-  @container field-group (min-width: 28rem) {
+  /* The nearest size container: the enclosing tec-field-group (container names do not cross shadow scopes). */
+  @container (min-width: 28rem) {
     :host([orientation="responsive"]) {
       flex-direction: row;
       align-items: center;

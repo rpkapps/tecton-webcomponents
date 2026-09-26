@@ -136,25 +136,21 @@ function choiceOptions(control: Element): Option[] {
 
 /** The items of a dropdown menu in the row: chosen by clicking the original item. */
 function dropdownOptions(control: Element): Option[] {
-  const selector = "tec-dropdown-menu-label, tec-dropdown-menu-item, tec-dropdown-menu-checkbox-item, tec-dropdown-menu-radio-item"
+  const selector = "tec-dropdown-menu-label, tec-dropdown-menu-item"
   return [...control.querySelectorAll(selector)]
     .filter((el) => !el.closest("tec-dropdown-menu-sub"))
-    .map((element) => ({
-      element,
-      label: textOf(element),
-      icon: iconOf(element),
-      disabled: isDisabled(element),
-      checked: isOn(element),
-      role:
-        element.localName === "tec-dropdown-menu-label"
-          ? "label"
-          : element.localName === "tec-dropdown-menu-checkbox-item"
-            ? "checkbox"
-            : element.localName === "tec-dropdown-menu-radio-item"
-              ? "radio"
-              : "item",
-      select: () => (element as HTMLElement).click(),
-    }))
+    .map((element) => {
+      const mode = element.closest("tec-dropdown-menu-group")?.getAttribute("selection-mode")
+      return {
+        element,
+        label: textOf(element),
+        icon: iconOf(element),
+        disabled: isDisabled(element),
+        checked: isOn(element),
+        role: element.localName === "tec-dropdown-menu-label" ? "label" : mode === "multiple" ? "checkbox" : mode === "single" ? "radio" : "item",
+        select: () => (element as HTMLElement).click(),
+      }
+    })
 }
 
 function optionEntries(options: Option[]): OverflowMenuEntry[] {

@@ -11,6 +11,7 @@ import { ListEmptyBase, ListGroupBase, ListItemBase, ListLabelBase, ListSeparato
  * @tag tec-combobox-item
  *
  * @slot - The option content (text, icons, or custom markup with a `label`).
+ * @slot start - A leading icon.
  *
  * @csspart base - The option row (padding, highlight background).
  * @csspart indicator - The check mark container.

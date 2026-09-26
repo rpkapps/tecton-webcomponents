@@ -52,7 +52,10 @@ const NAMED_SLOTS = ["icon", "color-tag", "suffix", "end"] as const
  * @csspart row - The row box (indent, hover, selection, focus ring).
  * @csspart chevron - The expand / collapse chevron (hidden without children).
  * @csspart icon - The leading icon box.
+ * @csspart color-tag - The colour tag box.
  * @csspart label - The label (truncated with an ellipsis).
+ * @csspart suffix - The box after the label.
+ * @csspart end - The box of the trailing controls.
  * @csspart group - The container of the child rows.
  *
  * @cssstate selected - The row is selected.
@@ -150,10 +153,10 @@ export class TecTreeViewItem extends TectonElement {
   setControlsTabbable(tabbable: boolean): void {
     for (const el of this.children) {
       if (el.getAttribute("slot") !== "end") continue
-      const controls = el instanceof TreeViewActionElement ? [el] : [el, ...el.querySelectorAll("*")]
-      for (const c of controls) {
+      for (const c of [el, ...el.querySelectorAll("*")]) {
         if (c instanceof TreeViewActionElement) c.tabbable = tabbable
-        else if (c instanceof HTMLElement && (c.localName === "button" || c.localName === "a" || c.localName.startsWith("tec-"))) c.tabIndex = tabbable ? 0 : -1
+        else if (c instanceof HTMLElement && (c.localName === "button" || c.localName === "tec-button" || (c.localName === "a" && c.hasAttribute("href"))))
+          c.tabIndex = tabbable ? 0 : -1
       }
     }
   }
@@ -176,11 +179,11 @@ export class TecTreeViewItem extends TectonElement {
     if (this.disabled) return
     const chevron = this.renderRoot.querySelector(".chevron")
     if (chevron && path.includes(chevron)) {
-      this.focus()
+      this.tree?.focusItem(this)
       this.userSetExpanded(!this.expanded)
       return
     }
-    this.focus()
+    this.tree?.focusItem(this)
     this.tree?.pressItem(this, "pointer")
   }
 

@@ -1,0 +1,22 @@
+<tec-app-shell class="h-auto w-full max-w-3xl overflow-visible rounded-lg border border-border">
+  <tec-app-shell-header>
+    <tec-app-shell-brand>
+      <tec-app-finder>
+        <tec-app-finder-trigger slot="trigger" name="Well Planning" tone="green">DWP</tec-app-finder-trigger>
+        <tec-app-finder-group heading="Wells">
+          <tec-app-finder-item value="dwp" icon="DWP" tone="green" name="Well Planning" keywords="DWP Wells" current></tec-app-finder-item>
+          <tec-app-finder-item value="trj" icon="TRJ" tone="green" name="Trajectory Design" keywords="TRJ Wells"></tec-app-finder-item>
+        </tec-app-finder-group>
+        <tec-app-finder-group heading="Subsurface">
+          <tec-app-finder-item value="dsg" icon="DSG" tone="blue" name="Discovery" keywords="DSG Subsurface"></tec-app-finder-item>
+        </tec-app-finder-group>
+      </tec-app-finder>
+    </tec-app-shell-brand>
+    <tec-app-shell-actions>
+      <tec-app-shell-command-trigger></tec-app-shell-command-trigger>
+      <tec-app-shell-action label="Help" shortcut="?">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+      </tec-app-shell-action>
+    </tec-app-shell-actions>
+  </tec-app-shell-header>
+</tec-app-shell>

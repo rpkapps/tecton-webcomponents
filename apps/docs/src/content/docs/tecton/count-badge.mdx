@@ -1,0 +1,189 @@
+---
+title: Count Badge
+description: A count or status dot anchored to the corner of an avatar, icon button or tab.
+tags: ["tec-count-badge"]
+---
+
+<ComponentPreview name="count-badge-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/count-badge"
+```
+
+```html
+<tec-count-badge count="4" color="destructive">
+  <tec-button variant="outline" size="icon" aria-label="Notifications, 4 unread">
+    <svg aria-hidden="true">…</svg>
+  </tec-button>
+</tec-count-badge>
+```
+
+<Callout title="Naming">
+  This is the Tecton *Badge* from the design system. It is named `tec-count-badge` so it does not collide with [`tec-badge`](/docs/components/badge), the static label (whose styles the interactive [Chip](/docs/tecton/chip) shares).
+</Callout>
+
+## Colors
+
+Use the `color` attribute. The values are the Badge `variant` names — `default`, `secondary`, `destructive`, `success`, `warning`, `info` — so the same word means the same status on both. The fills stay solid rather than the `*-surface` colours a badge uses: a 16 px pill needs the contrast to stay legible.
+
+<ComponentPreview name="count-badge-colors" />
+
+## Dot
+
+Use `variant="dot"` for a presence or status indicator without a number.
+
+<ComponentPreview name="count-badge-dot" />
+
+## Anchor
+
+Use the `anchor` attribute to place the badge on any corner of the wrapped element.
+
+<ComponentPreview name="count-badge-anchor" />
+
+## Max, zero and custom content
+
+Counts above `max` (99) render as `max+`. A `count` of `0` hides the badge unless `show-zero` is set; `content` replaces the number with text. `invisible` hides the badge in every case and keeps the wrapped element.
+
+<ComponentPreview name="count-badge-max" />
+
+## RTL
+
+The anchor names are physical corners, as in the design system: `top-right` stays on the right in a right-to-left layout. Choose `top-left` there if the badge should follow the reading direction.
+
+<ComponentPreview name="count-badge-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+The count badge is not interactive; focus and keys belong to the wrapped control.
+
+## Accessibility
+
+- The badge is decorative (`aria-hidden="true"`): put the number in the wrapped control's accessible name (`aria-label="Messages, 4 unread"`), so it is announced once, with the control, and updated when it changes.
+- A status dot carries no text either: say the status in the name of the avatar or tab ("Jane Doe, online").
+- In forced-colours mode the pill is drawn in system colours so it stays visible.
+
+## API Reference
+
+<ApiReference tags={["tec-count-badge"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A number belongs to an icon button, an avatar or a tab: unread messages, queued jobs, open comments.
+- A presence or status dot belongs to an avatar or a tab: `variant="dot"`.
+- The number decorates the control; it is not a label the user reads on its own.
+
+### Not for
+
+- a label with words in it, in the flow of the page: use [Badge](/docs/components/badge)
+- a tag the user can select or remove: use [Chip](/docs/tecton/chip)
+- a busy indicator on an icon button: use [Spinner](/docs/components/spinner)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Wrap the control — `tec-count-badge` is the positioned anchor and draws the badge; the control stays its child.
+
+</Do>
+
+<Do>
+
+Let the badge hide itself: `count="0"` renders nothing unless `show-zero`, and `invisible` hides it while keeping the wrapped element.
+
+</Do>
+
+<Do>
+
+Pick `color` (the Badge variant names), `anchor` (`top-right` … `bottom-left`) and `max` (counts above it render as `99+`).
+
+</Do>
+
+<Do>
+
+Put the number in the control's accessible name — `aria-label="Messages, 4 unread"` — because the badge is `aria-hidden` and assistive technology never hears it anywhere else.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Removing the control along with the count">
+
+<Wrong>
+
+```js
+wrapper.innerHTML = unread > 0
+  ? `<tec-count-badge count="${unread}"><tec-button …>…</tec-button></tec-count-badge>`
+  : ""
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+badge.count = unread
+button.setAttribute("aria-label", `Messages, ${unread} unread`)
+```
+
+</Correct>
+
+`tec-count-badge` is the wrapper, not the badge, so removing it removes the button as well; the element already hides the badge itself when `count` is 0.
+
+</Dont>
+
+<Dont severity="HIGH" title="Building the count by hand">
+
+<Wrong>
+
+```html
+<div class="relative inline-flex">
+  <tec-button variant="outline" size="icon" aria-label="Notifications">…</tec-button>
+  <span class="absolute -top-1 -right-1 rounded-full bg-red-500 px-1 text-white">4</span>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-count-badge count="4" color="destructive">
+  <tec-button variant="outline" size="icon" aria-label="Notifications, 4 unread">…</tec-button>
+</tec-count-badge>
+```
+
+</Correct>
+
+`red-500` is not a Tecton step, so the reset palette gives the pill no background at all, and the hand-built span has none of the background-coloured ring cut-out, the `max` cap, the zero handling or the `aria-hidden`.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Putting a count on a dot">
+
+<Wrong>
+
+```html
+<tec-count-badge variant="dot" color="destructive" count="5">…</tec-count-badge>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-count-badge color="destructive" count="5">…</tec-count-badge>
+```
+
+</Correct>
+
+The dot is an 8 px circle that renders no text by design, so the number is dropped and only the dot appears.
+
+</Dont>

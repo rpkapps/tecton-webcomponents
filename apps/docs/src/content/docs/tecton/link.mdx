@@ -1,0 +1,188 @@
+---
+title: Link
+description: Inline text link with default, primary, muted and subtle variants and an external-link marker.
+tags: ["tec-link"]
+---
+
+<ComponentPreview name="link-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/link"
+```
+
+```html
+<tec-link href="/wells/34-10-A-12" variant="primary">34/10-A-12</tec-link>
+```
+
+<Callout>
+  [`tec-button`](/docs/components/button) has a `link` variant for buttons that look like links, and renders a link with `href` for links that look like buttons. `tec-link` is the text link for navigation in and around prose.
+</Callout>
+
+## Variants
+
+Use the `variant` attribute. `subtle` is always underlined, the others underline on hover.
+
+<ComponentPreview name="link-variants" />
+
+## Sizes
+
+By default the link inherits the surrounding font size; use `size` to set it explicitly.
+
+<ComponentPreview name="link-sizes" />
+
+## External
+
+Set `external` to open in a new tab with `rel="noreferrer noopener"`, append an icon and add a visually hidden "(opens in a new tab)" to the accessible name (translate it with `external-label`). A `rel` you pass (`nofollow`) is added to `noreferrer noopener`, never swapped for it, and an explicit `target` wins over the default `_blank`.
+
+<ComponentPreview name="link-external" />
+
+## RTL
+
+The external-link icon sits at the inline end of the text.
+
+<ComponentPreview name="link-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Enter", "Follows the link."],
+    ["Tab / Shift+Tab", "Moves focus to the next / previous focusable element. A disabled link is skipped."],
+  ]}
+/>
+
+## Accessibility
+
+- Renders a native `<a href>` in its shadow root with `delegatesFocus`: it is announced as a link, supports the browser's link context menu and modifier-click, and `focus()` on the element focuses the anchor.
+- The accessible name is the slotted text; `aria-*` attributes on the element (`aria-label`, `aria-current`, `aria-describedby` …) are forwarded to the anchor.
+- `disabled` removes the `href` and sets `aria-disabled="true"`: the link leaves the tab order and does not navigate.
+- The focus ring is a 2px ring; in forced-colours mode the link uses the system link colour and an outline.
+
+## API Reference
+
+<ApiReference tags={["tec-link"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A word or phrase inside running text navigates somewhere: a well, a report, an external register.
+- The link sits in a sentence and should inherit the surrounding font size.
+- The destination leaves the application and needs the external marker.
+
+### Not for
+
+- a navigation target that should look like a button: use [Button](/docs/components/button) with `href`
+- something that happens in place instead of navigation: use [Button](/docs/components/button)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Always set `href`; without it there is no link.
+
+</Do>
+
+<Do>
+
+Choose colour and underline behaviour with `variant="default" | "primary" | "muted" | "subtle"`.
+
+</Do>
+
+<Do>
+
+Leave `size="inherit"` inside prose; set `sm`, `md` or `lg` only when the link stands on its own.
+
+</Do>
+
+<Do>
+
+Reach outside the app with `external` instead of writing `target` and `rel` by hand.
+
+</Do>
+
+<Do>
+
+Link text names the destination ("34/10-A-12 daily report"), never "click here", "read more" or a bare URL.
+
+</Do>
+
+<Do>
+
+Add an `aria-label` only to an icon-only link; a text link is already named by its visible text.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A link used to run an action">
+
+<Wrong>
+
+```html
+<tec-link onclick="archive(well)">Archive</tec-link>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-button variant="link" onclick="archive(well)">Archive</tec-button>
+```
+
+</Correct>
+
+Without `href` the anchor is not focusable and promises navigation it cannot do: no new tab, no copy-address, no status-bar target, and keyboard users cannot reach it.
+
+</Dont>
+
+<Dont severity="HIGH" title="Hand-built target, rel and external icon">
+
+<Wrong>
+
+```html
+<tec-link href="https://factpages.sodir.no" target="_blank">Sodir FactPages <svg>…</svg></tec-link>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-link href="https://factpages.sodir.no" external>Sodir FactPages</tec-link>
+```
+
+</Correct>
+
+`external` sets `target` and `rel="noreferrer noopener"` together, appends the icon at the right size and tells screen reader users that a new tab opens; `target="_blank"` alone leaves the opened page with a handle on `window.opener`.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Colouring the link with classes">
+
+<Wrong>
+
+```html
+<tec-link href="/wells/34-10-A-12" class="text-blue-600 underline">34/10-A-12</tec-link>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-link href="/wells/34-10-A-12" variant="primary">34/10-A-12</tec-link>
+```
+
+</Correct>
+
+The variant owns the colour and when the underline appears, and Tailwind's stock palette is reset here, so `text-blue-600` emits no CSS.
+
+</Dont>

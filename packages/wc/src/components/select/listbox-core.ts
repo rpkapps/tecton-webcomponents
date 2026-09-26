@@ -263,7 +263,7 @@ export class ListItemBase extends TectonElement {
   }
 
   protected override render() {
-    return html`<div class="base" part="base"><slot></slot>${this.renderIndicator()}</div>`
+    return html`<div class="base" part="base"><slot name="start"></slot><slot></slot>${this.renderIndicator()}</div>`
   }
 }
 
@@ -311,7 +311,7 @@ export class ListGroupBase extends TectonElement {
     this.toggleState("filtered", this.#filtered)
   }
 
-  protected get heading(): string {
+  protected get headingText(): string {
     return this.label
   }
 
@@ -319,9 +319,9 @@ export class ListGroupBase extends TectonElement {
     super.updated(changed)
     this.internals.role = "group"
     const labelEl = this.labelTag ? [...this.children].find((c) => c.localName === this.labelTag) : undefined
-    if (this.heading) {
+    if (this.headingText) {
       this.internals.ariaLabelledByElements = null
-      this.internals.ariaLabel = this.heading
+      this.internals.ariaLabel = this.headingText
     } else {
       this.internals.ariaLabel = null
       this.internals.ariaLabelledByElements = labelEl ? [labelEl] : null
@@ -330,7 +330,7 @@ export class ListGroupBase extends TectonElement {
 
   protected override render() {
     return html`<div class="base" part="base">
-      ${this.heading ? html`<div class="label" part="label" aria-hidden="true">${this.heading}</div>` : nothing}<slot
+      ${this.headingText ? html`<div class="label" part="label" aria-hidden="true">${this.headingText}</div>` : nothing}<slot
         @slotchange=${() => this.requestUpdate()}
       ></slot>
     </div>`
@@ -398,9 +398,15 @@ export class ListSeparatorBase extends TectonElement {
     this.toggleState("filtered", this.#filtered)
   }
 
+  /**
+   * `separator` inside menus; decorative (`none`) inside listboxes, whose only allowed children are
+   * options and groups.
+   */
+  protected separatorRole: "separator" | "none" = "none"
+
   override connectedCallback(): void {
     super.connectedCallback()
-    this.internals.role = "separator"
+    this.internals.role = this.separatorRole
   }
 
   protected override render() {

@@ -92,7 +92,7 @@ export class TecItem extends TectonElement {
 
   #syncChildren(): void {
     this.toggleState("has-description", !!this.querySelector("tec-item-description"))
-    for (const content of this.querySelectorAll<TecItemContent>(":scope > tec-item-content")) content.requestUpdate()
+    for (const content of this.querySelectorAll<TecItemContent>(":scope > tec-item-content")) content.requestUpdate?.()
   }
 
   protected override willUpdate(changed: PropertyValues): void {

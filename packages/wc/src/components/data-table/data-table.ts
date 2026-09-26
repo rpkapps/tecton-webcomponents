@@ -95,7 +95,7 @@ const fill = (template: string, values: Record<string, string>) =>
 const INTERACTIVE =
   'a, button, input, select, textarea, label, summary, [contenteditable]:not([contenteditable="false"]), [role="button"], [role="checkbox"], [role="link"], [role="menuitem"], [tabindex]:not([tabindex="-1"]), tec-button, tec-checkbox'
 
-const columnId = (column: DataTableColumn) => column.id ?? (typeof column.accessor === "string" ? column.accessor : "")
+const columnId = <T extends DataTableRow>(column: DataTableColumn<T>) => column.id ?? (typeof column.accessor === "string" ? column.accessor : "")
 
 /**
  * A data table driven by [TanStack Table](https://tanstack.com/table): give it `columns` and `data`
@@ -330,16 +330,11 @@ export class TecDataTable<T extends DataTableRow = DataTableRow> extends TectonE
       .rows.map((row: AnyRow) => row.original as T)
   }
 
-  #write(key: keyof TecDataTable["_pendingShape"], value: unknown): void {
+  #write(key: "sorting" | "selection" | "columnVisibility" | "pageIndex" | "pageSize" | "filter", value: unknown): void {
     ;(this.#pending as Record<string, unknown>)[key] = value
     if (this.#table) this.#applyPending(this.#table)
     this.requestUpdate()
   }
-
-  /** @internal type helper */
-  declare private _pendingShape: TecDataTable["_pendingKeys"]
-  /** @internal type helper */
-  declare private _pendingKeys: { sorting: 1; selection: 1; columnVisibility: 1; pageIndex: 1; pageSize: 1; filter: 1 }
 
   #applyPending(table: AnyTable): void {
     const p = this.#pending
@@ -401,6 +396,7 @@ export class TecDataTable<T extends DataTableRow = DataTableRow> extends TectonE
   #ensureTable(): AnyTable {
     if (this.#table) return this.#table
     const hidden = Object.fromEntries(this.columns.filter((c) => c.hidden).map((c) => [columnId(c), false]))
+    if (this.#pending.columnVisibility) this.#pending.columnVisibility = { ...hidden, ...this.#pending.columnVisibility }
     const table = constructTable({
       features,
       data: this.data,
@@ -606,6 +602,12 @@ export class TecDataTable<T extends DataTableRow = DataTableRow> extends TectonE
         const column = header.column.columnDef.meta.column as DataTableColumn<T>
         const sorted = header.column.getIsSorted()
         const classes = [column.class, column.headerClass].filter(Boolean).join(" ")
+        if (!column.header && !header.column.getCanSort()) {
+          // A column without a header (row actions): a hidden label names it, else it is not a header.
+          return column.label
+            ? html`<th scope="col" class=${classes || nothing} data-column=${header.column.id}><span class="tec-data-table-sr-only">${column.label}</span></th>`
+            : html`<td class=${classes || nothing} data-column=${header.column.id}></td>`
+        }
         return html`<th
           scope="col"
           class=${classes || nothing}

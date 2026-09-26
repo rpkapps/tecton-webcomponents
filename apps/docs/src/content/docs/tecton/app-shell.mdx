@@ -1,0 +1,327 @@
+---
+title: App Shell
+description: "The application frame: top bar with the global action cluster, optional sidebar, main work area and optional right aside."
+tags:
+  [
+    "tec-app-shell",
+    "tec-app-shell-header",
+    "tec-app-shell-brand",
+    "tec-app-shell-nav",
+    "tec-app-shell-body",
+    "tec-app-shell-sidebar",
+    "tec-app-shell-main",
+    "tec-app-shell-aside",
+    "tec-app-shell-actions",
+    "tec-app-shell-action",
+    "tec-app-shell-command-trigger",
+    "tec-app-shell-divider",
+    "tec-app-shell-overflow-trigger",
+    "tec-app-shell-user-menu-trigger",
+    "tec-app-shell-split",
+    "tec-app-shell-split-panel",
+    "tec-app-shell-split-handle",
+  ]
+---
+
+<ComponentPreview name="app-shell-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/app-shell"
+```
+
+```html
+<tec-app-shell>
+  <tec-app-shell-header>
+    <tec-app-shell-brand>Tecton</tec-app-shell-brand>
+    <tec-app-shell-nav aria-label="Application">…</tec-app-shell-nav>
+    <tec-app-shell-actions>…</tec-app-shell-actions>
+  </tec-app-shell-header>
+  <tec-app-shell-body>
+    <tec-app-shell-sidebar aria-label="Project">…</tec-app-shell-sidebar>
+    <tec-app-shell-main>…</tec-app-shell-main>
+    <tec-app-shell-aside aria-label="Properties">…</tec-app-shell-aside>
+  </tec-app-shell-body>
+</tec-app-shell>
+```
+
+<Callout>
+  The shell fills the viewport (`100svh`) by default. The previews on this page give it a fixed height with a class (`class="h-64"`).
+</Callout>
+
+## Composition
+
+```text
+tec-app-shell
+├── tec-app-shell-header
+│   ├── tec-app-shell-brand            (logo + name, or a tec-app-finder)
+│   ├── tec-app-shell-nav
+│   └── tec-app-shell-actions
+│       ├── tec-app-shell-command-trigger
+│       ├── tec-app-shell-action …
+│       ├── tec-app-shell-divider
+│       ├── tec-dropdown-menu > tec-app-shell-overflow-trigger[slot=trigger]
+│       └── tec-dropdown-menu > tec-app-shell-user-menu-trigger[slot=trigger]
+└── tec-app-shell-body
+    ├── tec-app-shell-sidebar
+    ├── tec-app-shell-main
+    └── tec-app-shell-aside            (or a tec-app-shell-split)
+```
+
+The regions are pure layout. Each column scrolls on its own; pad its content with an element inside it (`<div class="p-4">`) rather than on the region itself, so the surface, border and scrollbar stay at the edge.
+
+## Actions
+
+`tec-app-shell-actions` is the global action cluster at the end of the header: the command palette trigger, the icon actions (help, settings, release notes, bug report) and the user menu. It takes the free space of the header and aligns its content to the end.
+
+<ComponentPreview name="app-shell-actions" />
+
+<Callout>
+  These controls belong to the micro-frontend host, not to the mounted application. Every application sees the same cluster, and a change to it ships once through the package.
+</Callout>
+
+`tec-app-shell-action` is a ghost icon button whose `label` is both the accessible name and the tooltip; `shortcut` adds the key hint in shortcut syntax (`"mod+k"`, `"?"`, `"g w"`), drawn for the platform. `tec-app-shell-command-trigger` looks like a search field from the `md` breakpoint up and collapses to an icon button below it; its hint defaults to `mod+k` (⌘ K on Apple keyboards, Ctrl + K elsewhere). Both hints only *display* keys — bind them with [Shortcuts](/docs/tecton/shortcuts).
+
+```html
+<tec-app-shell-actions>
+  <tec-app-shell-command-trigger>Search or jump to…</tec-app-shell-command-trigger>
+  <tec-app-shell-action label="Help" shortcut="?"><svg …></svg></tec-app-shell-action>
+  <tec-app-shell-divider></tec-app-shell-divider>
+  <tec-dropdown-menu align="end">
+    <tec-app-shell-user-menu-trigger slot="trigger" name="Sarah Elliott" image="/avatars/01.png"></tec-app-shell-user-menu-trigger>
+    <tec-dropdown-menu-item>Sign out</tec-dropdown-menu-item>
+  </tec-dropdown-menu>
+</tec-app-shell-actions>
+```
+
+The menus are ordinary [Dropdown Menus](/docs/components/dropdown-menu): the shell provides their triggers. `tec-app-shell-user-menu-trigger` shows the user's picture (or initials derived from `name`) and is named "Account: <name>".
+
+## Overflow
+
+On a narrow header, hide the low-priority actions below a breakpoint (`class="hidden lg:inline-flex"`) and offer them in a "More" menu shown only below it (`class="lg:hidden"` on the dropdown menu), triggered by `tec-app-shell-overflow-trigger`. `tec-app-shell-divider` is the hairline between groups.
+
+<ComponentPreview name="app-shell-overflow" />
+
+## Sidebar
+
+`tec-app-shell-sidebar` is a 256px left column on the sidebar surface; put a [Tree View](/docs/tecton/tree-view) or a [Sidebar](/docs/components/sidebar) inside. Change its width with a class (`w-48`) or `--tec-app-shell-sidebar-width`.
+
+<ComponentPreview name="app-shell-sidebar" />
+
+## Aside
+
+`tec-app-shell-aside` is a 320px right column on the card surface for tool panels; combine it with [Panel](/docs/tecton/panel).
+
+<ComponentPreview name="app-shell-aside" />
+
+## Resizable split
+
+Wrap the main area and a full-height aside in `tec-app-shell-split`, each inside a `tec-app-shell-split-panel`, with a `tec-app-shell-split-handle` between them; the user drags the divider (or focuses it and uses the arrow keys) to resize. Panel sizes take `px`, `rem` or `%` (`default-size="240px"`, `min-size="40%"`, `max-size="20rem"`). An aside inside a split panel fills it and leaves the divider to the handle. The split fires `tec-layout-change` with the panel sizes in percent, so you can persist them and restore them through the `sizes` property.
+
+<ComponentPreview name="app-shell-split" />
+
+Render the aside only on wide viewports by hiding its panel and handle with a class: a hidden panel leaves the layout and the other panels share the space.
+
+```html
+<tec-app-shell-split>
+  <tec-app-shell-split-panel min-size="40%">
+    <tec-app-shell-main>…</tec-app-shell-main>
+  </tec-app-shell-split-panel>
+  <tec-app-shell-split-handle class="hidden xl:flex"></tec-app-shell-split-handle>
+  <tec-app-shell-split-panel class="hidden xl:flex" default-size="384px" min-size="280px" max-size="50%">
+    <tec-app-shell-aside aria-label="Properties">…</tec-app-shell-aside>
+  </tec-app-shell-split-panel>
+</tec-app-shell-split>
+```
+
+A panel with `collapsible` collapses when it is dragged well below its `min-size`, or with <Kbd>Enter</Kbd> on the handle before it.
+
+## RTL
+
+The shell uses logical properties: the sidebar moves to the right, borders follow, and the split handle's arrow keys are mirrored.
+
+<ComponentPreview name="app-shell-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves through the header controls, then the regions' content. Each split handle is one tab stop."],
+    ["Enter / Space", "Activates the focused action or trigger."],
+    ["Escape", "Hides the tooltip of the focused action."],
+    ["ArrowLeft / ArrowRight", "On a horizontal split handle: moves the divider by 5% (mirrored in right-to-left layouts)."],
+    ["ArrowUp / ArrowDown", "On a vertical split handle: moves the divider by 5%."],
+    ["Home / End", "On a split handle: shrinks / grows the panel before it to its limit."],
+    ["Enter", "On a split handle: collapses or restores a `collapsible` panel before it."],
+    ["F6 / Shift+F6", "On a split handle: moves focus to the next / previous handle."],
+  ]}
+/>
+
+## Accessibility
+
+- The header renders a native `<header>` (a `banner` landmark when the shell frames the page); `tec-app-shell-nav` is a `navigation` landmark, `tec-app-shell-main` the `main` landmark, and the sidebar and aside are `complementary` landmarks. Give every navigation and complementary region an `aria-label` when there is more than one.
+- `tec-app-shell-action` renders a ghost `tec-button` named by `label`; the tooltip opens on hover and on keyboard focus (not on a mouse press), closes on Escape, and the shortcut is announced as the button's description ("Shift + ?"), never as part of its name.
+- The command trigger keeps its accessible name ("Search", or the slotted text) when it collapses to an icon.
+- The menu triggers forward the `aria-haspopup` and `aria-expanded` that `tec-dropdown-menu` sets on them to their inner button.
+- `tec-app-shell-divider` is a vertical `separator`. A split handle is a focusable window splitter (`role="separator"`) whose `aria-valuenow` / `aria-valuemin` / `aria-valuemax` give the size of the panel before it, which it controls (`aria-controls`).
+
+## API Reference
+
+<ApiReference
+  tags={[
+    "tec-app-shell",
+    "tec-app-shell-header",
+    "tec-app-shell-brand",
+    "tec-app-shell-nav",
+    "tec-app-shell-body",
+    "tec-app-shell-sidebar",
+    "tec-app-shell-main",
+    "tec-app-shell-aside",
+    "tec-app-shell-actions",
+    "tec-app-shell-action",
+    "tec-app-shell-command-trigger",
+    "tec-app-shell-divider",
+    "tec-app-shell-overflow-trigger",
+    "tec-app-shell-user-menu-trigger",
+    "tec-app-shell-split",
+    "tec-app-shell-split-panel",
+    "tec-app-shell-split-handle",
+  ]}
+/>
+
+## Usage guidelines
+
+### Use it when
+
+- The outermost frame of an application: a top bar, an optional left rail, a work area, an optional right aside.
+- The frame fills the viewport and clips its own overflow, so each region scrolls on its own.
+- The header carries the host's own cluster — search, help, settings, the account menu — so every mounted application shows the same set.
+- A tool panel lives beside the content and the user may drag the divider between them.
+
+### Not for
+
+- a titled tool surface inside the work area: use [Panel](/docs/tecton/panel)
+- the title block at the top of the page inside the main area: use [Page Header](/docs/tecton/page-header)
+- a panel that floats over the page and is dismissed: use [Sheet](/docs/components/sheet)
+- a toolbar that folds into a More menu by measured width: use [Overflow](/docs/tecton/overflow)
+- switching between applications from the header: use [App Finder](/docs/tecton/app-finder)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `tec-app-shell-header` (with `tec-app-shell-brand`, `tec-app-shell-nav`, `tec-app-shell-actions`), then `tec-app-shell-body` holding `tec-app-shell-sidebar`, `tec-app-shell-main` and `tec-app-shell-aside`.
+
+</Do>
+
+<Do>
+
+Put the page content in `tec-app-shell-main`; it is the scrolling region of the work area. Pad it with an inner element.
+
+</Do>
+
+<Do>
+
+Give every `tec-app-shell-action` a `label` — both the accessible name and the tooltip — separate groups with `tec-app-shell-divider`, and on a narrow header hide the low-priority ones (`class="hidden lg:inline-flex"`) in favour of an overflow menu (`class="lg:hidden"`).
+
+</Do>
+
+<Do>
+
+For a draggable divider, wrap the regions in `tec-app-shell-split` with a `tec-app-shell-split-panel` each and a `tec-app-shell-split-handle` between them; hide a full-height aside's panel and handle below `xl`.
+
+</Do>
+
+<Do>
+
+Keep `tec-app-shell-nav` one level deep: a destination may open one dropdown menu; anything deeper belongs in the sidebar.
+
+</Do>
+
+<Do>
+
+Every navigation area on a page has its own screen-reader name (`aria-label`): app nav, page-header nav, rails.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="An icon button with a title instead of tec-app-shell-action">
+
+<Wrong>
+
+```html
+<tec-button variant="ghost" size="icon-sm" title="Settings"><svg …></svg></tec-button>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-app-shell-action label="Settings"><svg …></svg></tec-app-shell-action>
+```
+
+</Correct>
+
+A `title` is not shown on keyboard focus, is unreliable as an accessible name and looks nothing like the Tecton tooltip; `tec-app-shell-action` names the button from `label` and shows the tooltip on hover and keyboard focus.
+
+</Dont>
+
+<Dont severity="HIGH" title="Page content placed straight into tec-app-shell-body">
+
+<Wrong>
+
+```html
+<tec-app-shell-body><div class="overflow-y-auto p-6">…</div></tec-app-shell-body>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-app-shell-body>
+  <tec-app-shell-main><div class="p-6">…</div></tec-app-shell-main>
+</tec-app-shell-body>
+```
+
+</Correct>
+
+The body is the clipped row that holds the regions side by side: content dropped into it is cut off at the fold, is not the `main` landmark, and the sidebar and aside have nothing to sit beside.
+
+</Dont>
+
+<Dont severity="HIGH" title="The key hint mistaken for a registration">
+
+<Wrong>
+
+```html
+<tec-app-shell-command-trigger shortcut="mod+k">Search</tec-app-shell-command-trigger>
+<!-- …and nothing listens for ⌘K / Ctrl+K -->
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-shortcuts>
+  <tec-shortcut name="shell.palette" keys="mod+k" label="Command palette"></tec-shortcut>
+  <tec-app-shell-command-trigger>Search</tec-app-shell-command-trigger>
+</tec-shortcuts>
+<script type="module">
+  // open the palette from the trigger's click and from the shortcut's tec-shortcut event
+</script>
+```
+
+</Correct>
+
+The hint binds nothing: declare the key with a `tec-shortcut` so it works and appears in `tec-shortcut-list`, the list the shell's help dialog is built from.
+
+</Dont>

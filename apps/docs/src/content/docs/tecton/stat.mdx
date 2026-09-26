@@ -1,0 +1,204 @@
+---
+title: Stat
+description: KPI readout with label, tabular mono value, unit, trend delta and helper text.
+tags: ["tec-stat", "tec-stat-label", "tec-stat-value", "tec-stat-delta", "tec-stat-help", "tec-stat-group"]
+---
+
+<ComponentPreview name="stat-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/stat"
+```
+
+```html
+<tec-stat>
+  <tec-stat-label>Cost per barrel</tec-stat-label>
+  <tec-stat-value unit="USD">16.9</tec-stat-value>
+  <tec-stat-delta trend="down" tone="positive">-8% vs. Alternative A</tec-stat-delta>
+  <tec-stat-help>Base case, P50 volumes</tec-stat-help>
+</tec-stat>
+```
+
+<Callout>
+  The IBM Plex Mono value with a sans unit is a Tecton typography rule; `tec-stat` is the building block for the FDA and Well Design cards.
+</Callout>
+
+## Composition
+
+```text
+tec-stat
+├── tec-stat-label
+├── tec-stat-value (unit)
+├── tec-stat-delta (trend, tone)
+└── tec-stat-help
+```
+
+## Sizes
+
+Use the `size` attribute on `tec-stat` to scale the value (14 / 20 / 28 px).
+
+<ComponentPreview name="stat-sizes" />
+
+## Delta
+
+Use `tec-stat-delta` with `trend` for an up, down or flat indicator. The colour follows `tone`, which says whether the change is good news rather than which way it went: it defaults to the trend's (up is `positive`, down `negative`, flat `neutral`), so set it where down is good news — cost, CAPEX, downtime, risk.
+
+```html
+<tec-stat-delta trend="down" tone="positive">-8% vs. Alternative A</tec-stat-delta>
+```
+
+<ComponentPreview name="stat-delta" />
+
+## Group
+
+`tec-stat-group` lays out several stats in a responsive grid (as many columns of at least 7rem as fit; tune with `--tec-stat-group-min-width`). Use `align` on each `tec-stat`.
+
+<ComponentPreview name="stat-group" />
+
+## RTL
+
+`align="start"` and `"end"` are logical, and the parts follow the reading direction.
+
+<ComponentPreview name="stat-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A stat is static text and takes no focus.
+
+## Accessibility
+
+- The parts are plain text in reading order: label, value, unit, change, help. Screen readers read them as written, so write the delta so it makes sense aloud ("-8% vs. Alternative A").
+- The trend icon is decorative; the direction must be in the text (a sign or words), and the colour only repeats whether it is good news.
+- To announce a changing KPI, wrap the stat in your own live region.
+
+## API Reference
+
+<ApiReference tags={["tec-stat", "tec-stat-label", "tec-stat-value", "tec-stat-delta", "tec-stat-help", "tec-stat-group"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A card, a panel or a header reports one measured number: cost per barrel, NPV, drilling days.
+- The number wants a unit and a change against a baseline or a previous period.
+- Several KPIs sit side by side and their digits have to align: that is `tec-stat-group`.
+
+### Not for
+
+- a word that names a status or a category: use [Badge](/docs/components/badge)
+- a value read against a fixed scale with named bands: use [Meter](/docs/tecton/meter)
+- a series compared over time or across categories: use [Chart](/docs/components/chart)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose the parts inside `tec-stat`: `tec-stat-label`, `tec-stat-value` with its `unit`, `tec-stat-delta`, `tec-stat-help`.
+
+</Do>
+
+<Do>
+
+Scale the value with `size="sm" | "md" | "lg"` (14 / 20 / 28 px) and place the block with `align="start" | "center" | "end"`.
+
+</Do>
+
+<Do>
+
+Say which way the number moved with `trend="up" | "down" | "flat"` (the icon), and whether that is good news with `tone="positive" | "negative" | "neutral"` (the colour). Set `tone="positive"` on a falling cost, downtime or risk.
+
+</Do>
+
+<Do>
+
+Pass the unit in the `unit` attribute rather than writing it into the number, so it renders in the sans face at `0.6em`.
+
+</Do>
+
+<Do>
+
+Lay a row of KPIs out with `tec-stat-group`; `class` on it is for width, border and placement only.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A KPI as a heading and a coloured span">
+
+<Wrong>
+
+```html
+<div class="flex flex-col gap-0.5">
+  <span class="text-xs text-gray-500">NPV</span>
+  <h3 class="text-2xl font-semibold">1 240 MUSD</h3>
+  <span class="text-sm text-green-600">+11%</span>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-stat size="lg">
+  <tec-stat-label>NPV</tec-stat-label>
+  <tec-stat-value unit="MUSD">1 240</tec-stat-value>
+  <tec-stat-delta trend="up">+11%</tec-stat-delta>
+</tec-stat>
+```
+
+</Correct>
+
+`text-gray-500` and `text-green-600` are stock Tailwind that the reset palette emits no CSS for, so the label and the change render in the body colour, and the value loses the tabular mono figures that stop a column of KPIs jittering as the digits change.
+
+</Dont>
+
+<Dont severity="HIGH" title="Colouring the delta by hand instead of with trend and tone">
+
+<Wrong>
+
+```html
+<tec-stat-delta class="text-red-600">-4%</tec-stat-delta>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-stat-delta trend="down" tone="positive">-4%</tec-stat-delta>
+```
+
+</Correct>
+
+`trend` picks the trending-up / trending-down / minus icon and `tone` the success / destructive / muted colour — a CAPEX cut points down and reads as good news — so the hand-coloured version keeps the flat dash and a class that emits nothing.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="The unit written into the value">
+
+<Wrong>
+
+```html
+<tec-stat-value>42.1 MSm³</tec-stat-value>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-stat-value unit="MSm³">42.1</tec-stat-value>
+```
+
+</Correct>
+
+The `unit` renders in the sans face at 0.6em and muted beside the number; inside the number it is set in IBM Plex Mono at the full size and counted by the tabular figures, so it reads as part of the figure and the columns of a group stop lining up.
+
+</Dont>

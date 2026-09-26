@@ -1,0 +1,287 @@
+---
+title: Dropdown Menu
+description: Displays a menu to the user — such as a set of actions or functions — triggered by a button.
+tags: ["tec-dropdown-menu", "tec-dropdown-menu-item", "tec-dropdown-menu-group", "tec-dropdown-menu-label", "tec-dropdown-menu-separator", "tec-dropdown-menu-shortcut", "tec-dropdown-menu-sub", "tec-dropdown-menu-sub-trigger", "tec-dropdown-menu-sub-content"]
+---
+
+<ComponentPreview name="dropdown-menu-demo" class="min-h-96" />
+
+## Usage
+
+```ts
+import "@tecton/wc/dropdown-menu"
+```
+
+```html
+<tec-dropdown-menu>
+  <tec-button slot="trigger" variant="outline">Open</tec-button>
+  <tec-dropdown-menu-group>
+    <tec-dropdown-menu-label>My Account</tec-dropdown-menu-label>
+    <tec-dropdown-menu-item value="profile">Profile</tec-dropdown-menu-item>
+    <tec-dropdown-menu-item value="billing">Billing</tec-dropdown-menu-item>
+  </tec-dropdown-menu-group>
+  <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
+  <tec-dropdown-menu-group>
+    <tec-dropdown-menu-item value="team">Team</tec-dropdown-menu-item>
+    <tec-dropdown-menu-item value="subscription">Subscription</tec-dropdown-menu-item>
+  </tec-dropdown-menu-group>
+</tec-dropdown-menu>
+```
+
+The trigger goes in `slot="trigger"` and gets `aria-haspopup="menu"` and `aria-expanded`; everything else is the menu. The menu opens in the top layer below the trigger, start-aligned (`side` and `align` change that), and is as wide as the trigger — at least 8rem. Set `--tec-dropdown-menu-width` (or `--tec-menu-min-width`) on the element to size it.
+
+## Composition
+
+```text
+tec-dropdown-menu
+├── tec-button (slot="trigger")
+├── tec-dropdown-menu-group
+│   ├── tec-dropdown-menu-label
+│   ├── tec-dropdown-menu-item
+│   └── tec-dropdown-menu-item
+├── tec-dropdown-menu-separator
+├── tec-dropdown-menu-group
+│   ├── tec-dropdown-menu-label
+│   ├── tec-dropdown-menu-item
+│   └── tec-dropdown-menu-item
+└── tec-dropdown-menu-sub
+    ├── tec-dropdown-menu-sub-trigger
+    └── tec-dropdown-menu-sub-content
+        └── tec-dropdown-menu-group
+            ├── tec-dropdown-menu-label
+            ├── tec-dropdown-menu-item
+            └── tec-dropdown-menu-item
+```
+
+## Basic
+
+A basic dropdown menu with labels and separators. A `disabled` item is skipped by the arrow keys and cannot be activated.
+
+<ComponentPreview name="dropdown-menu-basic" class="min-h-80" />
+
+## Submenu
+
+Nest a `tec-dropdown-menu-sub` with a `tec-dropdown-menu-sub-trigger` and a `tec-dropdown-menu-sub-content` for secondary actions. Submenus open on hover (after 200 ms), on click and with <Kbd>→</Kbd> (<Kbd>←</Kbd> in right-to-left), and they nest to any depth. While the pointer travels diagonally towards an open submenu, the items it crosses don't steal it.
+
+<ComponentPreview name="dropdown-menu-submenu" class="min-h-80" />
+
+## Shortcuts
+
+Add a `tec-dropdown-menu-shortcut` at the end of an item to show a keyboard hint. It is only a hint: bind the shortcut yourself.
+
+<ComponentPreview name="dropdown-menu-shortcuts" class="min-h-80" />
+
+## Icons
+
+Put icons in `slot="start"`; they are sized to 1rem.
+
+<ComponentPreview name="dropdown-menu-icons" class="min-h-80" />
+
+## Checkboxes
+
+`selection-mode="multiple"` on a group turns its items into checkboxes (`menuitemcheckbox` with `aria-checked` and a check mark). The `checked` attribute sets an item's initial state; the group's `values` property holds the current ones. Toggling a checkbox with the pointer or <Kbd>Space</Kbd> keeps the menu open; <Kbd>Enter</Kbd> toggles and closes.
+
+<ComponentPreview name="dropdown-menu-checkboxes" class="min-h-80" />
+
+## Checkboxes Icons
+
+<ComponentPreview name="dropdown-menu-checkboxes-icons" class="min-h-80" />
+
+## Radio Group
+
+`selection-mode="single"` makes the items radios (`menuitemradio`): checking one unchecks the others. Read the group's `value`. Choosing a radio with the pointer or <Kbd>Enter</Kbd> closes the menu; <Kbd>Space</Kbd> keeps it open.
+
+<ComponentPreview name="dropdown-menu-radio-group" class="min-h-80" />
+
+## Radio Icons
+
+<ComponentPreview name="dropdown-menu-radio-icons" class="min-h-80" />
+
+## Destructive
+
+Use `variant="destructive"` for irreversible actions; the label, the icon and the focus background take the destructive colour.
+
+<ComponentPreview name="dropdown-menu-destructive" class="min-h-80" />
+
+## Avatar
+
+An account menu triggered by an avatar, aligned to the end of the trigger with `align="end"`. An icon-only trigger needs an `aria-label`: it also names the menu.
+
+<ComponentPreview name="dropdown-menu-avatar" class="min-h-80" />
+
+## Complex
+
+Groups, icons, shortcuts, checkboxes, radios and nested submenus together.
+
+<ComponentPreview name="dropdown-menu-complex" class="min-h-[36rem] items-start" />
+
+## Events
+
+Activating an item fires `tec-select` on it (`detail: { value, checked? }`); it bubbles, so one listener on the menu handles every item. `preventDefault()` keeps the menu open. A group with `selection-mode` fires the cancelable `tec-value-change` (`detail: { value, values }`) before the items change. The menu fires `tec-open-change` (`detail: { open, reason }`, cancelable) when the user opens or closes it; `show()`, `hide()`, `toggle()` and the `open` property fire nothing. An item with `href` is a link.
+
+<ComponentPreview name="dropdown-menu-events" class="min-h-80" />
+
+## RTL
+
+Submenus open towards the inline end, the chevrons flip, and <Kbd>←</Kbd> / <Kbd>→</Kbd> swap roles.
+
+<ComponentPreview name="dropdown-menu-rtl" direction="rtl" class="min-h-[30rem] items-start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Enter / Space", "On the trigger: opens the menu and focuses the first item. On an item: activates it. On a submenu trigger: opens the submenu and focuses its first item."],
+    ["ArrowDown", "On the trigger: opens the menu and focuses the first item. In the menu: moves to the next item (wraps; disabled items are skipped)."],
+    ["ArrowUp", "On the trigger: opens the menu and focuses the last item. In the menu: moves to the previous item (wraps)."],
+    ["Home / End", "Moves to the first / last item. PageUp and PageDown do the same."],
+    ["ArrowRight", "On a submenu trigger: opens the submenu and focuses its first item. In a submenu: closes it (right-to-left)."],
+    ["ArrowLeft", "In a submenu: closes it and focuses its trigger. On a submenu trigger: opens it (right-to-left)."],
+    ["A–Z", "Typeahead: moves to the next item whose label starts with the typed characters."],
+    ["Escape", "Closes the innermost open menu and returns focus to its trigger."],
+    ["Tab / Shift+Tab", "Closes every menu and moves focus on from the trigger."],
+  ]}
+/>
+
+## Accessibility
+
+- The menu follows the WAI-ARIA menu button pattern. The trigger gets `aria-haspopup="menu"` and `aria-expanded` (on a `tec-button` they reach its inner `<button>`); the surface is `role="menu"`, named by the trigger unless you set `label`.
+- Items are `menuitem`, `menuitemcheckbox` or `menuitemradio` with `aria-checked` and `aria-disabled`; groups are `role="group"` named by their `tec-dropdown-menu-label`; separators are `role="separator"`. Submenu triggers get `aria-haspopup="menu"` and `aria-expanded`, and name their submenu.
+- A pointer press focuses the menu itself; Enter, Space or the arrow keys focus the first or last item. Hovering an item focuses it. Closing returns focus to the trigger.
+- Give an icon-only trigger an `aria-label`. Shortcut text is part of the item's accessible name.
+- The menu renders in the top layer, so no `z-index` or `overflow` on an ancestor clips it.
+
+## API Reference
+
+<ApiReference tags={["tec-dropdown-menu", "tec-dropdown-menu-item", "tec-dropdown-menu-group", "tec-dropdown-menu-label", "tec-dropdown-menu-separator", "tec-dropdown-menu-shortcut", "tec-dropdown-menu-sub", "tec-dropdown-menu-sub-trigger", "tec-dropdown-menu-sub-content"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A button opens a short list of actions: row actions, an account menu, a "more" overflow.
+- Some of those entries are toggles or one exclusive choice, shown with check marks.
+- The list wants submenus, shortcut hints, or a destructive entry at the end.
+
+### Not for
+
+- a menu opened by right click on the content: use [Context Menu](/docs/components/context-menu)
+- choosing a value for a form field: use [Select](/docs/components/select)
+- a searchable palette of commands: use [Command](/docs/components/command)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the trigger (a `tec-button`) in `slot="trigger"` and the items, groups and separators directly inside `tec-dropdown-menu`; there is no separate content element.
+
+</Do>
+
+<Do>
+
+Give each item a `value` and handle `tec-select` once on the menu (`event.detail.value`).
+
+</Do>
+
+<Do>
+
+Make a group behave as checkboxes or radios with `selection-mode` on `tec-dropdown-menu-group`, `checked` on the items, and `tec-value-change` / `values` on the group.
+
+</Do>
+
+<Do>
+
+Title groups with `tec-dropdown-menu-label`, divide with `tec-dropdown-menu-separator`, hint keys with `tec-dropdown-menu-shortcut`.
+
+</Do>
+
+<Do>
+
+Anchor with `side` / `align` (for example `align="end"`) and nest with `tec-dropdown-menu-sub`, `-sub-trigger` and `-sub-content`.
+
+</Do>
+
+<Do>
+
+Label menu items with a short verb phrase ("Rename", "Export LAS"); the object comes from what the menu opened on.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="MEDIUM" title="Listening for click on a menu item">
+
+<Wrong>
+
+```js
+item.addEventListener("click", () => archive(well.id))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+menu.addEventListener("tec-select", (event) => {
+  if (event.detail.value === "archive") archive(well.id)
+})
+```
+
+</Correct>
+
+A menu item is not a button: <Kbd>Enter</Kbd> and <Kbd>Space</Kbd> don't produce a `click`, so keyboard users never reach that listener. `tec-select` fires for the pointer and the keyboard, only for enabled items, and can keep the menu open with `preventDefault()`.
+
+</Dont>
+
+<Dont severity="HIGH" title="Hand-made check marks instead of group selection">
+
+<Wrong>
+
+```html
+<tec-dropdown-menu-item>
+  <svg slot="start"><!-- check --></svg>
+  Panel
+</tec-dropdown-menu-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-dropdown-menu-group selection-mode="multiple">
+  <tec-dropdown-menu-item value="panel" checked>Panel</tec-dropdown-menu-item>
+</tec-dropdown-menu-group>
+```
+
+</Correct>
+
+A drawn check mark is invisible to assistive technology and never updates; `selection-mode` makes the item a `menuitemcheckbox` (or `menuitemradio`) with `aria-checked`, draws the mark and keeps the group's `values` in sync.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Colouring a destructive item with a class">
+
+<Wrong>
+
+```html
+<tec-dropdown-menu-item class="text-red-600">Delete</tec-dropdown-menu-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-dropdown-menu-item variant="destructive">Delete</tec-dropdown-menu-item>
+```
+
+</Correct>
+
+The stock Tailwind palette is not part of the Tecton preset, so `text-red-600` emits no CSS, while `variant="destructive"` sets the label, the icon and the focus background of the row.
+
+</Dont>

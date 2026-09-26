@@ -11,6 +11,7 @@ import { ListEmptyBase, ListGroupBase, ListItemBase, ListLabelBase, ListSeparato
  * @tag tec-select-item
  *
  * @slot - The option content: text, optionally with a leading icon. It is also shown in the trigger when selected.
+ * @slot start - A leading icon (an icon placed first in the default slot works too).
  *
  * @csspart base - The option row (padding, highlight background).
  * @csspart content - The wrapper of the slotted content.
@@ -42,7 +43,7 @@ export class TecSelectItem extends ListItemBase {
 
   protected override render() {
     return html`<div class="base" part="base">
-      <span class="content" part="content"><slot></slot></span>${this.renderIndicator()}
+      <span class="content" part="content"><slot name="start"></slot><slot></slot></span>${this.renderIndicator()}
     </div>`
   }
 }

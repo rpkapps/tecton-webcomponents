@@ -1,0 +1,23 @@
+<div class="flex items-center justify-between gap-4">
+  <tec-field orientation="horizontal" class="w-fit">
+    <tec-label for="pagination-icons-only-rows">Rows per page</tec-label>
+    <tec-select id="pagination-icons-only-rows" value="25" class="w-20">
+      <tec-select-group>
+        <tec-select-item value="10">10</tec-select-item>
+        <tec-select-item value="25">25</tec-select-item>
+        <tec-select-item value="50">50</tec-select-item>
+        <tec-select-item value="100">100</tec-select-item>
+      </tec-select-group>
+    </tec-select>
+  </tec-field>
+  <tec-pagination class="w-auto">
+    <tec-pagination-content>
+      <tec-pagination-item>
+        <tec-pagination-previous href="#"></tec-pagination-previous>
+      </tec-pagination-item>
+      <tec-pagination-item>
+        <tec-pagination-next href="#"></tec-pagination-next>
+      </tec-pagination-item>
+    </tec-pagination-content>
+  </tec-pagination>
+</div>

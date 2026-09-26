@@ -1,5 +1,5 @@
 import { ContextConsumer } from "@lit/context"
-import { html, LitElement, nothing, type CSSResultGroup, type PropertyValues } from "lit"
+import { html, LitElement, nothing, type PropertyValues } from "lit"
 import { property, query } from "lit/decorators.js"
 import { live } from "lit/directives/live.js"
 import { PanelLeft } from "lucide"
@@ -186,7 +186,7 @@ export class TecSidebarSeparator extends TectonElement {
  * @csspart base - The inner `<button>`.
  */
 export class TecSidebarTrigger extends TecButton {
-  static override styles: CSSResultGroup = [TecButton.styles, sidebarTriggerStyles]
+  static override styles = [...TecButton.styles, sidebarTriggerStyles]
 
   /** Accessible name. */
   @property() label = "Toggle Sidebar"
@@ -258,13 +258,14 @@ export class TecSidebarRail extends SidebarPart {
 }
 
 /**
- * The main content next to the sidebar (`role="main"`). With a `variant="inset"` sidebar it becomes
+ * The main content next to the sidebar (a `<main>` landmark in its shadow root, so a slotted `<header>` is
+ * not a page banner). With a `variant="inset"` sidebar it becomes
  * a rounded, raised card inset from the edges.
  *
  * @summary The main content area beside the sidebar.
  * @tag tec-sidebar-inset
  * @slot - The page: header, content.
- * @csspart base - The content surface (background, radius, shadow).
+ * @csspart base - The `<main>` content surface (background, radius, shadow).
  * @cssstate inset - The provider has a `variant="inset"` sidebar (desktop).
  * @cssstate collapsed - The sidebar is collapsed.
  */
@@ -272,11 +273,6 @@ export class TecSidebarInset extends TectonElement {
   static styles = [hostStyles, sidebarInsetStyles]
 
   #provider = new ContextConsumer(this, { context: sidebarProviderContext, subscribe: true })
-
-  override connectedCallback(): void {
-    super.connectedCallback()
-    this.internals.role = "main"
-  }
 
   protected override willUpdate(changed: PropertyValues): void {
     super.willUpdate(changed)
@@ -286,7 +282,7 @@ export class TecSidebarInset extends TectonElement {
   }
 
   protected override render() {
-    return html`<div class="base" part="base"><slot></slot></div>`
+    return html`<main class="base" part="base"><slot></slot></main>`
   }
 }
 

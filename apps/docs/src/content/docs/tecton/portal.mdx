@@ -1,0 +1,87 @@
+---
+title: Portal
+description: "Why Tecton web components need no portal container: overlays open in the browser's top layer and keep inheriting from where they are declared."
+---
+
+Component libraries built on a virtual DOM usually *portal* overlays: a dialog, popover, menu or tooltip is rendered into a container at the end of `<body>` so that it escapes `overflow: hidden` ancestors and `z-index` stacking. That move has a price — the overlay leaves its subtree, so it loses the subtree's theme class, scoped styles, CSS variables and `dir`, and applications that host several independently deployed parts (micro-frontends) need a portal *provider* to send each part's overlays into a container that carries that part's classes again.
+
+`@tecton/wc` has no portal element and needs none.
+
+## The top layer
+
+Every Tecton overlay is shown in the browser's **top layer**:
+
+- modal surfaces (`tec-dialog`, `tec-alert-dialog`, `tec-sheet`, `tec-drawer`, the command dialog) are native `<dialog>` elements opened with `showModal()`;
+- anchored surfaces (`tec-popover`, `tec-dropdown-menu`, `tec-context-menu`, `tec-select`, `tec-combobox`, `tec-hover-card`, `tec-tooltip`, `tec-app-finder`) are `popover="manual"` elements positioned against their trigger.
+
+The top layer paints above everything else on the page — no `z-index`, no clipping by `overflow: hidden` or `contain: paint` ancestors — **but the element does not move in the DOM**. It stays in the shadow root of the component that declared it, so it inherits exactly like any other descendant:
+
+| What | Portalled overlay | Top-layer overlay |
+| --- | --- | --- |
+| Escapes `overflow: hidden` and `z-index` | Yes | Yes |
+| Mode (`data-theme` / `.dark` on an ancestor) | Only if copied onto the container | Inherited |
+| Variable overrides on a subtree (`--tec-primary`) | Only if copied onto the container | Inherited |
+| `dir="rtl"` and `lang` of the subtree | Only if copied onto the container | Inherited |
+| Scoped styles of a micro-frontend | Needs a marked container | Shadow DOM already scopes them |
+| Container to create and remove | One per root | None |
+
+<ComponentPreview name="theme-root-demo" class="min-h-80 items-start" caption="The popover opens in the top layer and keeps the green primary of its tec-theme-root." />
+
+## What to do instead
+
+- **Theme a subtree** (pin light or dark, retint it with variables): wrap it in [`tec-theme-root`](/docs/tecton/theme-root), or set `data-theme` / custom properties on any ancestor. Its overlays follow.
+- **Several applications on one page**: give each its own root element with its own theme and variables. Nothing else is needed for overlays; each part's styles are already encapsulated in its components' shadow roots.
+- **A custom overlay of your own**: render it with the `popover` attribute (or a `<dialog>`) inside your component instead of appending it to `document.body`.
+
+## Things to know
+
+- An element in the top layer is laid out relative to the viewport (`position: fixed`), so `transform`, `filter` or `contain` on an ancestor does not trap it.
+- Overlays opened later are painted above earlier ones; nested menus and popovers inside a dialog therefore stack correctly without configuration.
+- In fullscreen (`element.requestFullscreen()`), overlays opened after entering fullscreen appear above the fullscreen element.
+- Do not move an overlay's host element to `document.body` yourself: it would lose the inheritance described above, and its trigger relationship.
+
+## Usage guidelines
+
+### Do
+
+<DoList>
+
+<Do>
+
+Declare an overlay next to its trigger, inside the subtree whose theme and direction it should use.
+
+</Do>
+
+<Do>
+
+Use [`tec-theme-root`](/docs/tecton/theme-root) (or `data-theme` and custom properties on an ancestor) to theme a region together with its overlays.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Appending an overlay to the body">
+
+<Wrong>
+
+```ts
+document.body.append(document.querySelector("tec-dialog"))
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-theme-root theme="dark">
+  <tec-dialog>…</tec-dialog>
+</tec-theme-root>
+```
+
+</Correct>
+
+The top layer already lifts the overlay above the page; moving it drops the theme, variables and `dir` it inherited from its subtree.
+
+</Dont>

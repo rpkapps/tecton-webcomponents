@@ -1,0 +1,48 @@
+<div id="data-table-selection" class="flex w-full max-w-3xl flex-col gap-3">
+  <tec-data-table
+    label="Wells"
+    selectable
+    select-all-label="Select all wells"
+    select-row-label="Select well"
+    empty-label="No wells."
+  ></tec-data-table>
+  <p class="text-sm text-muted-foreground" aria-live="polite">No wells selected.</p>
+</div>
+<script type="module">
+  import { html } from "@tecton/wc/data-table/data-table.js"
+
+  const wells = [
+    { id: "a12", name: "34/10-A-12", field: "Gullfaks", status: "Producing", depth: 3250, operator: "Equinor" },
+    { id: "b3", name: "34/10-B-3", field: "Gullfaks", status: "Shut in", depth: 2980, operator: "Equinor" },
+    { id: "c7", name: "33/9-C-7", field: "Statfjord", status: "Drilling", depth: 1420, operator: "Equinor" },
+    { id: "d2", name: "34/7-D-2", field: "Snorre", status: "Producing", depth: 2735, operator: "Equinor" },
+  ]
+  const statusVariant = { Producing: "success", "Shut in": "warning", Drilling: "info" }
+
+  const root = document.getElementById("data-table-selection")
+  const table = root.querySelector("tec-data-table")
+  const output = root.querySelector("p")
+  table.columns = [
+    { accessor: "name", header: "Well", rowHeader: true },
+    { accessor: "field", header: "Field" },
+    {
+      accessor: "status",
+      header: "Status",
+      cell: ({ value }) => html`<tec-badge variant=${statusVariant[value]} appearance="outline">${value}</tec-badge>`,
+    },
+    {
+      accessor: "depth",
+      header: "TD (m)",
+      align: "end",
+      cell: ({ value }) => html`<span class="font-mono tabular-nums">${value.toLocaleString("en-US")}</span>`,
+    },
+    { accessor: "operator", header: "Operator" },
+  ]
+  table.data = wells
+
+  table.addEventListener("tec-selection-change", async () => {
+    await table.updateComplete
+    const names = table.selectedRows.map((well) => well.name)
+    output.textContent = names.length ? `Selected: ${names.join(", ")}` : "No wells selected."
+  })
+</script>

@@ -1,0 +1,28 @@
+<div id="dropdown-menu-events" class="flex flex-col items-center gap-3">
+  <tec-dropdown-menu>
+    <tec-button slot="trigger" variant="outline">Well actions</tec-button>
+    <tec-dropdown-menu-group>
+      <tec-dropdown-menu-item value="rename">Rename</tec-dropdown-menu-item>
+      <tec-dropdown-menu-item value="export">Export LAS</tec-dropdown-menu-item>
+    </tec-dropdown-menu-group>
+    <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
+    <tec-dropdown-menu-group selection-mode="multiple" id="dropdown-menu-events-tracks">
+      <tec-dropdown-menu-label>Tracks</tec-dropdown-menu-label>
+      <tec-dropdown-menu-item value="gamma" checked>Gamma ray</tec-dropdown-menu-item>
+      <tec-dropdown-menu-item value="resistivity">Resistivity</tec-dropdown-menu-item>
+    </tec-dropdown-menu-group>
+    <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
+    <tec-dropdown-menu-item value="archive" variant="destructive">Archive</tec-dropdown-menu-item>
+  </tec-dropdown-menu>
+  <p class="text-sm text-muted-foreground" aria-live="polite">Pick an action.</p>
+</div>
+<script type="module">
+  const root = document.getElementById("dropdown-menu-events")
+  const output = root.querySelector("p")
+  root.addEventListener("tec-select", (event) => {
+    if (event.detail.checked === undefined) output.textContent = `Action: ${event.detail.value}`
+  })
+  root.querySelector("#dropdown-menu-events-tracks").addEventListener("tec-value-change", (event) => {
+    output.textContent = `Tracks: ${event.detail.values.join(", ") || "none"}`
+  })
+</script>

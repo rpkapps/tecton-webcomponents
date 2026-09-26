@@ -1,0 +1,24 @@
+<tec-breadcrumb id="breadcrumb-link">
+  <tec-breadcrumb-list>
+    <tec-breadcrumb-item>
+      <!-- the <a> your router renders (e.g. <router-link>, <Link>) -->
+      <tec-breadcrumb-link><a href="#link-component" data-router-link>Home</a></tec-breadcrumb-link>
+    </tec-breadcrumb-item>
+    <tec-breadcrumb-item>
+      <tec-breadcrumb-link><a href="#link-component" data-router-link>Components</a></tec-breadcrumb-link>
+    </tec-breadcrumb-item>
+    <tec-breadcrumb-item>
+      <tec-breadcrumb-page>Breadcrumb</tec-breadcrumb-page>
+    </tec-breadcrumb-item>
+  </tec-breadcrumb-list>
+</tec-breadcrumb>
+<script type="module">
+  // A stand-in for a client-side router: intercept the links and navigate without a reload.
+  const root = document.getElementById("breadcrumb-link")
+  root.addEventListener("click", (event) => {
+    const link = event.target.closest("a[data-router-link]")
+    if (!link) return
+    event.preventDefault()
+    history.replaceState(null, "", link.getAttribute("href"))
+  })
+</script>

@@ -1,0 +1,54 @@
+<div id="carousel-api" class="mx-auto max-w-[10rem] sm:max-w-xs">
+  <tec-carousel aria-label="Numbered slides" class="w-full max-w-xs">
+    <tec-carousel-content>
+      <tec-carousel-item>
+        <tec-card class="m-px">
+          <tec-card-content class="flex aspect-square items-center justify-center p-6">
+            <span class="text-4xl font-semibold">1</span>
+          </tec-card-content>
+        </tec-card>
+      </tec-carousel-item>
+      <tec-carousel-item>
+        <tec-card class="m-px">
+          <tec-card-content class="flex aspect-square items-center justify-center p-6">
+            <span class="text-4xl font-semibold">2</span>
+          </tec-card-content>
+        </tec-card>
+      </tec-carousel-item>
+      <tec-carousel-item>
+        <tec-card class="m-px">
+          <tec-card-content class="flex aspect-square items-center justify-center p-6">
+            <span class="text-4xl font-semibold">3</span>
+          </tec-card-content>
+        </tec-card>
+      </tec-carousel-item>
+      <tec-carousel-item>
+        <tec-card class="m-px">
+          <tec-card-content class="flex aspect-square items-center justify-center p-6">
+            <span class="text-4xl font-semibold">4</span>
+          </tec-card-content>
+        </tec-card>
+      </tec-carousel-item>
+      <tec-carousel-item>
+        <tec-card class="m-px">
+          <tec-card-content class="flex aspect-square items-center justify-center p-6">
+            <span class="text-4xl font-semibold">5</span>
+          </tec-card-content>
+        </tec-card>
+      </tec-carousel-item>
+    </tec-carousel-content>
+    <tec-carousel-previous></tec-carousel-previous>
+    <tec-carousel-next></tec-carousel-next>
+  </tec-carousel>
+  <div class="py-2 text-center text-sm text-muted-foreground">Slide <span data-current>1</span> of <span data-count>5</span></div>
+</div>
+<script type="module">
+  const root = document.getElementById("carousel-api")
+  const carousel = root.querySelector("tec-carousel")
+  const update = () => {
+    root.querySelector("[data-current]").textContent = carousel.selectedIndex + 1
+    root.querySelector("[data-count]").textContent = carousel.snapCount
+  }
+  carousel.addEventListener("tec-slide-change", update)
+  customElements.whenDefined("tec-carousel").then(() => requestAnimationFrame(update))
+</script>

@@ -1,0 +1,32 @@
+<tec-tree-view id="tree-view-nested" label="Fields" class="max-w-sm"></tec-tree-view>
+<script type="module">
+  const project = [
+    {
+      id: "fields",
+      name: "Fields",
+      children: [
+        {
+          id: "gullfaks",
+          name: "Gullfaks",
+          children: [
+            { id: "gullfaks-wells", name: "Wells", children: [{ id: "a12", name: "34/10-A-12" }, { id: "a13", name: "34/10-A-13" }] },
+            { id: "gullfaks-horizons", name: "Horizons", children: [] },
+          ],
+        },
+        { id: "statfjord", name: "Statfjord", children: [] },
+      ],
+    },
+  ]
+  const expanded = new Set(["fields", "gullfaks", "gullfaks-wells"])
+
+  function render(node) {
+    const item = document.createElement("tec-tree-view-item")
+    item.value = node.id
+    item.kind = node.children ? "folder" : "item"
+    item.expanded = expanded.has(node.id)
+    item.append(node.name, ...(node.children ?? []).map(render))
+    return item
+  }
+
+  document.getElementById("tree-view-nested").append(...project.map(render))
+</script>

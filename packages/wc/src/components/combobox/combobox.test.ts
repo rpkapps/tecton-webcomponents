@@ -174,7 +174,6 @@ describe("tec-combobox", () => {
       "group: Americas",
       "option: (GMT-5) New York",
       "option: (GMT-8) Los Angeles",
-      "separator",
       "group: Europe",
       "option: (GMT+0) London",
       "option: (GMT+1) Paris",

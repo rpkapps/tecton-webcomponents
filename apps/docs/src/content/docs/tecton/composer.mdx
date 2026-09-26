@@ -1,0 +1,320 @@
+---
+title: Composer
+description: "The message box of a chat: send and stop, keyboard first, with suggestions, slash commands and removable context."
+tags: ["tec-composer", "tec-composer-field", "tec-composer-input", "tec-composer-toolbar", "tec-composer-submit", "tec-composer-hint", "tec-composer-status-message", "tec-composer-attachments", "tec-composer-attachment", "tec-composer-suggestions", "tec-composer-suggestion", "tec-composer-commands", "tec-composer-command"]
+---
+
+<ComponentPreview name="composer-demo" />
+
+The composer is the message box under a chat transcript. It follows the patterns of the common chat
+composers (Vercel AI Elements, assistant-ui, CopilotKit, ChatGPT, Claude, Slack, VS Code) and the
+WCAG and WAI-ARIA practices behind them: a textarea that grows with its text, Send and Stop as two
+named buttons, keys that never send half-typed IME text, and polite announcements.
+
+## Usage
+
+```ts
+import "@tecton/wc/composer"
+```
+
+```html
+<tec-composer>
+  <tec-composer-field>
+    <tec-composer-input placeholder="Ask anything…"></tec-composer-input>
+    <tec-composer-toolbar>
+      <tec-composer-submit></tec-composer-submit>
+    </tec-composer-toolbar>
+  </tec-composer-field>
+  <tec-composer-hint></tec-composer-hint>
+  <tec-composer-status-message></tec-composer-status-message>
+</tec-composer>
+```
+
+```ts
+const composer = document.querySelector("tec-composer")
+composer.addEventListener("tec-submit", async (event) => {
+  composer.status = "submitted"               // Send turns into Stop
+  for await (const chunk of chat.send(event.detail.text)) {
+    composer.status = "streaming"
+    appendToTranscript(chunk)
+  }
+  composer.status = "ready"
+})
+composer.addEventListener("tec-stop", () => chat.abort())
+```
+
+`tec-submit` carries the trimmed text; the box is emptied after the event (call `preventDefault()`
+to keep it, for example when the send is refused). Set `status` to the chat's state —
+`ready`, `submitted`, `streaming` or `error`, the vocabulary of the AI SDK and TanStack AI — and the
+parts follow: nothing sends while busy, Send turns into Stop, and <Kbd>Esc</Kbd> in the textarea
+fires `tec-stop`. Set `unstoppable` if the reply cannot be stopped. The text is the `value`
+property, and `input` fires whenever the user changes it.
+
+## Keyboard first
+
+The textarea stays enabled while a reply streams, so the next message can be drafted; it just does
+not send until the chat is `ready` again. Focus stays in the textarea after sending. Send is
+`aria-disabled`, not disabled, while the box is empty, so it keeps its place in the tab order.
+While a reply arrives, Stop takes its place — a second button with a name of its own — and focus
+moves to it if it was on Send, and back to the textarea when the reply ends.
+
+`submit-mode="mod-enter"` makes <Kbd>Enter</Kbd> a new line and <Kbd>⌘</Kbd>/<Kbd>Ctrl</Kbd>+<Kbd>Enter</Kbd>
+the way to send, for long-form input. The toolbar is one tab stop with the arrow keys between its
+buttons; put ghost `icon-sm` buttons before `tec-composer-submit`, which always sits at the end.
+
+<ComponentPreview name="composer-submit-mode" />
+
+## History
+
+Set `history` to the prompts the user has sent, oldest first, and the arrows walk through them as
+in a terminal. <Kbd>↑</Kbd> with the caret on the first line the box shows loads the previous
+prompt, the newest first, with the caret at its end; while that prompt is in the box as it was
+loaded, <Kbd>↑</Kbd> keeps stepping back. <Kbd>↓</Kbd> on the last line goes forward again, and
+past the newest brings back what was in the box when browsing began. Anywhere else in the text the
+arrows move the caret as usual; the first and last lines are the ones shown, so a long paragraph
+that wraps counts each of its lines. A run of the same prompt is shown once, and `history-limit`
+caps how many of the newest prompts <Kbd>↑</Kbd> reaches.
+
+The draft survives edits: typing in a loaded prompt keeps browsing, and stepping away from it drops
+that edit but not the draft. Sending ends browsing, and so does a change from outside the textarea
+(a suggestion, a command, the application setting `value`); `history` itself is never changed.
+`tec-composer-hint` adds "<Kbd>↑</Kbd> for earlier messages" once `history` has an entry.
+
+```js
+composer.history = turns.filter((turn) => turn.role === "user").map((turn) => turn.text)
+```
+
+A global shortcut that focuses the composer is the application's: give it a modifier (ChatGPT uses
+<Kbd>Shift</Kbd>+<Kbd>Esc</Kbd>) and call `composer.focus()` — for example with a
+[`tec-shortcut`](/docs/tecton/shortcuts).
+
+## Announcements
+
+`tec-composer-status-message` is a polite, visually hidden status region for the composer's own
+changes: sent, stopped, failed (translate them with `submitted-message`, `stopped-message` and
+`error-message`). The reply is the transcript's to announce: the transcript is a `role="log"`
+(`tec-message-scroller-content`); set `aria-busy="true"` on it while a reply streams, so screen
+readers read the reply once it is complete rather than every token.
+
+## Context and suggestions
+
+`tec-composer-attachments` shows what goes with the message besides its text, such as a selection
+from the page or a file, as chips the user can remove: one tab stop, the arrow keys between the
+chips, <Kbd>Delete</Kbd> or <Kbd>Backspace</Kbd> (or the chip's button) removes one. A removed chip
+fires a cancelable `tec-remove` and takes itself out of the page; focus moves to the next chip, and
+after the last back to the textarea. Put an icon in `slot="start"` and a longer text in
+`description`.
+
+`tec-composer-suggestions` holds prompts to start from. A `tec-composer-suggestion` fills the box
+with its `value` to edit, sends it at once with `submit`, or — when you cancel its `tec-select` —
+leaves the press to you, for a suggestion that carries more than its text.
+
+<ComponentPreview name="composer-context" />
+
+## Commands
+
+`tec-composer-commands` lists commands when the box starts with a `/`, above the field: put it inside
+`tec-composer-field`, with one `tec-composer-command` per command (`command` is what is typed after
+the slash, the text is its label, `group` and `description` are optional, an icon goes in
+`slot="start"`). Typing narrows the list, by the start of the command, then a word of its label,
+then anywhere in the command. The commands stay in their groups, each group where its best match
+ranks and the best match first inside it, so <Kbd>Enter</Kbd> on a fresh list picks the best match;
+commands without a `group` are listed together, without a heading. A slash later in the text is
+only text, and with no match the list stays closed, so <Kbd>Enter</Kbd> sends what was typed.
+<Kbd>Esc</Kbd> closes the list until the text changes, and a `/word` recalled from `history` opens
+no list until it is edited.
+
+Picking empties the box and fires `tec-select` on the command (`detail.value` is the command).
+Fill the box for the user to finish with `composer.setValue()`, attach something, or do the whole
+thing at once, like starting a new conversation.
+
+```js
+composer.addEventListener("tec-select", (event) => {
+  if (event.detail.value === "new") startOver()
+  else composer.setValue(`${event.target.labelText}: `)
+})
+```
+
+Focus stays in the textarea. It points at the active command with `aria-activedescendant` and at
+the list with `aria-controls`, and a polite status says how many commands match ("3 commands, arrow
+keys to choose."; set `countMessage` to a function to say it in the page's language). The list
+opens in the top layer, so no `overflow` around the chat clips it, and flips below the field when
+there is no room above.
+
+<ComponentPreview name="composer-commands" class="min-h-[28rem]" />
+
+## RTL
+
+The parts use logical properties: the send button sits at the end, the arrow keys between
+suggestions and chips follow the reading direction. Translate the names with `label`,
+`send-label`, `stop-label`, `remove-label` and the hint's own text.
+
+<ComponentPreview name="composer-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Enter", "In the textarea: sends (a new line with `submit-mode=\"mod-enter\"`)."],
+    ["Shift+Enter", "In the textarea: a new line."],
+    ["Ctrl+Enter / Meta+Enter", "In the textarea: sends, in either mode."],
+    ["Escape", "While a reply arrives: stops it, and announces it. With commands listed: closes the list until the text changes. A dialog or sheet around the chat stays open."],
+    ["ArrowUp", "Caret on the first line (or a loaded prompt, unedited): loads the previous prompt from `history`. With commands listed: the previous command."],
+    ["ArrowDown", "Browsing `history`, caret on the last line: loads the next prompt; past the newest, the draft comes back. With commands listed: the next command."],
+    ["Tab", "With commands listed: picks the active command. Otherwise moves to the toolbar."],
+    ["ArrowLeft / ArrowRight", "In the toolbar, the suggestions or the attachments: moves between the buttons or chips (each group is one tab stop)."],
+    ["Home / End", "In the toolbar or the suggestions: the first or last button."],
+    ["Delete / Backspace", "On an attachment chip: removes it; after the last, focus returns to the textarea."],
+  ]}
+/>
+
+Nothing sends while an IME composes: the <Kbd>Enter</Kbd> that confirms a conversion is ignored
+(`isComposing` and key code 229).
+
+## Accessibility
+
+- The textarea is named "Message" (`label`, or `aria-label` / `aria-labelledby` on
+  `tec-composer-input`) and described by every `tec-composer-hint` (keep one, with
+  `visually-hidden` if the design has no room) plus its own `aria-describedby`.
+- Send and Stop are two buttons with their own names ("Send message", "Stop generating"); focus
+  follows the swap. Send is `aria-disabled` while there is nothing to send.
+- `tec-composer-toolbar` and `tec-composer-suggestions` are `toolbar`s, `tec-composer-attachments`
+  a `grid` of `row`s with a remove button each, `tec-composer-commands` a `listbox` of `option`s,
+  grouped under their headings.
+- The command list uses `aria-activedescendant` from the textarea (ARIA element reflection, so it
+  works across shadow roots), `aria-autocomplete="list"` and `aria-controls`; a status reports the
+  number of matches.
+- Pair the composer with a transcript that is a `role="log"` with `aria-busy` while a reply
+  streams, and keep `tec-composer-status-message` for sent, stopped and failed.
+- The focus ring of the field, the buttons and the chips stays visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-composer", "tec-composer-field", "tec-composer-input", "tec-composer-toolbar", "tec-composer-submit", "tec-composer-hint", "tec-composer-status-message", "tec-composer-attachments", "tec-composer-attachment", "tec-composer-suggestions", "tec-composer-suggestion", "tec-composer-commands", "tec-composer-command"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The user writes to an assistant or agent: the message box under a transcript.
+- A reply streams back and the user must be able to stop it, and keep typing the next message meanwhile.
+- The message carries something besides its text (a selection, a file) that the user can see and remove before sending.
+- The user types slash commands (`/new`, `/summarise`) in the message box and picks one from a list.
+
+### Not for
+
+- a one-line search or filter box: use [Input Group](/docs/components/input-group)
+- a form field for a long description: use [Textarea](/docs/components/textarea)
+- a structured question with choices for the user to answer: use [Questionnaire](/docs/components/questionnaire)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Set the chat's `status` (`ready`, `submitted`, `streaming`, `error`) and listen to `tec-stop`; `tec-composer-submit` swaps Send for Stop and <Kbd>Esc</Kbd> stops the reply.
+
+</Do>
+
+<Do>
+
+Keep `tec-composer-hint` (visible, or `visually-hidden`) so the textarea is described by its keys, and `tec-composer-status-message` for sent, stopped and failed.
+
+</Do>
+
+<Do>
+
+Pair it with a transcript that is a `role="log"` with `aria-busy="true"` while a reply streams, so the reply is announced once, complete.
+
+</Do>
+
+<Do>
+
+Use `submit-mode="mod-enter"` for long-form input, and set `history` to the prompts already sent (oldest first): <Kbd>↑</Kbd> on the first line steps back through them (`history-limit` caps how many), <Kbd>↓</Kbd> on the last line forward to the draft.
+
+</Do>
+
+<Do>
+
+Put extra context in `tec-composer-attachments`, prompts to start from in `tec-composer-suggestions`, and slash commands in `tec-composer-commands` inside `tec-composer-field`; its `tec-select` decides what a pick does and `countMessage` translates its announcement.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Disabling the textarea while a reply streams">
+
+<Wrong>
+
+```js
+textarea.disabled = status === "streaming"
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+composer.status = "streaming" // the textarea stays enabled; nothing sends until "ready"
+```
+
+</Correct>
+
+A disabled textarea drops focus to the page body mid-reply and stops the user drafting; `tec-composer` keeps it enabled and simply does not send until the chat is ready.
+
+</Dont>
+
+<Dont severity="HIGH" title="An Enter handler that ignores IME composition">
+
+<Wrong>
+
+```js
+textarea.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !event.shiftKey) send()
+})
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-composer>
+  <tec-composer-field>
+    <tec-composer-input></tec-composer-input>
+  </tec-composer-field>
+</tec-composer>
+```
+
+</Correct>
+
+The <Kbd>Enter</Kbd> that confirms a Japanese or Chinese conversion arrives as a keydown too, and in Safari after `compositionend`, so the half-typed message is sent; `tec-composer-input` ignores `isComposing` and key code 229.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="One send button whose label flips to Stop">
+
+<Wrong>
+
+```js
+button.setAttribute("aria-label", busy ? "Stop" : "Send")
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-composer-toolbar>
+  <tec-composer-submit></tec-composer-submit>
+</tec-composer-toolbar>
+```
+
+</Correct>
+
+Screen readers do not reliably announce a name that changes under focus, and a click landing as the state flips stops a reply the user meant to send after; `tec-composer-submit` renders two named buttons and moves focus between them.
+
+</Dont>

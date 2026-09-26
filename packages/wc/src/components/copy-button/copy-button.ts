@@ -115,6 +115,7 @@ export class TecCopyButton extends TectonElement {
   /** The current feedback state. */
   @state() status: CopyStatus = "idle"
 
+  /** Accessible name of the button; replaces the automatic "Copy" / "Copied" / "Copy failed". */
   @property({ attribute: "aria-label" }) private _hostLabel: string | null = null
 
   @query(".button") private _button!: TecButton

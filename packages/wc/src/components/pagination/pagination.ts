@@ -1,4 +1,4 @@
-import { html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult } from "lit"
+import { html, nothing, type PropertyValues, type TemplateResult } from "lit"
 import { property } from "lit/decorators.js"
 import { ifDefined } from "lit/directives/if-defined.js"
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide"
@@ -118,7 +118,7 @@ export class TecPaginationLink extends TecButton {
 
 /** Shared rendering of Previous / Next (chevron + label hidden on small screens). */
 abstract class PaginationStep extends TecPaginationLink {
-  static override styles: CSSResultGroup = [TecButton.styles, paginationStepStyles]
+  static override styles = [...TecButton.styles, paginationStepStyles]
 
   /** The visible label (hidden below 640px). */
   abstract text: string

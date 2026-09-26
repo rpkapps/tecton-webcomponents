@@ -1,0 +1,35 @@
+<div id="composer-context" class="flex w-full max-w-md flex-col gap-3">
+  <tec-composer>
+    <tec-composer-suggestions>
+      <tec-composer-suggestion value="Explain this"></tec-composer-suggestion>
+      <tec-composer-suggestion value="Who should know?"></tec-composer-suggestion>
+      <tec-composer-suggestion value="Draft the incident note" submit></tec-composer-suggestion>
+    </tec-composer-suggestions>
+    <tec-composer-field>
+      <tec-composer-attachments>
+        <tec-composer-attachment description="“Flaring at A-7 exceeded the permit for 14 minutes.”">
+          <svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 5H3" /><path d="M21 12H8" /><path d="M21 19H8" /><path d="M3 12v7" /></svg>
+          Selected text
+        </tec-composer-attachment>
+      </tec-composer-attachments>
+      <tec-composer-input placeholder="Ask about the selection…"></tec-composer-input>
+      <tec-composer-toolbar>
+        <tec-composer-submit></tec-composer-submit>
+      </tec-composer-toolbar>
+    </tec-composer-field>
+    <tec-composer-hint visually-hidden></tec-composer-hint>
+    <tec-composer-status-message></tec-composer-status-message>
+  </tec-composer>
+  <p class="text-sm text-muted-foreground" hidden></p>
+</div>
+
+<script type="module">
+  const root = document.getElementById("composer-context")
+  const output = root.querySelector("p")
+  root.querySelector("tec-composer").addEventListener("tec-submit", (event) => {
+    output.hidden = false
+    output.textContent = `Sent: ${event.detail.text}`
+    // The selection went with the message.
+    root.querySelectorAll("tec-composer-attachment").forEach((chip) => chip.remove())
+  })
+</script>

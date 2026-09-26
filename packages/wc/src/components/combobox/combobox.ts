@@ -503,9 +503,9 @@ export class TecCombobox extends FormControlMixin(TectonElement) {
     switch (event.key) {
       case "ArrowDown":
       case "ArrowUp": {
-        event.preventDefault()
         const down = event.key === "ArrowDown"
         if (event.altKey) {
+          event.preventDefault()
           if (down && !this.open) this.#requestOpen(true, "keyboard", "none", true)
           else if (!down && this.open) this.#close("keyboard")
           return
@@ -513,6 +513,7 @@ export class TecCombobox extends FormControlMixin(TectonElement) {
         if (!this.open) this.#requestOpen(true, "keyboard", down ? "first" : "last", true)
         else if (!this.#nav.activeItem) down ? this.#nav.first() : this.#nav.last()
         else this.#nav.handleKeyDown(event)
+        event.preventDefault()
         return
       }
       case "PageDown":

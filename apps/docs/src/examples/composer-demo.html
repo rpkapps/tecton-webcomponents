@@ -1,0 +1,65 @@
+<div id="composer-demo" class="flex h-96 w-full max-w-md flex-col gap-3">
+  <tec-message-scroller auto-scroll class="min-h-0 flex-1 rounded-md border border-border">
+    <tec-message-scroller-viewport class="px-3 py-2">
+      <tec-message-scroller-content class="gap-3"></tec-message-scroller-content>
+    </tec-message-scroller-viewport>
+  </tec-message-scroller>
+
+  <tec-composer>
+    <tec-composer-field>
+      <tec-composer-input placeholder="Ask about separator 2…"></tec-composer-input>
+      <tec-composer-toolbar>
+        <tec-composer-submit></tec-composer-submit>
+      </tec-composer-toolbar>
+    </tec-composer-field>
+    <tec-composer-hint></tec-composer-hint>
+    <tec-composer-status-message></tec-composer-status-message>
+  </tec-composer>
+</div>
+
+<script type="module">
+  const root = document.getElementById("composer-demo")
+  const composer = root.querySelector("tec-composer")
+  const transcript = root.querySelector("tec-message-scroller-content")
+  const reply =
+    "Separator 2 has been degraded since 06:40. Its level alarm cleared twice this shift; I would check the dump valve before the next test."
+  let timer = null
+
+  const turn = (role, text) => {
+    const item = document.createElement("tec-message-scroller-item")
+    item.setAttribute("message-id", `${role}-${Date.now()}`)
+    if (role === "user") item.setAttribute("scroll-anchor", "")
+    const align = role === "user" ? "end" : "start"
+    item.innerHTML = `<tec-message align="${align}"><tec-message-content><tec-bubble variant="${role === "user" ? "secondary" : "ghost"}" align="${align}"><tec-bubble-content></tec-bubble-content></tec-bubble></tec-message-content></tec-message>`
+    const content = item.querySelector("tec-bubble-content")
+    content.textContent = text
+    transcript.append(item)
+    return content
+  }
+
+  const stop = () => {
+    clearInterval(timer)
+    timer = null
+    composer.status = "ready"
+    transcript.removeAttribute("aria-busy")
+  }
+
+  composer.addEventListener("tec-submit", (event) => {
+    const { text } = event.detail
+    // What ArrowUp recalls: the prompts sent, oldest first.
+    composer.history = [...composer.history, text]
+    turn("user", text)
+    const answer = turn("assistant", "…")
+    composer.status = "submitted"
+    const words = reply.split(" ")
+    let index = 0
+    timer = setInterval(() => {
+      index += 1
+      composer.status = "streaming"
+      transcript.setAttribute("aria-busy", "true")
+      answer.textContent = words.slice(0, index).join(" ")
+      if (index >= words.length) stop()
+    }, 80)
+  })
+  composer.addEventListener("tec-stop", stop)
+</script>

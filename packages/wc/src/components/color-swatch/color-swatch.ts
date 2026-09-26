@@ -177,6 +177,7 @@ export class TecColorSwatch extends TectonElement {
   /** Accessible name of the hex field. */
   @property({ attribute: "hex-label" }) hexLabel = "Hex colour"
 
+  /** Accessible name of the swatch image, or of the editable swatch's button and picker. */
   @property({ attribute: "aria-label" }) private _hostLabel: string | null = null
 
   @state() private _resolved: { current: string | null; presets: ResolvedPreset[] } = { current: null, presets: [] }

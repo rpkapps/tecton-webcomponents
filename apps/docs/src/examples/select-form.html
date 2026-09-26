@@ -1,0 +1,23 @@
+<form id="select-form" class="flex w-full max-w-64 flex-col gap-4">
+  <tec-field>
+    <tec-field-label>Fluid</tec-field-label>
+    <tec-select name="fluid" required placeholder="Choose a fluid">
+      <tec-select-item value="oil">Oil</tec-select-item>
+      <tec-select-item value="gas">Gas</tec-select-item>
+      <tec-select-item value="water">Water</tec-select-item>
+    </tec-select>
+    <tec-field-error></tec-field-error>
+  </tec-field>
+  <div class="flex gap-2">
+    <tec-button type="submit">Submit</tec-button>
+    <tec-button type="reset" variant="outline">Reset</tec-button>
+  </div>
+  <output class="text-sm text-muted-foreground"></output>
+</form>
+<script type="module">
+  const form = document.getElementById("select-form")
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    form.querySelector("output").textContent = `fluid = ${new FormData(form).get("fluid")}`
+  })
+</script>

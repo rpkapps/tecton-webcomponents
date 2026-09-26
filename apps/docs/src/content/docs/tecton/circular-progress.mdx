@@ -1,0 +1,186 @@
+---
+title: Circular Progress
+description: Determinate progress ring with an optional centred value, or an indeterminate spinner.
+tags: ["tec-circular-progress"]
+---
+
+<ComponentPreview name="circular-progress-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/circular-progress"
+```
+
+```html
+<tec-circular-progress aria-label="Resampling" value="64" show-value></tec-circular-progress>
+```
+
+<Callout>
+  [Progress](/docs/components/progress) is a linear bar and [Spinner](/docs/components/spinner) is an icon. The Tecton circular progress with a value label is a separate element.
+</Callout>
+
+## Sizes
+
+Use the `size` attribute from 16 px (`xs`) to 96 px (`xl`). Stroke width and label size scale with it.
+
+<ComponentPreview name="circular-progress-sizes" />
+
+## Colors
+
+Use the `color` attribute for the ring colour. `default` paints the ring with the shared `progress` colour, the same fill as the linear [Progress](/docs/components/progress); the track is that colour at 38 %.
+
+<ComponentPreview name="circular-progress-colors" />
+
+## Value label
+
+Set `show-value` to render the formatted value in the centre, or put custom content in the element (text such as `7/12`, or an icon). `min` and `max` set the range; the value is formatted with `Intl.NumberFormat` in the element's language — a percentage by default, or the `formatOptions` property (`format-options` attribute as JSON). `value-label` replaces the text that is shown and announced.
+
+<ComponentPreview name="circular-progress-value" />
+
+## Indeterminate
+
+Set `indeterminate` for a spinning ring while the amount of work is unknown. With reduced motion requested the ring keeps turning slowly rather than stopping: a still arc would read as a stuck value.
+
+<ComponentPreview name="circular-progress-indeterminate" />
+
+## RTL
+
+The ring fills clockwise in both directions (like a clock), and numbers are formatted for the element's `lang`.
+
+<ComponentPreview name="circular-progress-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+The circular progress is not interactive and takes no focus.
+
+## Accessibility
+
+- The element is a `progressbar` (through `ElementInternals`) with `aria-valuenow`, `aria-valuemin`, `aria-valuemax` and an `aria-valuetext` equal to the text in the centre (or `value-label`). An indeterminate ring has no value.
+- There is no visible label: always give it an `aria-label` (or `aria-labelledby`).
+- The ring is drawn in system colours in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-circular-progress"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The progress belongs in a compact space: a card corner, a table cell, a tile, a KPI.
+- The number matters as much as the arc: `show-value`, or content such as `7/12`.
+- A ring, not an icon, is the right weight for an indeterminate wait inside a panel or a dialog.
+
+### Not for
+
+- a full-width determinate bar in the flow of a panel: use [Progress](/docs/components/progress)
+- a small busy glyph inside a button or an input: use [Spinner](/docs/components/spinner)
+- a segmented readout of risk, complexity or confidence: use [Meter](/docs/tecton/meter)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Always set `aria-label`; there is no visible label.
+
+</Do>
+
+<Do>
+
+Size with `size="xs" | "sm" | "md" | "lg" | "xl"` (16 / 24 / 40 / 64 / 96 px): one attribute drives the diameter, the stroke width and the centre type together.
+
+</Do>
+
+<Do>
+
+Colour with `color="default" | "foreground" | "success" | "warning" | "error" | "info"`; `default` is the shared `progress` fill.
+
+</Do>
+
+<Do>
+
+Give the scale with `min` and `max`, shape the text with `formatOptions` or `value-label`, or put custom content in the centre.
+
+</Do>
+
+<Do>
+
+Use `indeterminate`, not `value="0"`, while the total is unknown.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A ring with no accessible name">
+
+<Wrong>
+
+```html
+<tec-circular-progress value="64" show-value></tec-circular-progress>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-circular-progress aria-label="Resampling" value="64" show-value></tec-circular-progress>
+```
+
+</Correct>
+
+The ring is drawn in an `aria-hidden` SVG and a `progressbar` takes no name from its contents, so without `aria-label` it is announced as an unnamed progress bar.
+
+</Dont>
+
+<Dont severity="HIGH" title="Sizing or colouring the ring with classes">
+
+<Wrong>
+
+```html
+<tec-circular-progress aria-label="Export" value="40" class="size-20 text-blue-600"></tec-circular-progress>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-circular-progress aria-label="Export" value="40" size="lg"></tec-circular-progress>
+```
+
+</Correct>
+
+`size` sets the diameter, the stroke and the label size together; the stroke is drawn in the ring's own viewBox units and grows with the diameter, so resizing only the box gives a heavy stroke around a label still at the old size, and `blue-600` is not a Tecton step.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="show-value on an indeterminate ring">
+
+<Wrong>
+
+```html
+<tec-circular-progress size="sm" indeterminate show-value aria-label="Loading well logs"></tec-circular-progress>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<div class="flex items-center gap-3 text-sm text-muted-foreground">
+  <tec-circular-progress size="sm" indeterminate aria-label="Loading well logs"></tec-circular-progress>
+  Loading well logs…
+</div>
+```
+
+</Correct>
+
+The centre label only renders for a determinate ring, so `show-value` is ignored and the ring spins with an empty middle where the caption was expected.
+
+</Dont>

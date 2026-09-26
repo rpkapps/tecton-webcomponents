@@ -1,0 +1,271 @@
+---
+title: Data Table
+description: Powerful tables and datagrids built on TanStack Table.
+tags: ["tec-data-table"]
+---
+
+<ComponentPreview name="data-table-demo" align="start" class="items-start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/data-table"
+```
+
+```html
+<tec-data-table id="payments" label="Payments" sortable selectable filterable filter-column="email" column-menu pagination></tec-data-table>
+
+<script type="module">
+  import { html } from "@tecton/wc/data-table/data-table.js"
+
+  const table = document.getElementById("payments")
+  table.columns = [
+    { accessor: "status", header: "Status" },
+    { accessor: "email", header: "Email", rowHeader: true },
+    {
+      accessor: "amount",
+      header: "Amount",
+      align: "end",
+      cell: ({ value }) => html`<span class="font-medium">${value.toFixed(2)}</span>`,
+    },
+  ]
+  table.data = [
+    { id: "728ed52f", amount: 100, status: "pending", email: "m@example.com" },
+    { id: "489e1d42", amount: 125, status: "processing", email: "user@example.com" },
+  ]
+</script>
+```
+
+`<tec-data-table>` is a table engine: [TanStack Table](https://tanstack.com/table) (the framework-agnostic
+`@tanstack/table-core`) processes the rows, and the element renders them as a [Table](/docs/components/table)
+with the controls you switch on:
+
+| Attribute | Adds |
+| --- | --- |
+| `sortable` | A sort button in every accessor column's header (a column's `sortable` overrides it). |
+| `filterable` | A filter input above the table; `filter-column` limits it to one column. |
+| `column-menu` | A "Columns" menu to show and hide columns. |
+| `selectable` | A checkbox column, a select-all checkbox and a selection summary. |
+| `pagination` | Pages of `page-size` rows, previous / next buttons, and a rows-per-page select when `page-sizes` lists several sizes. |
+| `density="compact"`, `striped` | Shorter rows / alternating row backgrounds. |
+
+The table is rendered into the element's light DOM (a `tec-table` child the element manages), so cell
+renderers can return markup styled by your page — utility classes, badges, menus — exactly as in a static
+table. The toolbar, the column menu and the pagination controls live in the shadow root and are styled with
+`::part()`.
+
+## Columns
+
+`columns` is an array of plain objects:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `string` | Unique id. Defaults to `accessor` when it is a key; display columns (row actions) need one. |
+| `accessor` | `string` or `(row, index) => value` | The row key or a function giving the cell value, used for sorting and filtering. |
+| `header` | `string` or `(context) => content` | Header content. The context has `column`, `id` and `sorted`. |
+| `label` | `string` | Name in the column menu (and hidden header text of a column without a header). |
+| `cell` | `(context) => content` | Cell content. The context has `value`, `row` (the object), `rowId`, `index`, `column` and `selected`. Defaults to the value as text. |
+| `sortable`, `filterable`, `hideable` | `boolean` | Per-column switches (filterable and hideable default to `true` for accessor columns). |
+| `hidden` | `boolean` | Starts hidden. |
+| `align` | `"start"`, `"center"`, `"end"` | Aligns the header and the cells (`end` for numbers). |
+| `rowHeader` | `boolean` | The cells are row headers (`<th scope="row">`) — the identifying column. |
+| `class`, `headerClass`, `cellClass` | `string` | Classes on the header and body cells. |
+| `width` | `string` | CSS width of the column. |
+| `sortFn`, `sortDescFirst` | | `"auto"`, `"alphanumeric"`, `"text"`, `"basic"`, `"datetime"` or a comparator `(a, b) => number` of two rows. |
+
+A renderer returns anything Lit renders: a string, a number, a DOM node or an `html` template. `html` is
+re-exported by `@tecton/wc/data-table/data-table.js`, so you don't need `lit` as a dependency; event
+bindings (`@tec-select=${…}`) work inside those templates.
+
+Rows are identified by their `id` key (`row-id="key"` picks another key, `getRowId` a function). Replace
+`data` or `columns` with a new array to update the table.
+
+## Sorting
+
+Sortable headers render a button with an arrow; pressing it sorts ascending, descending, then back to the
+data order. The sorted header cell gets `aria-sort`. Strings sort case-insensitively, numbers numerically
+(numbers start descending). Set `sorting = [{ id: "amount", desc: true }]` to sort from code.
+
+## Filtering
+
+`filterable` shows a search input (`filter-placeholder`, `filter-label`). With `filter-column` it filters one
+column; without it, it searches every `filterable` column. The `filter` property holds the text; the input
+fires the native `input` event. The page resets to the first page when the filter changes.
+
+## Column visibility
+
+`column-menu` adds an outline "Columns" button (`columns-label`) opening a menu of checkbox items, one per
+hideable column. <Kbd>Space</Kbd> or <Kbd>Enter</Kbd> toggles a column and keeps the menu open. The
+`columnVisibility` property holds `{ [id]: false }` for hidden columns.
+
+## Density and alternating rows
+
+`density="compact"` and `striped` are passed to the table. Here a [Toggle Group](/docs/components/toggle-group)
+switches the density.
+
+<ComponentPreview name="data-table-density" align="start" />
+
+## Row selection
+
+`selectable` adds a checkbox in the header (select all rows that pass the filter) and in each row. A click
+anywhere on a row, outside its controls, also toggles it. The `selection` property holds the selected row
+ids and `selectedRows` the row objects; `tec-selection-change` fires before every change.
+
+<ComponentPreview name="data-table-selection" align="start" />
+
+## Pagination
+
+`pagination` shows `page-size` rows per page (default 10) with "Page x of y" (`page-label`) and previous /
+next buttons; `page-sizes="5 10 25"` adds a rows-per-page select. Put your own text at the start of the
+footer with `slot="summary"`.
+
+<ComponentPreview name="data-table-pagination" align="start" />
+
+## Small screens
+
+Hide low-priority columns below a breakpoint with a column `class` (`hidden md:table-cell` applies to the
+header and every cell) and let the primary cell carry that information as a subtitle, so nothing is lost on a
+phone.
+
+<ComponentPreview name="data-table-small-screen" align="start" />
+
+## Row actions
+
+A display column (an `id`, no `accessor`) renders anything per row — here a
+[Dropdown Menu](/docs/components/dropdown-menu) in the demo above. Give it `hideable: false` so it stays out
+of the column menu, and a `label` so its empty header is named for assistive technology.
+
+## Events and controlled state
+
+State is uncontrolled: the element updates itself. Every user change first fires a cancelable event —
+`tec-sort-change`, `tec-selection-change`, `tec-page-change`, `tec-column-visibility-change` — and
+`preventDefault()` keeps the current state. Setting `sorting`, `selection`, `columnVisibility`,
+`pageIndex`, `pageSize` or `filter` never fires an event. The TanStack instance is available as
+`tanstack` for anything else (faceted values, row models).
+
+```js
+table.addEventListener("tec-selection-change", (event) => {
+  if (event.detail.selection.length > 10) event.preventDefault() // at most ten rows
+})
+```
+
+## RTL
+
+Localise every label with its attribute (`filter-placeholder`, `columns-label`, `selection-label`,
+`page-label`, `previous-label`, `next-label`, `select-all-label`, `select-row-label`, `empty-label`); the
+numbers in them are formatted for the nearest `lang`.
+
+<ComponentPreview name="data-table-rtl" direction="rtl" align="start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves through the filter input, the Columns button, the sort buttons, the checkboxes and the controls in the cells, and the pagination controls."],
+    ["Enter / Space", "On a sort button: sorts by the column (ascending, descending, none). On a checkbox: toggles the row (or all rows)."],
+    ["ArrowDown / ArrowUp", "In the column menu: moves between columns (wraps)."],
+    ["Home / End", "In the column menu: first / last column."],
+    ["Space / Enter", "In the column menu: shows or hides the focused column; the menu stays open."],
+    ["Escape", "Closes the column menu and returns focus to the Columns button."],
+  ]}
+/>
+
+## Accessibility
+
+- The table is a native `<table>` named by `label`; sortable headers are buttons inside `<th>` with `aria-sort` on the sorted column (the WAI-ARIA APG sortable table pattern), and a `rowHeader` column renders `<th scope="row">` cells.
+- Selection uses real checkboxes named by `select-all-label` / `select-row-label`; the select-all checkbox is mixed while only some rows are selected. The row highlight is decoration only.
+- The column menu follows the APG menu button pattern: `aria-haspopup="menu"` and `aria-expanded` on the button, `menuitemcheckbox` items with `aria-checked`, roving focus, typeahead, focus return on close.
+- Previous / next page buttons are named by `previous-label` / `next-label`; the rows-per-page select by `rows-per-page-label`; the filter input by `filter-label` (or its placeholder).
+- Give a row-actions column a `label`, and name each action button after its row when possible.
+
+## API Reference
+
+<ApiReference tags={["tec-data-table"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The reader needs to sort, filter, page, select or hide columns of many records of the same shape.
+- The rows come from data (an API, a store) rather than hand-written markup.
+
+### Not for
+
+- a short static table, or rows you render yourself: use [Table](/docs/components/table)
+- a list of records with media, a title and actions: use [Item](/docs/components/item)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Mark the identifying column `rowHeader: true` and name the table with `label`.
+
+</Do>
+
+<Do>
+
+Right-align numeric columns with `align: "end"` and format numbers and dates with `Intl` in the cell renderer.
+
+</Do>
+
+<Do>
+
+Switch on only the controls the task needs: sorting and filtering for lookup, selection for bulk actions, pagination for long lists.
+
+</Do>
+
+<Do>
+
+Replace `data` with a new array when the rows change; keep `columns` stable between renders.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Mutating the data array in place">
+
+<Wrong>
+
+```js
+table.data.push(newWell)
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+table.data = [...table.data, newWell]
+```
+
+</Correct>
+
+The element watches the `data` property, not the array's contents: an in-place change is not rendered until something else updates the table.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Sorting with a click listener on the header">
+
+<Wrong>
+
+```js
+table.querySelector("th").addEventListener("click", () => sortRows())
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+table.columns = [{ accessor: "email", header: "Email", sortable: true }]
+```
+
+</Correct>
+
+A sortable column renders a real button and sets `aria-sort`; a click listener on a header cell is invisible to keyboard and screen reader users.
+
+</Dont>

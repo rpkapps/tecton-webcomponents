@@ -1,0 +1,243 @@
+---
+title: Context Menu
+description: Displays a menu of actions triggered by a right click.
+tags: ["tec-context-menu", "tec-context-menu-item", "tec-context-menu-group", "tec-context-menu-label", "tec-context-menu-separator", "tec-context-menu-shortcut", "tec-context-menu-sub", "tec-context-menu-sub-trigger", "tec-context-menu-sub-content"]
+---
+
+<ComponentPreview name="context-menu-demo" class="min-h-96" />
+
+## Usage
+
+```ts
+import "@tecton/wc/context-menu"
+```
+
+```html
+<tec-context-menu>
+  <div slot="trigger" tabindex="0">Right click here</div>
+  <tec-context-menu-item value="profile">Profile</tec-context-menu-item>
+  <tec-context-menu-item value="billing">Billing</tec-context-menu-item>
+  <tec-context-menu-item value="team">Team</tec-context-menu-item>
+</tec-context-menu>
+```
+
+The target area goes in `slot="trigger"`. A right click on it (or <kbd>Control</kbd>-click on macOS) opens the menu at the pointer; <Kbd>Shift+F10</Kbd> and the <Kbd>ContextMenu</Kbd> key open it at the focused element, so make the target focusable (`tabindex="0"`); a long press opens it on touch screens. By default the menu is as wide as the target (at least 9rem); set `--tec-context-menu-width` to size it.
+
+Items, groups, labels, separators, shortcuts and submenus work exactly as in [Dropdown Menu](/docs/components/dropdown-menu), under `tec-context-menu-*` names.
+
+## Composition
+
+```text
+tec-context-menu
+├── (target area, slot="trigger")
+├── tec-context-menu-group
+│   ├── tec-context-menu-label
+│   ├── tec-context-menu-item
+│   └── tec-context-menu-item
+├── tec-context-menu-separator
+├── tec-context-menu-group
+│   ├── tec-context-menu-item
+│   └── tec-context-menu-item
+└── tec-context-menu-sub
+    ├── tec-context-menu-sub-trigger
+    └── tec-context-menu-sub-content
+        └── tec-context-menu-group
+            ├── tec-context-menu-item
+            └── tec-context-menu-item
+```
+
+## Basic
+
+A simple context menu with a few actions.
+
+<ComponentPreview name="context-menu-basic" class="min-h-80" />
+
+## Submenu
+
+Use `tec-context-menu-sub` to nest secondary actions.
+
+<ComponentPreview name="context-menu-submenu" class="min-h-80" />
+
+## Shortcuts
+
+Add `tec-context-menu-shortcut` to show keyboard hints.
+
+<ComponentPreview name="context-menu-shortcuts" class="min-h-80" />
+
+## Groups
+
+Group related actions and separate them with dividers.
+
+<ComponentPreview name="context-menu-groups" class="min-h-[28rem] items-start" />
+
+## Icons
+
+Put icons in `slot="start"`.
+
+<ComponentPreview name="context-menu-icons" class="min-h-80" />
+
+## Checkboxes
+
+Use `selection-mode="multiple"` on a group for toggles; `checked` sets the initial state.
+
+<ComponentPreview name="context-menu-checkboxes" class="min-h-80" />
+
+## Radio
+
+Use `selection-mode="single"` for exclusive choices.
+
+<ComponentPreview name="context-menu-radio" class="min-h-80" />
+
+## Destructive
+
+Use `variant="destructive"` to style the item as destructive.
+
+<ComponentPreview name="context-menu-destructive" class="min-h-80" />
+
+## Placement
+
+`side` and `align` place the menu against the pointer (default `bottom` / `start`); it flips when there is no room.
+
+<ComponentPreview name="context-menu-sides" class="min-h-96" />
+
+## Events
+
+`tec-select` bubbles from the activated item (`detail: { value, checked? }`); `tec-open-change` fires with `reason: "context-menu"` when the menu opens. `showAt(x, y)` opens the menu at a viewport position from code, without an event. `disabled` lets the browser's own context menu through.
+
+<ComponentPreview name="context-menu-events" class="min-h-80" />
+
+## RTL
+
+<ComponentPreview name="context-menu-rtl" direction="rtl" class="min-h-96" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Shift+F10 / ContextMenu", "On the focused target: opens the menu at it and focuses the first item."],
+    ["ArrowDown / ArrowUp", "Moves to the next / previous item (wraps; disabled items are skipped). When the menu itself is focused, moves to the first / last item."],
+    ["Home / End", "Moves to the first / last item."],
+    ["Enter / Space", "Activates the item. On a submenu trigger: opens the submenu and focuses its first item."],
+    ["ArrowRight", "On a submenu trigger: opens the submenu. In a submenu: closes it (right-to-left)."],
+    ["ArrowLeft", "In a submenu: closes it and focuses its trigger. On a submenu trigger: opens it (right-to-left)."],
+    ["A–Z", "Typeahead: moves to the next item whose label starts with the typed characters."],
+    ["Escape", "Closes the innermost open menu; closing the menu returns focus to where it was."],
+    ["Tab / Shift+Tab", "Closes the menu and moves focus on."],
+  ]}
+/>
+
+## Accessibility
+
+- The surface is `role="menu"` with `menuitem`, `menuitemcheckbox` / `menuitemradio` (`aria-checked`), `group` and `separator` children, exactly as in the dropdown menu. It is named by the target area, or by `label`.
+- The target gets no `aria-haspopup`: a context menu is not opened by activating the target, and announcing a popup would mislead. Make sure every action is also reachable another way.
+- Make the target focusable (`tabindex="0"`) so keyboard users can open the menu with <Kbd>Shift+F10</Kbd> or the <Kbd>ContextMenu</Kbd> key.
+- Opening with the pointer focuses the menu; opening from the keyboard focuses the first item. Closing returns focus to the element that had it.
+
+## API Reference
+
+<ApiReference tags={["tec-context-menu", "tec-context-menu-item", "tec-context-menu-group", "tec-context-menu-label", "tec-context-menu-separator", "tec-context-menu-shortcut", "tec-context-menu-sub", "tec-context-menu-sub-trigger", "tec-context-menu-sub-content"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A row, card or canvas object has secondary actions that would clutter the surface.
+- Those actions are reachable another way too; the context menu is an accelerator, not the only route.
+- The gesture should be the platform's own: right click, Control-click, long press, Shift+F10.
+
+### Not for
+
+- a menu opened from a visible button: use [Dropdown Menu](/docs/components/dropdown-menu)
+- actions that must be discoverable on the surface: use [Button Group](/docs/components/button-group)
+- a bar of actions for the current selection: use [Action Bar](/docs/tecton/action-bar)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put one focusable target (`tabindex="0"`) in `slot="trigger"` and the items directly inside `tec-context-menu`.
+
+</Do>
+
+<Do>
+
+Give each item a `value` and handle `tec-select` once on the menu.
+
+</Do>
+
+<Do>
+
+Build toggles and exclusive choices with `selection-mode` on `tec-context-menu-group` and `checked` on the items.
+
+</Do>
+
+<Do>
+
+Mark the dangerous entry with `variant="destructive"`; nest with `tec-context-menu-sub`, `-sub-trigger` and `-sub-content`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A target keyboard users cannot reach">
+
+<Wrong>
+
+```html
+<tec-context-menu>
+  <div slot="trigger" class="rounded-xl border border-dashed p-6">Right click here</div>
+  <tec-context-menu-item value="reload">Reload</tec-context-menu-item>
+</tec-context-menu>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-context-menu>
+  <div slot="trigger" tabindex="0" class="rounded-xl border border-dashed p-6">Right click here</div>
+  <tec-context-menu-item value="reload">Reload</tec-context-menu-item>
+</tec-context-menu>
+```
+
+</Correct>
+
+<Kbd>Shift+F10</Kbd> and the <Kbd>ContextMenu</Kbd> key act on the focused element; a target that cannot take focus leaves the menu mouse-only.
+
+</Dont>
+
+<Dont severity="HIGH" title="The only way to an action">
+
+<Wrong>
+
+```html
+<tec-context-menu>
+  <div slot="trigger" tabindex="0">34/10-A-12</div>
+  <tec-context-menu-item value="delete" variant="destructive">Delete well</tec-context-menu-item>
+</tec-context-menu>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-context-menu>
+  <div slot="trigger" tabindex="0">
+    34/10-A-12
+    <tec-button variant="ghost" size="icon-sm" aria-label="Delete well">…</tec-button>
+  </div>
+  <tec-context-menu-item value="delete" variant="destructive">Delete well</tec-context-menu-item>
+</tec-context-menu>
+```
+
+</Correct>
+
+Nothing on screen says a context menu exists, and touch users need a long press they may never try; keep a visible route to every action and use the menu as a shortcut.
+
+</Dont>

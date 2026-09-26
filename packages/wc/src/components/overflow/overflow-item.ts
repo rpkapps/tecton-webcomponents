@@ -19,7 +19,7 @@ export type OverflowMenuForm = OverflowMenuEntry[] | ((item: TecOverflowItem) =>
 
 /** The row an item reports to (`tec-overflow` and the elements built on it). @internal */
 export interface OverflowRowLike extends HTMLElement {
-  itemChanged(item: TecOverflowItem): void
+  itemChanged(source?: Element): void
   focusMenuTrigger(): void
 }
 

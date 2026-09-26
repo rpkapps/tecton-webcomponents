@@ -1,0 +1,21 @@
+<div id="command-shortcuts" class="flex flex-col gap-4">
+  <tec-button variant="outline" class="w-fit">Open Menu</tec-button>
+  <tec-command-dialog>
+    <tec-command>
+      <tec-command-input placeholder="Type a command or search..."></tec-command-input>
+      <tec-command-list>
+        <tec-command-group heading="Settings">
+          <tec-command-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span><tec-command-shortcut>⌘P</tec-command-shortcut></tec-command-item>
+          <tec-command-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line><path d="M6 14h2"></path></svg><span>Billing</span><tec-command-shortcut>⌘B</tec-command-shortcut></tec-command-item>
+          <tec-command-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg><span>Settings</span><tec-command-shortcut>⌘S</tec-command-shortcut></tec-command-item>
+        </tec-command-group>
+        <tec-command-empty>No results found.</tec-command-empty>
+      </tec-command-list>
+    </tec-command>
+  </tec-command-dialog>
+</div>
+<script type="module">
+  const root = document.getElementById("command-shortcuts")
+  const dialog = root.querySelector("tec-command-dialog")
+  root.querySelector("tec-button").addEventListener("click", () => dialog.show())
+</script>

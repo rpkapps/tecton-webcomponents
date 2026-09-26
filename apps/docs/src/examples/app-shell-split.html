@@ -1,0 +1,28 @@
+<tec-app-shell class="h-72 w-full max-w-3xl overflow-hidden rounded-lg border border-border">
+  <tec-app-shell-header>
+    <tec-app-shell-brand>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Tecton
+    </tec-app-shell-brand>
+  </tec-app-shell-header>
+  <tec-app-shell-body>
+    <tec-app-shell-split>
+      <tec-app-shell-split-panel min-size="40%">
+        <tec-app-shell-main>
+          <div class="p-4 text-sm text-muted-foreground">Drag the divider to resize the aside.</div>
+        </tec-app-shell-main>
+      </tec-app-shell-split-panel>
+      <tec-app-shell-split-handle></tec-app-shell-split-handle>
+      <tec-app-shell-split-panel default-size="240px" min-size="160px" max-size="60%">
+        <tec-app-shell-aside aria-label="Properties">
+          <tec-panel class="h-full rounded-none border-0">
+            <tec-panel-header>
+              <tec-panel-title>Properties</tec-panel-title>
+            </tec-panel-header>
+            <tec-panel-content class="text-sm text-muted-foreground">Tool panel content</tec-panel-content>
+          </tec-panel>
+        </tec-app-shell-aside>
+      </tec-app-shell-split-panel>
+    </tec-app-shell-split>
+  </tec-app-shell-body>
+</tec-app-shell>

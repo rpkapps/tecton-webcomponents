@@ -44,14 +44,25 @@ const ICON_ONLY = 32
 
 const FOCUSABLE = "button, a[href], input:not([type=hidden]), select, textarea, [tabindex], [contenteditable]"
 
-function isFocusable(el: Element): boolean {
-  return el.matches(FOCUSABLE) || !!el.shadowRoot?.delegatesFocus
-}
-
-/** The element that takes focus for `el`: itself, or its first focusable light-DOM descendant. */
+/**
+ * The element that takes focus for `el`, looking through hosts that delegate focus (the native
+ * control inside a `tec-button`, say). Roving tabindex goes on that element, so a host never becomes a
+ * focusable generic node of its own.
+ */
 function focusTarget(el: Element): HTMLElement | null {
-  if (isFocusable(el)) return el as HTMLElement
-  for (const child of el.querySelectorAll<HTMLElement>("*")) if (isFocusable(child)) return child
+  const root = el.shadowRoot
+  if (root?.delegatesFocus) {
+    for (const child of root.querySelectorAll("*")) {
+      const inner = child.matches(FOCUSABLE) || child.shadowRoot?.delegatesFocus ? focusTarget(child) : null
+      if (inner) return inner
+    }
+    return null
+  }
+  if (el.matches(FOCUSABLE)) return el as HTMLElement
+  for (const child of el.children) {
+    const inner = focusTarget(child)
+    if (inner) return inner
+  }
   return null
 }
 
@@ -188,7 +199,8 @@ export class TecOverflow extends TectonElement implements OverflowRowLike {
 
   #subPopup = new PopupController(this, {
     popup: () => this.submenuEl,
-    trigger: () => this.#submenuTrigger,
+    // Positioned against its menu item; the item's aria-haspopup/aria-expanded are rendered, not managed.
+    anchor: () => this.#submenuTrigger,
     haspopup: false,
     expanded: false,
     placement: () => ({ side: "inline-end", align: "start", sideOffset: 2, alignOffset: -5 }),
@@ -249,7 +261,7 @@ export class TecOverflow extends TectonElement implements OverflowRowLike {
   }
 
   /** An item, group, divider or spacer changed or connected. @internal */
-  itemChanged(): void {
+  itemChanged(_source?: Element): void {
     if (!this.#ro) return
     this.#observeChildren()
     this.#schedule()
@@ -680,7 +692,7 @@ export class TecOverflow extends TectonElement implements OverflowRowLike {
       const target = focusTarget(entry.el)
       if (target) stops.push(target)
     }
-    const trigger = this.#trigger
+    const trigger = this.#trigger ? focusTarget(this.#trigger) : null
     if (this.#hidden.size && trigger) stops.push(trigger)
     return stops
   }
@@ -690,7 +702,8 @@ export class TecOverflow extends TectonElement implements OverflowRowLike {
   #menuModel(): OverflowMenuEntry[] {
     const out: OverflowMenuEntry[] = []
     let pendingSeparator = false
-    let current: { group: TecOverflowGroup; entry: Extract<OverflowMenuEntry, { type: "group" }> } | null = null
+    type Open = { group: TecOverflowGroup; entry: { entries: OverflowMenuEntry[] } }
+    let current = null as Open | null
     for (const entry of this.#entries()) {
       if (entry.kind === "divider") {
         pendingSeparator = out.length > 0
@@ -704,9 +717,10 @@ export class TecOverflow extends TectonElement implements OverflowRowLike {
       }
       const forms = entry.el.menuEntries()
       if (entry.group) {
-        if (current?.group === entry.group) current.entry.entries.push(...forms)
+        const open = current as Open | null
+        if (open && open.group === entry.group) open.entry.entries.push(...forms)
         else {
-          const group = { type: "group" as const, label: entry.group.label || undefined, entries: [...forms] }
+          const group: OverflowMenuEntry & { entries: OverflowMenuEntry[] } = { type: "group", label: entry.group.label || undefined, entries: [...forms] }
           out.push(group)
           current = { group: entry.group, entry: group }
         }

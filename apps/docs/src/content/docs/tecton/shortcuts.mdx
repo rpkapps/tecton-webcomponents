@@ -1,0 +1,305 @@
+---
+title: Shortcuts
+description: "A keyboard shortcut registry for the shell: the host listens once, applications register their shortcuts, and the shell lists them."
+tags: ["tec-shortcuts", "tec-shortcut", "tec-shortcut-keys", "tec-shortcut-list"]
+---
+
+<ComponentPreview name="shortcuts-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/shortcuts"
+```
+
+The host wraps the shell in one `tec-shortcuts`. Anything inside registers shortcuts, declaratively
+with `tec-shortcut`, which fires `tec-shortcut` when its keys are pressed:
+
+```html
+<tec-shortcuts>
+  <app-shell>…</app-shell>
+
+  <!-- in the wells page -->
+  <tec-shortcut name="wells.new" keys="n" label="Create well" group="Wells"></tec-shortcut>
+</tec-shortcuts>
+```
+
+```js
+document.addEventListener("tec-shortcut", (event) => {
+  if (event.detail.id === "wells.new") openNewWellDialog()
+})
+```
+
+A `tec-shortcut` is registered while it is in the page: render it with the view it belongs to and
+its shortcut disappears with the view. `disabled` skips it (the key goes through to the browser) and
+`unlisted` keeps it out of lists.
+
+## Registering from a micro-frontend
+
+An application that does not render into the shell's markup registers against the registry object
+instead. The host creates it with `createShortcutRegistry()`, gives it to `tec-shortcuts` and hands
+it to the mounted application (through its mount call, a module-federation shared module or
+`window`). `register` returns the function that removes the shortcuts again; call it when the
+application unmounts. From any element inside the shell, `getShortcutRegistry(element)` finds the
+registry too.
+
+```js
+import { createShortcutRegistry } from "@tecton/wc/shortcuts"
+
+// host
+const registry = createShortcutRegistry()
+document.querySelector("tec-shortcuts").registry = registry
+mountApplication(container, { shortcuts: registry })
+
+// mounted application
+const unregister = props.shortcuts.register([
+  { id: "wells.new", keys: "n", label: "Create well", group: "Wells", onAction: openNewWell },
+  { id: "wells.list", keys: "g w", label: "Go to wells", group: "Wells", onAction: goToWells },
+])
+
+// on unmount
+unregister()
+```
+
+<ComponentPreview name="shortcuts-registry" />
+
+Registering an id again replaces the earlier shortcut, and when two shortcuts share the same keys
+the most recently registered one wins, so an application can override a host default while it is
+mounted.
+
+## Registry contract
+
+`createShortcutRegistry()` returns a plain object with five methods and no DOM dependency, so a
+registry can be created, filled and dispatched from anywhere:
+
+```ts
+type ShortcutRegistry = {
+  register: (shortcut: Shortcut | Shortcut[]) => () => void
+  unregister: (id: string) => void
+  getAll: () => Shortcut[]
+  subscribe: (listener: () => void) => () => void
+  handleKeyDown: (event: KeyboardEvent) => boolean
+}
+
+type Shortcut = {
+  id: string                  // stable; registering the same id again replaces
+  keys: string                // "mod+k", "?", "g w"
+  label: string               // shown in lists
+  group?: string              // heading in lists (default "General")
+  onAction: (event: KeyboardEvent) => void
+  allowInInput?: boolean      // default: only chords with Ctrl, ⌘ or Alt
+  isEnabled?: () => boolean   // false: skipped, the key goes through
+  hidden?: boolean            // keep out of lists
+  allowRepeat?: boolean       // fire again while held
+}
+```
+
+This shape is **versioned public API**: it only changes in a major version. That is what makes the
+registry safe to pass across a micro-frontend boundary — the host can hand its registry to an
+application built against a different `@tecton/wc` version, and both sides keep working. The
+elements are sugar over the same object.
+
+## Key syntax
+
+| Syntax | Meaning |
+| --- | --- |
+| `mod+k` | ⌘K on macOS, Ctrl+K elsewhere. |
+| `ctrl+shift+p`, `alt+enter` | Explicit modifiers: `ctrl`, `alt`, `shift`, `meta`. |
+| `?`, `/`, `.` | A symbol; matches with or without Shift, whatever the layout. |
+| `g w` | A sequence: `g` then `w` within a second, shown as `G then W` (read as "G, then W"). |
+| `escape`, `enter`, `arrowup` | Named keys (`esc`, `up`, `space` are aliases). |
+
+Letters and digits match the key pressed when the character typed hides it: `alt+k` still fires
+where Option turns K into "˚" on a Mac, and `g w` works on a non-Latin layout. Other Latin layouts
+match by the character, so a letter stays where the layout puts it.
+
+Shortcuts without Ctrl, ⌘ or Alt do not fire while an input, textarea or editable element has focus
+(inside a shadow root too, such as a `tec-input`), so `n` never steals a letter from a form. Set
+`allow-in-input` (`allowInInput`) to change that for one shortcut.
+
+A held key fires its shortcut once: the key's auto-repeats are swallowed (so the browser's own
+action does not run either) but do not fire again, so a toggle does not flicker. Set
+`allow-repeat` (`allowRepeat`) for a shortcut that should keep firing while the key is held, such as
+a nudge or a zoom step.
+
+## Showing shortcuts
+
+`tec-shortcut-keys` renders a shortcut as key caps: the keys of a chord joined with "+" (`Ctrl + K`,
+⌘ on Apple keyboards), the steps of a sequence with "then" (`G then W`). Screen readers get the same
+as text and the caps are hidden from them, so no key is read out twice. `platform` forces the Apple
+or the other layout (`auto` detects it).
+
+<ComponentPreview name="shortcuts-keys" />
+
+`tec-shortcut-list` lists the registered shortcuts under their groups and updates as applications
+register and unregister them — the body of a shell's "Keyboard shortcuts" dialog. For a list of your
+own, read `registry.getAll()` and re-render on `registry.subscribe()`. `formatShortcut(keys)` returns
+the caps per chord (`[["⌘", "K"]]`), `describeShortcut(keys)` the spoken text and `isMacPlatform()`
+whether the reader's keyboard is an Apple one, for a hand-written hint that shows ⌘ instead of Ctrl.
+
+## Scoping
+
+By default `tec-shortcuts` listens on `document`. `scoped` makes it listen on itself, so its
+shortcuts fire only while focus is inside it — a canvas or an editor region with keys of its own.
+The demo above is scoped that way; `target` listens on any other element.
+
+A nested `tec-shortcuts` normally reuses its parent's registry, so a component can wrap itself in
+one and still share the host's shortcuts. A nested one that is `scoped` (or has a `target`) and no
+`registry` gets a registry of its own, listening there only: the parent's registry already listens
+on its own target, and one registry listening in two places would see every key twice. The scoped
+shortcuts are then listed by a `tec-shortcut-list` inside it, not with the host's.
+
+## RTL
+
+The caps and lists use logical properties. Translate the list's `default-group` and `then-label`
+(and the `then-label` of `tec-shortcut-keys`).
+
+<ComponentPreview name="shortcuts-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+The keys are the ones you register. The registry itself:
+
+<KeyboardTable
+  rows={[
+    ["Ctrl+K / Meta+K", "A `mod` chord: ⌘ on Apple keyboards, Ctrl elsewhere. Chords with Ctrl, ⌘ or Alt fire in text fields too."],
+    ["G / W", "A sequence (`g w`): the second key within a second of the first. The first key is swallowed while a sequence can still complete."],
+    ["?", "A symbol matches with or without Shift."],
+  ]}
+/>
+
+## Accessibility
+
+- Unmodified single-key shortcuts never fire while typing in a text field, and can be disabled per
+  shortcut (WCAG 2.1.4 Character Key Shortcuts): offer a setting that sets `disabled` on them, or
+  give them a modifier.
+- `tec-shortcut-keys` hides the caps from assistive technology and reads the shortcut as text
+  ("Ctrl + K", "G, then W").
+- `tec-shortcut-list` renders a list per group, labelled by the group's heading.
+- List every shortcut where the user can find it (a "Keyboard shortcuts" dialog opened with `?`),
+  and show a command's shortcut next to it in menus and the command palette.
+
+## API Reference
+
+<ApiReference tags={["tec-shortcuts", "tec-shortcut", "tec-shortcut-keys", "tec-shortcut-list"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The host listens for keys once and every mounted application registers against the same registry.
+- A shortcut must be listed as well as bound: the help dialog and the command palette read the registry.
+- A region owns keys only while focus is inside it — `scoped` limits the listener to the element, with a registry of its own, so its shortcuts are not listed with the host's.
+
+### Not for
+
+- one key cap rendered inside a label or a menu row: use [Kbd](/docs/components/kbd)
+- the header button whose tooltip shows a shortcut: use [App Shell](/docs/tecton/app-shell)
+- a searchable palette of the commands themselves: use [Command](/docs/components/command)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Wrap the shell in one `tec-shortcuts`; a nested one with no `registry` of its own reuses the parent's.
+
+</Do>
+
+<Do>
+
+Register with a `tec-shortcut` rendered with the view it belongs to, so the shortcut goes when the view goes; handle it with the `tec-shortcut` event.
+
+</Do>
+
+<Do>
+
+Create the registry with `createShortcutRegistry()` in the host and hand the object to each mounted application; that shape is versioned public API, so the two sides may be on different package versions.
+
+</Do>
+
+<Do>
+
+Write keys in the registry syntax: `mod+k` for ⌘ / Ctrl, `?` for a symbol, `g w` for a sequence; a held key fires once, so set `allow-repeat` only where holding it should repeat (zoom, nudge).
+
+</Do>
+
+<Do>
+
+Give every shortcut a stable `name` (`id`), a `label` and a `group`, and render its caps with `tec-shortcut-keys`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A shortcut registered with a window listener">
+
+<Wrong>
+
+```js
+window.addEventListener("keydown", (event) => {
+  if (event.key === "n") openNewWellDialog()
+})
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-shortcut name="wells.new" keys="n" label="Create well" group="Wells"></tec-shortcut>
+```
+
+</Correct>
+
+The registry suppresses unmodified keys while an input, textarea or editable element has focus, so a hand-rolled listener opens the dialog on the first `n` the user types into a form — and the shortcut never reaches the registry, so neither the help dialog nor the command palette lists it.
+
+</Dont>
+
+<Dont severity="HIGH" title="A mounted application creating its own registry">
+
+<Wrong>
+
+```js
+const shortcuts = createShortcutRegistry()
+document.addEventListener("keydown", (event) => shortcuts.handleKeyDown(event))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+const unregister = props.shortcuts.register(appShortcuts)
+```
+
+</Correct>
+
+A registry of its own adds a second `document` listener with a list the host cannot see, so the application's keys are missing from the shell's shortcut dialog and both registries answer the same press.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Key caps typed out by hand">
+
+<Wrong>
+
+```html
+<span>Go to wells <tec-kbd>G</tec-kbd> <tec-kbd>W</tec-kbd></span>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<span>Go to wells <tec-shortcut-keys keys="g w"></tec-shortcut-keys></span>
+```
+
+</Correct>
+
+`tec-shortcut-keys` resolves `mod` to ⌘ or Ctrl for the reader's platform, splits a chord or a sequence into caps (a chord's keys joined by "+", a sequence's steps by "then") and reads the whole to screen readers as text ("G, then W"); hand-typed caps freeze the author's platform and are read out letter by letter.
+
+</Dont>

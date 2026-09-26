@@ -1,0 +1,271 @@
+---
+title: Table
+description: A responsive table component.
+tags: ["tec-table"]
+---
+
+<ComponentPreview name="table-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/table"
+```
+
+```html
+<tec-table>
+  <table>
+    <caption>A list of your recent invoices.</caption>
+    <thead>
+      <tr>
+        <th scope="col" class="w-[100px]">Invoice</th>
+        <th scope="col">Status</th>
+        <th scope="col">Method</th>
+        <th scope="col" class="text-end">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">INV001</th>
+        <td>Paid</td>
+        <td>Credit Card</td>
+        <td class="text-end">$250.00</td>
+      </tr>
+    </tbody>
+  </table>
+</tec-table>
+```
+
+`<tec-table>` wraps a plain HTML `<table>`. The table stays in your markup — in the light DOM — so it keeps
+everything a native table gives: the `table`, `columnheader`, `rowheader` and `cell` roles, row and column
+counts, `colspan`, the `<caption>` as the table's name, and the table navigation commands of screen readers.
+The element adds the Tecton look and a container that scrolls horizontally when the table is wider than its
+column.
+
+## Composition
+
+The parts are the native table elements:
+
+```text
+tec-table
+└── table
+    ├── caption            (below the table; names it)
+    ├── thead
+    │   └── tr
+    │       └── th scope="col"   (header band)
+    ├── tbody
+    │   └── tr             (data-state="selected" highlights it)
+    │       ├── th scope="row"   (row header, medium weight)
+    │       └── td
+    └── tfoot
+        └── tr
+            └── td
+```
+
+<Callout title="Why a native table">
+
+A table cannot be split across shadow roots: rows, header cells and cells must be in one tree for the browser
+to build the table. Custom elements with ARIA table roles would lose `colspan`, column header association in
+some screen readers and native layout, so `tec-table` styles the real elements instead. Its part styles are
+adopted once into the document inside `@layer components` (box properties such as padding use zero
+specificity), so a utility class on a cell — `text-end`, `w-[100px]`, `hidden md:table-cell` — always wins.
+
+</Callout>
+
+## Footer
+
+Use a `<tfoot>` for totals. It renders as a muted band.
+
+<ComponentPreview name="table-footer" />
+
+## Actions
+
+A table showing actions for each row using a [Dropdown Menu](/docs/components/dropdown-menu). Name each
+trigger after its row.
+
+<ComponentPreview name="table-actions" />
+
+## Density and states
+
+`density="compact"` shortens the rows and uses the extra-small text size; `striped` alternates the body
+row background (`--tec-surface-alt`). A row with `data-state="selected"` uses the Tecton active row colour
+(`--tec-table-active`), and a cell with `data-align="end"` or `"center"` aligns its content.
+
+<ComponentPreview name="table-density" />
+
+## Empty state
+
+Mark the body `data-empty` and render one cell spanning every column: it becomes a tall, centred, muted
+message.
+
+<ComponentPreview name="table-empty" />
+
+## Data Table
+
+Sorting, filtering, row selection, column visibility and pagination are built into
+[Data Table](/docs/components/data-table), which renders a `tec-table` from column definitions with
+[TanStack Table](https://tanstack.com/table).
+
+## RTL
+
+The table uses logical alignment (`text-align: start`), so header and cell text follow `dir="rtl"`. Use
+`text-end` rather than `text-right` for numeric columns so they flip too.
+
+<ComponentPreview name="table-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A static table has no keyboard interaction of its own: Tab moves through the interactive elements inside
+the cells (buttons, links, checkboxes) in document order, and screen readers offer their table navigation
+commands (for example <Kbd>Ctrl</Kbd>+<Kbd>Alt</Kbd>+arrow keys in NVDA and JAWS, <Kbd>Ctrl</Kbd>+<Kbd>Option</Kbd>+arrow keys in VoiceOver).
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus to the next / previous interactive element in the cells."],
+  ]}
+/>
+
+## Accessibility
+
+- Name the table: a `<caption>` (shown below the table), or `aria-label` / `aria-labelledby` on the `<table>`.
+- Use `<th scope="col">` for column headers and `<th scope="row">` for the cell that identifies the row (the
+  invoice number, the well name); screen readers announce them when moving between cells.
+- Row selection is conveyed by the controls in the row (a checkbox), not by the highlight: `data-state="selected"` is styling only. In a
+  table with `role="grid"` you can use `aria-selected="true"` instead, which is styled the same way.
+- Row actions: one control per row named after the row (`aria-label="Open menu for Wireless Mouse"`).
+- In forced-colours mode row dividers use `CanvasText` and selected rows `Highlight`.
+
+## API Reference
+
+<ApiReference tags={["tec-table"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Records of the same shape have to line up in columns: invoices, wells, run results.
+- A footer totals the columns, or a caption names the table.
+- The content is static or you render the rows yourself.
+
+### Not for
+
+- sorting, filtering, paging, row selection or column visibility over the rows: use [Data Table](/docs/components/data-table)
+- a list of rows with media, a title and actions rather than columns: use [Item](/docs/components/item)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Wrap one native `<table>` with `thead`, `tbody` and optionally `tfoot`; put `th scope="col"` in the header row and `th scope="row"` on the identifying cell of each row.
+
+</Do>
+
+<Do>
+
+Name the table with a `<caption>` or `aria-label` on the `<table>`.
+
+</Do>
+
+<Do>
+
+Render the empty case as `<tbody data-empty>` with one cell spanning all columns, and keep classes on cells to alignment and width (`text-end`, `w-24`).
+
+</Do>
+
+<Do>
+
+Give text-heavy columns (well name, remarks) a minimum width on the header cell; they never collapse when the panel narrows.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A table built from divs and grid classes">
+
+<Wrong>
+
+```html
+<div class="grid grid-cols-2 text-sm">
+  <div class="bg-zinc-100 px-4 py-3 font-medium">Invoice</div>
+  <div class="bg-zinc-100 px-4 py-3 font-medium">Status</div>
+  <div class="px-4 py-3">INV001</div>
+  <div class="px-4 py-3">Paid</div>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-table>
+  <table aria-label="Invoices">
+    <thead>
+      <tr><th scope="col">Invoice</th><th scope="col">Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><th scope="row">INV001</th><td>Paid</td></tr>
+    </tbody>
+  </table>
+</tec-table>
+```
+
+</Correct>
+
+The grid has no `table`, `columnheader` or `rowheader` semantics, so assistive technology reads a stream of unassociated cells with no row or column count; and `bg-zinc-100` is a stock Tailwind colour the Tecton palette emits no CSS for — the header band is built in.
+
+</Dont>
+
+<Dont severity="CRITICAL" title="Activating a row with a click handler only">
+
+<Wrong>
+
+```html
+<tr onclick="openWell('a12')">
+  <th scope="row">34/10-A-12</th>
+  <td>Gullfaks</td>
+</tr>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tr>
+  <th scope="row"><a href="/wells/a12">34/10-A-12</a></th>
+  <td>Gullfaks</td>
+</tr>
+```
+
+</Correct>
+
+A row is not focusable and does not react to <Kbd>Enter</Kbd>; put a link or button in the identifying cell so keyboard and screen reader users can open the record.
+
+</Dont>
+
+<Dont severity="HIGH" title="Sorting from a click handler on the header cell">
+
+<Wrong>
+
+```html
+<th scope="col" onclick="sortBy('email')">Email</th>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-data-table label="Payments" sortable></tec-data-table>
+```
+
+</Correct>
+
+A clickable `th` answers a mouse and nothing else and announces no sort state. Data Table renders a button in the header and sets `aria-sort` on the sorted column.
+
+</Dont>

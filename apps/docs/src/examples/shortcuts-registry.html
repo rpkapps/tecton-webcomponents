@@ -1,0 +1,49 @@
+<tec-shortcuts scoped id="shortcuts-registry" class="w-full max-w-md">
+  <div
+    role="region"
+    aria-label="Wells application"
+    tabindex="0"
+    class="flex flex-col gap-3 rounded-lg border border-border p-4 text-sm outline-none focus-within:ring-2 focus-within:ring-ring/50"
+  >
+    <div class="flex items-center justify-between gap-2">
+      <span class="font-medium">Wells application</span>
+      <tec-button size="sm" variant="outline">Mount</tec-button>
+    </div>
+    <tec-shortcut-list></tec-shortcut-list>
+    <p aria-live="polite" class="text-muted-foreground">Mount the application, then press its keys.</p>
+  </div>
+</tec-shortcuts>
+
+<script type="module">
+  import { createShortcutRegistry } from "@tecton/wc/shortcuts"
+
+  // The host creates the registry, listens with it and hands it to the applications it mounts.
+  const root = document.getElementById("shortcuts-registry")
+  const registry = createShortcutRegistry()
+  root.registry = registry
+
+  const status = root.querySelector("[aria-live]")
+  const button = root.querySelector("tec-button")
+  let unregister = null
+
+  // The mounted application only knows the registry object.
+  function mountApplication(shortcuts) {
+    return shortcuts.register([
+      { id: "wells.new", keys: "n", label: "Create well", group: "Wells", onAction: () => (status.textContent = "Create well") },
+      { id: "wells.list", keys: "g w", label: "Go to wells", group: "Navigate", onAction: () => (status.textContent = "Go to wells") },
+    ])
+  }
+
+  button.addEventListener("click", () => {
+    if (unregister) {
+      unregister()
+      unregister = null
+      button.textContent = "Mount"
+      status.textContent = "Unmounted: its shortcuts are gone."
+    } else {
+      unregister = mountApplication(registry)
+      button.textContent = "Unmount"
+      status.textContent = "Mounted: press N, or G then W."
+    }
+  })
+</script>

@@ -1,0 +1,58 @@
+<div id="data-table-rtl" class="w-full" lang="ar">
+  <tec-data-table
+    label="المدفوعات"
+    selectable
+    filterable
+    filter-column="email"
+    filter-placeholder="تصفية البريد الإلكتروني..."
+    column-menu
+    columns-label="الأعمدة"
+    pagination
+    empty-label="لا توجد نتائج."
+    selection-label="{selected} من {total} صف(وف) محدد."
+    page-label="الصفحة {page} من {count}"
+    previous-label="الصفحة السابقة"
+    next-label="الصفحة التالية"
+    select-all-label="تحديد الكل"
+    select-row-label="تحديد الصف"
+  ></tec-data-table>
+</div>
+<script type="module">
+  import { html } from "@tecton/wc/data-table/data-table.js"
+
+  const data = [
+    { id: "m5gr84i9", amount: 316, status: "success", email: "ken99@example.com" },
+    { id: "3u1reuv4", amount: 242, status: "success", email: "Abe45@example.com" },
+    { id: "derv1ws0", amount: 837, status: "processing", email: "Monserrat44@example.com" },
+    { id: "5kma53ae", amount: 874, status: "success", email: "Silas22@example.com" },
+    { id: "bhqecj4p", amount: 721, status: "failed", email: "carmella@example.com" },
+  ]
+
+  const statusLabel = { success: "ناجح", processing: "قيد المعالجة", failed: "فشل", pending: "قيد الانتظار" }
+  const currency = new Intl.NumberFormat("ar-SA", { style: "currency", currency: "USD" })
+  const table = document.querySelector("#data-table-rtl tec-data-table")
+
+  table.columns = [
+    { accessor: "status", header: "الحالة", cell: ({ value }) => statusLabel[value] },
+    { accessor: "email", header: "البريد الإلكتروني", sortable: true, rowHeader: true, cell: ({ value }) => html`<span class="font-normal lowercase">${value}</span>` },
+    { accessor: "amount", header: "المبلغ", cell: ({ value }) => html`<span class="font-medium">${currency.format(value)}</span>` },
+    {
+      id: "actions",
+      label: "الإجراءات",
+      hideable: false,
+      cell: ({ row }) => html`<tec-dropdown-menu side="bottom" align="end">
+        <tec-button slot="trigger" variant="ghost" size="icon-xs" aria-label="فتح القائمة">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg>
+        </tec-button>
+        <tec-dropdown-menu-group>
+          <tec-dropdown-menu-label>الإجراءات</tec-dropdown-menu-label>
+          <tec-dropdown-menu-item @tec-select=${() => navigator.clipboard.writeText(row.id)}>نسخ معرف الدفع</tec-dropdown-menu-item>
+        </tec-dropdown-menu-group>
+        <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
+        <tec-dropdown-menu-item>عرض العميل</tec-dropdown-menu-item>
+        <tec-dropdown-menu-item>عرض تفاصيل الدفع</tec-dropdown-menu-item>
+      </tec-dropdown-menu>`,
+    },
+  ]
+  table.data = data
+</script>

@@ -1,0 +1,209 @@
+---
+title: Color Swatch
+description: A colour preview with optional label and value, for colour tags, legends and theme documentation — optionally editable.
+tags: ["tec-color-swatch"]
+---
+
+<ComponentPreview name="color-swatch-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/color-swatch"
+```
+
+```html
+<tec-color-swatch color="#f59e0b" label="Sandstone" value="#f59e0b"></tec-color-swatch>
+```
+
+## Sizes
+
+Use the `size` attribute, from 12 px (`xs`) to 48 px (`xl`).
+
+<ComponentPreview name="color-swatch-sizes" />
+
+## Shapes
+
+Use the `shape` attribute for square, rounded or circular swatches.
+
+<ComponentPreview name="color-swatch-shapes" />
+
+## Labels
+
+Set `label` and/or `value` to render text next to the swatch; the value is set in the mono font.
+
+<ComponentPreview name="color-swatch-labels" />
+
+## Any CSS colour
+
+`color` takes any CSS colour: a hex, `oklch()`, a named colour or a theme token such as `var(--tec-primary)`. Tokens resolve where the swatch is rendered, so it follows the light and dark theme.
+
+<ComponentPreview name="color-swatch-tokens" />
+
+## Editable
+
+With `editable` the swatch becomes a button that opens a picker: a row of preset colours (the Tecton accent fills by default), the platform colour picker and a hex field. Picking a colour sets `color` to a `#rrggbb` string and fires `input` (while picking) and `change` (on commit). The `value` text is yours to keep in sync.
+
+<ComponentPreview name="color-swatch-editable" />
+
+## Presets
+
+Replace the presets with the `presets` property: an array of CSS colours or `{ color, label }` objects (the label names the option for assistive technology). Values that do not resolve to a colour are left out.
+
+<ComponentPreview name="color-swatch-presets" />
+
+```js
+swatch.presets = [
+  { color: "#d97706", label: "Sandstone" },
+  { color: "#64748b", label: "Shale" },
+]
+```
+
+## RTL
+
+The swatch sits at the inline start and the text follows it. Translate the picker with `edit-label`, `presets-label`, `custom-label`, `pick-label` and `hex-label`.
+
+<ComponentPreview name="color-swatch-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+With `editable`:
+
+<KeyboardTable
+  rows={[
+    ["Enter / Space", "On the swatch: opens the picker and moves focus to the selected preset (or the first)."],
+    ["ArrowRight / ArrowLeft / ArrowDown / ArrowUp", "Moves between presets (wrapping; horizontal arrows mirrored in RTL)."],
+    ["Home / End", "Moves to the first / last preset."],
+    ["Enter / Space", "On a preset: picks it."],
+    ["Tab / Shift+Tab", "Moves between the presets, the colour picker and the hex field; focus stays inside the picker."],
+    ["Enter", "In the hex field: commits the typed colour (an invalid one reverts)."],
+    ["ArrowUp / ArrowDown", "In the hex field: increments / decrements the colour by one."],
+    ["Escape", "Closes the picker and returns focus to the swatch."],
+  ]}
+/>
+
+## Accessibility
+
+- A plain swatch is a `role="img"` named by `aria-label`, else by `label` or the colour value. With both `label` and `value` it is decorative and the text carries the meaning.
+- An editable swatch is a button named "Edit colour" (or its `aria-label`) with `aria-haspopup="dialog"` and `aria-expanded`. The picker is a non-modal dialog; the presets are a `listbox` named "Presets" whose options are named by their label (the accent name for Tecton tokens).
+- The swatch border keeps white, pale and transparent colours visible; in forced-colours mode the colour is kept and the border uses the system text colour.
+
+## API Reference
+
+<ApiReference tags={["tec-color-swatch"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The colour *is* the data: a horizon colour, a facies legend, a theme token, a series fill.
+- The colour needs its name or its value beside it: `label` and `value`.
+- The user has to change it: `editable` turns the swatch into a button with a preset and hex picker.
+
+### Not for
+
+- a label that names a status or a category in words: use [Badge](/docs/components/badge)
+- the colour key for the series of a chart: use the [Chart](/docs/components/chart) legend
+- a count or a dot pinned to the corner of an icon or an avatar: use [Count Badge](/docs/tecton/count-badge)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Pass any CSS colour to `color` — a hex, an `oklch()` value or `var(--tecton-color-accent-lime-fill)`.
+
+</Do>
+
+<Do>
+
+Size with `size="xs" | "sm" | "md" | "lg" | "xl"` (12 to 48 px) and pick the corner with `shape="square" | "rounded" | "circle"`.
+
+</Do>
+
+<Do>
+
+Give it an `aria-label` whenever there is no `label`; the swatch has no text of its own.
+
+</Do>
+
+<Do>
+
+Make it editable with `editable`, listen to `change` (read `color`), and replace the Tecton accent presets with `presets` when the palette is domain-specific.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A coloured div in place of the swatch">
+
+<Wrong>
+
+```html
+<div class="size-6 rounded-md" style="background: #f59e0b"></div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-color-swatch color="#f59e0b" aria-label="Top Balder colour"></tec-color-swatch>
+```
+
+</Correct>
+
+The swatch is a named image with a subtle border and shadow, which keeps a white, pale or transparent colour visible against the surface; a bare div is silent to assistive technology.
+
+</Dont>
+
+<Dont severity="HIGH" title="Opening your own picker from a click handler">
+
+<Wrong>
+
+```html
+<tec-color-swatch color="#cb8553" onclick="openPicker()"></tec-color-swatch>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-color-swatch color="#cb8553" editable aria-label="Edit series colour"></tec-color-swatch>
+```
+
+</Correct>
+
+A plain swatch is an image, not a control: it is not focusable and does not react to the keyboard. `editable` renders the button with the preset row, the colour picker and the hex field.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Label and value written as sibling spans">
+
+<Wrong>
+
+```html
+<div class="flex items-center gap-2">
+  <tec-color-swatch color="#f59e0b"></tec-color-swatch>
+  <span class="text-sm">Sandstone</span>
+  <span class="font-mono text-xs text-zinc-500">#f59e0b</span>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-color-swatch color="#f59e0b" label="Sandstone" value="#f59e0b"></tec-color-swatch>
+```
+
+</Correct>
+
+With `label` and `value` the element renders the row itself — name over value, the value in the mono face and muted — and makes the swatch decorative, while `text-zinc-500` is stock Tailwind that emits no CSS at all.
+
+</Dont>

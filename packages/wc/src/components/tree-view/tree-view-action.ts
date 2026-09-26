@@ -35,6 +35,7 @@ export class TreeViewActionElement extends TectonElement {
     return []
   }
 
+  /** Presses the button. */
   override click(): void {
     this.control?.click()
   }

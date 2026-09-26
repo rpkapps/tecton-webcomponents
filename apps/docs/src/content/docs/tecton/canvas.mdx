@@ -1,0 +1,198 @@
+---
+title: Canvas
+description: "Full-bleed work surface (map, schematic, 3D view) with floating chrome: overlays pinned to edges and corners, tool rails and a legend."
+tags: ["tec-canvas", "tec-canvas-surface", "tec-canvas-overlay", "tec-canvas-toolbar", "tec-canvas-legend", "tec-canvas-legend-item"]
+---
+
+<ComponentPreview name="canvas-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/canvas"
+```
+
+```html
+<tec-canvas>
+  <tec-canvas-surface>
+    <!-- the map, SVG, <canvas> or WebGL view -->
+  </tec-canvas-surface>
+  <tec-canvas-overlay position="top-left">
+    <tec-canvas-toolbar aria-label="Navigation">
+      <tec-button variant="ghost" size="icon-sm" aria-label="Zoom in"><svg …></svg></tec-button>
+    </tec-canvas-toolbar>
+  </tec-canvas-overlay>
+  <tec-canvas-overlay position="bottom-left">
+    <tec-canvas-legend aria-label="Legend">
+      <tec-canvas-legend-item swatch="var(--tec-chart-1)">Existing fields</tec-canvas-legend-item>
+    </tec-canvas-legend>
+  </tec-canvas-overlay>
+</tec-canvas>
+```
+
+<Callout>
+  `tec-canvas` takes the remaining height of a flex column (`flex: 1; min-height: 0`) and fills a parent of definite height, so place it directly in `tec-app-shell-main` or a sidebar inset. Give it a height with a class (`class="h-72"`) when it is embedded in normal flow. Overlays ignore pointer events between their children, so the surface stays interactive around the floating controls.
+</Callout>
+
+## Composition
+
+```text
+tec-canvas
+├── tec-canvas-surface
+└── tec-canvas-overlay (position) …
+    ├── tec-canvas-toolbar (orientation)
+    │   └── tec-button variant="ghost" size="icon-sm" …
+    └── tec-canvas-legend
+        └── tec-canvas-legend-item (swatch)
+```
+
+## Overlay positions
+
+`position` pins an overlay to one of eight places: `top-left` (default), `top`, `top-right`, `left`, `right`, `bottom-left`, `bottom` and `bottom-right`, 12px from the edges. Corners and sides stack their children down a column aligned to the edge; `top` and `bottom` lay them out in a centred row. `left` and `right` are the inline start and end sides, so the chrome mirrors in right-to-left layouts.
+
+## Toolbars
+
+`tec-canvas-toolbar` is a floating rail with `role="toolbar"`: `orientation="vertical"` (default) or `"horizontal"`. It is a single tab stop; the arrow keys move along it. Fill it with ghost `icon-sm` buttons that each have an `aria-label`. A `tec-separator` between buttons is skipped by the keyboard.
+
+## Legend
+
+`tec-canvas-legend` is a list; each `tec-canvas-legend-item` is a decorative 12px swatch followed by the symbol's name. `swatch` takes any CSS colour or paint (`var(--tec-chart-1)`, a gradient); put an element in `slot="swatch"` for a pattern or an icon.
+
+```html
+<tec-canvas-legend-item>
+  <span slot="swatch" class="bg-[repeating-linear-gradient(45deg,var(--tec-chart-3)_0_2px,transparent_2px_4px)]"></span>
+  Licence boundary
+</tec-canvas-legend-item>
+```
+
+## RTL
+
+<ComponentPreview name="canvas-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves into a toolbar (to the control used last) and out of it; each toolbar is one tab stop."],
+    ["ArrowDown / ArrowUp", "In a vertical toolbar: next / previous control."],
+    ["ArrowRight / ArrowLeft", "In a horizontal toolbar: next / previous control (mirrored in right-to-left layouts)."],
+    ["Home / End", "First / last control of the toolbar."],
+  ]}
+/>
+
+## Accessibility
+
+- Each `tec-canvas-toolbar` is a `toolbar` with `aria-orientation`; name it with `aria-label` ("Navigation", "Measure").
+- `tec-canvas-legend` is a `list` of `listitem`s, so assistive technology reads the symbol names in order; the swatches are hidden from it. Name the list with `aria-label` ("Legend").
+- The surface is yours: give an interactive map or view its own accessible name and keyboard support, and offer the essential information in text as well.
+
+## API Reference
+
+<ApiReference tags={["tec-canvas", "tec-canvas-surface", "tec-canvas-overlay", "tec-canvas-toolbar", "tec-canvas-legend", "tec-canvas-legend-item"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A map, a schematic, a seismic section or a 3D view owns the whole work area and the chrome floats over it.
+- The surface is pannable or zoomable, so the controls must not steal the drags that pass between them.
+- The view fills whatever height is left in its column rather than a height the design picked.
+
+### Not for
+
+- a titled tool surface with a scrolling body and a pinned footer: use [Panel](/docs/tecton/panel)
+- a self-contained block of content in a grid: use [Card](/docs/components/card)
+- the application frame around the work area: use [App Shell](/docs/tecton/app-shell)
+- a decorative themed texture behind ordinary content: use [Background](/docs/tecton/background)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `tec-canvas-surface` for the engine, then one `tec-canvas-overlay` per edge or corner holding `tec-canvas-toolbar`s and a `tec-canvas-legend`.
+
+</Do>
+
+<Do>
+
+Write the symbology as `tec-canvas-legend-item`s inside a `tec-canvas-legend`, with `swatch` for a colour and `slot="swatch"` for a pattern.
+
+</Do>
+
+<Do>
+
+Set a rail's direction with `orientation` on `tec-canvas-toolbar` and give it an `aria-label`; it already carries the floating surface, blur and shadow.
+
+</Do>
+
+<Do>
+
+Fill a rail with `<tec-button variant="ghost" size="icon-sm" aria-label="…">`, and give the canvas its height from the column it sits in: a flex-column parent, or `class="h-72"` when it is embedded.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Floating chrome positioned by hand">
+
+<Wrong>
+
+```html
+<tec-canvas>
+  <tec-canvas-surface>…</tec-canvas-surface>
+  <div class="absolute top-3 left-3 z-10 flex flex-col gap-2 rounded-md border p-1 shadow-md">
+    <tec-button variant="ghost" size="icon-sm" aria-label="Zoom in">…</tec-button>
+  </div>
+</tec-canvas>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-canvas>
+  <tec-canvas-surface>…</tec-canvas-surface>
+  <tec-canvas-overlay position="top-left">
+    <tec-canvas-toolbar aria-label="Navigation">
+      <tec-button variant="ghost" size="icon-sm" aria-label="Zoom in">…</tec-button>
+    </tec-canvas-toolbar>
+  </tec-canvas-overlay>
+</tec-canvas>
+```
+
+</Correct>
+
+A hand-placed box swallows every drag that starts in its padding, has no `toolbar` role or arrow-key navigation, does not mirror in right-to-left layouts, and misses the frosted surface.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A canvas in a block wrapper without a height">
+
+<Wrong>
+
+```html
+<div class="p-6">
+  <tec-canvas><tec-canvas-surface>…</tec-canvas-surface></tec-canvas>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-app-shell-main>
+  <tec-canvas><tec-canvas-surface>…</tec-canvas-surface></tec-canvas>
+</tec-app-shell-main>
+```
+
+</Correct>
+
+The surface is absolutely positioned, so the canvas has no content height of its own: in a wrapper without a definite height it collapses to zero. Put it in a flex column or a region of definite height, or give it a height.
+
+</Dont>

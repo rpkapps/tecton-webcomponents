@@ -1,0 +1,27 @@
+<tec-app-finder id="app-finder-demo">
+  <tec-app-finder-trigger slot="trigger" name="Discovery" tone="blue">DSG</tec-app-finder-trigger>
+  <tec-app-finder-group heading="Subsurface">
+    <tec-app-finder-item value="dsg" icon="DSG" tone="blue" name="Discovery" description="Regional geology and prospects" keywords="DSG Subsurface" current></tec-app-finder-item>
+    <tec-app-finder-item value="fwm" icon="FWM" tone="blue" name="Framework Modeling" description="Horizons and faults" keywords="FWM Subsurface"></tec-app-finder-item>
+    <tec-app-finder-item value="wcr" icon="WCR" tone="blue" name="Well Correlation" description="Log correlation and markers" keywords="WCR Subsurface"></tec-app-finder-item>
+  </tec-app-finder-group>
+  <tec-app-finder-group heading="Wells">
+    <tec-app-finder-item value="dwp" icon="DWP" tone="green" name="Well Planning" description="Well design and comparison" keywords="DWP Wells"></tec-app-finder-item>
+    <tec-app-finder-item value="trj" icon="TRJ" tone="green" name="Trajectory Design" description="Targets and anti-collision" keywords="TRJ Wells"></tec-app-finder-item>
+  </tec-app-finder-group>
+  <tec-app-finder-group heading="Facilities">
+    <tec-app-finder-item value="aam" icon="AAM" tone="saffron" name="Asset Management" description="Field development alternatives" keywords="AAM Facilities"></tec-app-finder-item>
+    <tec-app-finder-item value="sub" icon="SUB" tone="saffron" name="Subsea Layout" description="Templates, flowlines, umbilicals" keywords="SUB Facilities"></tec-app-finder-item>
+  </tec-app-finder-group>
+</tec-app-finder>
+<script type="module">
+  const finder = document.getElementById("app-finder-demo")
+  const trigger = finder.querySelector("tec-app-finder-trigger")
+  finder.addEventListener("tec-select", (event) => {
+    const app = event.target
+    for (const item of finder.querySelectorAll("tec-app-finder-item")) item.current = item === app
+    trigger.name = app.name
+    trigger.tone = app.tone
+    trigger.textContent = app.icon
+  })
+</script>

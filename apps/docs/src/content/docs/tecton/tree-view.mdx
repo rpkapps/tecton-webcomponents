@@ -1,0 +1,237 @@
+---
+title: Tree View
+description: Hierarchical project, inventory and file structures, with folder and item rows, states, colour tags and row actions.
+tags: ["tec-tree-view", "tec-tree-view-item", "tec-tree-view-action", "tec-tree-view-visibility-toggle"]
+---
+
+<ComponentPreview name="tree-view-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/tree-view"
+```
+
+```html
+<tec-tree-view label="Project" selection-mode="single">
+  <tec-tree-view-item value="wells" kind="folder" expanded>
+    Wells
+    <tec-tree-view-item value="a12">34/10-A-12</tec-tree-view-item>
+  </tec-tree-view-item>
+</tec-tree-view>
+```
+
+A row's text is its label; the `tec-tree-view-item`s inside it are its children, shown while it is `expanded`. The chevron, the folder / dot glyph and the indentation per level are drawn for you.
+
+## Composition
+
+```text
+tec-tree-view
+└── tec-tree-view-item
+    ├── (label text)
+    ├── [slot="icon"] [slot="color-tag"] [slot="suffix"] [slot="end"]
+    ├── tec-tree-view-item
+    └── tec-tree-view-item
+```
+
+## Nested
+
+Nest rows to any depth. For data, create the rows from it; `aria-level`, `aria-setsize` and `aria-posinset` follow the structure automatically.
+
+<ComponentPreview name="tree-view-nested" />
+
+## States
+
+`selection-mode="single" | "multiple"` makes rows selectable (`selected` sets the initial selection; `value` / `values` on the tree hold the current one). `disabled` rows are skipped and cannot be selected or expanded. `dimmed` is the design system's *hidden* state: the object is hidden in the view but stays in the tree.
+
+<ComponentPreview name="tree-view-states" />
+
+## Adornments
+
+Rows have slots for a `color-tag` (a [Color Swatch](/docs/tecton/color-swatch)), a `suffix` (a [Badge](/docs/components/badge)), a custom `icon` and `end` controls such as `tec-tree-view-visibility-toggle` and `tec-tree-view-action`. The `end` controls of the focused row are reachable with <Kbd>Tab</Kbd>.
+
+<ComponentPreview name="tree-view-adornments" />
+
+`tec-tree-view-visibility-toggle` is a toggle button: its name is always "Hide" and `aria-pressed` carries the state (pressed while the row is hidden), so a screen reader announces "Hide Faults, toggle button, pressed" rather than a name that flips between "Hide" and "Show". Its name is completed with the row's label, so a column of toggles does not read as a list of bare "Hide"s; pass `name` to use another noun, and `hide-label` to translate the verb. Pressing it fires the cancelable `tec-visibility-change` and sets `dimmed` on its row. `tec-tree-view-action` has no name of its own: give it an `aria-label`.
+
+## Row menus
+
+Put a `tec-dropdown-menu` in the `end` slot with a `tec-tree-view-action` as its trigger for a per-row menu.
+
+<ComponentPreview name="tree-view-menu" class="min-h-80" />
+
+## Events
+
+The tree fires `tec-value-change` (`detail: { value, values }`, cancelable) when the user changes the selection. Rows fire `tec-expanded-change` (`detail: { expanded }`, cancelable) and `tec-select` (every press, for actions); both bubble. Without `selection-mode`, pressing a parent row expands or collapses it. `expandAll()` and `collapseAll()` change every row without events.
+
+<ComponentPreview name="tree-view-events" />
+
+## RTL
+
+Indentation, chevrons and the <Kbd>←</Kbd> / <Kbd>→</Kbd> keys follow the direction.
+
+<ComponentPreview name="tree-view-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves focus into the tree (to the selected row, else the last focused or first row), then to that row's `end` controls, then out."],
+    ["ArrowDown / ArrowUp", "Moves to the next / previous visible row (disabled rows are skipped)."],
+    ["ArrowRight", "On a collapsed parent: expands it. On an expanded parent: moves to its first child. (ArrowLeft in right-to-left.)"],
+    ["ArrowLeft", "On an expanded parent: collapses it. Otherwise: moves to the parent row. (ArrowRight in right-to-left.)"],
+    ["Home / End", "Moves to the first / last visible row."],
+    ["*", "Expands every sibling of the focused row."],
+    ["Enter / Space", "Presses the row: toggles its selection (with `selection-mode`), else expands or collapses a parent."],
+    ["Shift+ArrowDown / Shift+ArrowUp", "With `selection-mode=\"multiple\"`: moves and adds the row to the selection."],
+    ["Ctrl+A / Cmd+A", "With `selection-mode=\"multiple\"`: selects every enabled row."],
+    ["A–Z", "Typeahead: moves to the next visible row whose label starts with the typed characters."],
+  ]}
+/>
+
+## Accessibility
+
+- `tec-tree-view` is `role="tree"` (`aria-multiselectable` in multiple mode), named by `label` or `aria-label`. Rows are `treeitem`s with `aria-level`, `aria-setsize`, `aria-posinset`, `aria-expanded` (parents only), `aria-selected` (selectable trees) and `aria-disabled`; children sit in a `role="group"`.
+- A row's accessible name is its label text (or `text-value`) only: colour tags, suffixes and controls don't leak into it.
+- The tree is one Tab stop (roving tabindex); the focused row's `end` controls follow it in the Tab order.
+- Name every `tec-tree-view-action` with `aria-label`; the visibility toggle names itself.
+
+## API Reference
+
+<ApiReference tags={["tec-tree-view", "tec-tree-view-item", "tec-tree-view-action", "tec-tree-view-visibility-toggle"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A hierarchy is browsed rather than read: a project tree, a field and well inventory, a layer list.
+- Rows carry more than a label: selection, disabled, hidden, a colour, a count, a per-row menu.
+- Arrow-key navigation, expansion and type-ahead have to work across the whole structure.
+
+### Not for
+
+- stacked sections that expand, with no parent and child structure: use [Accordion](/docs/components/accordion)
+- a flat list of rows with media, a title and actions: use [Item](/docs/components/item)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Name the tree with `label`, and give every row a `value`.
+
+</Do>
+
+<Do>
+
+Write the row's label first, then its child rows; put adornments in the `icon`, `color-tag`, `suffix` and `end` slots.
+
+</Do>
+
+<Do>
+
+Pick the leading glyph with `kind="folder" | "item"` or replace it with `slot="icon"`; the chevron and the indent are handled for you.
+
+</Do>
+
+<Do>
+
+Drive state from the rows (`selected`, `disabled`, `expanded`, `dimmed`) and the tree (`selection-mode`, `value` / `values`).
+
+</Do>
+
+<Do>
+
+Open the tree on the branches the user came for (active field, selected well's parents) with `expanded`, not on a column of closed folders.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A tree built from nested collapsibles">
+
+<Wrong>
+
+```html
+<tec-collapsible>
+  <tec-button slot="trigger">Wells</tec-button>
+  <div class="ps-4">
+    <tec-collapsible>
+      <tec-button slot="trigger">34/10-A-12</tec-button>
+      <div class="ps-4">Completions</div>
+    </tec-collapsible>
+  </div>
+</tec-collapsible>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-tree-view label="Project" selection-mode="single">
+  <tec-tree-view-item value="wells" kind="folder" expanded>
+    Wells
+    <tec-tree-view-item value="a12">34/10-A-12</tec-tree-view-item>
+  </tec-tree-view-item>
+</tec-tree-view>
+```
+
+</Correct>
+
+Each collapsible is its own widget, so the result is a pile of buttons with no `role="tree"`, no arrow-key or type-ahead movement between rows and no selection; `tec-tree-view` gets all of it from the nesting.
+
+</Dont>
+
+<Dont severity="HIGH" title="Indenting rows with padding classes">
+
+<Wrong>
+
+```html
+<tec-tree-view-item value="a12" class="ps-8">34/10-A-12</tec-tree-view-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-tree-view-item value="wells" kind="folder" expanded>
+  Wells
+  <tec-tree-view-item value="a12">34/10-A-12</tec-tree-view-item>
+</tec-tree-view-item>
+```
+
+</Correct>
+
+The indent comes from the row's level in the tree, so a padding class only shifts the whole row (children included) and leaves `aria-level` wrong; nest the row instead.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Markup-heavy labels without text-value">
+
+<Wrong>
+
+```html
+<tec-tree-view-item value="balder"><strong>Top</strong> <em>Balder</em> (12)</tec-tree-view-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-tree-view-item value="balder" text-value="Top Balder">
+  <strong>Top</strong> <em>Balder</em>
+  <tec-badge slot="suffix" variant="info">12</tec-badge>
+</tec-tree-view-item>
+```
+
+</Correct>
+
+The label text is the row's accessible name and its type-ahead key; counts and decorations belong in `suffix`, and `text-value` gives a clean name when the label is not plain text.
+
+</Dont>

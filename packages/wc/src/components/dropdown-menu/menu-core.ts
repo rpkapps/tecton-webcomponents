@@ -259,6 +259,7 @@ export abstract class MenuRootElement extends MenuSurfaceElement {
   /** Trigger / anchor / ARIA options of the popup (subclasses). @internal */
   protected abstract popupOptions(): Partial<PopupOptions>
 
+  /** @internal */
   override get rootMenu(): MenuRootElement {
     return this
   }
@@ -495,10 +496,12 @@ export class MenuSubTriggerElement extends MenuItemElement {
     return this.parentElement instanceof MenuSubElement ? this.parentElement : null
   }
 
+  /** @internal */
   override get selectionMode(): MenuSelectionMode {
     return "none"
   }
 
+  /** @internal */
   override activate(source: MenuActivationSource, _event?: Event): void {
     if (this.disabled) return
     clearTimeout(this.#hoverTimer)
@@ -775,10 +778,12 @@ export class MenuSubContentElement extends MenuSurfaceElement {
     return this.parentElement instanceof MenuSubElement ? this.parentElement : null
   }
 
+  /** @internal */
   override get isSubmenu(): boolean {
     return true
   }
 
+  /** @internal */
   override get rootMenu(): MenuRootElement | null {
     for (let p = this.parentElement; p; p = p.parentElement) if (p instanceof MenuRootElement) return p
     return null

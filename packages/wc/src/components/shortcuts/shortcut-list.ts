@@ -41,6 +41,9 @@ export class TecShortcutList extends TectonElement {
   /** The heading of shortcuts registered without a `group`. */
   @property({ attribute: "default-group" }) defaultGroup = "General"
 
+  /** The word between the steps of a sequence (see `tec-shortcut-keys`). */
+  @property({ attribute: "then-label" }) thenLabel = "then"
+
   @state() private shortcuts: Shortcut[] = []
 
   #context = new ContextConsumer(this, { context: shortcutsContext, subscribe: true })
@@ -109,7 +112,7 @@ export class TecShortcutList extends TectonElement {
             ${shortcuts.map(
               (shortcut) => html`<li class="item" part="item">
                 <span class="label" part="label">${shortcut.label}</span>
-                <tec-shortcut-keys part="keys" exportparts="kbd, separator, then" keys=${shortcut.keys} platform=${this.platform}></tec-shortcut-keys>
+                <tec-shortcut-keys part="keys" exportparts="kbd, separator, then" keys=${shortcut.keys} platform=${this.platform} then-label=${this.thenLabel}></tec-shortcut-keys>
               </li>`
             )}
           </ul>

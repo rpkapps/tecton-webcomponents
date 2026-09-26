@@ -1,0 +1,40 @@
+<tec-shortcuts scoped id="shortcuts-demo" class="w-full max-w-md">
+  <div
+    role="region"
+    aria-label="Shortcut demo"
+    tabindex="0"
+    class="flex flex-col gap-3 rounded-lg border border-border p-4 text-sm outline-none focus-within:ring-2 focus-within:ring-ring/50"
+  >
+    <tec-shortcut name="new-well" keys="n" label="Create well" group="Wells"></tec-shortcut>
+    <tec-shortcut name="go-wells" keys="g w" label="Go to wells" group="Navigate"></tec-shortcut>
+    <tec-shortcut name="save" keys="mod+s" label="Save" group="Wells"></tec-shortcut>
+    <tec-shortcut name="lock" keys="l" label="Lock" group="Wells"></tec-shortcut>
+
+    <p class="text-muted-foreground">Click here, then press a shortcut. Registered in this region:</p>
+    <tec-shortcut-list></tec-shortcut-list>
+    <p aria-live="polite" class="border-t border-border pt-3">
+      <span class="text-muted-foreground">No shortcut pressed yet</span>
+    </p>
+  </div>
+</tec-shortcuts>
+
+<script type="module">
+  const root = document.getElementById("shortcuts-demo")
+  const status = root.querySelector("[aria-live]")
+  const save = root.querySelector("tec-shortcut[name=save]")
+  const lock = root.querySelector("tec-shortcut[name=lock]")
+
+  root.addEventListener("tec-shortcut", (event) => {
+    if (event.detail.id === "lock") {
+      // A disabled shortcut stays listed; its keys go through to the browser.
+      save.disabled = !save.disabled
+      save.label = save.disabled ? "Save (disabled while locked)" : "Save"
+      lock.label = save.disabled ? "Unlock" : "Lock"
+      return
+    }
+    status.replaceChildren("Last action: ", Object.assign(document.createElement("span"), {
+      className: "font-medium",
+      textContent: event.target.label,
+    }))
+  })
+</script>

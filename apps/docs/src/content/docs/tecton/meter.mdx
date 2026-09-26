@@ -1,0 +1,215 @@
+---
+title: Meter
+description: Segmented gauge for risk, complexity and confidence readouts, with automatic colour by value.
+tags: ["tec-meter"]
+---
+
+<ComponentPreview name="meter-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/meter"
+```
+
+```html
+<tec-meter label="Drilling complexity" value="60" value-label="Medium" color="auto"></tec-meter>
+```
+
+<Callout>
+  The segmented gauge from the FDA and Well Design cards reads a score, not a task: [Progress](/docs/components/progress) is kept for task progress.
+</Callout>
+
+## Segments
+
+Use `segments` to control the number of blocks; `segments="1"` renders a continuous bar. Partially filled segments show the exact value.
+
+<ComponentPreview name="meter-segments" />
+
+## Auto color
+
+Use `color="auto"` to pick `success`, `warning` or `error` from the value (below 34 %, below 67 %, otherwise). The resolved colour is exposed as a custom state (`tec-meter:state(error)`).
+
+<ComponentPreview name="meter-auto-color" />
+
+## Colors
+
+Or use a fixed `color`.
+
+<ComponentPreview name="meter-colors" />
+
+## Custom color and scale
+
+`color="custom"` fills the segments from the `--tec-meter-fill` custom property. State the scale with `min` and `max` whenever it is not 0–100, and format the value with the `formatOptions` property (`format-options` attribute as JSON).
+
+<ComponentPreview name="meter-custom" />
+
+## Sizes
+
+Use the `size` attribute for the track height (4 / 6 / 10 px).
+
+<ComponentPreview name="meter-sizes" />
+
+## Value label
+
+`show-value` prints the formatted value at the end of the label row; `value-label` replaces it with your own text ("Medium", "High"). The `value-label` is also what assistive technology announces (`aria-valuetext`), so the spoken value matches the one on screen instead of a percentage.
+
+## RTL
+
+The segments fill from the inline start, so a right-to-left meter fills from the right.
+
+<ComponentPreview name="meter-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+The meter is not interactive and takes no focus.
+
+## Accessibility
+
+- The element is a `meter` (through `ElementInternals`) with `aria-valuenow`, `aria-valuemin`, `aria-valuemax` and `aria-valuetext` (the `value-label`, else the formatted value).
+- It is named by `label` (or a rich label in the `label` slot, referenced by element); without a visible label, set `aria-label`.
+- The segments are presentational. In forced-colours mode they are outlined and the fill uses the system highlight colour.
+
+## API Reference
+
+<ApiReference tags={["tec-meter"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A score or a level is being read, not a task being completed: geological risk, drilling complexity, confidence, data quality.
+- The value sits on a fixed scale with named bands (low / medium / high).
+- The readout belongs on a card, in a table cell or in a panel row, with a label and a word for the value.
+
+### Not for
+
+- the completion of a task that will finish: use [Progress](/docs/components/progress)
+- an indeterminate wait: use [Spinner](/docs/components/spinner)
+- a one-word risk label in a row or a header: use [Badge](/docs/components/badge)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Name it: `label` renders the visible label and names the meter; use `aria-label` when the name is already beside it.
+
+</Do>
+
+<Do>
+
+State the scale with `min` and `max` whenever it is not 0–100; the segments fill from the percentage.
+
+</Do>
+
+<Do>
+
+Choose `segments` (5 by default, `1` for a continuous bar) and `size="sm" | "md" | "lg"`.
+
+</Do>
+
+<Do>
+
+Let `color="auto"` pick success / warning / error from the value, or fix it with `color`; `color="custom"` reads `--tec-meter-fill`.
+
+</Do>
+
+<Do>
+
+Show the band with `value-label="Medium"` and the raw number with `show-value`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A meter with no accessible name">
+
+<Wrong>
+
+```html
+<tec-meter value="60" value-label="Medium"></tec-meter>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-meter label="Drilling complexity" value="60" value-label="Medium"></tec-meter>
+```
+
+</Correct>
+
+The segments are presentational and a `meter` takes no name from them, so without `label` or `aria-label` the gauge announces a value with nothing to attach it to.
+
+</Dont>
+
+<Dont severity="HIGH" title="A raw score on the default 0–100 scale">
+
+<Wrong>
+
+```html
+<tec-meter label="Confidence" value="4" show-value></tec-meter>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-meter label="Confidence" value="4" max="5" show-value></tec-meter>
+```
+
+</Correct>
+
+`max` defaults to 100, so a 4-out-of-5 score fills 4 % of the track and is announced as 4 %.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Re-deriving the colour bands by hand">
+
+<Wrong>
+
+```js
+meter.color = risk >= 67 ? "error" : risk >= 34 ? "warning" : "success"
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-meter label="Geological risk" color="auto"></tec-meter>
+```
+
+</Correct>
+
+`color="auto"` already applies the 34 / 67 thresholds to the percentage, so the hand-written ternary duplicates a design-system decision and disagrees with it as soon as `min` or `max` is not 0–100.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Colouring the segments with classes">
+
+<Wrong>
+
+```html
+<tec-meter label="Data quality" value="80" class="bg-green-600"></tec-meter>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-meter label="Data quality" value="80" color="success"></tec-meter>
+```
+
+</Correct>
+
+A class lands on the element's box, not on the segment fills, which take their colour from `color` — and `green-600` is not a Tecton step, so nothing is emitted for it either.
+
+</Dont>

@@ -1,0 +1,222 @@
+---
+title: Chip
+description: Selectable and removable tags in a group. Static labels are Badges.
+tags: ["tec-chip-group", "tec-chip"]
+---
+
+<ComponentPreview name="chip-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/chip"
+```
+
+```html
+<tec-chip-group aria-label="Horizons" selection-mode="multiple" removable>
+  <tec-chip value="balder" variant="info">Top Balder</tec-chip>
+  <tec-chip value="sele" variant="info">Top Sele</tec-chip>
+</tec-chip-group>
+```
+
+<Callout title="Chip or Badge?">
+  A static label is the [Badge](/docs/components/badge), which carries the Tecton status colours, the outline appearance and the size scale. `tec-chip` is the *interactive* label: a tag inside a `tec-chip-group` that can be selected and removed with the keyboard. It uses the badge styles, so a chip and a badge with the same `variant`, `appearance` and `size` look identical. What Tecton calls a *Badge* (a count anchored to an icon) is the [Count Badge](/docs/tecton/count-badge).
+</Callout>
+
+## Removable
+
+With `removable` on the group (as in the demo above) every chip renders a remove button and supports the <Kbd>Backspace</Kbd> and <Kbd>Delete</Kbd> keys. Each removed chip fires a cancelable `tec-remove` event (`detail.value`); unless a listener calls `preventDefault()`, the chip element removes itself and focus moves to the next chip. The `empty` slot is shown once the group has no chips.
+
+```js
+group.addEventListener("tec-remove", (event) => {
+  if (!confirmRemoval(event.detail.value)) event.preventDefault()
+})
+```
+
+## Selectable
+
+Set `selection-mode="single"` or `"multiple"` on the group. The `selected` attribute sets the initial selection, the group's `values` property reads or sets it, and `tec-value-change` (cancelable, `detail: { value, values }`) fires when the user changes it. `disabled` disables a single chip.
+
+<ComponentPreview name="chip-selectable" />
+
+## Variants and appearance
+
+`variant` and `appearance` are the Badge attributes: the semantic colours as solid surfaces or as outlines. The default is `variant="secondary"`.
+
+<ComponentPreview name="chip-variants" />
+
+## Sizes
+
+Use `size="default" | "md" | "lg"` (20 / 24 / 28 px). Icons in the `start` slot scale with the size.
+
+<ComponentPreview name="chip-sizes" />
+
+## RTL
+
+The arrow keys follow the reading direction and the remove button sits at the inline end. Translate the remove button's name with `remove-label` and the keyboard hint with `remove-hint`.
+
+<ComponentPreview name="chip-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves focus into the group (to the last focused chip) and out of it: the group is one tab stop."],
+    ["ArrowRight / ArrowLeft", "Moves focus to the next / previous chip, wrapping; mirrored in RTL. Disabled chips are skipped."],
+    ["Home / End", "Moves focus to the first / last chip."],
+    ["Space / Enter", "Toggles the selection of the focused chip (with `selection-mode`)."],
+    ["Delete / Backspace", "Removes the focused chip, or every selected chip when the focused one is selected (with `removable`)."],
+  ]}
+/>
+
+## Accessibility
+
+- The group is an ARIA `grid` and each chip a `row` with one `gridcell` (the React Aria `TagGroup` pattern); an empty group becomes a plain `group`. Name the group with `aria-label` or `aria-labelledby`.
+- A chip's accessible name is its text. With `selection-mode` the rows carry `aria-selected` and a multiple group `aria-multiselectable`.
+- The remove button is named "Remove" followed by the chip's text ("Remove Top Balder") and is not a tab stop: <kbd>Delete</kbd> does the same from the keyboard, and removable chips describe that with `remove-hint`.
+- While focus is inside, the group is a polite live region for added chips. When the last chip is removed, focus moves to the group itself.
+
+## API Reference
+
+<ApiReference tags={["tec-chip-group", "tec-chip"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The user toggles the label: active filters, selected facies, chosen horizons.
+- The user removes the label: applied filters, recipients, keywords, attachments.
+- The set is small enough that every chip is on screen at once.
+
+### Not for
+
+- a label that is never selected or removed: use [Badge](/docs/components/badge)
+- a count or dot pinned to the corner of an icon or avatar: use [Count Badge](/docs/tecton/count-badge)
+- a confirmation that a tag was removed: use [toast](/docs/components/sonner)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put `tec-chip` elements directly in a `tec-chip-group` and give the group an `aria-label`: the group is the `grid` that names and manages them.
+
+</Do>
+
+<Do>
+
+Turn on removal with `removable` on the group; the remove buttons and the <Kbd>Backspace</Kbd> and <Kbd>Delete</Kbd> keys come with it. Listen to `tec-remove` to update your data, and `preventDefault()` to keep a chip.
+
+</Do>
+
+<Do>
+
+Turn on selection with `selection-mode="single" | "multiple"`, read it from `values` or `tec-value-change`; `disabled` disables one chip.
+
+</Do>
+
+<Do>
+
+Give every chip a `value` — it is the key in `values` and `tec-remove` — when its text is not a stable identifier.
+
+</Do>
+
+<Do>
+
+Take the look from the Badge axes: `variant`, `appearance="outline"`, `size`. `class` is for layout only.
+
+</Do>
+
+<Do>
+
+Use a chip only to select or remove a value; actions are a [Button](/docs/components/button), destinations a [Link](/docs/tecton/link), even when small.
+
+</Do>
+
+<Do>
+
+Use at most two or three chip colours in one group, each with one fixed meaning; beyond that, distinguish with text.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A chip outside its group">
+
+<Wrong>
+
+```html
+<div class="flex flex-wrap gap-1.5">
+  <tec-chip variant="info">Sandstone</tec-chip>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-chip-group aria-label="Facies" selection-mode="multiple">
+  <tec-chip variant="info">Sandstone</tec-chip>
+</tec-chip-group>
+```
+
+</Correct>
+
+A chip is a grid row: outside a group it has no grid to belong to, no keyboard handling, no selection and no removal — just an orphaned `row` that assistive technology reports as broken.
+
+</Dont>
+
+<Dont severity="HIGH" title="Building the remove button by hand">
+
+<Wrong>
+
+```html
+<tec-chip-group aria-label="Horizons">
+  <tec-chip>
+    Top Balder
+    <tec-button variant="ghost" size="icon-xs" aria-label="Remove"></tec-button>
+  </tec-chip>
+</tec-chip-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-chip-group aria-label="Horizons" removable>
+  <tec-chip value="balder">Top Balder</tec-chip>
+</tec-chip-group>
+```
+
+</Correct>
+
+`removable` on the group renders the remove button and binds <Kbd>Backspace</Kbd> and <Kbd>Delete</Kbd>; a nested button removes the chip by mouse only and adds a focus stop the grid's key handling does not expect.
+
+</Dont>
+
+<Dont severity="HIGH" title="Colouring a chip with classes">
+
+<Wrong>
+
+```html
+<tec-chip class="bg-orange-500 text-white">Fault seal</tec-chip>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-chip variant="warning">Fault seal</tec-chip>
+```
+
+</Correct>
+
+The chip's colour lives on its inner box, so a class on the host does not reach it — and `orange` is not a Tecton family, so the reset palette emits no CSS for it anyway.
+
+</Dont>
