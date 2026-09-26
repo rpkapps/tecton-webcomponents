@@ -1,8 +1,11 @@
 import { css } from "lit"
 
 export const labelStyles = css`
+  /* Layout on the host (gap/items classes on the element work); the base inherits it. */
   :host {
     display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-family: var(--tec-font-sans);
     font-size: var(--tec-text-sm);
     line-height: 1;
@@ -13,8 +16,11 @@ export const labelStyles = css`
   .base {
     display: flex;
     flex: 1 1 auto;
-    align-items: center;
-    gap: 0.5rem;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    gap: inherit;
     min-width: 0;
   }
   :host(:state(disabled)) {

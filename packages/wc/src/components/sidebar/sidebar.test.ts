@@ -241,7 +241,9 @@ describe("tec-sidebar (mobile)", () => {
     expect(sheet.matches(":modal")).toBe(true)
     expect(provider.openMobile).toBe(true)
     expect(await axNode(sheet)).toMatchObject({ role: "dialog", name: "Sidebar" })
-    // focus moved into the sheet (the search input)
+    // focus moved to the sheet itself; Tab enters the content
+    expect(deepActiveElement()).toBe(sheet)
+    await userEvent.keyboard("{Tab}")
     expect((deepActiveElement() as HTMLElement).localName).toBe("input")
     await expectAccessible(root)
     await userEvent.keyboard("{Escape}")

@@ -405,7 +405,7 @@ export class TecInputOtpSeparator extends TectonElement {
     this.internals.ariaHidden = "true"
   }
   protected override render() {
-    return html`<slot>${icon(Minus, { size: 16 })}</slot>`
+    return html`<slot>${icon(Minus, { size: 24 })}</slot>`
   }
 }
 

@@ -115,6 +115,12 @@ export class TecMessageScroller extends TectonElement {
   #prependRestore: { element: Element; viewportTop: number } | null = null
   #pendingScrollToMessage: { messageId: string; options?: MessageScrollerScrollOptions } | null = null
   #defaultApplied = false
+  /**
+   * The opening position was applied and the reader has not interacted yet: rows that finish
+   * rendering later (upgrades, fonts, images, `content-visibility` placeholders replaced by real
+   * sizes) re-apply it, so the transcript settles exactly where it should open.
+   */
+  #opening = false
   #pendingDefault = true
   #handledAnchors = new WeakSet<Element>()
   #scrollable: MessageScrollerScrollable = NO_SCROLL
@@ -159,6 +165,7 @@ export class TecMessageScroller extends TectonElement {
    * Returns `false` when there is no viewport.
    */
   scrollToEnd(options: MessageScrollerScrollOptions = {}): boolean {
+    this.#opening = false
     const viewport = this.#viewport
     if (!viewport) return false
     this.#setSpacer(0)
@@ -171,6 +178,7 @@ export class TecMessageScroller extends TectonElement {
 
   /** Scrolls to the start of the transcript. Returns `false` when there is no viewport. */
   scrollToStart(options: MessageScrollerScrollOptions = {}): boolean {
+    this.#opening = false
     if (!this.#viewport) return false
     this.#setSpacer(0)
     this.#streamingTurn = null
@@ -186,6 +194,7 @@ export class TecMessageScroller extends TectonElement {
    * id returns `false`. `true` means the scroll ran or was queued.
    */
   scrollToMessage(messageId: string, options: MessageScrollerScrollOptions = {}): boolean {
+    this.#opening = false
     const element = this.#findItem(messageId)
     if (element) {
       this.#markDefaultApplied()
@@ -239,7 +248,8 @@ export class TecMessageScroller extends TectonElement {
     super.updated(changed)
     if (!this.#ready) return
     if (changed.has("defaultScrollPosition") && changed.get("defaultScrollPosition") !== undefined) {
-      if (!this.#applyDefault() && this.#itemCount === 0) this.#clearPendingDefault()
+      if (this.#applyDefault()) this.#opening = true
+      else if (this.#itemCount === 0) this.#clearPendingDefault()
     }
     if (changed.has("autoScroll") && changed.get("autoScroll") !== undefined) {
       if (this.autoScroll && this.#mode === "following-bottom" && this.#itemCount > 0) this.scrollToEnd()
@@ -270,6 +280,7 @@ export class TecMessageScroller extends TectonElement {
     viewport.addEventListener("wheel", this.#onUserScrollIntent, { passive: true })
     viewport.addEventListener("touchmove", this.#onUserScrollIntent, { passive: true })
     viewport.addEventListener("keydown", this.#onKeyDown)
+    viewport.addEventListener("pointerdown", this.#onUserScrollIntent)
     this.#resizeObserver.observe(viewport)
     this.#resizeObserver.observe(content)
     this.#contentObserver.observe(content, { childList: true })
@@ -293,6 +304,7 @@ export class TecMessageScroller extends TectonElement {
       viewport.removeEventListener("wheel", this.#onUserScrollIntent)
       viewport.removeEventListener("touchmove", this.#onUserScrollIntent)
       viewport.removeEventListener("keydown", this.#onKeyDown)
+      viewport.removeEventListener("pointerdown", this.#onUserScrollIntent)
     }
     this.#resizeObserver.disconnect()
     this.#contentObserver.disconnect()
@@ -330,6 +342,7 @@ export class TecMessageScroller extends TectonElement {
   }
 
   #onUserScrollIntent = () => {
+    this.#opening = false
     if (this.#mode !== "free-scrolling") {
       this.#streamingTurn = null
       this.#mode = "free-scrolling"
@@ -556,12 +569,17 @@ export class TecMessageScroller extends TectonElement {
     if (previousCount === 0) {
       // Rows present at load are part of the saved thread, not new turns.
       for (const item of items) if (isAnchor(item)) this.#handledAnchors.add(item)
-      if (this.#applyDefault() || (items.length > 0 && this.autoScroll && this.scrollToEnd())) return
+      if (this.#applyDefault()) {
+        this.#opening = true
+        return
+      }
+      if (items.length > 0 && this.autoScroll && this.scrollToEnd()) return
       if (items.length === 0) this.#clearPendingDefault()
       this.#commitScrollState()
       this.#scheduleVisibility()
       return
     }
+    this.#opening = false
     const firstIndex = previousFirst ? items.indexOf(previousFirst as HTMLElement) : -1
     const viewport = this.#viewport as TecMessageScrollerViewport | null
     if (!viewport?.hasAttribute("prepend-shift") && firstIndex > 0) {
@@ -598,6 +616,13 @@ export class TecMessageScroller extends TectonElement {
 
   #handleResize(): void {
     if (!this.#ready) return
+    if (this.#opening) {
+      this.#defaultApplied = false
+      if (this.#applyDefault()) {
+        this.#opening = true
+        return
+      }
+    }
     if (this.#mode === "following-bottom" && this.autoScroll) {
       this.scrollToEnd()
       return

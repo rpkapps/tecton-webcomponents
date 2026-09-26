@@ -79,6 +79,20 @@ describe("tec-resizable-group", () => {
     await expectAccessible(root)
   })
 
+  it("a panel does not shrink below its content (vertical example: 25% of 200px, 75px of content)", async () => {
+    const root = await fixture<HTMLElement>(html`<div style="width: 384px">
+      <tec-resizable-group orientation="vertical" style="min-height: 200px">
+        <tec-resizable-panel default-size="25%"><div style="height: 100%; padding: 24px; line-height: 27px">Header</div></tec-resizable-panel>
+        <tec-resizable-handle aria-label="Resize header"></tec-resizable-handle>
+        <tec-resizable-panel default-size="75%"><div style="height: 100%; padding: 24px">Content</div></tec-resizable-panel>
+      </tec-resizable-group>
+    </div>`)
+    const { panels } = parts(root)
+    await nextFrame()
+    expect(heights(panels)[0]).toBe(75)
+    expect(heights(panels)[1]).toBe(124)
+  })
+
   it("keyboard: arrows step 5%, Home/End, mirrored in RTL; fires tec-layout-change", async () => {
     const root = await fixture<HTMLElement>(two())
     const { group, handle } = parts(root)

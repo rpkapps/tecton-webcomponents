@@ -1,7 +1,6 @@
 import { ContextConsumer, ContextProvider } from "@lit/context"
 import { html, type PropertyValues } from "lit"
 import { property, query } from "lit/decorators.js"
-import { getTabbables } from "../../internal/focus.js"
 import { lockScroll, unlockScroll } from "../../internal/scroll-lock.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
@@ -22,7 +21,7 @@ export type { SidebarCollapsible, SidebarOpenChangeReason, SidebarSide, SidebarV
  * `transform` or `contain: layout` bounds it instead of the viewport — handy for previews). It
  * collapses off-canvas, to an icon rail, or not at all (`collapsible`). Below the provider's mobile
  * breakpoint it renders as a modal sheet (a native `<dialog>`: Escape and a press on the backdrop
- * close it, focus is trapped and restored).
+ * close it; focus moves to the sheet, is trapped inside and restored).
  *
  * `side` is logical: `left` is the inline start (the right edge in right-to-left pages). Put a
  * `side="right"` sidebar after the `tec-sidebar-inset` (it is drawn at the end of the row either way).
@@ -111,11 +110,13 @@ export class TecSidebar extends TectonElement {
     }
     const open = !!this.#provider.value?.openMobile
     if (open && !sheet.open) {
+      // Focus goes to the sheet itself (like a React Aria modal): no focus ring after a pointer
+      // press; Tab moves into the content.
       sheet.showModal()
       lockScroll(this)
-      const inner = sheet.querySelector<HTMLElement>(".inner")
-      const first = inner ? getTabbables(inner)[0] : undefined
-      ;(first ?? sheet).focus({ preventScroll: true })
+      if (sheet.getRootNode() instanceof ShadowRoot && (sheet.getRootNode() as ShadowRoot).activeElement !== sheet) {
+        sheet.focus({ preventScroll: true })
+      }
     } else if (!open && sheet.open) {
       sheet.close()
       unlockScroll(this)
@@ -143,6 +144,8 @@ export class TecSidebar extends TectonElement {
       return html`<dialog
         class="sheet"
         part="sheet"
+        tabindex="-1"
+        autofocus
         aria-label=${this.label}
         @cancel=${this.#onCancel}
         @click=${this.#onSheetClick}

@@ -84,6 +84,9 @@ export const inputGroupStyles = css`
 export const inputGroupAddonStyles = css`
   :host {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     order: -9999;
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
@@ -104,9 +107,9 @@ export const inputGroupAddonStyles = css`
   .base {
     display: flex;
     flex: 1 1 auto;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    align-items: inherit;
+    justify-content: inherit;
+    gap: inherit;
     height: auto;
     padding-block: 0.375rem;
   }
@@ -128,9 +131,12 @@ export const inputGroupAddonStyles = css`
   :host(:state(inline-end):state(has-kbd)) .base {
     padding-inline-end: 0.35rem;
   }
+  :host(:state(block-start)),
+  :host(:state(block-end)) {
+    justify-content: flex-start;
+  }
   :host(:state(block-start)) .base,
   :host(:state(block-end)) .base {
-    justify-content: flex-start;
     padding-inline: 0.625rem;
   }
   :host(:state(block-start)) .base {

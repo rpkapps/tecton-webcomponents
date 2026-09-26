@@ -41,6 +41,8 @@ const TAGS: CollectionTags = {
  * @csspart base - The palette surface (background, radius, padding).
  *
  * @cssprop --tec-command-radius - Corner radius (default `--tec-radius-xl`).
+ * @cssprop --tec-command-border-width - Border width of the palette (default 0; `1px` for a standalone card).
+ * @cssprop --tec-command-border-color - Border colour (default `--tec-border`).
  *
  * @cssstate empty - No item matches the search.
  *
@@ -70,6 +72,7 @@ export class TecCommand extends TectonElement {
         flex-direction: column;
         overflow: hidden;
         border-radius: var(--tec-command-radius, var(--tec-radius-xl));
+        border: var(--tec-command-border-width, 0px) solid var(--tec-command-border-color, var(--tec-border));
         background-color: var(--tec-popover);
         padding: 0.25rem;
       }

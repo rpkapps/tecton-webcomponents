@@ -1,8 +1,11 @@
 import { css } from "lit"
 
 export const inputOtpStyles = css`
+  /* Layout lives on the host (gap-4, justify-center on the element work); the base inherits it. */
   :host {
     display: flex;
+    align-items: center;
+    gap: 0.5rem;
     width: fit-content;
     max-width: 100%;
     font-family: var(--tec-font-sans);
@@ -16,8 +19,11 @@ export const inputOtpStyles = css`
   .base {
     position: relative;
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    flex: 1 1 auto;
+    flex-wrap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    gap: inherit;
     cursor: text;
     user-select: none;
     -webkit-user-select: none;
@@ -52,10 +58,12 @@ export const inputOtpStyles = css`
 export const inputOtpGroupStyles = css`
   :host {
     display: flex;
+    align-items: center;
   }
   .base {
     display: flex;
-    align-items: center;
+    align-items: inherit;
+    gap: inherit;
     border-radius: var(--tec-radius-md);
   }
   :host(:state(invalid)) .base {
@@ -158,8 +166,9 @@ export const inputOtpSeparatorStyles = css`
     display: flex;
     align-items: center;
   }
+  /* The minus glyph renders at the icon's natural 24px, like the reference. */
   svg {
-    width: 1rem;
-    height: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 `
