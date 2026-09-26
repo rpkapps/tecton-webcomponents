@@ -47,7 +47,8 @@ await new Promise((ok) => server.listen(0, "127.0.0.1", ok))
 const base = `http://127.0.0.1:${server.address().port}`
 
 const executablePath =
-  process.env.CHROMIUM_PATH ?? (existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : undefined)
+  process.env.CHROMIUM_PATH ??
+  (process.platform === "linux" && existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : undefined)
 const browser = await chromium.launch({ executablePath })
 const filter = process.argv[2]
 

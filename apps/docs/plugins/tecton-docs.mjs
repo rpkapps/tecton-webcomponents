@@ -38,6 +38,8 @@ function defineFiles() {
     .filter((d) => d.isDirectory())
     .map((d) => join(dir, d.name, "define.ts"))
     .filter((file) => existsSync(file))
+    // Forward slashes on every platform: the paths become import specifiers.
+    .map((file) => file.replaceAll("\\", "/"))
     .sort()
 }
 
@@ -78,7 +80,7 @@ export function tectonDocs() {
         if (this.environment?.mode === "dev")
           return (
             `const families = ${JSON.stringify(files)};\n` +
-            `await Promise.all(families.map((f) => import(/* @vite-ignore */ "/@fs" + f).catch((e) => console.error("[tecton-docs] could not load", f, e))));\n` +
+            `await Promise.all(families.map((f) => import(/* @vite-ignore */ "/@fs/" + f.replace(/^\\//, "")).catch((e) => console.error("[tecton-docs] could not load", f, e))));\n` +
             "export {};\n"
           )
         return files.map((file) => `import ${JSON.stringify(file)};`).join("\n") + "\nexport {};\n"

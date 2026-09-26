@@ -21,8 +21,12 @@ pnpm test         # 799 browser tests (Vitest + Playwright Chromium, axe checks)
 pnpm build        # library (dist + custom-elements.json) and the static docs site
 ```
 
-Requirements: Node ≥ 22, pnpm 10. Tests use a Chromium from Playwright
-(`CHROMIUM_PATH` overrides the executable).
+Requirements: Node ≥ 22 and pnpm 10, on Windows, macOS or Linux. The tests run in Playwright's
+Chromium; download it once with `pnpm --filter @tecton/wc exec playwright install chromium`
+(set `CHROMIUM_PATH` to use another Chromium instead).
+
+On Windows, clone with the repository's line endings (`.gitattributes` keeps LF). A clone made
+before that file existed can be fixed with `git rm --cached -r . && git reset --hard`.
 
 ## Using the library
 

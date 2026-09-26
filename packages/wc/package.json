@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "node scripts/build-theme.mjs && node scripts/build-index.mjs && rm -rf dist && tsc -p tsconfig.build.json && node scripts/copy-assets.mjs && pnpm run analyze",
+    "build": "node scripts/build-theme.mjs && node scripts/build-index.mjs && node scripts/clean.mjs && tsc -p tsconfig.build.json && node scripts/copy-assets.mjs && pnpm run analyze",
     "build:index": "node scripts/build-index.mjs",
     "build:theme": "node scripts/build-theme.mjs",
     "analyze": "cem analyze --config custom-elements-manifest.config.mjs",

@@ -1,5 +1,16 @@
+import { existsSync } from "node:fs"
 import { defineConfig } from "vitest/config"
 import { playwright } from "@vitest/browser-playwright"
+
+/**
+ * The Chromium to test in: $CHROMIUM_PATH, else a preinstalled one if present (some Linux
+ * containers), else Playwright's own download (`npx playwright install chromium`; Windows, macOS, CI).
+ */
+function chromiumPath(): string | undefined {
+  if (process.env.CHROMIUM_PATH) return process.env.CHROMIUM_PATH
+  const preinstalled = "/opt/pw-browsers/chromium"
+  return process.platform === "linux" && existsSync(preinstalled) ? preinstalled : undefined
+}
 
 export default defineConfig({
   // Pre-bundle every runtime dependency up front: a mid-run optimisation reloads the test page.
@@ -31,7 +42,7 @@ export default defineConfig({
     browser: {
       enabled: true,
       headless: true,
-      provider: playwright({ launchOptions: { executablePath: process.env.CHROMIUM_PATH ?? (process.env.CI ? undefined : "/opt/pw-browsers/chromium") } }),
+      provider: playwright({ launchOptions: { executablePath: chromiumPath() } }),
       instances: [{ browser: "chromium" }],
       screenshotFailures: false,
     },

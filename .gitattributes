@@ -1,0 +1,8 @@
+# Keep LF everywhere (Windows included): the generators compare file contents, and the
+# token/CSS parsers expect LF.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
