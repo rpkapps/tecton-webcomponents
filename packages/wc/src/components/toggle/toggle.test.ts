@@ -57,16 +57,21 @@ describe("tec-toggle", () => {
   it("uses the ghost-active background when pressed and ghost-hover on hover", async () => {
     const root = await fixture<HTMLElement>(html`<div><tec-toggle pressed>On</tec-toggle><tec-toggle>Off</tec-toggle></div>`)
     const [on, off] = [...root.querySelectorAll("tec-toggle")]
-    await aTimeout(200)
     const probe = document.createElement("div")
-    probe.style.background = "var(--tec-ghost-active)"
+    probe.style.cssText = "background: var(--tec-ghost-active); height: 20px"
     root.append(probe)
+    await userEvent.hover(probe) // keep the pointer off the toggles
+    await aTimeout(200)
     expect(getComputedStyle(button(on!)).backgroundColor).toBe(getComputedStyle(probe).backgroundColor)
     expect(getComputedStyle(button(off!)).backgroundColor).toBe("rgba(0, 0, 0, 0)")
     await userEvent.hover(off!)
     await aTimeout(200)
     probe.style.background = "var(--tec-ghost-hover)"
     expect(getComputedStyle(button(off!)).backgroundColor).toBe(getComputedStyle(probe).backgroundColor)
+    // Hover wins over the pressed colours (as in the spec).
+    await userEvent.hover(on!)
+    await aTimeout(200)
+    expect(getComputedStyle(button(on!)).backgroundColor).toBe(getComputedStyle(probe).backgroundColor)
   })
 
   it("disabled toggles are not focusable and do not toggle", async () => {

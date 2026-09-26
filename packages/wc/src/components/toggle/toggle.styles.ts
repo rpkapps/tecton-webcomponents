@@ -82,13 +82,14 @@ export const toggleStyles = css`
     pointer-events: none;
   }
 
-  :host(:hover) .base {
-    background-color: var(--tec-ghost-hover);
-    color: var(--tec-ghost-hover-foreground);
-  }
   :host(:state(pressed)) .base {
     background-color: var(--tec-ghost-active);
     color: var(--tec-ghost-active-foreground);
+  }
+  /* As in the spec, hover wins over the pressed colours. */
+  :host(:hover) .base {
+    background-color: var(--tec-ghost-hover);
+    color: var(--tec-ghost-hover-foreground);
   }
   :host(:state(focus-visible)) .base,
   :host(:focus-visible) .base {

@@ -1,7 +1,7 @@
 import { css } from "lit"
 
 /*
- * Track: 4px, `slider` colour at 60%, fully rounded; range: `slider`; thumbs: 20px `slider` circles
+ * The element is as thick as the track (4px); thumbs overhang it. Track: 4px, `slider` colour at 60%, fully rounded; range: `slider`; thumbs: 20px `slider` circles
  * with a 4px `slider`/30 ring on hover and the 2px focus ring on keyboard focus. Thumb centres sit on
  * the value (so they overhang the ends of the track by half their size, as in the spec).
  */
@@ -33,14 +33,23 @@ export const sliderStyles = css`
     display: flex;
     align-items: center;
     width: 100%;
-    height: 1.25rem;
+    height: 0.25rem;
+  }
+  /* The box is as thick as the track (thumbs overhang it, as in the spec); this widens the pointer target. */
+  .base::before {
+    content: "";
+    position: absolute;
+    inset: -0.5rem 0;
   }
   :host([orientation="vertical"]) .base {
     flex: 1 1 auto;
     flex-direction: column;
     justify-content: center;
-    width: 1.25rem;
+    width: 0.25rem;
     height: auto;
+  }
+  :host([orientation="vertical"]) .base::before {
+    inset: 0 -0.5rem;
   }
 
   .track {

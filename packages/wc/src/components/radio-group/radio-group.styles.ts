@@ -61,12 +61,13 @@ export const radioGroupItemStyles = css`
     position: absolute;
     inset: -0.5rem -0.75rem;
   }
-  :host(:hover) .control {
-    border-color: var(--tec-link-hover-foreground);
-  }
   :host(:state(checked)) .control {
     border-color: var(--tec-link-active-foreground);
     color: var(--tec-link-active-foreground);
+  }
+  /* As in the spec, the hover border wins over the checked one. */
+  :host(:hover) .control {
+    border-color: var(--tec-link-hover-foreground);
   }
   :host(:focus-visible) .control {
     border-color: var(--tec-ring);
