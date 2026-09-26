@@ -77,10 +77,10 @@ describe("tec-panel", () => {
     expect(toolbar.getBoundingClientRect().right).toBeLessThanOrEqual(headerBox.right + 1)
   })
 
-  it("parts are layout boxes: classes on the element lay out its children", async () => {
+  it("parts are layout boxes: layout set on the element lays out its children", async () => {
     const root = await fixture(html`<tec-panel style="width: 400px" variant="flat">
-      <tec-panel-content class="flex gap-6"><span>TD</span><span>Picks</span></tec-panel-content>
-      <tec-panel-footer class="justify-end"><tec-button size="sm">Open</tec-button></tec-panel-footer>
+      <tec-panel-content style="display: flex; gap: 24px"><span>TD</span><span>Picks</span></tec-panel-content>
+      <tec-panel-footer style="justify-content: flex-end"><tec-button size="sm">Open</tec-button></tec-panel-footer>
     </tec-panel>`)
     const [a, b] = [...root.querySelectorAll("tec-panel-content span")].map((el) => el.getBoundingClientRect())
     expect(Math.round(a!.top)).toBe(Math.round(b!.top))

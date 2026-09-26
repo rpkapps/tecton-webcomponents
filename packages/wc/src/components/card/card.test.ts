@@ -43,6 +43,10 @@ describe("tec-card", () => {
     const action = card.querySelector("tec-card-action")!.getBoundingClientRect()
     expect(action.left).toBeGreaterThan(title.right - 1)
     expect(Math.round(action.right)).toBe(Math.round(header.getBoundingClientRect().right - 24))
+    // The header is exactly as tall as its content (no stray row gap from the host grid).
+    const titleTop = card.querySelector("tec-card-title")!.getBoundingClientRect().top
+    const descBottom = card.querySelector("tec-card-description")!.getBoundingClientRect().bottom
+    expect(Math.round(header.getBoundingClientRect().height)).toBe(Math.round(descBottom - titleTop))
     card.querySelector("tec-card-action")!.remove()
     await nextFrame()
     expect(header.matches(":state(has-action)")).toBe(false)

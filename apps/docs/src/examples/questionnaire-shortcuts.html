@@ -1,10 +1,10 @@
-<div id="questionnaire-shortcuts" class="mx-auto flex w-full max-w-md flex-col gap-4">
-  <tec-native-select aria-label="Shortcut style" class="self-end">
+<div id="questionnaire-shortcuts" class="relative mx-auto flex h-full w-full max-w-md flex-col gap-4">
+  <tec-native-select aria-label="Shortcut style" class="absolute end-0 top-0">
     <option value="">No shortcuts</option>
     <option value="letters" selected>Letters</option>
     <option value="numbers">Numbers</option>
   </tec-native-select>
-  <tec-questionnaire shortcuts="letters">
+  <tec-questionnaire shortcuts="letters" class="mt-auto">
     <tec-questionnaire-item name="action" required>
       <tec-questionnaire-title>What should the agent do next?</tec-questionnaire-title>
       <tec-questionnaire-description>Use the displayed shortcut or navigate with the keyboard.</tec-questionnaire-description>

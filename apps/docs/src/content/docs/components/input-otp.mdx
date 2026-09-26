@@ -28,7 +28,7 @@ import "@tecton/wc/input-otp"
 </tec-input-otp>
 ```
 
-One real, transparent `<input>` covers the slots and holds the code, so typing, deleting, the arrow keys, paste, the virtual keyboard and one-time-code autofill work as in a text field; the slots display it. Slots take their position from their order (set `index` to override), and `maxlength` defaults to the number of slots.
+One real, transparent `<input>` covers the slots and holds the code, so typing, deleting, the arrow keys, paste, the virtual keyboard and one-time-code autofill work as in a text field; the slots display it. Focusing or clicking always puts the caret in the next empty slot (or on the last character of a full code); the arrow keys reach earlier characters. Slots take their position from their order (set `index` to override), and `maxlength` defaults to the number of slots.
 
 ## Pattern
 

@@ -201,14 +201,15 @@ export const fieldDescriptionStyles = css`
     font-weight: var(--tec-font-weight-normal);
     text-align: start;
   }
-  :host(:state(after-legend)) .base {
-    margin-top: -0.375rem;
-  }
+  /* Same precedence as the reference's utility order: last, second-last, then after-legend. */
   :host(:state(second-last)) .base {
     margin-top: -0.25rem;
   }
   :host(:state(last)) .base {
     margin-top: 0;
+  }
+  :host(:state(after-legend)) .base {
+    margin-top: -0.375rem;
   }
   /* Links in help text (the reset of host documents styles anchors, so these are important). */
   ::slotted(a) {

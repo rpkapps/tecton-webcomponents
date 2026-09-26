@@ -71,6 +71,7 @@ export const forwardLayout = css`
     flex: 1 1 auto;
     align-self: stretch;
     grid-column: 1 / -1;
+    grid-row: 1 / -1;
     min-width: 0;
     flex-direction: inherit;
     flex-wrap: inherit;

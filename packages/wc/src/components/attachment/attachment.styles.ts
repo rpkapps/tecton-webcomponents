@@ -343,9 +343,15 @@ export const attachmentGroupStyles = css`
     outline: 2px solid var(--tec-ring);
     outline-offset: -2px;
   }
+  /* The row's flex parameters live on the host, so layout utilities on the element apply. */
+  :host {
+    gap: 0.75rem;
+    align-items: normal;
+  }
   .base {
     display: flex;
-    gap: 0.75rem;
+    gap: inherit;
+    align-items: inherit;
     padding-block: 0.25rem;
     min-width: 0;
   }

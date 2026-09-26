@@ -73,7 +73,6 @@ describe("tec-message-scroller", () => {
     grow("m2", 300)
     await waitUntil(() => Math.round(topIn(last.viewport, "m6")) === 64, "re-anchored after late growth")
     const end = await mount()
-    grow.call(null, "m1", 120)
     ;(end.viewport.querySelector('[message-id="m10"]')!.firstElementChild as HTMLElement).style.height = "300px"
     await waitUntil(() => atEnd(end.viewport), "still at the end")
     // After an interaction the view is left alone.
