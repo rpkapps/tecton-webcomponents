@@ -28,6 +28,7 @@ export const forwardLayout = css`
     grid-column: 1 / -1;
     grid-row: 1 / -1;
     min-width: 0;
+    min-height: 0;
     flex-direction: inherit;
     flex-wrap: inherit;
     align-items: inherit;

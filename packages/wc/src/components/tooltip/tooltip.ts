@@ -46,7 +46,8 @@ const styles = css`
   :host(:state(has-kbd)) .content {
     padding-inline-end: 0.375rem;
   }
-  ::slotted(tec-kbd) {
+  ::slotted(tec-kbd),
+  ::slotted(tec-shortcut-keys) {
     position: relative;
     isolation: isolate;
     z-index: 50;
@@ -112,7 +113,7 @@ const styles = css`
  *
  * @cssprop --tec-tooltip-max-width - Maximum width of the bubble (default `20rem`).
  *
- * @cssstate has-kbd - The tooltip contains a `tec-kbd` (tighter end padding).
+ * @cssstate has-kbd - The tooltip contains a `tec-kbd` or `tec-shortcut-keys` (tighter end padding).
  *
  * @fires tec-open-change - The tooltip opened or closed through user interaction. Cancelable: `preventDefault()` keeps the current state. `detail: { open, reason }` with `reason` one of `hover`, `focus`, `blur`, `press`, `escape`.
  */
@@ -274,7 +275,7 @@ export class TecTooltip extends TectonElement {
   }
 
   #syncKbd = () => {
-    this.toggleState("has-kbd", !!this.querySelector(":scope > tec-kbd, :scope > kbd"))
+    this.toggleState("has-kbd", !!this.querySelector(":scope > tec-kbd, :scope > tec-shortcut-keys, :scope > kbd"))
     if (this.open) describeTrigger(this.trigger, this.#content())
   }
 

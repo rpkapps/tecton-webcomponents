@@ -65,6 +65,20 @@ describe("tec-card", () => {
     expect(getComputedStyle(base(custom!.querySelector("tec-card-content")!)).paddingInlineStart).toBe("32px")
   })
 
+  it("lets a flex-1 min-h-0 content shrink so a scroller inside scrolls", async () => {
+    const card = await fixture<TecCard>(html`<tec-card style="height: 200px">
+      <tec-card-header><tec-card-title>A</tec-card-title></tec-card-header>
+      <tec-card-content style="flex: 1 1 0%; min-height: 0">
+        <div class="scroller" style="flex: 1 1 0%; min-height: 0; overflow: auto"><div style="height: 1000px"></div></div>
+      </tec-card-content>
+    </tec-card>`)
+    const content = card.querySelector("tec-card-content")!
+    const scroller = card.querySelector<HTMLElement>(".scroller")!
+    expect(content.getBoundingClientRect().bottom).toBeLessThanOrEqual(card.getBoundingClientRect().bottom)
+    expect(scroller.scrollHeight).toBeGreaterThan(scroller.clientHeight)
+    expect(scroller.clientHeight).toBeGreaterThan(0)
+  })
+
   it("takes gap classes on the card itself", async () => {
     const card = await fixture<TecCard>(html`<tec-card style="gap: 8px">
       <tec-card-header><tec-card-title>A</tec-card-title></tec-card-header>
