@@ -6,7 +6,7 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, dev
 const errors = []
 page.on("console", (m) => m.type() === "error" && errors.push(m.text()))
 page.on("pageerror", (e) => errors.push(String(e)))
-await page.addInitScript((t) => { for (const k of ["theme", "tecton-theme", "tecton-docs-theme"]) localStorage.setItem(k, t) }, theme)
+await page.addInitScript((t) => { for (const k of ["tecton-docs:theme"]) localStorage.setItem(k, t) }, theme)
 await page.goto(`http://localhost:4437/docs/components/${page_}`, { waitUntil: "networkidle" })
 await page.waitForTimeout(800)
 for (const el of await page.$$("[data-slot=component-preview]")) {

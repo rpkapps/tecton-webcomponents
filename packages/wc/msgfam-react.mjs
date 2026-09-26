@@ -5,7 +5,7 @@ const b = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-119
 const p = await b.newPage({ viewport: { width: 1280, height: 900 } })
 await p.goto(`http://127.0.0.1:3000/docs/components/${page}`, { waitUntil: "networkidle" })
 await p.evaluate((d) => document.documentElement.classList.toggle("dark", d === "dark"), dark)
-await p.waitForTimeout(1000)
+await p.waitForSelector(".preview", { timeout: 15000 }); await p.waitForTimeout(1500)
 const previews = p.locator(".preview")
 console.log("count", await previews.count())
 for (const i of idx) {
