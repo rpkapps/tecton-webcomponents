@@ -1,0 +1,22 @@
+<form id="button-form" class="flex w-full max-w-sm flex-col gap-3">
+  <label class="flex flex-col gap-1.5 text-sm font-medium">
+    Well name
+    <input name="well" required value="34/10-A-12" class="h-8 rounded-md border border-input bg-transparent px-2.5 text-sm font-normal" />
+  </label>
+  <div class="flex justify-end gap-2">
+    <tec-button type="reset" variant="ghost">Reset</tec-button>
+    <tec-button type="submit">Save well</tec-button>
+  </div>
+  <output class="text-sm text-muted-foreground" aria-live="polite"></output>
+</form>
+<script type="module">
+  const form = document.getElementById("button-form")
+  const output = form.querySelector("output")
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    const data = new FormData(form)
+    output.textContent = `Submitted well=${data.get("well")}`
+  })
+  form.addEventListener("reset", () => (output.textContent = "Form reset"))
+</script>

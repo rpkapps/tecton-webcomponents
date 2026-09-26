@@ -8,7 +8,7 @@
  * Per tag: summary, attributes & properties, events, slots, CSS parts, CSS custom
  * properties, custom states and methods. Empty tables are left out.
  */
-import { findElement, loadManifest, propertyRows, publicMethods, signature } from "../lib/manifest"
+import { expandType, findElement, loadManifest, propertyRows, publicMethods, signature } from "../lib/manifest"
 import { inlineMarkdown } from "../lib/markdown"
 
 interface Props {
@@ -71,7 +71,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
         {props.length > 0 && (
           <>
             <h4>Attributes &amp; properties</h4>
-            <div class="typeset-scroll no-scrollbar">
+            <div class="typeset-scroll docs-no-scrollbar">
               <table>
                 <thead>
                   <tr>
@@ -95,7 +95,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
                           <div class="api-muted text-xs">{[row.reflects && "reflects", row.readonly && "read-only"].filter(Boolean).join(", ")}</div>
                         )}
                       </td>
-                      <td set:html={code(row.type)} />
+                      <td set:html={code(expandType(row.type, doc?.modulePath))} />
                       <td class="whitespace-nowrap" set:html={code(row.default)} />
                       <td set:html={deprecated(row.deprecated) + md(row.description)} />
                     </tr>
@@ -109,7 +109,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
         {d?.events?.length ? (
           <>
             <h4>Events</h4>
-            <div class="typeset-scroll no-scrollbar">
+            <div class="typeset-scroll docs-no-scrollbar">
               <table>
                 <thead>
                   <tr>
@@ -124,7 +124,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
                       <td class="whitespace-nowrap">
                         <code>{event.name}</code>
                       </td>
-                      <td set:html={code(event.type?.text)} />
+                      <td set:html={code(expandType(event.type?.text, doc?.modulePath))} />
                       <td set:html={deprecated(event.deprecated) + md(event.description ?? event.summary)} />
                     </tr>
                   ))}
@@ -137,7 +137,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
         {d?.slots?.length ? (
           <>
             <h4>Slots</h4>
-            <div class="typeset-scroll no-scrollbar">
+            <div class="typeset-scroll docs-no-scrollbar">
               <table>
                 <thead>
                   <tr>
@@ -161,7 +161,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
         {d?.cssParts?.length ? (
           <>
             <h4>CSS parts</h4>
-            <div class="typeset-scroll no-scrollbar">
+            <div class="typeset-scroll docs-no-scrollbar">
               <table>
                 <thead>
                   <tr>
@@ -187,7 +187,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
         {d?.cssProperties?.length ? (
           <>
             <h4>CSS custom properties</h4>
-            <div class="typeset-scroll no-scrollbar">
+            <div class="typeset-scroll docs-no-scrollbar">
               <table>
                 <thead>
                   <tr>
@@ -215,7 +215,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
         {d?.cssStates?.length ? (
           <>
             <h4>Custom states</h4>
-            <div class="typeset-scroll no-scrollbar">
+            <div class="typeset-scroll docs-no-scrollbar">
               <table>
                 <thead>
                   <tr>
@@ -241,7 +241,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
         {methods.length > 0 && (
           <>
             <h4>Methods</h4>
-            <div class="typeset-scroll no-scrollbar">
+            <div class="typeset-scroll docs-no-scrollbar">
               <table>
                 <thead>
                   <tr>
@@ -290,6 +290,7 @@ const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest,
     }
     table {
       width: 100%;
+      font-size: 0.9em;
     }
     td :global(code),
     th :global(code) {

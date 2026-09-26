@@ -1,0 +1,46 @@
+---
+title: Accessibility
+description: What every Tecton element guarantees — roles, keyboard, focus, labels, forms — and how shadow DOM is handled.
+order: 9
+---
+
+Accessibility is part of the definition of done of every component, not an add-on. Each interactive element implements the [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/) pattern that [React Aria](https://react-spectrum.adobe.com/react-aria/) implements for the same component, and is tested for it in a real browser.
+
+## What every component guarantees
+
+- **Semantics.** The right role, states and properties (`aria-expanded`, `aria-selected`, `aria-checked`, `aria-invalid` …), kept in sync with the component's state.
+- **Keyboard.** The complete keyboard model of the pattern: <Kbd>Tab</Kbd> into and out of the widget, arrow keys, <Kbd>Home</Kbd>/<Kbd>End</Kbd>, <Kbd>PageUp</Kbd>/<Kbd>PageDown</Kbd>, typeahead, <Kbd>Enter</Kbd>/<Kbd>Space</Kbd> and <Kbd>Esc</Kbd> where the pattern defines them. Every component page lists its keys under **Keyboard interactions**.
+- **Focus.** A visible focus ring for keyboard users only (`:focus-visible`), focus moved into overlays when they open and back to the trigger when they close, and roving focus inside composite widgets.
+- **Forms.** Controls are form-associated: labelled by `<label for>`, validated natively, announced as invalid with their message. See [Forms](/docs/forms).
+- **Internationalisation.** Right-to-left layouts through logical properties and `dir`, including reversed arrow-key behaviour where the pattern is horizontal; numbers and dates formatted with `Intl`; every visually hidden label (`close-label`, `remove-label`…) is an attribute you can translate.
+- **Preferences.** Animations run only with `prefers-reduced-motion: no-preference`; borders and focus rings stay visible in forced-colours (high-contrast) mode.
+- **Tests.** Each component is tested in Chromium with axe-core, keyboard interaction through real key presses, and assertions on its ARIA states.
+
+## Your part
+
+The components cannot know what your content means. Make sure that:
+
+- **Every control has a name.** Visible text for buttons, a `<tec-field-label>`, `<label for>` or `label` attribute for form controls, and `aria-label` for icon-only buttons (`aria-label="Delete well 34/10-A-12"`, including the object when the icon repeats).
+- **Icons in content are hidden** (`aria-hidden="true"`) when text next to them says the same thing, and labelled when they carry meaning alone.
+- **Headings and landmarks** structure the page; components such as dialogs and sheets take a title for their accessible name.
+- **Colour is not the only signal.** Status badges and alerts carry text; charts need labels or a table.
+- **Localised strings** are translated: set `close-label`, `previous-label` and similar attributes in other languages.
+
+## Shadow DOM and ARIA
+
+Shadow DOM is a boundary for ID references: an `aria-labelledby="x"` or `<label for="x">` in the page cannot point at an element inside a component's shadow root, and the other way round. Tecton elements are built so that you never need to cross it:
+
+- **The host is the control.** Where a component wraps a native control (`<button>`, `<input>`, `<dialog>`), it uses `delegatesFocus`: focusing, clicking and labelling the host reach the inner control. `aria-label` and the relevant `aria-*` attributes set on the host are forwarded to it.
+- **Labels work.** Form controls are form-associated, so a `<label for>` pointing at the **host** labels it, and the component passes the label to its inner control.
+- **Items carry their own roles.** In collections — options, menu items, tabs, tree items, radios — each light-DOM item is the semantic node itself (role and states set through `ElementInternals`), so the relationships stay in one tree.
+- **Element references, not IDs.** When an inner control must reference slotted content — a combobox input pointing at the active option, a field control pointing at its description — the component uses ARIA element reflection (`ariaActiveDescendantElement`, `ariaDescribedByElements`), which may reference elements outside the shadow root.
+- **Overlays use the top layer.** Modal dialogs are native `<dialog>` elements opened with `showModal()` (the rest of the page becomes inert, <Kbd>Esc</Kbd> closes); popups use the Popover API. No portals move content away from its trigger.
+- **One announcer.** Toasts and other live announcements go through a single live region in the page, where screen readers pick them up reliably.
+
+<Callout title="Referencing a component from outside">
+  Point `aria-describedby`, `aria-controls` or `<label for>` at the component's **host** element, never at something inside it. For anything else, prefer the component's own attributes and slots (`label`, `description`, a `slot="trigger"`), which wire the relationships for you.
+</Callout>
+
+## Testing your pages
+
+Automated checks find a part of the problems: run [axe](https://github.com/dequelabs/axe-core) (it traverses open shadow roots) in your end-to-end tests, and check the accessibility tree with Playwright's `ariaSnapshot()`. Then use the page with the keyboard alone, and with a screen reader — VoiceOver with Safari, NVDA with Firefox or Chrome.

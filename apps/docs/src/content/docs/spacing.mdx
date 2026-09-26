@@ -1,0 +1,54 @@
+---
+title: Spacing & radius
+description: Tecton's spacing scale and corner radii, as variables and Tailwind utilities.
+order: 4
+---
+
+## Spacing
+
+Tecton's spacing scale is 4px-based and coincides with Tailwind's default spacing (`--spacing: 0.25rem`), so the Tailwind utilities need no configuration. Components follow the same scale internally.
+
+| Tecton | px | Tailwind |
+| --- | --- | --- |
+| space-0 | 0 | `0` |
+| space-25 | 2 | `0.5` |
+| space-50 | 4 | `1` |
+| space-75 | 6 | `1.5` |
+| space-100 | 8 | `2` |
+| space-150 | 12 | `3` |
+| space-200 | 16 | `4` |
+| space-250 | 20 | `5` |
+| space-300 | 24 | `6` |
+| space-400 | 32 | `8` |
+| space-500 | 40 | `10` |
+| space-600 | 48 | `12` |
+| space-700 | 56 | `14` |
+| space-800 | 64 | `16` |
+| space-900 | 72 | `18` |
+| space-1000 | 80 | `20` |
+| space-1200 | 96 | `24` |
+| space-1400 | 112 | `28` |
+| space-1600 | 128 | `32` |
+| space-1800 | 144 | `36` |
+
+The values are also exposed as `--tecton-space-*` variables for CSS without Tailwind (`gap: var(--tecton-space-200)`).
+
+## Radius
+
+Tecton's default corner radius is **4px**. The scale is not a multiple of a single base, so each step is its own variable:
+
+| Tecton | px | Variable / Tailwind |
+| --- | --- | --- |
+| radius-0 | 0 | `rounded-none` |
+| radius-25 | 2 | `--tec-radius-sm` → `rounded-sm` |
+| radius-50 | 4 | `--tec-radius-md` → `rounded-md` (default) |
+| radius-100 | 8 | `--tec-radius-lg` → `rounded-lg` |
+| radius-150 | 12 | `--tec-radius-xl` → `rounded-xl` |
+| radius-200 | 16 | `--tec-radius-2xl` → `rounded-2xl` |
+| radius-round | 1000 | `rounded-full` |
+
+<ComponentPreview name="radius-demo" />
+
+<Callout>
+  Components that use the medium radius (buttons, inputs, menu items) render Tecton's 4px; large surfaces (cards, alerts, dialogs) render 8px. Set `--tec-radius-md` or `--tec-radius-lg` on any element to change the corners of every component below it.
+</Callout>

@@ -80,6 +80,8 @@ interface Manifest {
 
 function manifestPath(): string | undefined {
   const candidates: string[] = []
+  // Override for previews of an unreleased manifest.
+  if (process.env.TECTON_WC_MANIFEST) candidates.push(resolve(process.env.TECTON_WC_MANIFEST))
   try {
     const require = createRequire(join(process.cwd(), "package.json"))
     candidates.push(require.resolve("@tecton/wc/custom-elements.json"))
@@ -197,4 +199,29 @@ export function signature(method: CemMember): string {
     .join(", ")
   const ret = method.return?.type?.text
   return `${method.name}(${params})${ret ? `: ${ret}` : ""}`
+}
+
+const sourceCache = new Map<string, string>()
+
+function moduleSource(modulePath: string): string {
+  if (!sourceCache.has(modulePath)) {
+    const roots = [resolve(process.cwd(), "node_modules/@tecton/wc"), resolve(process.cwd(), "../../packages/wc")]
+    const file = roots.map((root) => resolve(root, modulePath)).find((f) => existsSync(f))
+    sourceCache.set(modulePath, file ? readFileSync(file, "utf8") : "")
+  }
+  return sourceCache.get(modulePath)!
+}
+
+/**
+ * Expands a type alias declared in the element's module (`ButtonVariant` →
+ * `"default" | "outline" | …`); the manifest only records the alias name.
+ */
+export function expandType(text: string | undefined, modulePath: string | undefined): string | undefined {
+  if (!text || !modulePath) return text
+  return text.replace(/\b([A-Z]\w*)\b/g, (name) => {
+    const source = moduleSource(modulePath)
+    const match = new RegExp(`\\btype\\s+${name}\\s*=\\s*([^;]+?)(?:;|\\n\\s*\\n|\\n(?=export|\\/\\*|import))`).exec(source)
+    const expanded = match?.[1].replace(/\s+/g, " ").replace(/^\|\s*/, "").trim()
+    return expanded && expanded.length < 200 && !/[{}<>]/.test(expanded) ? expanded : name
+  })
 }

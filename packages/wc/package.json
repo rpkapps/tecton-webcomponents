@@ -26,5 +26,5 @@
     "vite": "^8.3.1",
     "vitest": "^5.0.2"
   },
-  "customElements": "custom-elements.json"
+  "customElements": "/tmp/claude-0/-home-user/7824a982-3b74-50e1-abe5-6bb120608676/scratchpad/cem/custom-elements.json"
 }

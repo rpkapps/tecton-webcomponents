@@ -113,6 +113,8 @@ function score(text: string, query: string) {
   // all words of the query somewhere
   const words = query.split(/\s+/).filter(Boolean)
   if (words.length > 1 && words.every((w) => t.includes(w))) return 30
+  // "theme" finds "theming": the query without its last letter
+  if (query.length >= 4 && t.includes(query.slice(0, -1))) return 25
   return 0
 }
 
@@ -140,7 +142,7 @@ function search(entries: SearchEntry[], raw: string): Result[] {
     }
     for (const [text, slug] of e.h ?? []) {
       const hs = score(text, query)
-      if (hs >= 40) scored.push({ id: `r${i}-${slug}`, title: text, url: `${e.u}#${slug}`, group: e.g, detail: e.t, kind: "heading", s: hs - 5 })
+      if (hs >= 40) scored.push({ id: `r${i}-${slug}`, title: text, url: `${e.u}#${slug}`, group: e.g, detail: e.t, kind: "heading", s: hs - 30 })
     }
   })
   return scored.sort((a, b) => b.s - a.s).slice(0, 50)

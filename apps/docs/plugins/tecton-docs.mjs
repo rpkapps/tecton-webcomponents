@@ -65,8 +65,8 @@ export function tectonDocs() {
       if (id.endsWith(EXAMPLE_QUERY)) {
         const path = id.slice(0, -EXAMPLE_QUERY.length)
         const file = path.startsWith("/src/") ? join(docsRoot, path) : resolve(importer ? dirname(importer) : docsRoot, path)
-        // A virtual id: no other plugin treats it as an HTML document.
-        return EXAMPLE_PREFIX + file
+        // A virtual .js id: no other plugin (Astro's .html pages) treats it as HTML.
+        return EXAMPLE_PREFIX + file + ".js"
       }
     },
     async load(id) {
@@ -80,7 +80,7 @@ export function tectonDocs() {
         return files.map((file) => `import ${JSON.stringify(file)};`).join("\n") + "\nexport {};\n"
       }
       if (id.startsWith(EXAMPLE_PREFIX)) {
-        const file = id.slice(EXAMPLE_PREFIX.length)
+        const file = id.slice(EXAMPLE_PREFIX.length, -".js".length)
         this.addWatchFile(file)
         if (!existsSync(file)) return "export {};\n"
         const code = extractExampleScript(readFileSync(file, "utf8"))

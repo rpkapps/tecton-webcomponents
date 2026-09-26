@@ -33,7 +33,7 @@ export function copyButtonHast() {
       ariaLabel: "Copy code",
       title: "Copy code",
       className: [
-        "copy-button",
+        "docs-copy-button",
         "absolute",
         "top-3",
         "end-2",

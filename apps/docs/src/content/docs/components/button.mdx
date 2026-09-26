@@ -1,0 +1,296 @@
+---
+title: Button
+description: Displays a button or a link that looks like a button.
+tags: ["tec-button"]
+---
+
+<ComponentPreview name="button-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/button"
+```
+
+```html
+<tec-button variant="outline">Button</tec-button>
+```
+
+The import registers `<tec-button>`. Importing `@tecton/wc` registers every element at once; see [Installation](/docs/installation).
+
+## Size
+
+Use the `size` attribute to change the size of the button. The `icon-*` sizes make a square button for a single icon.
+
+<ComponentPreview name="button-size" />
+
+## Default
+
+<ComponentPreview name="button-default" />
+
+## Outline
+
+<ComponentPreview name="button-outline" />
+
+## Secondary
+
+<ComponentPreview name="button-secondary" />
+
+## Ghost
+
+<ComponentPreview name="button-ghost" />
+
+## Destructive
+
+<ComponentPreview name="button-destructive" />
+
+## Link
+
+<ComponentPreview name="button-link" />
+
+## Icon
+
+An icon-only button needs an accessible name: set `aria-label` on the element.
+
+<ComponentPreview name="button-icon" />
+
+## With Icon
+
+Put icons in the `start` or `end` slot so the padding adjusts to them. Any SVG works — Lucide icons, `<tec-icon>` or your own.
+
+<ComponentPreview name="button-with-icon" />
+
+## Rounded
+
+The element itself is the button's box — background, border, radius and focus ring — so a `rounded-full` class on it rounds the button. The `--tec-button-radius` custom property does the same from a stylesheet, and the inner `<button>` is exposed as the `base` part. See [Styling](/docs/styling).
+
+<ComponentPreview name="button-rounded" />
+
+## Spinner
+
+Put a [`<tec-spinner>`](/docs/components/spinner) in the `start` or `end` slot to show that work is in progress.
+
+<ComponentPreview name="button-spinner" />
+
+## Button Group
+
+To group related buttons, use [`<tec-button-group>`](/docs/components/button-group).
+
+<ComponentPreview name="button-group-demo" />
+
+## As Link
+
+With `href`, the button renders a real `<a>` in its shadow root: it is announced as a link, opens in a new tab with the usual modifier keys and supports `target`, `rel` and `download`. **Do not nest an `<a>` inside a `<tec-button>`**: interactive content inside a button is invalid, and the link would be announced as a button.
+
+<ComponentPreview name="button-as-link" />
+
+## Forms
+
+`<tec-button>` is a form-associated custom element. `type="submit"` and `type="reset"` submit and reset the enclosing `<form>` like a native button — with constraint validation, the `submit` event's `submitter` and the button's `name` / `value` in the form data. Unlike a native button, the default `type` is `"button"`: a button without `type` never submits a form by accident. A `disabled` ancestor `<fieldset>` disables it. See [Forms](/docs/forms).
+
+<ComponentPreview name="button-form" />
+
+## Events
+
+A button fires the native `click` event for mouse, touch, <Kbd>Enter</Kbd> and <Kbd>Space</Kbd>, and never while it is `disabled`. Listen for it as for any element; there is no custom press event.
+
+<ComponentPreview name="button-events" />
+
+## Floating action button
+
+A Tecton FAB is a button recipe: `class="h-10 rounded-full shadow-md"` for the extended form and `size="icon" class="rounded-full shadow-md"` (with an `aria-label`) for the round one. Any `variant` works; `default`, `secondary`, `ghost` and `outline` correspond to the design system's primary, secondary, tertiary and outlined FABs.
+
+<ComponentPreview name="button-fab" />
+
+## RTL
+
+Buttons use logical properties, so slotted icons and padding follow `dir="rtl"` on any ancestor. Flip direction-dependent icons yourself (`rtl:rotate-180`).
+
+<ComponentPreview name="button-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space", "Activates the button (on key up, like a native button)."],
+    ["Enter", "Activates the button. A link button (`href`) follows the link."],
+    ["Tab / Shift+Tab", "Moves focus to the next / previous focusable element. A disabled button is skipped."],
+  ]}
+/>
+
+## Accessibility
+
+- Renders a native `<button>` (or `<a>` with `href`) in its shadow root, with `delegatesFocus`, so the element is focused, clicked and announced exactly like the native control. Calling `focus()` on the host focuses the inner control.
+- The accessible name is the slotted text. For an icon-only button, set `aria-label` on `<tec-button>`; it is forwarded to the inner control. Slotted icons should be `aria-hidden="true"`.
+- `disabled` disables the inner control: the button leaves the tab order and fires no `click`. A `disabled` ancestor `<fieldset>` disables it too.
+- `aria-expanded`, `aria-haspopup`, `aria-pressed` and `aria-controls` set on the host are forwarded to the inner control, which is how [overlays](/docs/components/dropdown-menu) wire a slotted trigger.
+- The focus ring is the Tecton 2px ring and stays visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-button"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Something happens in place: submit, open a dialog, run an action, trigger a menu.
+- A button (or a link that must look like one, with `href`) is the right semantics, and one of the action weights fits: `default`, `secondary`, `outline`, `ghost`, `destructive`, `link`.
+
+### Not for
+
+- a link inside a sentence or a paragraph: use [Link](/docs/tecton/link)
+- several related actions behind one control: use [Dropdown Menu](/docs/components/dropdown-menu)
+- copying a value to the clipboard with feedback: use [Copy Button](/docs/tecton/copy-button)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Handle presses with the `click` event, which covers pointer, <Kbd>Enter</Kbd> and <Kbd>Space</Kbd>; disable with the `disabled` attribute or property.
+
+</Do>
+
+<Do>
+
+Pick the weight with `variant` and the box with `size`; keep `class` on the element for layout (`w-full`, `ms-auto`) and documented recipes (`rounded-full shadow-md`).
+
+</Do>
+
+<Do>
+
+Put icons in `slot="start"` or `slot="end"` so the padding adjusts, and give icon-only buttons an `aria-label`.
+
+</Do>
+
+<Do>
+
+Navigate with `href`, which renders a real link; never with a `click` handler that sets `location`.
+
+</Do>
+
+<Do>
+
+Each view or panel has one primary button for its main action (`variant="default"`); every other action is secondary, outline or ghost by weight.
+
+</Do>
+
+<Do>
+
+Label a button with a verb and its object ("Shut in well", "Export LAS"), never "OK", "Submit" or "Click here".
+
+</Do>
+
+<Do>
+
+When an icon repeats across rows, its accessible name includes the object (`aria-label="Delete well 34/10-A-12"`, not "Delete").
+
+</Do>
+
+<Do>
+
+Icon-only buttons in toolbars, table rows and panel headers stay quiet (`variant="ghost"`, `size="icon-sm"` or `"icon"`).
+
+</Do>
+
+<Do>
+
+Give a button visible text when its icon alone is ambiguous; go icon-only just for universal glyphs like close, search, refresh or more.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="An anchor nested inside a button">
+
+<Wrong>
+
+```html
+<tec-button variant="secondary" size="sm">
+  <a href="/wells/34-10-A-12">Open well</a>
+</tec-button>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-button variant="secondary" size="sm" href="/wells/34-10-A-12">Open well</tec-button>
+```
+
+</Correct>
+
+Interactive content inside a button is invalid: the page gets two tab stops for one control, and the link is announced and activated as a button.
+
+</Dont>
+
+<Dont severity="HIGH" title='disabled="false" to enable a button'>
+
+<Wrong>
+
+```html
+<tec-button disabled="false">Save</tec-button>
+```
+
+</Wrong>
+
+<Correct>
+
+```ts
+saveButton.disabled = false // or saveButton.removeAttribute("disabled")
+```
+
+</Correct>
+
+`disabled` is a boolean attribute: any value, including `"false"`, disables the button. Remove the attribute, or set the `disabled` property.
+
+</Dont>
+
+<Dont severity="HIGH" title="Sizing and colouring a button with classes">
+
+<Wrong>
+
+```html
+<tec-button class="h-12 bg-blue-600 px-6 text-white">Assign</tec-button>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-button size="lg">Assign</tec-button>
+```
+
+</Correct>
+
+The variant owns colour and the size owns height, padding and icon size: a hand-set height breaks the size scale, `px-6` pads the box but not the label, and Tailwind's stock palette is reset here, so `bg-blue-600` emits no CSS at all. Keep classes on a button for layout (`w-full`, `ms-auto`) and shape recipes such as the FAB.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A clickable div instead of a button">
+
+<Wrong>
+
+```html
+<div class="cursor-pointer rounded-md border px-3 py-1.5" onclick="exportLas()">Export LAS</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-button variant="outline" onclick="exportLas()">Export LAS</tec-button>
+```
+
+</Correct>
+
+A `div` is not focusable, has no role and does not react to <Kbd>Enter</Kbd> or <Kbd>Space</Kbd>, so keyboard and screen reader users cannot use it.
+
+</Dont>

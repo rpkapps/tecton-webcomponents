@@ -1,17 +1,45 @@
 ---
 title: Introduction
-description: test
+description: Tecton Web Components are the Tecton design system as framework-agnostic custom elements, built with Lit.
 order: 0
 ---
 
-Hello **world**.
+**Tecton Web Components** (`@tecton/wc`) give every application the Tecton look and behaviour, whatever it is built with. Each component is a standard custom element — `<tec-button>`, `<tec-dialog>`, `<tec-select>` — that works in plain HTML, in React, Vue, Angular and Svelte, and in server-rendered pages. The component set, names and variants follow the shadcn/ui vocabulary with the Tecton theme, and every interactive element meets the accessibility bar of React Aria and the WAI-ARIA Authoring Practices.
+
+```html
+<tec-button variant="outline">
+  <tec-icon name="well" slot="start"></tec-icon>
+  New well
+</tec-button>
+```
 
 ## What you get
 
-```html title="index.html"
-<tec-button>Hi</tec-button>
-```
+- **`@tecton/wc`** — one package with every component (`@tecton/wc/<name>` registers one family, `@tecton/wc` all of them), the Tecton domain icons (`<tec-icon>`), the theme stylesheet and an optional Tailwind preset.
+- **Native elements** — shadow DOM encapsulation, form-associated controls that submit, validate and reset with the `<form>` they are in, and standard events (`click`, `input`, `change`) plus a few `tec-*` custom events.
+- **Tecton tokens** — colours, radii, type and motion are `--tec-*` CSS custom properties generated from the Tecton design tokens. They cross shadow roots by inheritance, so light, dark and any re-theming need no component code. See [Theming](/docs/theming).
+- **A documented styling API** — variants and sizes as attributes, `::part()` for the internals, custom properties for common knobs and `:state()` for read-only states. See [Styling](/docs/styling).
 
-<Callout title="Note">Some `code`.</Callout>
+## Principles
 
-<ComponentPreview name="button-demo" />
+<Callout title="The platform first">
+  A Tecton element behaves like the native element it stands for: `<tec-button>` is focused, clicked, disabled and submitted like a `<button>`, and `<tec-input>` has a `value`, a `name`, `required` and `checkValidity()`. When the platform has an answer — `<dialog>`, the Popover API, `ElementInternals` — the component uses it.
+</Callout>
+
+- **Dark first.** Tecton applications run dark by default; both themes come straight from the Tecton token export.
+- **Accessible by default.** Roles, states, the full keyboard model and focus management are part of every component, and tested with axe in a real browser. See [Accessibility](/docs/accessibility).
+- **Composable.** Compound components are nested elements in the light DOM, one element per part (`<tec-select>` › `<tec-select-item>`), so markup reads like the design.
+- **Framework-agnostic.** No runtime beyond Lit; properties for data, attributes for configuration, events for everything the user does. See [Frameworks](/docs/frameworks).
+
+## Where to go next
+
+| Section | What it covers |
+| --- | --- |
+| [Installation](/docs/installation) | Adding `@tecton/wc` to an application, the theme stylesheet, fonts, CDN use and TypeScript |
+| [Theming](/docs/theming) | The `--tec-*` variables, light and dark, re-theming a subtree, the Tecton palette |
+| [Styling](/docs/styling) | Attributes, `::part()`, custom properties, `:state()` and Tailwind in your own markup |
+| [Frameworks](/docs/frameworks) | Using the elements from React, Vue, Angular, Svelte and plain HTML |
+| [Forms](/docs/forms) | Form-associated controls, native validation, `FormData` and reset |
+| [Components](/docs/components) | The shadcn/ui component set as custom elements |
+| [Tecton components](/docs/tecton) | Chip, tree view, meter, stat, panel, app shell… |
+| [Icons](/docs/icons) | The Tecton domain icons and how they work alongside Lucide |

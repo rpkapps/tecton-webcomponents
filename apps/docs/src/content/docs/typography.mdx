@@ -1,0 +1,62 @@
+---
+title: Typography
+description: Figtree for the interface, IBM Plex Mono for data — as --tec-* variables and Tailwind utilities.
+order: 3
+---
+
+Tecton uses **Figtree** for interface text and **IBM Plex Mono** (tabular numerals) for numeric readouts. `@tecton/wc/fonts.css` loads both, and the theme exposes them as `--tec-font-sans` and `--tec-font-mono`. Components use them internally; for your own markup use the variables or, with the Tailwind preset, the `font-sans` / `font-mono` utilities:
+
+```html
+<p class="font-sans text-sm">Interface text</p>
+<span class="font-mono tabular-nums">248.6</span>
+```
+
+<ComponentPreview name="typography-demo" />
+
+## Type scale
+
+The Tecton scale, with the matching theme variables and Tailwind utilities. Headings use weight 500 (`font-medium`); body text is 400.
+
+| Tecton style | Size / weight / line-height | Tailwind |
+| --- | --- | --- |
+| display1 | 3rem / 500 / 1.208 | `text-5xl font-medium leading-tight` |
+| display2 | 2.5rem / 500 / 1.2 | `text-4xl font-medium leading-tight` |
+| display3 | 2rem / 500 / 1.25 | `text-3xl font-medium leading-tight` |
+| heading1 | 1.5rem / 500 / 1.25 | `text-2xl font-medium` |
+| heading2 | 1.25rem / 500 / 1.2 | `text-xl font-medium` |
+| large | 1rem / 500 / 1.25 | `text-base font-medium` |
+| medium (body) | 0.875rem / 400 / 1.2857 | `text-sm` |
+| mediumStrong | 0.875rem / 500 | `text-sm font-medium` |
+| small | 0.75rem / 400 / 1.333 | `text-xs` |
+| smallStrong | 0.75rem / 500 | `text-xs font-medium` |
+| tiny | 0.625rem / 500 / 1.4 | `text-[0.625rem] font-medium` |
+| largeData | 1rem mono | `font-mono text-base tabular-nums` |
+| mediumData | 0.875rem mono | `font-mono text-sm tabular-nums` |
+| smallData | 0.75rem mono | `font-mono text-xs tabular-nums` |
+| actionMedium | 0.875rem / 500 | `text-sm font-medium` (buttons) |
+| actionSmall | 0.75rem / 500 | `text-xs font-medium` |
+
+## Variables
+
+| Variable | Value |
+| --- | --- |
+| `--tec-font-sans` | Figtree, then the system UI font |
+| `--tec-font-mono` | IBM Plex Mono, then the system monospace font |
+| `--tec-text-xs` … `--tec-text-2xl` | 0.75rem, 0.875rem, 1rem, 1.125rem, 1.25rem, 1.5rem |
+| `--tec-text-<size>--line-height` | the matching line height (unitless) |
+| `--tec-font-weight-normal` / `-medium` / `-semibold` | 400 / 500 / 600 |
+
+The raw Tecton values are also available as `--tecton-font-size-*`, `--tecton-font-weight-*` and `--tecton-line-height-*`.
+
+```css
+.readout {
+  font-family: var(--tec-font-mono);
+  font-size: var(--tec-text-sm);
+  line-height: var(--tec-text-sm--line-height);
+  font-variant-numeric: tabular-nums;
+}
+```
+
+<Callout variant="info">
+  Components set their own text sizes (buttons and inputs use `--tec-text-sm`, Tecton's `actionMedium` / `medium` styles) and inherit the font family, so a subtree with another `font-family` changes the components inside it too.
+</Callout>

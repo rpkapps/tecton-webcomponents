@@ -1,0 +1,165 @@
+---
+title: shimmer
+description: Utilities for adding a shimmer effect to text elements.
+---
+
+<ComponentPreview name="shimmer-demo" />
+
+## Installation
+
+The utilities ship as CSS with `@tecton/wc`, in two flavours with the same class names. Load one of them.
+
+**Plain CSS**, for any page (or `import "@tecton/wc/utilities.css"` from a bundled script, or a `<link rel="stylesheet">` to the file):
+
+```css
+@import "@tecton/wc/utilities.css";
+```
+
+**Tailwind CSS v4**, which adds variants (`md:shimmer-none`) and the modifiers (`shimmer-duration-1000`, `shimmer-color-blue-560/60`):
+
+```css
+@import "tailwindcss";
+@import "@tecton/wc/tailwind.css";
+@import "@tecton/wc/tailwind-utilities.css";
+```
+
+## Usage
+
+| Class | Styles |
+| --- | --- |
+| `shimmer` | `background-clip: text;` <br /> `animation: tec-shimmer var(--shimmer-duration, 2s) linear infinite;` |
+| `shimmer-once` | `animation-iteration-count: 1;` |
+| `shimmer-reverse` | `animation-direction: reverse;` |
+| `shimmer-none` | `--shimmer-image: none;` <br /> `--shimmer-text-fill: currentColor;` |
+| `shimmer-color-<color>` (Tailwind) | `--shimmer-color: <color>;` |
+| `shimmer-color-[<value>]` (Tailwind) | `--shimmer-color: <value>;` |
+| `shimmer-color-<color>/<pct>` (Tailwind) | `--shimmer-color: color-mix(in oklch, <color> <pct>, transparent);` |
+| `shimmer-duration-<number>` (Tailwind) | `--shimmer-duration: calc(<number> * 1ms);` |
+| `shimmer-spread-<number>` (Tailwind) | `--shimmer-spread: calc(var(--spacing) * <number>);` |
+| `shimmer-spread-[<value>]` (Tailwind) | `--shimmer-spread: <value>;` |
+| `shimmer-angle-<number>` (Tailwind) | `--shimmer-angle: calc(<number> * 1deg);` |
+
+| Custom property | Default | Description |
+| --- | --- | --- |
+| `--shimmer-color` | Derived from `currentColor` | Colour of the highlight. |
+| `--shimmer-duration` | `2s` | Length of one sweep. |
+| `--shimmer-spread` | `calc(3ch + 40px)` | Width of the highlight band. |
+| `--shimmer-angle` | `20deg` | Tilt of the highlight band. |
+
+Add `shimmer` to a text element.
+
+```html
+<p class="shimmer text-muted-foreground">Generating response&hellip;</p>
+```
+
+The shimmer is built on `currentColor`, so it adapts to the element:
+
+- The highlight is derived from the text colour, with no configuration needed.
+- It works on any colour, from `text-muted-foreground` to brand colours.
+- In dark mode, the highlight automatically brightens to stay visible (it follows the Tecton theme's `color-scheme` through `light-dark()`).
+
+The effect is pure CSS. The text is painted with `background-clip: text`, and the highlight sweeps across it in a seamless loop.
+
+## With Marker
+
+The shimmer composes with any element that renders text, including Tecton elements whose text you slot in. A common pattern is a [Marker](/docs/components/marker) showing a live status while the assistant is working:
+
+<ComponentPreview name="shimmer-marker" />
+
+```html
+<tec-marker role="status">
+  <tec-marker-icon><tec-spinner></tec-spinner></tec-marker-icon>
+  <tec-marker-content class="shimmer">Thinking&hellip;</tec-marker-content>
+</tec-marker>
+```
+
+## Color
+
+Set `--shimmer-color` (Tailwind: `shimmer-color-<color>`) to choose the highlight colour explicitly. The Tailwind utility accepts Tecton palette colours with an optional opacity modifier, or any arbitrary colour value.
+
+<ComponentPreview name="shimmer-color" />
+
+```html
+<p class="shimmer shimmer-color-blue-560/60">Generating response&hellip;</p>
+<p class="shimmer" style="--shimmer-color: #378ADD">Generating response&hellip;</p>
+```
+
+## Duration
+
+Set `--shimmer-duration` (Tailwind: `shimmer-duration-<number>`, in milliseconds) for the length of one sweep. The default is `2s`.
+
+<ComponentPreview name="shimmer-duration" />
+
+```html
+<p class="shimmer shimmer-duration-1000">Generating response&hellip;</p>
+<p class="shimmer" style="--shimmer-duration: 1s">Generating response&hellip;</p>
+```
+
+## Spread
+
+Set `--shimmer-spread` (Tailwind: `shimmer-spread-<number>` on the spacing scale) for the width of the highlight band. The default is `calc(3ch + 40px)`: a fixed base plus a `3ch` term that scales with the font size.
+
+<ComponentPreview name="shimmer-spread" />
+
+```html
+<p class="shimmer shimmer-spread-24">Generating response&hellip;</p>
+<p class="shimmer shimmer-spread-[5rem]">Generating response&hellip;</p>
+```
+
+## Angle
+
+Set `--shimmer-angle` (Tailwind: `shimmer-angle-<number>`, in degrees) for the tilt of the highlight band. The default is `20deg`.
+
+<ComponentPreview name="shimmer-angle" />
+
+```html
+<p class="shimmer shimmer-angle-45">Generating response&hellip;</p>
+```
+
+## Reverse
+
+Use `shimmer-reverse` to sweep the highlight in the opposite direction. In RTL layouts the sweep already follows the reading direction. See [RTL](#rtl).
+
+```html
+<p class="shimmer shimmer-reverse">Generating response&hellip;</p>
+```
+
+## Play Once
+
+Use `shimmer-once` to play a single sweep instead of looping, useful as a reveal when streaming completes. Pair it with a duration to control how long the sweep takes.
+
+<ComponentPreview name="shimmer-once" />
+
+```html
+<p class="shimmer shimmer-duration-1100 shimmer-once">Response generated.</p>
+```
+
+## Disabling the Shimmer
+
+Use `shimmer-none` to turn the effect off and render the text normally. It works in any class order, so the typical use is responsive or stateful (`md:shimmer-none` with Tailwind):
+
+<ComponentPreview name="shimmer-none" />
+
+```html
+<p class="shimmer md:shimmer-none">Generating response&hellip;</p>
+```
+
+## Fallback
+
+The shimmer is built on modern colour features, [relative colour syntax](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Relative_colors), `light-dark()` and `color-mix()`, which are available in all current browsers. In older browsers without support, the highlight gradient is dropped and the text can render transparent. If you target older browsers, apply `shimmer` conditionally, e.g. with `@supports (color: oklch(from white l c h))` or Tailwind's `supports-[color:oklch(from_white_l_c_h)]:shimmer`.
+
+## Reduced Motion
+
+When the user prefers reduced motion, the animation is disabled automatically and the text renders normally. There is nothing to configure.
+
+## RTL
+
+The sweep follows the reading direction (`:dir(rtl)`), left to right in LTR and right to left in RTL, with no extra classes. Use `shimmer-reverse` to flip the direction manually.
+
+<ComponentPreview name="shimmer-rtl" />
+
+## Accessibility
+
+- The shimmer only changes how text is painted; the text stays real, selectable and announced as usual.
+- For a live status ("Thinking…"), put the text in an element with `role="status"` (or `aria-live="polite"`) so the change is announced; the shimmer alone conveys nothing to assistive technology.
+- It stops under `prefers-reduced-motion: reduce`, and the text keeps the element's own colour, so contrast is that of the text.

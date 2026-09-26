@@ -1,0 +1,33 @@
+<tec-chart id="chart-rtl" class="min-h-[200px] w-full" lang="ar" label="الزوار حسب الشهر" description="استخدم مفاتيح الأسهم للتنقل بين نقاط البيانات.">
+  <tec-chart-grid></tec-chart-grid>
+  <tec-chart-x-axis key="month" tick-margin="10"></tec-chart-x-axis>
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-legend></tec-chart-legend>
+  <tec-chart-bar key="desktop" radius="4"></tec-chart-bar>
+  <tec-chart-bar key="mobile" radius="4"></tec-chart-bar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-rtl")
+  const months = {
+    january: "يناير",
+    february: "فبراير",
+    march: "مارس",
+    april: "أبريل",
+    may: "مايو",
+    june: "يونيو",
+  }
+  chart.querySelector("tec-chart-x-axis").tickFormatter = (value) => months[value].slice(0, 3)
+  chart.querySelector("tec-chart-tooltip").labelFormatter = (value) => months[value]
+  chart.config = {
+    desktop: { label: "سطح المكتب", color: "var(--tec-chart-2)" },
+    mobile: { label: "الجوال", color: "var(--tec-chart-1)" },
+  }
+  chart.data = [
+    { month: "january", desktop: 186, mobile: 80 },
+    { month: "february", desktop: 305, mobile: 200 },
+    { month: "march", desktop: 237, mobile: 120 },
+    { month: "april", desktop: 73, mobile: 190 },
+    { month: "may", desktop: 209, mobile: 130 },
+    { month: "june", desktop: 214, mobile: 140 },
+  ]
+</script>

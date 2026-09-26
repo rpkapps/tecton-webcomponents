@@ -8,7 +8,7 @@ const sections = await getNavSections()
 ---
 
 <header class="sticky top-0 z-50 w-full bg-background">
-  <div class="container-wrapper px-6">
+  <div class="docs-container-wrapper px-6">
     <div class="flex h-(--header-height) items-center">
       <MobileNav sections={sections} pathname={pathname} />
       <nav aria-label="Main" class="hidden items-center gap-0 lg:flex">
@@ -49,16 +49,10 @@ const sections = await getNavSections()
           >
         </button>
         <div class="ml-2 hidden h-4 w-px bg-border lg:block" aria-hidden="true"></div>
-        <button
-          type="button"
-          data-theme-toggle
-          aria-label="Toggle theme"
-          title="Toggle light / dark"
-          class="relative inline-flex size-8 items-center justify-center rounded-md text-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
-        >
+        <tec-button data-theme-toggle variant="ghost" size="icon-sm" aria-label="Toggle theme" title="Toggle light / dark" class="size-8">
           <Icon name="sun" class="size-4 dark:hidden" />
           <Icon name="moon" class="hidden size-4 dark:block" />
-        </button>
+        </tec-button>
       </div>
     </div>
   </div>

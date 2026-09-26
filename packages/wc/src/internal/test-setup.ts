@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 /**
  * @module test-setup
  * Loaded before every test file (see `vitest.config.ts`): the Tecton theme (so `--tec-*` variables

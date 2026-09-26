@@ -1,0 +1,18 @@
+<tec-chart id="chart-bar-horizontal" orientation="horizontal" class="min-h-[200px] w-full" label="Desktop visitors by month">
+  <tec-chart-y-axis key="month" tick-margin="4" width="44"></tec-chart-y-axis>
+  <tec-chart-tooltip hide-label></tec-chart-tooltip>
+  <tec-chart-bar key="desktop" radius="5"></tec-chart-bar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-bar-horizontal")
+  chart.querySelector("tec-chart-y-axis").tickFormatter = (value) => value.slice(0, 3)
+  chart.config = { desktop: { label: "Desktop", color: "var(--tec-chart-1)" } }
+  chart.data = [
+    { month: "January", desktop: 186 },
+    { month: "February", desktop: 305 },
+    { month: "March", desktop: 237 },
+    { month: "April", desktop: 73 },
+    { month: "May", desktop: 209 },
+    { month: "June", desktop: 214 },
+  ]
+</script>

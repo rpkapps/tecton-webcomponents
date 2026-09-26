@@ -1,0 +1,24 @@
+<tec-chart id="chart-bar-stacked" class="min-h-[200px] w-full" label="Visitors by month, stacked">
+  <tec-chart-grid></tec-chart-grid>
+  <tec-chart-x-axis key="month" tick-margin="10"></tec-chart-x-axis>
+  <tec-chart-tooltip hide-label></tec-chart-tooltip>
+  <tec-chart-legend></tec-chart-legend>
+  <tec-chart-bar key="desktop" stack="visitors" radius="0 0 4 4"></tec-chart-bar>
+  <tec-chart-bar key="mobile" stack="visitors" radius="4 4 0 0"></tec-chart-bar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-bar-stacked")
+  chart.querySelector("tec-chart-x-axis").tickFormatter = (value) => value.slice(0, 3)
+  chart.config = {
+    desktop: { label: "Desktop", color: "var(--tec-chart-1)" },
+    mobile: { label: "Mobile", color: "var(--tec-chart-2)" },
+  }
+  chart.data = [
+    { month: "January", desktop: 186, mobile: 80 },
+    { month: "February", desktop: 305, mobile: 200 },
+    { month: "March", desktop: 237, mobile: 120 },
+    { month: "April", desktop: 73, mobile: 190 },
+    { month: "May", desktop: 209, mobile: 130 },
+    { month: "June", desktop: 214, mobile: 140 },
+  ]
+</script>

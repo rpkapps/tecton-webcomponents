@@ -44,7 +44,7 @@ const toggle =
               title={icon.description ? `${icon.description} — click to copy the markup` : "Click to copy the markup"}
               class="flex w-full flex-col items-center gap-2 rounded-md border border-border bg-card p-3 text-xs outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
             >
-              <tec-icon name={icon.name} variant="outlined" style="font-size: 20px; width: 20px; height: 20px" aria-hidden="true" />
+              <tec-icon name={icon.name} variant="outlined" style="--tec-icon-size: 20px" aria-hidden="true" />
               <span class="w-full truncate text-center text-muted-foreground">{icon.name}</span>
             </button>
           </li>
@@ -86,9 +86,7 @@ const toggle =
         press("[data-icon-size]", s)
         const px = `${s.dataset.iconSize}px`
         for (const icon of gallery.querySelectorAll<HTMLElement>("tec-icon")) {
-          icon.style.fontSize = px
-          icon.style.width = px
-          icon.style.height = px
+          icon.style.setProperty("--tec-icon-size", px)
         }
         return
       }

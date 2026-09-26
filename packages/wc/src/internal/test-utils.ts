@@ -1,3 +1,4 @@
+/// <reference types="@vitest/browser-playwright" />
 /**
  * @module test-utils
  * Helpers for Vitest browser-mode tests (Chromium via Playwright). Import only from `*.test.ts`.
@@ -80,6 +81,15 @@ export function nextFrame(): Promise<void> {
 /** Resolves after `ms` milliseconds. */
 export function aTimeout(ms = 0): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+/**
+ * Resolves when the CSS animations running on `el` and its subtree (e.g. a popup's enter motion) have
+ * finished — measure positions or run axe (colour contrast) only after that.
+ */
+export async function animationsFinished(el: Element): Promise<void> {
+  await nextFrame()
+  await Promise.allSettled(el.getAnimations({ subtree: true }).map((a) => a.finished))
 }
 
 /** Resolves with the next `name` event dispatched on `target`. */

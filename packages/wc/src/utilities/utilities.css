@@ -1,0 +1,9 @@
+/*
+ * The Tecton CSS utilities as plain classes, for any page (no build step needed):
+ *   <link rel="stylesheet" href="@tecton/wc/utilities.css">
+ * scroll-fade: fades the edges of a scroll container (scroll-aware).
+ * shimmer: a highlight sweeping across text.
+ * Tailwind v4 projects import tailwind-utilities.css instead (same classes, plus modifiers).
+ */
+@import "./scroll-fade.css";
+@import "./shimmer.css";

@@ -1,0 +1,130 @@
+---
+title: Theming
+description: The --tec-* variables every component reads, light and dark mode, re-theming a subtree, and the Tecton colour palette.
+order: 2
+---
+
+Every component reads its colours, radii, type and motion from **`--tec-*` CSS custom properties**. Custom properties inherit through shadow roots, so the theme reaches every component from wherever it is set: on `:root` for the whole page, on any element for a subtree. Components never hard-code a colour; changing the theme never needs component code.
+
+## How it works
+
+<Steps>
+
+### Raw tokens
+
+`tokens.css` is the CSS export of the Tecton design system: every token as a custom property (`--tecton-color-bg-default`, `--tecton-radius-50`, `--tecton-font-family-sans`…), with one block for light (`:root`, `.light`, `[data-theme="light"]`) and one for dark (`.dark`, `[data-theme="dark"]`). It also sets `color-scheme`, so native controls and `light-dark()` follow the mode.
+
+### Colour ramps
+
+`palette.css` holds Tecton's foundational colour ramps as `--tecton-palette-<family>-<step>`, again with a light and a dark value. See [Palette](#palette).
+
+### Theme
+
+`theme.css` defines the semantic layer the components use — `--tec-background`, `--tec-primary`, `--tec-border`, `--tec-ring`, the status and state colours, `--tec-radius-*`, `--tec-text-*`, `--tec-shadow-*`, `--tec-duration*` — each pointing at a Tecton token. Because the tokens switch with the mode, one mapping serves both modes.
+
+### One stylesheet
+
+`@tecton/wc/tecton.css` imports the three files (and a few document base rules). The files are generated from the Tecton token export by the library's build and are never edited by hand.
+
+</Steps>
+
+## Light and dark
+
+Both modes come from the Tecton export. Tecton applications are dark-first, so this site defaults to dark, but light is equally exact.
+
+Toggle the mode with the **`dark` class** (or `data-theme="dark"`) on `<html>`; without it the page is light. Components need nothing: the variables they read switch values, and `color-scheme` switches with them.
+
+```html
+<html class="dark">
+```
+
+### Inverted sections
+
+A section can run in the opposite mode to the page: put the `light` or `dark` class on any element and everything below it follows — `color-scheme`, the raw tokens, the palette, the `--tec-*` variables, and every component inside, including their shadow roots.
+
+```html
+<div class="light rounded-lg bg-background p-6 text-foreground">
+  <!-- a light panel in a dark page -->
+  <tec-button>Light button</tec-button>
+</div>
+```
+
+<ComponentPreview name="theming-inverted" />
+
+## Re-theming a subtree
+
+Set a `--tec-*` variable on any element to change it for every component below it. Point it at a palette step, not a literal colour, so it stays correct in both modes:
+
+```css
+.danger-zone {
+  --tec-primary: var(--tecton-palette-red-560);
+  --tec-primary-hover: var(--tecton-palette-red-460);
+  --tec-radius-md: 0;
+}
+```
+
+<ComponentPreview name="theming-subtree" />
+
+A component may also document its own custom properties (`--tec-sidebar-width`, `--tec-dialog-width`) for sizes that are commonly tuned; they are listed in each component's API reference. See [Styling](/docs/styling) for the rest of the styling API.
+
+## Theme variables
+
+The complete list, generated from `theme.css`, with the Tecton token each variable points at, its value in both modes and the note of the token mapping.
+
+<TokenTable />
+
+## Using the variables in your CSS
+
+The variables are public API: use them for the application's own markup so it follows the theme.
+
+```css
+.well-card {
+  background: var(--tec-card);
+  color: var(--tec-card-foreground);
+  border: 1px solid var(--tec-border);
+  border-radius: var(--tec-radius-lg);
+  font: var(--tec-text-sm) / var(--tec-text-sm--line-height) var(--tec-font-sans);
+}
+.well-card:focus-visible {
+  box-shadow: var(--tec-focus-ring);
+}
+```
+
+With the [Tailwind preset](/docs/installation#tailwind-css-optional), the same values are utilities: `bg-card`, `text-card-foreground`, `border-border`, `rounded-lg`, `text-sm`, `font-mono`.
+
+## Palette
+
+Tecton's foundational colours are **contrast ramps**: fifteen families, each with twenty-three steps from `50` (barely off the page background) to `1570` (maximum contrast), and a separate set of values for light and dark mode. A step is the same perceived distance from the background in both modes — `gray-120` is the pale grey of a filled neutral badge on light and the deep grey of the same badge on dark — so one value serves both modes and no dark-mode override is needed.
+
+The ramps are available as `--tecton-palette-<family>-<step>` variables and, with the Tailwind preset, as colour utilities: `bg-blue-560`, `text-orchid-830`, `border-yellow-160`. **Tailwind's stock palette is removed** by the preset: `bg-red-500` or `text-zinc-400` produce no CSS, so a colour that is not Tecton's cannot slip into a screen. Only `white` and `black` are kept.
+
+<PaletteTable />
+
+Hover a swatch for its utility, its variable and both values. The semantic variables are picks from these ramps, which gives a few recipes:
+
+| Recipe | Classes | Where Tecton uses it |
+| --- | --- | --- |
+| Tinted surface with readable text | `bg-<family>-120 text-<family>-830` | Filled status badges and alerts |
+| Solid fill with light text | `bg-<family>-560 text-<family>-50` | Filled status buttons, avatar badges |
+| Coloured text or icon on the page | `text-<family>-560` | Status text, links |
+| Border | `border-<family>-160` | Tinted alerts |
+
+Prefer the semantic variables (`--tec-primary`, `--tec-success`, `--tec-warning-surface`…) whenever one exists: they carry meaning and follow theme changes. Reach for a palette step for the rest — a chart series, a tag colour, a custom badge — instead of a hex value.
+
+## Adding your own tokens
+
+Declare the variable once, pointing at a palette step, and it follows both modes because the palette variable already switches:
+
+```css title="src/styles/app.css"
+:root {
+  --highlight: var(--tecton-palette-yellow-830);
+}
+```
+
+With Tailwind, expose it as a utility too:
+
+```css
+@theme inline {
+  --color-highlight: var(--highlight);
+}
+```

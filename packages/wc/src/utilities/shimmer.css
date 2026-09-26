@@ -1,0 +1,97 @@
+/*
+ * shimmer — a highlight that sweeps across text, built on currentColor.
+ *
+ *   <p class="shimmer" style="color: var(--tec-muted-foreground)">Generating response…</p>
+ *
+ * Classes: shimmer, shimmer-once (one sweep), shimmer-reverse, shimmer-none (render the text
+ * normally).
+ *
+ * Custom properties (set them on the element or an ancestor):
+ *   --shimmer-color      highlight colour (default: derived from currentColor, brighter in dark mode)
+ *   --shimmer-duration   one sweep (default 2s)
+ *   --shimmer-spread     width of the highlight band (default calc(3ch + 40px))
+ *   --shimmer-angle      tilt of the band (default 20deg)
+ *
+ * The sweep follows the reading direction (reversed in RTL) and stops under
+ * prefers-reduced-motion: reduce. Tailwind users: import tailwind-utilities.css instead, which adds
+ * the modifiers (shimmer-color-blue-560/60, shimmer-duration-1000, shimmer-spread-24, …).
+ */
+
+@property --shimmer-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 20deg;
+}
+@property --shimmer-image {
+  syntax: "*";
+  inherits: false;
+}
+@property --shimmer-text-fill {
+  syntax: "*";
+  inherits: false;
+}
+
+@keyframes tec-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+.shimmer {
+  --_spread: var(--shimmer-spread, calc(3ch + 40px));
+  --_base: currentColor;
+  /* The highlight is the text colour at 20% alpha; in dark mode it brightens to stay visible. */
+  --_highlight: var(
+    --shimmer-color,
+    light-dark(
+      oklch(from currentColor l c h / calc(alpha * 0.2)),
+      oklch(from currentColor max(0.8, calc(l + 0.4)) c h / calc(alpha + 0.4))
+    )
+  );
+
+  background-image: var(
+    --shimmer-image,
+    linear-gradient(
+      calc(90deg + var(--shimmer-angle)),
+      var(--_base) calc(50% - var(--_spread)),
+      color-mix(in oklch, var(--_highlight), var(--_base) 50%) calc(50% - var(--_spread) * 0.5),
+      var(--_highlight) 50%,
+      color-mix(in oklch, var(--_highlight), var(--_base) 50%) calc(50% + var(--_spread) * 0.5),
+      var(--_base) calc(50% + var(--_spread))
+    )
+  );
+  background-repeat: no-repeat;
+  background-size: calc(200% + var(--_spread) * 2) 100%;
+  background-position: 0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: var(--shimmer-text-fill, transparent);
+  animation: tec-shimmer var(--shimmer-duration, 2s) linear infinite;
+}
+.shimmer:where(:dir(rtl)) {
+  animation-direction: reverse;
+}
+
+.shimmer-once.shimmer-once {
+  animation-iteration-count: 1;
+}
+
+.shimmer-reverse.shimmer-reverse {
+  animation-direction: reverse;
+}
+
+.shimmer-none.shimmer-none {
+  --shimmer-image: none;
+  --shimmer-text-fill: currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer.shimmer {
+    animation: none;
+    background-image: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}

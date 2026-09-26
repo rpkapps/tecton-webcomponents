@@ -1,0 +1,271 @@
+---
+title: Background
+description: "Eleven decorative background effects drawn from oil and gas imagery: seismic sections, contour maps, strata, grids, flow lines, well logs, a drill bit, hexagon meshes, pressure fields and a horizon, plus a perspective wireframe terrain. Quiet by design, themed in both modes."
+tags: ["tec-background"]
+---
+
+<ComponentPreview name="background-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/background"
+```
+
+```html
+<section class="relative isolate overflow-hidden rounded-lg border border-border bg-background p-6">
+  <tec-background effect="contour" tone="azure"></tec-background>
+  <h2>Northern Fairway</h2>
+  <p>Content goes after the background and renders on top of it.</p>
+</section>
+```
+
+One element draws every effect: pick it with `effect`, and the ink with `tone`, `intensity` and `speed`. The value lists are exported for pickers and settings screens:
+
+```ts
+import { backgroundEffects, backgroundTones, backgroundIntensities, backgroundSpeeds } from "@tecton/wc/background"
+
+backgroundEffects // ["seismic", "contour", "strata", "grid", "flow", "well-log", "drill", "hexagons", "pressure", "horizon", "terrain-grid"]
+```
+
+<Callout>
+  Give the container `relative` and `isolate` (`position: relative; isolation: isolate`). The element is `position: absolute; inset: 0; z-index: -10`, so `isolate` keeps it above the container's own background and below everything else in it. Without `isolate` it can disappear behind the container's `bg-*`.
+</Callout>
+
+## Gallery
+
+Every effect behind the same sample text, in the tone `azure` (`--tec-chart-1`); switch the site theme to see the other mode. The effect only sets its opacity, so the theme decides how it reads. The contour map uses its own elevation ramp.
+
+<ComponentPreview name="background-gallery" />
+
+| `effect` | Motif | Motion | Suggested use |
+| --- | --- | --- | --- |
+| `seismic` | Survey in section: seismogram, surface, faulted strata, source with wavefront rings | Rings ripple out from the source | Hero and summary cards |
+| `contour` | Structure map isolines, coloured by elevation | Gentle wander | The calm default for most surfaces |
+| `strata` | Cross-section of bedding planes with tints | Pans very slowly along the section | Dense dashboards |
+| `grid` | Orthogonal line grid with nodes | Nodes glow in turn; optional pointer reveal | Landing, onboarding |
+| `flow` | Gathering and distribution: streams converge into a hub, then branch out through junctions with nodes | Pulses travel along the lines; the hub rings breathe | Pipelines and process screens; the liveliest one |
+| `well-log` | Cross-section around a wellbore: strata, log tracks, casing | Tool string runs down the hole; the logging tool pulses | Wide hero and sign-in surfaces |
+| `drill` | Bit seen from above | Slow rotation | Centred hero content |
+| `hexagons` | Hexagonal simulation mesh | Cells glow in turn; optional pointer reveal | Simulation and modelling screens |
+| `pressure` | Soft gradient field | Blobs migrate | Busy screens; the most abstract |
+| `horizon` | Ground line with layers | Breathing opacity | Empty states, onboarding |
+| `terrain-grid` | Wireframe surface of squares in perspective, glowing nodes | Nodes pulse; optional pointer reveal | Landing and sign-in pages |
+
+Effects are drawn at a fixed pixel scale (1px strokes, tiles that repeat), so they look the same in a sidebar tile and behind a full page. The geometry is generated once per page from a fixed seed and shared by every instance, so the same effect always looks the same.
+
+## Tone
+
+`tone` picks the ink from the theme: `neutral` uses `--tec-foreground`, `primary` uses `--tec-primary`, and the others use the chart accents (`--tec-chart-1` azure, `--tec-chart-2` saffron, `--tec-chart-3` lime, `--tec-chart-4` blue), which already flip between modes. Red is deliberately absent: it is the alarm colour in every control room.
+
+<ComponentPreview name="background-tones" />
+
+### Contour map colours
+
+`effect="contour"` is a continuous structure map: isolines of one height field, coloured by elevation like a printed map, deep to high: blue, azure, lime, saffron, with every fourth line drawn as an index contour and a flat stepped tint between the lines. That is `palette="map"`, the default; `palette="tone"` draws it in the single `tone` like the other effects. `grid` adds a survey grid under the isolines. The map is 4K-sized.
+
+<ComponentPreview name="background-contour" />
+
+## Intensity and speed
+
+`intensity` sets the opacity of the effect's ink (`low` 8%, `medium` 16%, `high` 32%), so text over it keeps its contrast; small accents such as nodes, the casing or the main seismic event are drawn at up to 1.8 times that, and soft fills at under half. `speed` sets the base cycle (`slow` 60s, `normal` 36s, `fast` 18s). Even `high` and `fast` stay within a texture rather than a picture.
+
+<ComponentPreview name="background-intensity" />
+
+## Motion
+
+Every effect freezes on its static frame with the `static` attribute, under `prefers-reduced-motion: reduce`, while it is scrolled out of view and while the tab is hidden (the element then matches `tec-background:state(paused)`). In print and forced-colours mode it is hidden altogether. Nothing tracks the pointer unless you ask for it.
+
+<ComponentPreview name="background-static" />
+
+### Pointer reveal
+
+`grid`, `hexagons` and `terrain-grid` take `interactive` to light up the pattern around the pointer as it moves over the container. They listen on the parent element, so the background itself stays `pointer-events: none`. On the other effects `interactive` does nothing.
+
+<ComponentPreview name="background-interactive" />
+
+## Custom drawing
+
+Without `effect`, the element is the plain layer: slot your own SVG into it and paint it with `--tec-background-ink`, `--tec-background-ink-soft` and `--tec-background-ink-strong`. It gets the same positioning, tone, intensity, print and forced-colours rules as the built-in effects. Keyframes you animate it with live in your own stylesheet.
+
+<ComponentPreview name="background-custom" />
+
+To tint an effect with a colour outside the tone list, set `--tec-background-tone` (and `--tec-background-alpha`, `--tec-background-duration` for the opacity and cycle) on the element or an ancestor.
+
+## RTL
+
+The effects are pictures, not text: they draw the same in both directions and need no RTL handling.
+
+## Keyboard interactions
+
+None. The background is decorative: it takes no focus and ignores the pointer.
+
+## Accessibility
+
+- The element is hidden from assistive technology (its default semantics are `aria-hidden="true"` and `role="presentation"`, and its drawing sits in an `aria-hidden` wrapper), so nothing in it is announced. Do not put meaningful content inside it.
+- It never takes focus or pointer events; content placed after it stays fully interactive.
+- Motion respects `prefers-reduced-motion: reduce`, pauses off screen and in hidden tabs, and can be switched off with `static`.
+- It is hidden in forced-colours mode (where it would only add noise) and in print.
+- Ink opacity is capped (32% at `high`) so text over it keeps its contrast; check contrast yourself when you override `--tec-background-alpha`.
+
+## API Reference
+
+<ApiReference tags={["tec-background"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A large, otherwise plain surface needs texture: a hero, a sign-in page, an onboarding step, a dashboard header.
+- The imagery is decoration — it says nothing a reader has to read, and losing it costs nothing.
+- The surface belongs to this product, so an oil and gas motif reads as the domain rather than as clip art.
+
+### Not for
+
+- an interactive map, schematic or 3D view: use [Canvas](/docs/tecton/canvas)
+- a placeholder shape while real content loads: use [Skeleton](/docs/components/skeleton)
+- an empty state with a message and an action: use [Empty](/docs/components/empty)
+- a picture of real data: use [Chart](/docs/components/chart)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put `<tec-background>` as the first child of a `relative isolate overflow-hidden` container, with the content after it.
+
+</Do>
+
+<Do>
+
+Pick the ink with `tone`, the weight with `intensity` and the cycle with `speed`; on busy screens stay at `intensity="low"`.
+
+</Do>
+
+<Do>
+
+Let the effect decide when to move: it already freezes under `prefers-reduced-motion`, off screen and in a hidden tab, and hides itself in print and forced colours. `static` pins it to its static frame.
+
+</Do>
+
+<Do>
+
+Choose an effect by name with the `effect` attribute and the `backgroundEffects`, `backgroundTones`, `backgroundIntensities` and `backgroundSpeeds` lists when the person picks their own.
+
+</Do>
+
+<Do>
+
+Build a new effect inside the plain layer (a `<tec-background>` without `effect`) so it inherits the ink variables and the print rules; do not reimplement the layer.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A gradient class instead of an effect">
+
+<Wrong>
+
+```html
+<section class="relative isolate rounded-lg border bg-gradient-to-br from-blue-500/20 to-transparent p-6">
+  <h2 class="text-lg font-medium">Northern Fairway</h2>
+</section>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<section class="relative isolate overflow-hidden rounded-lg border border-border bg-background p-6">
+  <tec-background effect="contour" tone="azure" intensity="low"></tec-background>
+  <h2 class="text-lg font-medium">Northern Fairway</h2>
+</section>
+```
+
+</Correct>
+
+`from-blue-500` is stock Tailwind, which the Tecton preset resets, so the gradient emits no CSS and the surface stays flat; an effect takes its ink from the theme through `tone` and flips with the mode on its own.
+
+</Dont>
+
+<Dont severity="HIGH" title="A background layer without relative isolate">
+
+<Wrong>
+
+```html
+<tec-card>
+  <tec-background effect="seismic" tone="primary" intensity="low"></tec-background>
+  <tec-card-header><tec-card-title>Survey 24-B</tec-card-title></tec-card-header>
+</tec-card>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-card class="relative isolate overflow-hidden">
+  <tec-background effect="seismic" tone="primary" intensity="low"></tec-background>
+  <tec-card-header><tec-card-title>Survey 24-B</tec-card-title></tec-card-header>
+</tec-card>
+```
+
+</Correct>
+
+The layer is `position: absolute; inset: 0; z-index: -10`: without `relative` the effect positions itself against some ancestor further up, and without `isolate` its negative z-index puts it behind the card's own background, where it is invisible.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="interactive on an effect that has no reveal">
+
+<Wrong>
+
+```html
+<div class="relative isolate overflow-hidden rounded-lg p-8">
+  <tec-background effect="seismic" tone="azure" interactive></tec-background>
+  <p class="text-sm">Choose a project to open.</p>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<div class="relative isolate overflow-hidden rounded-lg p-8">
+  <tec-background effect="grid" tone="azure" interactive></tec-background>
+  <p class="text-sm">Choose a project to open.</p>
+</div>
+```
+
+</Correct>
+
+Only `grid`, `hexagons` and `terrain-grid` have a pointer reveal; on any other effect `interactive` is ignored and nothing lights up.
+
+</Dont>
+
+<Dont severity="MEDIUM" title='animate="false" to stop the motion'>
+
+<Wrong>
+
+```html
+<tec-background effect="flow" animate="false"></tec-background>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-background effect="flow" static></tec-background>
+```
+
+</Correct>
+
+There is no `animate` attribute; `static` is the boolean that freezes the effect (and reduced motion, off-screen and hidden tabs freeze it anyway).
+
+</Dont>

@@ -22,5 +22,14 @@ export default defineConfig({
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss(), tectonDocs()],
+    build: {
+      rollupOptions: {
+        onwarn(warning, warn) {
+          // Astro's own MDX modules carry a directive the bundler cannot keep; harmless.
+          if (warning.code === "MODULE_LEVEL_DIRECTIVE") return
+          warn(warning)
+        },
+      },
+    },
   },
 })

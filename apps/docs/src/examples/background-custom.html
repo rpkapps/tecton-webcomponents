@@ -1,0 +1,15 @@
+<div class="relative isolate flex h-48 w-full max-w-md flex-col justify-end overflow-hidden rounded-lg border border-border bg-background p-4">
+  <tec-background tone="primary" intensity="high">
+    <svg class="absolute inset-0 size-full" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <pattern id="background-custom-dots" width="24" height="24" patternUnits="userSpaceOnUse">
+          <circle cx="12" cy="12" r="1.5" fill="var(--tec-background-ink-strong)" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#background-custom-dots)" />
+      <line x1="0" y1="70%" x2="100%" y2="30%" stroke="var(--tec-background-ink)" stroke-width="2" />
+    </svg>
+  </tec-background>
+  <span class="text-sm font-medium">Custom drawing</span>
+  <span class="text-xs text-muted-foreground">Painted with the layer's ink variables</span>
+</div>

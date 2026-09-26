@@ -1,0 +1,107 @@
+---
+title: Styling
+description: Variants as attributes, ::part(), custom properties, :state() and Tailwind in your own markup — the public styling API of the elements.
+order: 6
+---
+
+Each component renders its internals in a **shadow root** with its own scoped CSS. Page styles cannot reach inside by accident, and component styles never leak out. What you can style from outside is a deliberate, documented API — listed in the API reference of every component:
+
+| Hook | Use it for | Example |
+| --- | --- | --- |
+| Attributes | Variants, sizes, states the design system defines | `<tec-button variant="outline" size="sm">` |
+| Theme variables | Colours, radii, type for a page or a subtree | `--tec-primary`, `--tec-radius-md` |
+| Component custom properties | Sizes a component documents as tunable | `--tec-sidebar-width` |
+| `::part()` | Anything else on a named internal element | `tec-button::part(base)` |
+| `:state()` | Styling the host by a read-only state | `tec-checkbox:state(checked)` |
+| Host classes | Layout and shape of the element in your page | `class="w-full rounded-full"` |
+
+## Variants are attributes
+
+The variant axes of a component — `variant`, `size`, `appearance`, `orientation` — are string attributes, reflected so the current value is always in the markup. Pick from the documented values; the component owns the colours, padding and radius that go with them.
+
+```html
+<tec-button variant="destructive" size="sm">Delete well</tec-button>
+<tec-badge variant="success" appearance="outline">Active</tec-badge>
+```
+
+States are boolean attributes (`disabled`, `open`, `invalid`, `checked` for the initial value) and work as CSS hooks from outside too: `tec-dialog[open]`, `tec-input[invalid]`.
+
+## Theme variables
+
+Every colour, radius, font and duration a component uses comes from a `--tec-*` variable. Custom properties inherit through shadow roots, so setting one on any ancestor changes every component below it — see [Theming](/docs/theming#re-theming-a-subtree).
+
+## Component custom properties
+
+A few sizes that applications commonly tune are custom properties of the component itself, named `--tec-<component>-<thing>`:
+
+```css
+tec-sidebar {
+  --tec-sidebar-width: 18rem;
+}
+```
+
+Only documented properties are API; anything else a component uses internally may change.
+
+## CSS parts
+
+Every meaningful internal element carries a `part` name (`base`, `label`, `icon`, `indicator`, `popup`…). Style it from outside with `::part()`:
+
+```css
+tec-button.pill::part(base) {
+  border-radius: 9999px;
+}
+tec-dialog::part(panel) {
+  max-width: 40rem;
+}
+```
+
+With Tailwind, an arbitrary variant does the same inline: `class="[&::part(base)]:rounded-full"`. A component that renders another component re-exports its parts with `exportparts`, so nested parts stay reachable.
+
+`::part()` selects one element; it cannot reach its descendants (`::part(base) span` does not match). That is intentional: parts are the stable surface, the rest of the shadow DOM is not.
+
+## Custom states
+
+Read-only states that are not attributes — whether a checkbox is currently checked, whether a field was interacted with — are exposed as **custom states** and matched with `:state()`:
+
+```css
+tec-checkbox:state(checked) + label {
+  font-weight: 500;
+}
+tec-input:state(user-invalid)::part(base) {
+  outline: 2px solid var(--tec-destructive);
+}
+```
+
+The states of each component are listed under **Custom states** in its API reference.
+
+## Tailwind in your markup
+
+The components do not use Tailwind, and Tailwind classes cannot style their internals. Tailwind is for **your** light DOM: page layout, spacing between components, and the content you slot into them. The [preset](/docs/installation#tailwind-css-optional) maps the utilities to the Tecton theme, so `bg-card`, `text-muted-foreground`, `border-border`, `rounded-lg` and the palette steps (`bg-blue-120 text-blue-830`) match the components exactly.
+
+```html
+<tec-card class="w-full max-w-sm">
+  <div class="grid gap-4">
+    <p class="text-sm text-muted-foreground">Last survey 12 March</p>
+    <tec-button class="w-full">Open well</tec-button>
+  </div>
+</tec-card>
+```
+
+Classes on a component style its **host element**. For many components the host is the visible box — a button's background, border, radius and ring — so layout and shape classes (`w-full`, `ms-auto`, `rounded-full`, `shadow-md`) work directly. Everything inside the shadow root (padding of the label, icon sizes, colours of states) is reached only through attributes, parts and variables.
+
+## Why there is no Tailwind inside the components
+
+A distributable component library cannot rely on utility classes inside shadow roots:
+
+- Tailwind v4 registers many of its internal variables with `@property`, which browsers ignore inside shadow roots, so shadows, rings and transforms break unless a global stylesheet is added to every page.
+- Class-based variants (`dark:`, `group-*`, `peer-*`, `rtl:`) look at ancestors, which a shadow root cannot see.
+- Utility classes inside a shadow root are not an API: an application could not override them anyway.
+
+So each component carries small, hand-written CSS that reads only the theme variables, and exposes attributes, parts, custom properties and states as its styling API — the approach of Web Awesome, Spectrum, Carbon and Material Web.
+
+## Light and dark, RTL, motion
+
+- **Mode.** Components switch with the theme variables and `color-scheme`; there is no per-component dark mode.
+- **Direction.** Components use logical properties (`padding-inline-start`, `inset-inline-end`), so `dir="rtl"` on any ancestor mirrors them; directional icons flip with `:dir(rtl)`.
+- **Motion.** Every transition and animation is limited to `prefers-reduced-motion: no-preference`.
+- **Forced colours.** Borders and focus rings stay visible in Windows high-contrast mode.

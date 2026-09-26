@@ -1,0 +1,36 @@
+<form id="forms-demo" class="flex w-full max-w-sm flex-col gap-5" novalidate>
+  <tec-field>
+    <tec-field-label>Well name</tec-field-label>
+    <tec-input name="well" required placeholder="34/10-A-12" pattern="\d+/\d+-[A-Z]-\d+"></tec-input>
+    <tec-field-description>Licence block, platform and slot.</tec-field-description>
+  </tec-field>
+  <tec-field>
+    <tec-field-label>Fluid</tec-field-label>
+    <tec-select name="fluid" required placeholder="Pick a fluid">
+      <tec-select-item value="oil">Oil</tec-select-item>
+      <tec-select-item value="gas">Gas</tec-select-item>
+      <tec-select-item value="water">Water</tec-select-item>
+    </tec-select>
+  </tec-field>
+  <tec-field orientation="horizontal">
+    <tec-checkbox name="notify" value="yes" checked></tec-checkbox>
+    <tec-field-label>Notify the operations team</tec-field-label>
+  </tec-field>
+  <div class="flex justify-end gap-2">
+    <tec-button type="reset" variant="ghost">Reset</tec-button>
+    <tec-button type="submit">Save well</tec-button>
+  </div>
+  <pre class="min-h-10 rounded-md bg-muted p-3 font-mono text-xs text-muted-foreground" aria-live="polite">Submit to see the form data.</pre>
+</form>
+<script type="module">
+  const form = document.getElementById("forms-demo")
+  const output = form.querySelector("pre")
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    // Native constraint validation: shows the first error and focuses its control.
+    if (!form.reportValidity()) return
+    output.textContent = JSON.stringify(Object.fromEntries(new FormData(form)), null, 2)
+  })
+  form.addEventListener("reset", () => (output.textContent = "Submit to see the form data."))
+</script>

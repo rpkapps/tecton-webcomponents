@@ -1,4 +1,129 @@
 ---
+import Icon from "../components/Icon.astro"
 import BaseLayout from "../layouts/BaseLayout.astro"
+import { siteConfig } from "../lib/nav"
+
+const heroSource = import.meta.glob<string>("/src/examples/hero-preview.html", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+})["/src/examples/hero-preview.html"]
+
+const features = [
+  {
+    icon: "shapes",
+    title: "The shadcn/ui vocabulary",
+    description:
+      "Every component of the Tecton design system as a standard custom element: the same names, variants and composition, written as plain HTML.",
+    href: "/docs/components",
+  },
+  {
+    icon: "layers",
+    title: "Tecton components",
+    description:
+      "Chips, tree views, meters, stats, panels and application scaffolding that Tecton needs beyond the shadcn/ui set.",
+    href: "/docs/tecton",
+  },
+  {
+    icon: "palette",
+    title: "Themed by CSS variables",
+    description:
+      "Tecton's colours, radii and type are --tec-* custom properties. They inherit through shadow roots, so light, dark and re-theming need no component code.",
+    href: "/docs/theming",
+  },
+  {
+    icon: "blocks",
+    title: "Any framework",
+    description:
+      "Plain HTML, React 19, Vue, Angular or Svelte: the elements are native, form-associated and fire standard events.",
+    href: "/docs/frameworks",
+  },
+]
+const install = `pnpm add ${siteConfig.package}`
 ---
-<BaseLayout><p>home</p></BaseLayout>
+
+<BaseLayout>
+  <div class="docs-container-wrapper flex flex-1 flex-col px-6">
+    <div class="docs-container flex flex-1 flex-col gap-16 py-12 md:py-20">
+      <section class="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+        <div class="flex flex-col gap-6">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="inline-flex h-6 items-center rounded-full bg-primary px-2.5 text-xs font-medium text-primary-foreground">
+              Web Components · Lit
+            </span>
+            <span class="inline-flex h-6 items-center rounded-full border border-border px-2.5 text-xs font-medium">
+              Tecton design system
+            </span>
+          </div>
+          <h1 class="text-4xl font-medium tracking-tight text-balance md:text-5xl">
+            The Tecton component library, as web components.
+          </h1>
+          <p class="max-w-prose text-base text-muted-foreground md:text-lg">
+            {siteConfig.description} One set of accessible elements for every application, whatever it is built with.
+          </p>
+          <div class="flex flex-wrap items-center gap-3">
+            <tec-button href="/docs" size="lg">
+              Get started
+              <span slot="end" class="inline-flex"><Icon name="arrow-right" class="size-4" /></span>
+            </tec-button>
+            <tec-button href="/docs/components" size="lg" variant="outline">Browse components</tec-button>
+          </div>
+          <div
+            class="flex w-fit items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 font-mono text-xs text-muted-foreground"
+          >
+            <Icon name="terminal" class="size-3.5" />
+            <span>{install}</span>
+            <button
+              type="button"
+              data-copy-button
+              data-copy-value={install}
+              aria-label="Copy install command"
+              class="docs-copy-button inline-flex size-6 items-center justify-center rounded-md outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Icon name="copy" class="copy-icon size-3.5" />
+              <Icon name="check" class="check-icon size-3.5" />
+            </button>
+          </div>
+        </div>
+        <div class="flex justify-center" data-not-typeset>
+          {heroSource && <Fragment set:html={heroSource} />}
+        </div>
+      </section>
+
+      <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          features.map((feature) => (
+            <a
+              href={feature.href}
+              class="group flex flex-col gap-2 rounded-xl border border-border bg-card p-6 text-card-foreground outline-none hover:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Icon name={feature.icon} class="mb-2 size-5 text-muted-foreground" />
+              <span class="font-medium">{feature.title}</span>
+              <span class="text-sm text-muted-foreground">{feature.description}</span>
+              <span class="mt-auto flex items-center gap-1 pt-4 text-sm font-medium group-hover:underline">
+                Explore <Icon name="arrow-right" class="size-3.5" />
+              </span>
+            </a>
+          ))
+        }
+      </section>
+
+      <section class="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h2 class="text-lg font-medium">Accessible by construction.</h2>
+          <p class="max-w-prose text-sm text-muted-foreground">
+            Every interactive element implements its WAI-ARIA pattern — roles, states, the full keyboard model and focus
+            management — and form controls take part in native forms: <code class="font-mono">FormData</code>, validation and
+            reset.
+          </p>
+        </div>
+        <a
+          href="/docs/accessibility"
+          class="inline-flex h-8 shrink-0 items-center rounded-md bg-secondary px-3 text-sm font-medium text-secondary-foreground outline-none hover:bg-secondary-hover focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Read the accessibility guide
+        </a>
+      </section>
+    </div>
+  </div>
+</BaseLayout>

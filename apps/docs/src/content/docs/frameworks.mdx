@@ -1,0 +1,150 @@
+---
+title: Frameworks
+description: Using the elements from plain HTML, React 19, Vue, Angular and Svelte — attributes, properties and events.
+order: 7
+---
+
+Tecton elements are standard custom elements, so every framework that renders HTML can use them. What differs between frameworks is how they set **properties** (as opposed to attributes) and how they listen to **custom events**. The rules of the elements themselves are the same everywhere:
+
+- **Attributes** configure: strings, numbers and booleans (`variant="outline"`, `max-visible="3"`, `disabled`).
+- **Properties** carry state and data: `value`, `checked`, `open`, and arrays or objects (`.items`, `.columns`) that have no attribute.
+- **Events** report what the user did: native-named `click`, `input` and `change` for form controls, and `tec-*` custom events (`tec-open-change`, `tec-select`, `tec-remove`) with a `detail`. Events are never fired for changes your code makes.
+- Components are **uncontrolled**: they update themselves. To control one, listen to `change` (or the cancelable `tec-*` event) and set the property; `preventDefault()` on a cancelable event keeps the current state.
+
+Register the elements once, in the entry point of the application, whatever the framework:
+
+```ts title="main.ts"
+import "@tecton/wc/tecton.css"
+import "@tecton/wc"
+```
+
+## Plain HTML
+
+```html
+<tec-select id="fluid" name="fluid" placeholder="Fluid">
+  <tec-select-item value="oil">Oil</tec-select-item>
+  <tec-select-item value="gas">Gas</tec-select-item>
+</tec-select>
+
+<script type="module">
+  const select = document.getElementById("fluid")
+  select.addEventListener("change", () => console.log(select.value))
+  select.value = "gas" // no change event: programmatic
+</script>
+```
+
+## React
+
+React 19 supports custom elements natively: it sets known properties as properties, passes everything else as attributes, and `on<event>` props listen to events of that exact name — including custom events.
+
+```tsx title="WellForm.tsx"
+export function WellForm() {
+  const [fluid, setFluid] = useState("oil")
+  return (
+    <tec-select
+      name="fluid"
+      value={fluid}
+      onchange={(event) => setFluid((event.target as HTMLElement & { value: string }).value)}
+    >
+      <tec-select-item value="oil">Oil</tec-select-item>
+      <tec-select-item value="gas">Gas</tec-select-item>
+    </tec-select>
+  )
+}
+```
+
+- Use the **event name as written**: `onchange`, `oninput`, `ontec-open-change`. React's synthetic `onChange` does not apply to custom elements.
+- `className` works as usual: React 19 renders it as the `class` attribute on custom elements too.
+- For React 18, set properties and listen to events through a `ref`.
+
+For type checking, declare the elements for JSX once — the classes come from the package:
+
+```ts title="src/tecton-jsx.d.ts"
+import type { TecButton } from "@tecton/wc/button/button.js"
+import type { TecSelect } from "@tecton/wc/select/select.js"
+
+type Props<T> = Partial<Omit<T, "children" | "style">> &
+  React.DOMAttributes<T> & { class?: string; style?: React.CSSProperties; slot?: string; children?: React.ReactNode }
+
+declare module "react" {
+  namespace JSX {
+    interface IntrinsicElements {
+      "tec-button": Props<TecButton>
+      "tec-select": Props<TecSelect>
+    }
+  }
+}
+```
+
+## Vue
+
+Tell the compiler that `tec-*` tags are custom elements, then use them like native elements. `v-model` works on form controls because they fire `input` and have a `value` property; `.prop` forces a property binding for data.
+
+```ts title="vite.config.ts"
+import vue from "@vitejs/plugin-vue"
+
+export default {
+  plugins: [vue({ template: { compilerOptions: { isCustomElement: (tag) => tag.startsWith("tec-") } } })],
+}
+```
+
+```vue title="WellForm.vue"
+<script setup lang="ts">
+import { ref } from "vue"
+const fluid = ref("oil")
+</script>
+
+<template>
+  <tec-select v-model="fluid" name="fluid">
+    <tec-select-item value="oil">Oil</tec-select-item>
+    <tec-select-item value="gas">Gas</tec-select-item>
+  </tec-select>
+  <tec-dialog :open="fluid === 'gas'" @tec-open-change="(e) => console.log(e.detail.open)">…</tec-dialog>
+</template>
+```
+
+## Angular
+
+Add `CUSTOM_ELEMENTS_SCHEMA` to the components that use the elements. Bind properties with `[prop]`, attributes with `[attr.name]` and events with `(event)`.
+
+```ts title="well-form.component.ts"
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core"
+
+@Component({
+  selector: "app-well-form",
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  template: `
+    <tec-select name="fluid" [value]="fluid" (change)="fluid = $any($event.target).value">
+      <tec-select-item value="oil">Oil</tec-select-item>
+      <tec-select-item value="gas">Gas</tec-select-item>
+    </tec-select>
+    <tec-button [attr.variant]="dirty ? 'default' : 'outline'" (click)="save()">Save</tec-button>
+  `,
+})
+export class WellFormComponent {
+  fluid = "oil"
+  dirty = false
+  save() {}
+}
+```
+
+For reactive forms, a small `ControlValueAccessor` directive that writes `value` and listens to `input` / `change` lets `formControlName` drive a Tecton control; inside a native `<form>`, the controls also submit on their own (see [Forms](/docs/forms)).
+
+## Svelte
+
+Svelte sets properties on custom elements when the element has a property of that name, so values and data bind directly; `on:` (Svelte 4) or `on<event>` (Svelte 5) listens to any event name.
+
+```svelte title="WellForm.svelte"
+<script lang="ts">
+  let fluid = $state("oil")
+</script>
+
+<tec-select value={fluid} onchange={(e) => (fluid = e.currentTarget.value)}>
+  <tec-select-item value="oil">Oil</tec-select-item>
+  <tec-select-item value="gas">Gas</tec-select-item>
+</tec-select>
+```
+
+## Server rendering
+
+The elements render on the client: server-rendered HTML contains the tags and their light-DOM content, and each element upgrades when its module loads. Keep the light-DOM content meaningful (labels, item text) so the page reads well before that, and hide the few elements above the fold that would flash (see [Installation](/docs/installation#before-the-elements-are-defined)). Components do not touch the DOM in their constructors, so they are safe to import in server bundles.

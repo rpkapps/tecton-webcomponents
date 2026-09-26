@@ -1,0 +1,91 @@
+---
+title: Forms
+description: Form-associated controls — native submission, FormData, constraint validation and reset — and composing labels and messages with <tec-field>.
+order: 8
+---
+
+Every Tecton form control is a **form-associated custom element**. Inside a `<form>` it behaves like the native control it stands for: it submits its `name` and `value`, takes part in constraint validation, resets with the form, is disabled by a disabled `<fieldset>`, and is labelled by a `<label for>`. No form library is needed, and the ones you use keep working.
+
+<ComponentPreview name="forms-demo" class="min-h-96" />
+
+## Submitting
+
+A control with a `name` adds its value to the form data, like `<input name>`. Read it with `FormData`, or let the browser submit the form:
+
+```html
+<form action="/wells" method="post">
+  <tec-input name="well" required></tec-input>
+  <tec-select name="fluid">
+    <tec-select-item value="oil">Oil</tec-select-item>
+  </tec-select>
+  <tec-button type="submit">Save well</tec-button>
+</form>
+```
+
+```ts
+form.addEventListener("submit", (event) => {
+  event.preventDefault()
+  const data = new FormData(form) // well=…, fluid=…
+})
+```
+
+- A checkbox or switch submits its `value` (default `"on"`) only when checked, like a native checkbox.
+- A multi-select control submits one entry per selected value (`data.getAll("tags")`).
+- `<tec-button type="submit">` and `type="reset"` submit and reset the form; a submit button's `name` and `value` are included for the button that submitted.
+
+## Values
+
+The `value` **property** is the current value; the `value` **attribute** is the initial value, used again on reset — exactly like `<input>`. The same goes for `checked`. Controls fire `input` while the user edits and `change` when they commit, both native-named and bubbling, and never for values your code sets.
+
+```ts
+const input = document.querySelector("tec-input")!
+input.value = "34/10-A-12" // no event
+input.addEventListener("change", () => save(input.value))
+```
+
+## Validation
+
+Controls implement native constraint validation. The usual attributes — `required`, `minlength`, `maxlength`, `pattern`, `min`, `max`, `step`, `type="email"` — set the validity, and the usual API reads and changes it:
+
+| API | What it does |
+| --- | --- |
+| `validity`, `validationMessage`, `willValidate` | The control's validity state, like a native control's |
+| `checkValidity()` | `true` when valid; fires `invalid` otherwise |
+| `reportValidity()` | Also shows the message and focuses the control |
+| `setCustomValidity(message)` | A custom error (`""` clears it) — for server-side and cross-field checks |
+| `form.checkValidity()` / `form.reportValidity()` | Validate every control of the form, Tecton or native |
+
+For styling, a control exposes `:state(user-invalid)` once the user has interacted with it and it is invalid (the equivalent of `:user-invalid`), and reflects the `invalid` attribute, which you can also set yourself to show an error from elsewhere:
+
+```html
+<tec-input name="well" invalid></tec-input>
+```
+
+To use your own error UI instead of the browser's bubbles, put `novalidate` on the form and call `checkValidity()` on submit; each control's `validationMessage` is ready to display.
+
+## Reset and restore
+
+`form.reset()` (or a reset button) sets every control back to its initial `value` / `checked` attribute and clears its user-invalid state. When the browser restores a page from its history cache or autofills a form, controls restore their state too.
+
+## Disabled and read-only
+
+`disabled` on a control, or on an ancestor `<fieldset>`, removes it from the tab order and from the form data. `readonly` keeps the value submitted and focusable, but not editable.
+
+## Labels and messages with `<tec-field>`
+
+A control is labelled by a `<label for="id">` pointing at it, by its `label` attribute, or by `aria-label`. For the complete Tecton form row — label, control, description and error message — compose the control in a [`<tec-field>`](/docs/components/field):
+
+```html
+<tec-field>
+  <tec-field-label>Well name</tec-field-label>
+  <tec-input name="well" required></tec-input>
+  <tec-field-description>Licence block, platform and slot.</tec-field-description>
+  <tec-field-error>Enter a well name.</tec-field-error>
+</tec-field>
+```
+
+The field connects the parts for assistive technology (the label names the control, the description and the error describe it) and shows the error only while the control is invalid. `orientation="horizontal"` puts a checkbox or switch next to its label.
+
+## With a form library
+
+Form libraries that work with native inputs work with Tecton controls: they read `value` / `checked`, listen to `input` and `change`, and can call `setCustomValidity()` to show their own errors. In a framework, bind the value as described in [Frameworks](/docs/frameworks).

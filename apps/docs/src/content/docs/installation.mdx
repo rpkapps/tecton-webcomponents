@@ -1,0 +1,178 @@
+---
+title: Installation
+description: Add @tecton/wc to an application — the elements, the theme stylesheet and the fonts — with a bundler, an import map or a CDN.
+order: 1
+---
+
+`@tecton/wc` is one package: the elements, the Tecton domain icons, the theme stylesheet, the fonts and an optional Tailwind preset. It is plain ES modules with TypeScript declarations and has one runtime dependency family ([Lit](https://lit.dev) and a few small helpers), so it works with any bundler or none.
+
+## Install
+
+<Steps>
+
+### Add the package
+
+```bash
+pnpm add @tecton/wc
+```
+
+Inside the Tecton monorepo, reference the workspace package instead:
+
+```json title="apps/my-app/package.json"
+{
+  "dependencies": {
+    "@tecton/wc": "workspace:*"
+  }
+}
+```
+
+### Load the theme
+
+`tecton.css` holds the Tecton tokens, the colour palette, the `--tec-*` theme variables and a few document-level base rules (page background, text colour and font). `fonts.css` loads Figtree and IBM Plex Mono. Load both once per document:
+
+```css title="src/styles/app.css"
+@import "@tecton/wc/tecton.css";
+@import "@tecton/wc/fonts.css";
+```
+
+or, without a bundler:
+
+```html title="index.html"
+<link rel="stylesheet" href="/node_modules/@tecton/wc/tecton.css" />
+<link rel="stylesheet" href="/node_modules/@tecton/wc/fonts.css" />
+```
+
+### Register the elements
+
+Importing a family's module defines its elements. Import everything once at the entry point of the application:
+
+```ts title="src/main.ts"
+import "@tecton/wc"
+```
+
+or only the families a page uses — a bundler then ships only those:
+
+```ts
+import "@tecton/wc/button"
+import "@tecton/wc/dialog"
+```
+
+### Use them
+
+```html
+<tec-button variant="outline">Cancel</tec-button>
+<tec-button>Save well</tec-button>
+```
+
+</Steps>
+
+## Dark mode
+
+Tecton is dark-first. Put the `dark` class (or `data-theme="dark"`) on `<html>`; without it you get the Tecton light theme. The mode can also be set on any subtree — see [Theming](/docs/theming#light-and-dark).
+
+```html
+<html lang="en" class="dark">
+```
+
+To follow the operating system, set the class from `prefers-color-scheme` before the first paint:
+
+```html title="index.html"
+<script>
+  document.documentElement.classList.toggle("dark", matchMedia("(prefers-color-scheme: dark)").matches)
+</script>
+```
+
+## Tailwind CSS (optional)
+
+The components need no Tailwind: they are styled inside their shadow roots. For the application's own markup — layout, spacing, the content you slot into components — the package ships a Tailwind v4 preset that maps utilities to the Tecton theme and replaces the stock palette with Tecton's (`bg-primary`, `text-muted-foreground`, `bg-blue-120`, `rounded-lg`):
+
+```css title="src/styles/app.css"
+@import "tailwindcss";
+@import "@tecton/wc/tailwind.css";
+@import "@tecton/wc/tecton.css";
+```
+
+The preset also adds the `dark:` variant for the `.dark` class and `[data-theme="dark"]`. See [Styling](/docs/styling#tailwind-in-your-markup).
+
+## Without a bundler
+
+The modules import `lit` and a few other packages by bare name, so a page that loads them directly needs an [import map](https://developer.mozilla.org/docs/Web/HTML/Element/script/type/importmap) that points those names at URLs — your own static hosting or a CDN build of the package:
+
+```html title="index.html"
+<script type="importmap">
+  {
+    "imports": {
+      "@tecton/wc": "https://cdn.example.com/@tecton/wc@0.1.0/index.js",
+      "@tecton/wc/": "https://cdn.example.com/@tecton/wc@0.1.0/",
+      "lit": "https://cdn.example.com/lit@3/index.js",
+      "lit/": "https://cdn.example.com/lit@3/"
+    }
+  }
+</script>
+<link rel="stylesheet" href="https://cdn.example.com/@tecton/wc@0.1.0/tecton.css" />
+<script type="module">
+  import "@tecton/wc/button"
+</script>
+
+<tec-button>It works</tec-button>
+```
+
+## Before the elements are defined
+
+Until a module has loaded, a `<tec-*>` tag is an unknown element that shows its light-DOM text unstyled. Hide undefined elements for the first moments, or wait for the ones above the fold:
+
+```css
+tec-button:not(:defined),
+tec-select:not(:defined) {
+  visibility: hidden;
+}
+```
+
+```ts
+await Promise.all(["tec-button", "tec-select"].map((tag) => customElements.whenDefined(tag)))
+```
+
+## TypeScript
+
+Every element class is exported and declared in `HTMLElementTagNameMap`, so DOM queries are typed:
+
+```ts
+import type { TecButton } from "@tecton/wc/button/button.js"
+
+const button = document.querySelector("tec-button") // TecButton | null
+button?.addEventListener("click", () => {})
+```
+
+Use `"moduleResolution": "bundler"` (or `"node16"` / `"nodenext"`) so the package `exports` resolve. JSX types for React and the component types for Vue are described in [Frameworks](/docs/frameworks).
+
+## Registering elements yourself
+
+`@tecton/wc/<family>` registers its elements as a side effect. `@tecton/wc/<family>/<family>.js` exports the classes **without** registering them — for scoped custom element registries or for your own tag names:
+
+```ts
+import { TecButton } from "@tecton/wc/button/button.js"
+
+customElements.define("tec-button", TecButton)
+```
+
+Registration is idempotent: importing a family twice, or two bundles that both register it, never throws — the first definition wins.
+
+## Embedding in micro-frontends
+
+Several independently deployed applications can share one document:
+
+- **Styles cannot collide.** Each component is styled inside its own shadow root, so no application's CSS can restyle another's components by accident, and the components never restyle the page.
+- **The theme is inherited.** The shell loads `tecton.css` once and sets the mode; `--tec-*` variables inherit into every mounted application and every shadow root. An application can re-theme its own subtree by setting variables on its root element.
+- **One definition per tag.** The global `customElements` registry holds one class per tag name, so all applications in a document use the first `@tecton/wc` that registers a family. Keep one version per document, or — where [scoped custom element registries](https://developer.chrome.com/blog/scoped-registries) are available (Chrome 146+, Safari 26+) — give an application its own registry with the class-only modules:
+
+```ts title="src/mount.ts"
+import { TecButton } from "@tecton/wc/button/button.js"
+
+const registry = new CustomElementRegistry()
+registry.define("tec-button", TecButton)
+
+export function mount(host: HTMLElement) {
+  const root = host.attachShadow({ mode: "open", customElementRegistry: registry })
+  root.innerHTML = `<tec-button>Save</tec-button>`
+}
+```

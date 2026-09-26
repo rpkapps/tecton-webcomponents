@@ -1,0 +1,68 @@
+<div id="background-demo" class="flex w-full max-w-3xl flex-col gap-4">
+  <div data-tile class="relative isolate flex h-72 flex-col justify-end overflow-hidden rounded-lg border border-border bg-background p-6">
+    <tec-background effect="seismic" tone="azure" intensity="medium"></tec-background>
+    <tec-button variant="ghost" size="icon-sm" aria-label="View fullscreen" data-fullscreen class="absolute end-2 top-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/><path d="M9 21H3v-6"/></svg>
+    </tec-button>
+    <p class="text-xs font-medium tracking-wide text-muted-foreground uppercase">Field development</p>
+    <h3 class="mt-1 text-2xl font-medium">Northern Fairway, phase 2</h3>
+    <div class="mt-4 grid grid-cols-3 gap-4">
+      <tec-stat size="sm">
+        <tec-stat-label>Wells</tec-stat-label>
+        <tec-stat-value>14</tec-stat-value>
+      </tec-stat>
+      <tec-stat size="sm">
+        <tec-stat-label>Cost per barrel</tec-stat-label>
+        <tec-stat-value unit="USD">16.9</tec-stat-value>
+        <tec-stat-delta trend="down" tone="positive">-8%</tec-stat-delta>
+      </tec-stat>
+      <tec-stat size="sm">
+        <tec-stat-label>First oil</tec-stat-label>
+        <tec-stat-value>2029</tec-stat-value>
+      </tec-stat>
+    </div>
+  </div>
+  <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+    <tec-toggle-group aria-label="Effect" size="sm" variant="outline" value="seismic" data-option="effect" class="flex-wrap">
+      <tec-toggle-group-item value="seismic">seismic</tec-toggle-group-item>
+      <tec-toggle-group-item value="contour">contour</tec-toggle-group-item>
+      <tec-toggle-group-item value="strata">strata</tec-toggle-group-item>
+      <tec-toggle-group-item value="grid">grid</tec-toggle-group-item>
+      <tec-toggle-group-item value="flow">flow</tec-toggle-group-item>
+      <tec-toggle-group-item value="well-log">well-log</tec-toggle-group-item>
+      <tec-toggle-group-item value="drill">drill</tec-toggle-group-item>
+      <tec-toggle-group-item value="hexagons">hexagons</tec-toggle-group-item>
+      <tec-toggle-group-item value="pressure">pressure</tec-toggle-group-item>
+      <tec-toggle-group-item value="horizon">horizon</tec-toggle-group-item>
+      <tec-toggle-group-item value="terrain-grid">terrain-grid</tec-toggle-group-item>
+    </tec-toggle-group>
+    <tec-toggle-group aria-label="Tone" size="sm" variant="outline" value="azure" data-option="tone">
+      <tec-toggle-group-item value="neutral">neutral</tec-toggle-group-item>
+      <tec-toggle-group-item value="primary">primary</tec-toggle-group-item>
+      <tec-toggle-group-item value="azure">azure</tec-toggle-group-item>
+      <tec-toggle-group-item value="saffron">saffron</tec-toggle-group-item>
+      <tec-toggle-group-item value="lime">lime</tec-toggle-group-item>
+      <tec-toggle-group-item value="blue">blue</tec-toggle-group-item>
+    </tec-toggle-group>
+    <tec-toggle-group aria-label="Intensity" size="sm" variant="outline" value="medium" data-option="intensity">
+      <tec-toggle-group-item value="low">low</tec-toggle-group-item>
+      <tec-toggle-group-item value="medium">medium</tec-toggle-group-item>
+      <tec-toggle-group-item value="high">high</tec-toggle-group-item>
+    </tec-toggle-group>
+  </div>
+</div>
+<script type="module">
+  const root = document.getElementById("background-demo")
+  const tile = root.querySelector("[data-tile]")
+  const background = tile.querySelector("tec-background")
+
+  // Each toggle group sets one attribute of the background (effect, tone, intensity).
+  root.addEventListener("change", (event) => {
+    const group = event.target.closest("[data-option]")
+    const value = [group?.value].flat()[0]
+    if (group && value) background.setAttribute(group.dataset.option, value)
+  })
+
+  // The same effect and content, full screen (Escape leaves).
+  tile.querySelector("[data-fullscreen]").addEventListener("click", () => tile.requestFullscreen?.())
+</script>

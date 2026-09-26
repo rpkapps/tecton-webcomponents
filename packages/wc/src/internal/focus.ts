@@ -135,3 +135,46 @@ export class FocusTrap {
     }
   }
 }
+
+/**
+ * Mirrors "an element inside my shadow root matches `:focus-visible`" as the host custom state
+ * `:state(focus-visible)` — hosts never match `:focus-visible` themselves, even with
+ * `delegatesFocus`. Use it when the host is the styled box and the focusable element is inside:
+ *
+ * ```ts
+ * #focusVisible = new FocusVisibleController(this)
+ * // css: :host(:state(focus-visible)) { box-shadow: var(--tec-focus-ring) }
+ * ```
+ */
+export class FocusVisibleController {
+  readonly #host: HTMLElement & { internals: ElementInternals; addController(c: object): void }
+
+  constructor(host: HTMLElement & { internals: ElementInternals; addController(c: object): void }) {
+    this.#host = host
+    host.addController(this)
+  }
+
+  hostConnected(): void {
+    this.#host.addEventListener("focusin", this.#sync)
+    this.#host.addEventListener("focusout", this.#clear)
+    this.#host.addEventListener("keyup", this.#sync)
+  }
+
+  hostDisconnected(): void {
+    this.#host.removeEventListener("focusin", this.#sync)
+    this.#host.removeEventListener("focusout", this.#clear)
+    this.#host.removeEventListener("keyup", this.#sync)
+    this.#host.internals.states.delete("focus-visible")
+  }
+
+  #sync = () => {
+    const active = this.#host.shadowRoot?.activeElement ?? null
+    const visible = !!active && active.matches(":focus-visible")
+    if (visible) this.#host.internals.states.add("focus-visible")
+    else this.#host.internals.states.delete("focus-visible")
+  }
+
+  #clear = () => {
+    this.#host.internals.states.delete("focus-visible")
+  }
+}

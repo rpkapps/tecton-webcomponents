@@ -1,0 +1,73 @@
+---
+title: Icons
+description: The Tecton domain icons (<tec-icon>, outlined and filled) and how they work alongside Lucide.
+order: 5
+tags: ["tec-icon"]
+---
+
+Tecton applications use **two icon sets**:
+
+- **Tecton icons** — the domain glyphs of the design system (wells, horizons, seismic, drill bits…), the ones general icon sets have no answer for. They ship with `@tecton/wc` and render with `<tec-icon>`, in an outlined and a filled variant.
+- **[Lucide](https://lucide.dev)** — everything general-purpose (chevrons, search, close, arrows). The components use Lucide glyphs internally; your markup can register the Lucide icons it needs with `<tec-icon>`, or inline their SVG.
+
+```html
+<tec-icon name="well"></tec-icon>
+<tec-icon name="seismic" variant="filled"></tec-icon>
+
+<tec-button variant="outline">
+  <tec-icon name="well" slot="start"></tec-icon>
+  New well
+</tec-button>
+```
+
+## Gallery
+
+Click an icon to copy its markup.
+
+<IconGallery />
+
+## Size and colour
+
+An icon is 1.5rem (24px) square by default and draws with `currentColor`, so it follows the text colour of its context. Inside components, slotted icons are sized by the component (a button's icons are 1rem). Set the size with the `--tec-icon-size` custom property, or with `width` and `height` on the element:
+
+```html
+<tec-icon name="horizon" class="size-4 text-info"></tec-icon>
+<tec-icon name="seismic" style="--tec-icon-size: 2rem"></tec-icon>
+```
+
+## Accessibility
+
+Icons are decorative by default (`aria-hidden`): the text next to them, or the `aria-label` of an icon-only button, names the action. For a meaningful standalone icon, give it a `label`, which makes it an image with that name:
+
+```html
+<tec-icon name="fault" label="Fault detected"></tec-icon>
+```
+
+## Lucide icons
+
+Use Lucide for everything outside the domain set. Register the icons the application uses with `registerIcons` — the framework-free `lucide` package provides them — and `<tec-icon>` renders them by kebab-case name:
+
+```ts title="src/icons.ts"
+import { ChevronDown, Search } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ ChevronDown, Search }) // <tec-icon name="chevron-down">, <tec-icon name="search">
+registerIcons({ logo: { viewBox: "0 0 24 24", svg: "<path d='…'/>" } }) // your own SVG
+```
+
+Elements already on the page re-render when an icon they show is registered. Inline SVG needs no registration at all, and is what the examples in these docs use so they can be copied anywhere:
+
+```html
+<tec-button variant="ghost" size="icon" aria-label="Search">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" />
+  </svg>
+</tec-button>
+```
+
+In a framework, the Lucide package for that framework (`lucide-react`, `lucide-vue-next`, `lucide-svelte`, `lucide-angular`) renders the same SVGs.
+
+## API Reference
+
+<ApiReference tags={["tec-icon"]} />
