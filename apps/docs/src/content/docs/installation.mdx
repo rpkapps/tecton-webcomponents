@@ -117,16 +117,29 @@ The modules import `lit` and a few other packages by bare name, so a page that l
 <tec-button>It works</tec-button>
 ```
 
-## Before the elements are defined
+## Avoiding a flash of unstyled content
 
-Until a module has loaded, a `<tec-*>` tag is an unknown element that shows its light-DOM text unstyled. Hide undefined elements for the first moments, or wait for the ones above the fold:
+Until its module has loaded, a `<tec-*>` tag is an unknown element that shows its light-DOM text
+unstyled. Two opt-in pieces prevent that:
 
-```css
-tec-button:not(:defined),
-tec-select:not(:defined) {
-  visibility: hidden;
-}
+- **`@tecton/wc/cloak.css`** hides every Tecton element until it is defined. If a definition never
+  arrives (a failed request, a family you forgot to import), the content is revealed after two
+  seconds anyway (`--tec-cloak-timeout`), so nothing can stay hidden for good.
+- **`@tecton/wc/autoloader`** registers families on demand: it finds the `tec-*` tags in the page,
+  imports only their families, and keeps watching for tags added later. A page then downloads the
+  components it uses instead of the whole library, so they are defined sooner.
+
+```html
+<link rel="stylesheet" href="@tecton/wc/tecton.css" />
+<link rel="stylesheet" href="@tecton/wc/cloak.css" />
+<script type="module">
+  import "@tecton/wc/autoloader"
+</script>
 ```
+
+This documentation site uses exactly this setup. For content the autoloader cannot see (a closed
+shadow root, a detached fragment), call `discover(root)` from the same module; it resolves once
+every family found has registered. To wait for specific elements without the autoloader:
 
 ```ts
 await Promise.all(["tec-button", "tec-select"].map((tag) => customElements.whenDefined(tag)))

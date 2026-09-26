@@ -50,6 +50,12 @@
     "./fonts.css": "./dist/fonts.css",
     "./utilities.css": "./dist/utilities/utilities.css",
     "./tailwind-utilities.css": "./dist/utilities/tailwind-utilities.css",
+    "./cloak.css": "./dist/styles/cloak.css",
+    "./autoloader": {
+      "source": "./src/autoloader.ts",
+      "types": "./dist/autoloader.d.ts",
+      "default": "./dist/autoloader.js"
+    },
     "./styles/*": "./dist/styles/*",
     "./custom-elements.json": "./custom-elements.json",
     "./icons": {
@@ -75,6 +81,8 @@
     "custom-elements.json"
   ],
   "sideEffects": [
+    "./src/autoloader.ts",
+    "./dist/autoloader.js",
     "./dist/index.js",
     "./dist/components/*/define.js",
     "./src/index.ts",

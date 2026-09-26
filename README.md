@@ -56,6 +56,9 @@ before that file existed can be fixed with `git rm --cached -r . && git reset --
   markup (`bg-primary`, `bg-blue-120`); components never need it.
 - **Frameworks**: React 19, Vue, Angular and Svelte use the elements directly; types come from
   `custom-elements.json` and `HTMLElementTagNameMap`.
+- **Loading**: `@tecton/wc/autoloader` registers only the families a page uses (on demand, as tags
+  appear) and `@tecton/wc/cloak.css` hides elements until they are defined (no flash of unstyled
+  content; a 2s failsafe reveals them if a definition never arrives).
 - **Scoped registries**: `@tecton/wc/<family>/<family>.js` exports the classes without registering them.
 
 ## How it is built

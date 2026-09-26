@@ -60,8 +60,9 @@ const pageTitle = title ? `${title} – ${siteConfig.title}` : siteConfig.title
     <!-- One toaster for the whole site: toast() from @tecton/wc/sonner works on every page. -->
     <tec-toaster position="top-center"></tec-toaster>
     <script>
-      // Every tec-* element, on every page (examples need no imports).
-      import "virtual:tecton-components"
+      // Registers the tec-* elements a page uses, on demand (examples need no imports);
+      // cloak.css (in app.css) keeps them hidden until their family has loaded.
+      import "@tecton/wc/autoloader"
       import "../scripts/site"
     </script>
   </body>

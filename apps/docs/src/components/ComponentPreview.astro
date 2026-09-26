@@ -86,7 +86,7 @@ if (!source) console.warn(`[docs] ComponentPreview: src/examples/${name}.html do
         {!hideCode && (
           <div data-slot="code" class="relative">
             <Fragment set:html={code} />
-            <div data-slot="view-code" class="absolute inset-0 flex items-center justify-center pb-2">
+            <div data-slot="view-code" class="absolute inset-0 flex items-center justify-center pb-2 in-data-code-open:hidden">
               <div class="absolute inset-0 bg-[linear-gradient(to_top,var(--color-code),color-mix(in_oklab,var(--color-code)_60%,transparent),transparent)]" />
               <button
                 type="button"

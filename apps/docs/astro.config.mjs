@@ -32,6 +32,7 @@ export default defineConfig({
       // CSS @imports do not use export conditions: point the stylesheet entries at source too.
       alias: [
         { find: /^@tecton\/wc\/tecton\.css$/, replacement: wcSource("src/styles/tecton.css") },
+        { find: /^@tecton\/wc\/cloak\.css$/, replacement: wcSource("src/styles/cloak.css") },
         { find: /^@tecton\/wc\/tailwind\.css$/, replacement: wcSource("src/styles/tailwind.css") },
         { find: /^@tecton\/wc\/utilities\.css$/, replacement: wcSource("src/utilities/utilities.css") },
         { find: /^@tecton\/wc\/tailwind-utilities\.css$/, replacement: wcSource("src/utilities/tailwind-utilities.css") },

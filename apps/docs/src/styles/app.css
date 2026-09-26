@@ -14,6 +14,7 @@
 
 @import "tailwindcss";
 @import "@tecton/wc/tecton.css";
+@import "@tecton/wc/cloak.css";
 @import "@tecton/wc/tailwind.css";
 @import "@tecton/wc/tailwind-utilities.css";
 @import "@fontsource/figtree/400.css";
@@ -270,8 +271,5 @@
   }
   [data-slot="component-preview"]:not([data-code-open]) .docs-copy-button {
     visibility: hidden;
-  }
-  [data-slot="component-preview"][data-code-open] [data-slot="view-code"] {
-    display: none;
   }
 }
