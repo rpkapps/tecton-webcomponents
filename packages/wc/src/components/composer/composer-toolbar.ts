@@ -1,6 +1,7 @@
 import { ContextConsumer } from "@lit/context"
 import { html, type PropertyValues } from "lit"
 import { property } from "lit/decorators.js"
+import { focusTargetOf } from "../../internal/focus.js"
 import { RovingFocusController } from "../../internal/roving-focus.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
@@ -31,6 +32,7 @@ export class TecComposerToolbar extends TectonElement {
     items: () => [...this.children].filter((el): el is HTMLElement => el instanceof HTMLElement && !el.hidden),
     orientation: "horizontal",
     loop: false,
+    focusTarget: focusTargetOf,
   })
 
   #onClick = (event: MouseEvent) => {

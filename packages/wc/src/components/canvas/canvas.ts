@@ -1,6 +1,7 @@
 import { html, nothing, type PropertyValues } from "lit"
 import { property } from "lit/decorators.js"
 import { styleMap } from "lit/directives/style-map.js"
+import { focusTargetOf } from "../../internal/focus.js"
 import { RovingFocusController } from "../../internal/roving-focus.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
@@ -106,6 +107,7 @@ export class TecCanvasToolbar extends TectonElement {
     orientation: () => this.orientation,
     loop: false,
     homeEnd: true,
+    focusTarget: focusTargetOf,
   })
 
   protected override willUpdate(changed: PropertyValues): void {

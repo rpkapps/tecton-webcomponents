@@ -21,9 +21,14 @@
  *
  * The controller listens to `keydown` and `focusin` on the host (item events bubble to it) and only
  * handles events whose composed path contains one of the items.
+ *
+ * Where the tabindex goes: on the item host by default (items with host semantics, e.g. a tab); on
+ * the inner control with `focusTarget: focusTargetOf` when the items only wrap a control (toolbar
+ * buttons) — see {@link RovingFocusOptions.focusTarget}.
  */
 import type { ReactiveController, ReactiveControllerHost } from "lit"
 import { horizontalStep } from "./direction.js"
+import type { focusTargetOf } from "./focus.js"
 import { Typeahead } from "./typeahead.js"
 
 export type RovingOrientation = "horizontal" | "vertical" | "both"
@@ -48,6 +53,15 @@ export interface RovingFocusOptions<T extends HTMLElement> {
   onActivate?: (item: T, event: Event) => void
   /** Type-to-focus. `true` uses the item's text; a function returns the text to match. */
   typeahead?: boolean | ((item: T) => string)
+  /**
+   * The element that takes the roving `tabindex` and focus for an item. Default: the item itself —
+   * right for items that carry the widget semantics on their host (`internals.role = "tab"`,
+   * `"radio"` …). For items that merely **wrap** a control (a `tec-button` or a menu trigger in a
+   * toolbar), pass {@link focusTargetOf}: a wrapper host with `tabindex` is a focusable generic node
+   * (the ARIA it forwards, e.g. `aria-expanded`, then trips axe's `aria-allowed-attr`), and a host with
+   * `tabindex="-1"` takes its slotted content out of the Tab order. `null` falls back to the item.
+   */
+  focusTarget?: (item: T) => HTMLElement | null | undefined
 }
 
 export function defaultIsDisabled(item: Element): boolean {
@@ -59,6 +73,8 @@ export class RovingFocusController<T extends HTMLElement = HTMLElement> implemen
   readonly #options: RovingFocusOptions<T>
   readonly #typeahead?: Typeahead
   #active: T | null = null
+  /** Where the tabindex of each item was put (to move it when the target changes). */
+  #applied = new WeakMap<T, HTMLElement>()
 
   constructor(host: ReactiveControllerHost & HTMLElement, options: RovingFocusOptions<T>) {
     this.#host = host
@@ -94,11 +110,16 @@ export class RovingFocusController<T extends HTMLElement = HTMLElement> implemen
     return this.#options.focusDisabled || !this.#isDisabled(item)
   }
 
+  /** The element that takes tabindex and focus for `item` (see `focusTarget`). */
+  targetOf(item: T): HTMLElement {
+    return this.#options.focusTarget?.(item) ?? item
+  }
+
   /** Makes `item` the tab stop (and focuses it with `{ focus: true }`). */
   setActive(item: T | null, options: { focus?: boolean } = {}): void {
     this.#active = item
     this.update()
-    if (item && options.focus) item.focus()
+    if (item && options.focus) this.targetOf(item).focus()
   }
 
   /**
@@ -111,15 +132,19 @@ export class RovingFocusController<T extends HTMLElement = HTMLElement> implemen
       this.#active = items.find((i) => this.#canFocus(i)) ?? null
     }
     for (const item of items) {
+      const target = this.targetOf(item)
+      const previous = this.#applied.get(item)
+      if (previous && previous !== target) previous.removeAttribute("tabindex")
+      this.#applied.set(item, target)
       const tabIndex = item === this.#active ? 0 : -1
-      if (item.tabIndex !== tabIndex || !item.hasAttribute("tabindex")) item.tabIndex = tabIndex
+      if (target.tabIndex !== tabIndex || !target.hasAttribute("tabindex")) target.tabIndex = tabIndex
     }
   }
 
   /** Focuses the active item. */
   focus(options?: FocusOptions): void {
     this.update()
-    this.#active?.focus(options)
+    if (this.#active) this.targetOf(this.#active).focus(options)
   }
 
   #itemFromEvent(event: Event): T | undefined {

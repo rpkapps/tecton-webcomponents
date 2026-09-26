@@ -1,6 +1,7 @@
 import { ContextConsumer } from "@lit/context"
 import { html, LitElement, type PropertyValues } from "lit"
 import { property } from "lit/decorators.js"
+import { focusTargetOf } from "../../internal/focus.js"
 import { RovingFocusController } from "../../internal/roving-focus.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
@@ -35,6 +36,7 @@ export class TecComposerSuggestions extends TectonElement {
     orientation: "horizontal",
     loop: false,
     isDisabled: (item) => item.isDisabled,
+    focusTarget: focusTargetOf,
   })
 
   protected override willUpdate(changed: PropertyValues): void {
