@@ -145,10 +145,11 @@ export class ListNavigationController<T extends HTMLElement = HTMLElement> imple
   move(delta: number): void {
     const enabled = this.#enabled()
     if (!enabled.length) return
-    const index = this.#active ? enabled.indexOf(this.#active) : -1
+    let index = this.#active ? enabled.indexOf(this.#active) : -1
+    // From nothing, moving forward starts before the first item and backward after the last.
+    if (index < 0) index = delta > 0 ? -1 : enabled.length
     let next: number
-    if (index < 0) next = delta > 0 ? 0 : enabled.length - 1
-    else if (this.#options.loop) next = (((index + delta) % enabled.length) + enabled.length) % enabled.length
+    if (this.#options.loop) next = (((index + delta) % enabled.length) + enabled.length) % enabled.length
     else next = Math.min(Math.max(index + delta, 0), enabled.length - 1)
     this.setActive(enabled[next]!)
   }

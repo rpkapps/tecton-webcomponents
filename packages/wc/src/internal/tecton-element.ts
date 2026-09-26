@@ -56,7 +56,7 @@ export class TectonElement extends LitElement {
    * if (this.emit("tec-open-change", { detail: { open: false }, cancelable: true })) this.open = false
    * ```
    */
-  emit<D = undefined>(name: string, options: EmitOptions<D> = {}): boolean {
+  protected emit<D = undefined>(name: string, options: EmitOptions<D> = {}): boolean {
     const event = new CustomEvent<D>(name, {
       detail: options.detail as D,
       cancelable: options.cancelable ?? false,

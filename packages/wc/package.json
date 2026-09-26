@@ -4,7 +4,15 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "build": "node scripts/build-theme.mjs && node scripts/build-index.mjs && rm -rf dist && tsc -p tsconfig.build.json && node scripts/copy-assets.mjs && pnpm run analyze",
+    "build:index": "node scripts/build-index.mjs",
+    "build:theme": "node scripts/build-theme.mjs",
+    "analyze": "cem analyze --config custom-elements-manifest.config.mjs",
+    "dev": "node scripts/build-index.mjs && tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "test": "node scripts/build-index.mjs && vitest run",
+    "test:watch": "vitest",
+    "typecheck": "node scripts/build-index.mjs && tsc --noEmit -p .",
+    "check": "node scripts/build-theme.mjs --check && node scripts/build-index.mjs --check"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.8.0",
@@ -26,5 +34,45 @@
     "vite": "^8.3.1",
     "vitest": "^5.0.2"
   },
-  "customElements": "/tmp/claude-0/-home-user/7824a982-3b74-50e1-abe5-6bb120608676/scratchpad/cem/custom-elements.json"
+  "customElements": "custom-elements.json",
+  "description": "Tecton design system web components (Lit).",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tecton.css": "./dist/styles/tecton.css",
+    "./tailwind.css": "./dist/styles/tailwind.css",
+    "./fonts.css": "./dist/fonts.css",
+    "./utilities.css": "./dist/utilities/utilities.css",
+    "./tailwind-utilities.css": "./dist/utilities/tailwind-utilities.css",
+    "./styles/*": "./dist/styles/*",
+    "./custom-elements.json": "./custom-elements.json",
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "default": "./dist/icons/index.js"
+    },
+    "./internal/*": null,
+    "./package.json": "./package.json",
+    "./*.js": {
+      "types": "./dist/components/*.d.ts",
+      "default": "./dist/components/*.js"
+    },
+    "./*": {
+      "types": "./dist/components/*/define.d.ts",
+      "default": "./dist/components/*/define.js"
+    }
+  },
+  "files": [
+    "dist",
+    "custom-elements.json"
+  ],
+  "sideEffects": [
+    "./dist/index.js",
+    "./dist/components/*/define.js",
+    "*.css"
+  ]
 }

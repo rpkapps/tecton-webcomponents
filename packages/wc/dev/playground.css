@@ -1,0 +1,17 @@
+@import "../src/styles/tecton.css";
+@import "@fontsource/figtree/400.css";
+@import "@fontsource/figtree/500.css";
+@import "@fontsource/figtree/600.css";
+
+/* What a Tailwind app's preflight does to every element (components must survive it). */
+*, ::before, ::after { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid; }
+
+body { padding: 1.5rem; font-size: 14px; }
+.bar { display: flex; gap: 1.5rem; align-items: center; margin-bottom: 1.5rem; }
+section { margin-block: 1.5rem 2.5rem; }
+h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
+.row { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; align-items: center; margin-bottom: 1rem; }
+.stack { display: grid; gap: 1.25rem; justify-items: start; }
+.label { font-size: 14px; font-weight: 500; line-height: 1; }
+.grid { display: grid; grid-template-columns: 1fr 2fr; gap: 0.5rem 1rem; align-items: center; }
+.grid input { height: 2rem; border: 1px solid var(--tec-input); border-radius: var(--tec-radius-md); padding-inline: 0.5rem; background: transparent; color: inherit; font: inherit; }

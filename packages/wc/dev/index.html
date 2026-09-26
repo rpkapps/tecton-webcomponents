@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@tecton/wc playground</title>
+    <link rel="stylesheet" href="./playground.css" />
+    <script type="module" src="./main.ts"></script>
+  </head>
+  <body>
+    <header class="bar">
+      <strong>@tecton/wc playground</strong>
+      <label><input type="checkbox" id="dark" /> Dark</label>
+      <label><input type="checkbox" id="rtl" /> RTL</label>
+    </header>
+
+    <main id="root">
+      <section id="button">
+        <h2>Button</h2>
+        <div class="row">
+          <tec-button>Default</tec-button>
+          <tec-button variant="outline">Outline</tec-button>
+          <tec-button variant="secondary">Secondary</tec-button>
+          <tec-button variant="ghost">Ghost</tec-button>
+          <tec-button variant="destructive">Destructive</tec-button>
+          <tec-button variant="link">Link</tec-button>
+        </div>
+        <div class="row">
+          <tec-button size="xs" variant="outline">Extra small</tec-button>
+          <tec-button size="sm" variant="outline">Small</tec-button>
+          <tec-button variant="outline">Default</tec-button>
+          <tec-button size="lg" variant="outline">Large</tec-button>
+          <tec-button size="icon-xs" variant="outline" aria-label="Up"><tec-icon name="arrow-up"></tec-icon></tec-button>
+          <tec-button size="icon-sm" variant="outline" aria-label="Up"><tec-icon name="arrow-up"></tec-icon></tec-button>
+          <tec-button size="icon" variant="outline" aria-label="Up"><tec-icon name="arrow-up"></tec-icon></tec-button>
+          <tec-button size="icon-lg" variant="outline" aria-label="Up"><tec-icon name="arrow-up"></tec-icon></tec-button>
+        </div>
+        <div class="row">
+          <tec-button variant="outline"><tec-icon slot="start" name="git-branch"></tec-icon>New Branch</tec-button>
+          <tec-button variant="outline">Fork<tec-icon slot="end" name="git-fork"></tec-icon></tec-button>
+          <tec-button><tec-icon slot="start" name="well"></tec-icon>New well</tec-button>
+          <tec-button disabled>Disabled</tec-button>
+          <tec-button href="#button" variant="secondary" size="sm">Login</tec-button>
+          <tec-button style="--tec-button-radius: 9999px">Get Started</tec-button>
+        </div>
+      </section>
+
+      <section id="checkbox">
+        <h2>Checkbox</h2>
+        <div class="stack">
+          <div class="row"><tec-checkbox id="terms"></tec-checkbox><label for="terms" class="label">Accept terms and conditions</label></div>
+          <tec-checkbox checked>Accept terms and conditions</tec-checkbox>
+          <tec-checkbox disabled>Enable notifications</tec-checkbox>
+          <tec-checkbox invalid>Accept terms and conditions</tec-checkbox>
+          <tec-checkbox indeterminate>Select all</tec-checkbox>
+        </div>
+      </section>
+
+      <section id="popover">
+        <h2>Popover</h2>
+        <div class="row">
+          <tec-popover style="--tec-popover-width: 20rem">
+            <tec-button slot="trigger" variant="outline">Open popover</tec-button>
+            <tec-popover-header>
+              <tec-popover-title>Dimensions</tec-popover-title>
+              <tec-popover-description>Set the dimensions for the layer.</tec-popover-description>
+            </tec-popover-header>
+            <div class="grid">
+              <label for="w">Width</label><input id="w" value="100%" />
+              <label for="h">Height</label><input id="h" value="25px" />
+            </div>
+          </tec-popover>
+          <tec-popover align="start" style="--tec-popover-width: 10rem"><tec-button slot="trigger" variant="outline" size="sm">Start</tec-button>Aligned to start</tec-popover>
+          <tec-popover align="end" style="--tec-popover-width: 10rem"><tec-button slot="trigger" variant="outline" size="sm">End</tec-button>Aligned to end</tec-popover>
+          <tec-popover side="right"><tec-button slot="trigger" variant="outline" size="sm">Right</tec-button>On the right</tec-popover>
+        </div>
+      </section>
+
+      <section id="tabs">
+        <h2>Tabs</h2>
+        <tec-tabs value="overview" style="width: 400px">
+          <tec-tabs-list>
+            <tec-tabs-trigger value="overview">Overview</tec-tabs-trigger>
+            <tec-tabs-trigger value="analytics">Analytics</tec-tabs-trigger>
+            <tec-tabs-trigger value="reports">Reports</tec-tabs-trigger>
+            <tec-tabs-trigger value="settings">Settings</tec-tabs-trigger>
+          </tec-tabs-list>
+          <tec-tabs-content value="overview">You have 12 active projects and 3 pending tasks.</tec-tabs-content>
+          <tec-tabs-content value="analytics">Page views are up 25% compared to last month.</tec-tabs-content>
+          <tec-tabs-content value="reports">You have 5 reports ready and available to export.</tec-tabs-content>
+          <tec-tabs-content value="settings">Configure notifications, security, and themes.</tec-tabs-content>
+        </tec-tabs>
+        <div class="row">
+          <tec-tabs value="overview">
+            <tec-tabs-list variant="line">
+              <tec-tabs-trigger value="overview">Overview</tec-tabs-trigger>
+              <tec-tabs-trigger value="analytics">Analytics</tec-tabs-trigger>
+              <tec-tabs-trigger value="reports">Reports</tec-tabs-trigger>
+            </tec-tabs-list>
+          </tec-tabs>
+          <tec-tabs value="account" orientation="vertical">
+            <tec-tabs-list>
+              <tec-tabs-trigger value="account">Account</tec-tabs-trigger>
+              <tec-tabs-trigger value="password">Password</tec-tabs-trigger>
+              <tec-tabs-trigger value="notifications">Notifications</tec-tabs-trigger>
+            </tec-tabs-list>
+          </tec-tabs>
+          <tec-tabs value="preview">
+            <tec-tabs-list>
+              <tec-tabs-trigger value="preview"><tec-icon name="app-window"></tec-icon>Preview</tec-tabs-trigger>
+              <tec-tabs-trigger value="code"><tec-icon name="code"></tec-icon>Code</tec-tabs-trigger>
+            </tec-tabs-list>
+          </tec-tabs>
+        </div>
+      </section>
+
+      <section id="icon">
+        <h2>Icon</h2>
+        <div class="row" id="icons"></div>
+        <div class="row" id="icons-filled"></div>
+      </section>
+    </main>
+  </body>
+</html>

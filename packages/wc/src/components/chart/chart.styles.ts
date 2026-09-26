@@ -269,6 +269,7 @@ export const tooltipStyles = [
       flex: 1;
       align-items: center;
       justify-content: space-between;
+      gap: 0.5rem;
       line-height: 1;
     }
     .text[data-nested] {

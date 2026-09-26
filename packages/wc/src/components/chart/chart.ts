@@ -147,6 +147,19 @@ function numeric(value: unknown): number | null {
 }
 
 /**
+ * The chart engine is a small built-in SVG renderer (nice ticks, band/point scales, linear,
+ * monotone, natural and step curves, pie sectors) rather than a charting library: the charting
+ * libraries the Tecton design is based on are framework-bound, and a dependency-free renderer of the
+ * chart types the design system documents keeps the element small, SSR-safe and fully themeable
+ * with CSS. Size the chart with CSS (`class="min-h-[200px] w-full"`, `class="h-64 w-full"`); it
+ * follows its box with a `ResizeObserver`.
+ *
+ * **Accessibility.** The plot is focusable (`role="application"` with `aria-roledescription="chart"`
+ * and the `label` as its name): the arrow keys move between data points (Home/End jump to the ends,
+ * Escape hides the tooltip) and each point is announced in a polite live region. A visually hidden
+ * data table lists every value for screen reader users who browse the page. Motion (bars growing,
+ * lines revealing, value changes) only runs without `prefers-reduced-motion: reduce`.
+ *
  * @summary Beautiful, accessible charts: bar (grouped, stacked, horizontal), line, area (stacked,
  * gradient) and pie/donut, drawn as SVG and themed with the Tecton chart palette.
  *
@@ -164,19 +177,6 @@ function numeric(value: unknown): number | null {
  * @cssprop --tec-chart-color-<key> - Set by the chart for every `config` entry with a colour; use it
  *   in data rows (`fill: "var(--tec-chart-color-chrome)"`) and in your own CSS.
  * @cssprop --tec-chart-1 - Chart palette (theme), `--tec-chart-1` … `--tec-chart-5`.
- *
- * The chart engine is a small built-in SVG renderer (nice ticks, band/point scales, linear,
- * monotone, natural and step curves, pie sectors) rather than a charting library: the charting
- * libraries the Tecton design is based on are framework-bound, and a dependency-free renderer of the
- * chart types the design system documents keeps the element small, SSR-safe and fully themeable
- * with CSS. Size the chart with CSS (`class="min-h-[200px] w-full"`, `class="h-64 w-full"`); it
- * follows its box with a `ResizeObserver`.
- *
- * **Accessibility.** The plot is focusable (`role="application"` with `aria-roledescription="chart"`
- * and the `label` as its name): the arrow keys move between data points (Home/End jump to the ends,
- * Escape hides the tooltip) and each point is announced in a polite live region. A visually hidden
- * data table lists every value for screen reader users who browse the page. Motion (bars growing,
- * lines revealing, value changes) only runs without `prefers-reduced-motion: reduce`.
  */
 export class TecChart extends TectonElement {
   static styles = [hostStyles, srOnly, chartStyles]
@@ -205,7 +205,10 @@ export class TecChart extends TectonElement {
   /** With `type`: stacks the generated series. */
   @property({ type: Boolean }) stacked = false
 
-  /** The accessible name of the chart (and the caption of its data table). */
+  /**
+   * The accessible name of the chart (and the caption of its data table). An `aria-label` on the
+   * host is used when it is not set.
+   */
   @property() label = ""
 
   /** The accessible description of the plot (the keyboard hint by default). */
@@ -229,6 +232,7 @@ export class TecChart extends TectonElement {
 
   #model?: Model
   #observer?: ResizeObserver
+  #mutations?: MutationObserver
   #pointer: Point | null = null
   #keyboard = false
   #resized = false
@@ -248,11 +252,15 @@ export class TecChart extends TectonElement {
   connectedCallback(): void {
     super.connectedCallback()
     if (this.hasUpdated && this._plot) this.#observe()
+    // Parts shown or hidden with the `hidden` attribute (e.g. a series toggled from a legend).
+    this.#mutations ??= new MutationObserver(() => this.requestUpdate())
+    this.#mutations.observe(this, { attributes: true, attributeFilter: ["hidden"], subtree: true })
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.#observer?.disconnect()
+    this.#mutations?.disconnect()
   }
 
   protected firstUpdated(): void {
@@ -544,8 +552,10 @@ export class TecChart extends TectonElement {
   }
 
   protected render() {
-    const style = getComputedStyle(this)
-    this.#font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`
+    if (!this.#font || this.#resized) {
+      const style = getComputedStyle(this)
+      this.#font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`
+    }
     const model = (this.#model = this.#computeModel())
     const transition = !this.#resized && this.hasUpdated
     this.#resized = false
@@ -592,6 +602,8 @@ export class TecChart extends TectonElement {
 
   #name(): string {
     if (this.label) return this.label
+    const hostLabel = this.getAttribute("aria-label")
+    if (hostLabel) return hostLabel
     const kind = this.#seriesSpecsCache[0]?.kind ?? (this.#parts(TecChartPie).length ? "pie" : this.type)
     return kind ? `${kind[0]!.toUpperCase()}${kind.slice(1)} chart` : "Chart"
   }

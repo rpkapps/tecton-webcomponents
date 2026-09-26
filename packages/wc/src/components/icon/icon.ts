@@ -13,6 +13,12 @@ export type { TectonIconData, TectonIconVariant } from "../../icons/index.js"
 const warned = new Set<string>()
 
 /**
+ * Decorative by default (hidden from assistive technology). Give it a `label` when the icon conveys
+ * meaning on its own — it then has `role="img"` and that accessible name.
+ *
+ * The 18 Tecton domain icons are always available; register Lucide icons with `registerIcons` from
+ * `@tecton/wc/icon/registry.js`.
+ *
  * @summary Renders a Tecton domain icon (well, seismic, drill-bit …) or any registered Lucide / custom icon.
  *
  * @tag tec-icon
@@ -20,12 +26,6 @@ const warned = new Set<string>()
  * @csspart svg - The rendered `<svg>`.
  *
  * @cssprop --tec-icon-size - Width and height (default 1.5rem = 24px). Components set it for their slotted icons (e.g. 1rem in buttons); plain `width`/`height` on the host work too.
- *
- * Decorative by default (hidden from assistive technology). Give it a `label` when the icon conveys
- * meaning on its own — it then has `role="img"` and that accessible name.
- *
- * The 18 Tecton domain icons are always available; register Lucide icons with `registerIcons` from
- * `@tecton/wc/icon/registry.js`.
  */
 export class TecIcon extends TectonElement {
   static styles = [hostStyles, iconStyles]

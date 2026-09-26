@@ -20,6 +20,10 @@ export interface PopoverOpenChangeDetail {
 }
 
 /**
+ * The panel is a non-modal `role="dialog"` in the top layer, named by `tec-popover-title` (or the
+ * `label` attribute, else the trigger). Opening moves focus to the panel and keeps Tab inside it;
+ * Escape or a press outside closes it and focus returns to the trigger.
+ *
  * @summary Displays rich content in a portal, triggered by a button.
  *
  * @tag tec-popover
@@ -32,10 +36,6 @@ export interface PopoverOpenChangeDetail {
  * @cssprop --tec-popover-width - Width of the panel (default 18rem).
  *
  * @fires tec-open-change - The user opened or closed the popover (trigger press, Escape, outside press). Cancelable: `preventDefault()` keeps the current state. `detail: { open, reason }`.
- *
- * The panel is a non-modal `role="dialog"` in the top layer, named by `tec-popover-title` (or the
- * `label` attribute, else the trigger). Opening moves focus to the panel and keeps Tab inside it;
- * Escape or a press outside closes it and focus returns to the trigger.
  */
 export class TecPopover extends TectonElement {
   static styles = [hostStyles, srOnly, popupStyles, animationStyles, popupMotion(".content"), popoverStyles]

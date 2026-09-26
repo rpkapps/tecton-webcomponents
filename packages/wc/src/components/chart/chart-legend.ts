@@ -16,7 +16,6 @@ import { legendStyles } from "./chart.styles.js"
  * @csspart item - One entry.
  * @csspart swatch - The colour swatch of an entry.
  * @csspart label - The label of an entry.
- *
  */
 export class TecChartLegend extends TectonElement {
   static styles = [hostStyles, legendStyles]

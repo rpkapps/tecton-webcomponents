@@ -1,19 +1,432 @@
 ---
 title: Chart
-description: Beautiful, accessible charts built from composable elements.
-tags: ["tec-chart"]
+description: Bar, line, area and pie charts built from composable elements, themed with the Tecton chart palette.
+tags:
+  [
+    "tec-chart",
+    "tec-chart-bar",
+    "tec-chart-line",
+    "tec-chart-area",
+    "tec-chart-pie",
+    "tec-chart-x-axis",
+    "tec-chart-y-axis",
+    "tec-chart-grid",
+    "tec-chart-tooltip",
+    "tec-chart-legend",
+  ]
 ---
 
 <ComponentPreview name="chart-demo" class="p-0! lg:min-h-[404px]" hideCode />
+
+Charts are designed to look great out of the box, work with the other components and stay fully themeable. A chart is a `<tec-chart>` holding the parts you need — series, axes, grid, tooltip, legend — so you only bring in what the chart shows.
+
+## Usage
+
+```ts
+import "@tecton/wc/chart"
+```
+
+```html
+<tec-chart id="visitors" class="min-h-[200px] w-full" label="Visitors by month">
+  <tec-chart-x-axis key="month"></tec-chart-x-axis>
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-bar key="desktop" radius="4"></tec-chart-bar>
+</tec-chart>
+
+<script type="module">
+  const chart = document.getElementById("visitors")
+  chart.config = { desktop: { label: "Desktop", color: "var(--tec-chart-1)" } }
+  chart.data = [
+    { month: "January", desktop: 186 },
+    { month: "February", desktop: 305 },
+  ]
+</script>
+```
+
+The import registers `<tec-chart>` and all its parts. `data` and `config` are properties (they hold arrays and objects); assign a new array to update the chart.
+
+### The engine
+
+`<tec-chart>` draws its SVG itself with a small built-in engine — nice ticks, band and point scales, linear, monotone, natural and step curves, stacking, pie sectors — instead of wrapping a charting library. The chart libraries this design is based on are bound to one framework; a dependency-free renderer of the chart types below keeps the element small, works in any framework (or none) and is themed entirely with CSS.
+
+## Your first chart
+
+Let's build a bar chart, then add a grid, an axis, a tooltip and a legend.
+
+<Steps>
+
+### Define your data
+
+The data can have any shape: each series and axis picks its field with `key`. This data holds the number of desktop and mobile visitors per month.
+
+```ts
+chart.data = [
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  { month: "April", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "June", desktop: 214, mobile: 140 },
+]
+```
+
+### Define your chart config
+
+The config holds the human-readable labels, colours and icons of the series, keyed by the same keys as the data.
+
+```ts
+chart.config = {
+  desktop: { label: "Desktop", color: "var(--tec-chart-1)" },
+  mobile: { label: "Mobile", color: "var(--tec-chart-2)" },
+}
+```
+
+### Build your chart
+
+Add one `<tec-chart-bar>` per series.
+
+<Callout variant="warning">
+
+**Important:** give the chart a size — `class="min-h-[200px] w-full"` or `class="h-64 w-full"`. It follows its box with a `ResizeObserver`; without a size it falls back to a 16:9 box.
+
+</Callout>
+
 <ComponentPreview name="chart-example" />
+
+</Steps>
+
+## Add a grid
+
+Add a `<tec-chart-grid>`. Without attributes it draws lines at the value ticks; `horizontal` and `vertical` choose the lines, `dashed` dashes them.
+
 <ComponentPreview name="chart-example-grid" />
+
+## Add an axis
+
+Add a `<tec-chart-x-axis>` with the `key` of the categories. Its `tickFormatter` property formats the labels; labels that would overlap are skipped (`min-tick-gap`).
+
 <ComponentPreview name="chart-example-axis" />
+
+## Add a tooltip
+
+Add a `<tec-chart-tooltip>`. It follows the pointer and the keyboard, and highlights the active category with a cursor.
+
 <ComponentPreview name="chart-example-tooltip" />
+
+## Add a legend
+
+Add a `<tec-chart-legend>`. Like the tooltip, it takes its labels and swatches from the config.
+
 <ComponentPreview name="chart-example-legend" />
+
+## Chart config
+
+The config holds the labels, icons and colours of a chart. It is decoupled from the data, so one config can be shared by several charts, and data or colours can come from elsewhere.
+
+```ts
+import { createElement, Monitor } from "lucide"
+
+chart.config = {
+  desktop: {
+    label: "Desktop",
+    icon: createElement(Monitor), // an element (cloned) or a Lit template, shown instead of the swatch
+    // A colour: "var(--tec-chart-1)", "oklch(0.5 0.2 240)", "#2563eb" …
+    color: "var(--tec-chart-1)",
+    // … or one colour per theme
+    theme: { light: "var(--tec-chart-1)", dark: "var(--tec-chart-4)" },
+  },
+}
+```
+
+## Theming
+
+`--tec-chart-1` … `--tec-chart-5` are the Tecton accent fills (azure, saffron, lime, blue, pink), already paired for light and dark. Use them in the config; any CSS colour works too.
+
+The chart exposes each config colour as a custom property, `--tec-chart-color-<key>`. Series use it automatically; use it yourself in data rows or your own CSS:
+
+```ts
+chart.data = [
+  { browser: "chrome", visitors: 275, fill: "var(--tec-chart-color-chrome)" },
+  { browser: "safari", visitors: 200, fill: "var(--tec-chart-color-safari)" },
+]
+```
+
+A series without a config colour takes its `color` attribute, then the palette in series order.
+
+## Tooltip
+
+A tooltip shows a label, and a name, indicator and value per series. Turn parts off with `hide-label` and `hide-indicator`, and pick the indicator with `indicator="dot | line | dashed"`.
+
 <ComponentPreview name="chart-tooltip" hideCode />
-<ComponentPreview name="chart-rtl" direction="rtl" />
+
+| Attribute / property | Type | Description |
+| :-- | :-- | :-- |
+| `label-key` | string | The config or data key to use for the label. |
+| `name-key` | string | The config or data key to use for the names. |
+| `indicator` | `dot`, `line` or `dashed` | The indicator style. |
+| `hide-label` | boolean | Hides the label. |
+| `hide-indicator` | boolean | Hides the indicators. |
+| `hide-cursor` | boolean | Hides the cursor (highlighted band or line). |
+| `labelFormatter` | `(label, items) => string` | Formats the label. |
+| `formatter` | `(value, name, item, index, row) => string \| TemplateResult` | Renders a row. |
+
+Colours come from the config. To name the label and the rows with other keys:
+
+```ts
+chart.data = [
+  { browser: "chrome", visitors: 187 },
+  { browser: "safari", visitors: 200 },
+]
+chart.config = {
+  visitors: { label: "Total Visitors" },
+  chrome: { label: "Chrome", color: "var(--tec-chart-1)" },
+  safari: { label: "Safari", color: "var(--tec-chart-2)" },
+}
+```
+
+```html
+<tec-chart-tooltip label-key="visitors" name-key="browser"></tec-chart-tooltip>
+```
+
+This uses `Total Visitors` for the label and `Chrome` and `Safari` for the names. Size the tooltip with a class (`class="w-[150px]"`); outside a chart, `standalone` renders it in place with the `label` and `payload` you give it.
+
+## Legend
+
+`<tec-chart-legend>` shows a swatch (or the config icon) and the label of every series — of every slice for a pie. `vertical-align="top"` puts it above the plot, `hide-icon` shows swatches instead of icons, and `name-key` names the entries with another key:
+
+```html
+<tec-chart-legend name-key="browser"></tec-chart-legend>
+```
+
+## Stacked bars
+
+Series with the same `stack` id are stacked. Round only the outer corners with four radii (`top-left top-right bottom-right bottom-left`).
+
 <ComponentPreview name="chart-bar-stacked" />
+
+## Horizontal bars
+
+`orientation="horizontal"` lays the categories out along the y axis; the category axis is then `<tec-chart-y-axis>`.
+
 <ComponentPreview name="chart-bar-horizontal" />
+
+## Line chart
+
+`<tec-chart-line>` draws a line per series; `curve` is `linear`, `monotone`, `natural` or `step`, `dots` marks every point and `dashed` dashes the line. Line and area charts put the first and last category on the edges of the plot, so give them some `margin`.
+
 <ComponentPreview name="chart-line" />
+
+## Area chart
+
+`<tec-chart-area>` fills the area under a series (`fill-opacity`, or a vertical `gradient`); give several areas the same `stack` to stack them.
+
 <ComponentPreview name="chart-area" />
+
+## Pie and donut
+
+`<tec-chart-pie>` draws one slice per data row: `key` holds the values and `name-key` the names, which are also the config keys of the slices. `inner-radius` makes a donut and `padding-angle` separates the slices.
+
 <ComponentPreview name="chart-pie" />
+
+## Quick charts
+
+For a simple chart, `type` draws one series per config key with a colour, without series elements (`stacked` stacks them):
+
+```html
+<tec-chart type="bar" category-key="month" class="h-64 w-full" label="Visitors by month"></tec-chart>
+```
+
+## RTL
+
+The chart mirrors itself in a right-to-left context: the categories run from the right, the value axis sits on the right, and the tooltip opens towards the start. The arrow keys follow the reading direction.
+
+<ComponentPreview name="chart-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves focus to the chart and shows the first data point."],
+    ["ArrowRight / ArrowLeft", "Moves to the next / previous data point, in the reading direction."],
+    ["ArrowDown / ArrowUp", "Moves to the next / previous data point."],
+    ["Home / End", "Moves to the first / last data point."],
+    ["Escape", "Hides the tooltip; an arrow key shows it again."],
+  ]}
+/>
+
+## Accessibility
+
+- The plot is focusable and has `role="application"` with `aria-roledescription="chart"`. Its accessible name is the `label` attribute — always set one that says what the chart shows ("Visitors by month"). The `description` attribute (the keyboard hint by default) is its description; translate both.
+- Moving with the keyboard announces the active point — its label and every series value, as the tooltip shows them — in a polite live region.
+- A visually hidden table lists every value, with the config labels as column headers and the categories (formatted by the tooltip's `labelFormatter`) as row headers, for screen reader users who browse the page.
+- The SVG is decorative (`aria-hidden`); the tooltip is too, since the live region announces it. The legend is plain text.
+- The focus ring is the Tecton ring and turns into a system outline in forced-colours mode, where series keep their colours.
+- Bars grow, lines and areas reveal and value changes animate only without `prefers-reduced-motion: reduce`.
+
+## API Reference
+
+<ApiReference
+  tags={[
+    "tec-chart",
+    "tec-chart-bar",
+    "tec-chart-line",
+    "tec-chart-area",
+    "tec-chart-pie",
+    "tec-chart-x-axis",
+    "tec-chart-y-axis",
+    "tec-chart-grid",
+    "tec-chart-tooltip",
+    "tec-chart-legend",
+  ]}
+/>
+
+## Usage guidelines
+
+### Use it when
+
+- Several values are compared over time or across categories: production by month, cost by discipline.
+- The chart is a bar, line, area or pie chart; its parts go inside `<tec-chart>`.
+- The series need one set of labels, colours and icons that the tooltip, the legend and the data table all read: that is the `config`.
+
+### Not for
+
+- one measured number with a unit and a change: use [Stat](/docs/tecton/stat)
+- a value read against a fixed scale with named bands: use [Meter](/docs/tecton/meter)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Key the `config` by data key, each entry with `label`, `color` (or `theme: { light, dark }`) and an optional `icon`.
+
+</Do>
+
+<Do>
+
+Take the colours from the theme: `var(--tec-chart-1)` … `var(--tec-chart-5)` are the Tecton accent fills, already paired for light and dark.
+
+</Do>
+
+<Do>
+
+Let series take their colour from the config; use `var(--tec-chart-color-<key>)` where you need the same colour yourself (data rows, your own CSS).
+
+</Do>
+
+<Do>
+
+Give the chart a size (`class="h-64 w-full"`) and a `label` that says what it shows.
+
+</Do>
+
+<Do>
+
+Add `<tec-chart-tooltip>` and `<tec-chart-legend>`; both read their labels and swatches from the same config.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Colouring series with Tailwind classes or a hex">
+
+<Wrong>
+
+```html
+<tec-chart class="h-64 w-full">
+  <tec-chart-bar key="desktop" class="fill-blue-500"></tec-chart-bar>
+  <tec-chart-bar key="mobile" color="#60a5fa"></tec-chart-bar>
+</tec-chart>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-chart class="h-64 w-full" label="Visitors by month">
+  <tec-chart-bar key="desktop"></tec-chart-bar>
+  <tec-chart-bar key="mobile"></tec-chart-bar>
+</tec-chart>
+<script type="module">
+  chart.config = {
+    desktop: { label: "Desktop", color: "var(--tec-chart-1)" },
+    mobile: { label: "Mobile", color: "var(--tec-chart-2)" },
+  }
+</script>
+```
+
+</Correct>
+
+Series are drawn inside the chart's shadow root, so a class on a series element styles nothing, and `fill-blue-500` is a stock Tailwind colour the Tecton preset emits no CSS for. A hard-coded hex has no dark pair. Only the config colour reaches the tooltip, the legend and `--tec-chart-color-<key>` together.
+
+</Dont>
+
+<Dont severity="CRITICAL" title="A chart without a label">
+
+<Wrong>
+
+```html
+<tec-chart class="h-64 w-full">…</tec-chart>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-chart class="h-64 w-full" label="Oil production by month, 2024">…</tec-chart>
+```
+
+</Correct>
+
+The label is the accessible name of the focusable chart and the caption of its data table. Without it, screen readers announce a generic "Bar chart".
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A config key that is not the data key">
+
+<Wrong>
+
+```ts
+chart.config = { Desktop: { label: "Desktop", color: "var(--tec-chart-1)" } }
+```
+
+</Wrong>
+
+<Correct>
+
+```ts
+chart.config = { desktop: { label: "Desktop", color: "var(--tec-chart-1)" } }
+```
+
+</Correct>
+
+The chart looks each series up by its `key`: with a mismatched config key, `<tec-chart-bar key="desktop">` falls back to the palette colour and the tooltip, legend and table show the raw key instead of the label.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Mutating the data array in place">
+
+<Wrong>
+
+```ts
+chart.data.push({ month: "July", desktop: 190 })
+```
+
+</Wrong>
+
+<Correct>
+
+```ts
+chart.data = [...chart.data, { month: "July", desktop: 190 }]
+```
+
+</Correct>
+
+The chart re-renders when the `data` property is assigned; changing the array it already holds is not noticed.
+
+</Dont>

@@ -8,6 +8,9 @@ import { tabsContext } from "./tabs-context.js"
 import { tabsContentStyles } from "./tabs.styles.js"
 
 /**
+ * The panel is focusable (`tabindex="0"`) unless it contains focusable content, so keyboard users
+ * can reach text-only panels (React Aria behaviour).
+ *
  * @summary The panel shown while the trigger with the same `value` is selected.
  *
  * @tag tec-tabs-content
@@ -15,9 +18,6 @@ import { tabsContentStyles } from "./tabs.styles.js"
  * @slot - The panel content.
  *
  * @cssstate selected - The panel is shown.
- *
- * The panel is focusable (`tabindex="0"`) unless it contains focusable content, so keyboard users
- * can reach text-only panels (React Aria behaviour).
  */
 export class TecTabsContent extends TectonElement {
   static styles = [hostStyles, tabsContentStyles]

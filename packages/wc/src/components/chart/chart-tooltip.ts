@@ -63,6 +63,8 @@ export function resolveTooltip(options: TooltipResolveOptions): { label: unknown
 }
 
 /**
+ * Size the tooltip with classes on the element (`class="w-[150px]"`); the box fills it.
+ *
  * @summary The tooltip of a `tec-chart`: the active category's label and one row per series with
  * an indicator, the series name and its value. Place it inside the chart; it follows the pointer and
  * the keyboard. With `standalone` it renders in place (for documentation and custom layouts).
@@ -78,8 +80,6 @@ export function resolveTooltip(options: TooltipResolveOptions): { label: unknown
  * @csspart value - The value of a row.
  *
  * @cssstate active - The tooltip is shown.
- *
- * Size the tooltip with classes on the element (`class="w-[150px]"`); the box fills it.
  */
 export class TecChartTooltip extends TectonElement {
   static styles = [hostStyles, tooltipStyles]

@@ -11,6 +11,10 @@ import { tabsStyles } from "./tabs.styles.js"
 export type { TabsActivation, TabsListVariant, TabsOrientation } from "./tabs-context.js"
 
 /**
+ * Implements the WAI-ARIA tabs pattern: `tablist` / `tab` / `tabpanel` semantics, roving focus with
+ * the arrow keys (Left/Right, or Up/Down when vertical; mirrored in RTL), Home/End, and automatic
+ * (focus selects) or manual (Enter/Space selects) activation.
+ *
  * @summary A set of layered sections of content (tab panels) that are displayed one at a time.
  *
  * @tag tec-tabs
@@ -18,10 +22,6 @@ export type { TabsActivation, TabsListVariant, TabsOrientation } from "./tabs-co
  * @slot - A `tec-tabs-list` with `tec-tabs-trigger`s, and one `tec-tabs-content` per trigger (matched by `value`).
  *
  * @fires tec-value-change - The user selected another tab. Cancelable (`preventDefault()` keeps the current tab). `detail: { value }`.
- *
- * Implements the WAI-ARIA tabs pattern: `tablist` / `tab` / `tabpanel` semantics, roving focus with
- * the arrow keys (Left/Right, or Up/Down when vertical; mirrored in RTL), Home/End, and automatic
- * (focus selects) or manual (Enter/Space selects) activation.
  */
 export class TecTabs extends TectonElement {
   static styles = [hostStyles, tabsStyles]

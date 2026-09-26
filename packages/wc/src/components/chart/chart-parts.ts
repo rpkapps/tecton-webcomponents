@@ -117,10 +117,10 @@ export class TecChartArea extends TecChartSeries {
 }
 
 /**
- * @summary A pie (or, with `inner-radius`, donut) series of a `tec-chart`: one slice per data row.
- *
  * Slice colours come from the row's `fill` field, then from the config entry named by the row's
  * `name-key` value, then from the chart palette.
+ *
+ * @summary A pie (or, with `inner-radius`, donut) series of a `tec-chart`: one slice per data row.
  *
  * @tag tec-chart-pie
  */

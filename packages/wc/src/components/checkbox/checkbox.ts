@@ -10,6 +10,9 @@ import { TectonElement } from "../../internal/tecton-element.js"
 import { checkboxStyles } from "./checkbox.styles.js"
 
 /**
+ * Form-associated: submits `name=value` (value defaults to `"on"`) when checked; `required` blocks
+ * submission while unchecked; reset restores the `checked` attribute.
+ *
  * @summary A control that allows the user to toggle between checked and not checked.
  *
  * @tag tec-checkbox
@@ -30,9 +33,6 @@ import { checkboxStyles } from "./checkbox.styles.js"
  *
  * @fires input - The checked state changed by user interaction.
  * @fires change - The checked state changed by user interaction.
- *
- * Form-associated: submits `name=value` (value defaults to `"on"`) when checked; `required` blocks
- * submission while unchecked; reset restores the `checked` attribute.
  */
 export class TecCheckbox extends FormControlMixin(TectonElement) {
   static styles = [hostStyles, checkboxStyles]

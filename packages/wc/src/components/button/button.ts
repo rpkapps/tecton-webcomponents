@@ -12,6 +12,10 @@ export type ButtonVariant = "default" | "outline" | "secondary" | "ghost" | "des
 export type ButtonSize = "default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg"
 
 /**
+ * ARIA attributes set on the host (`aria-label`, `aria-expanded`, `aria-haspopup`, `aria-pressed`,
+ * `aria-describedby` …) are delegated to the inner `<button>`/`<a>`; they stay on the host too, so
+ * overlays can set them on a slotted `tec-button` trigger and styles can read them.
+ *
  * @summary Displays a button or a component that looks like a button. With `href` it renders a link.
  *
  * @tag tec-button
@@ -29,10 +33,6 @@ export type ButtonSize = "default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "
  * @cssstate focus-visible - The button has keyboard focus.
  * @cssstate has-start - The `start` slot has content.
  * @cssstate has-end - The `end` slot has content.
- *
- * ARIA attributes set on the host (`aria-label`, `aria-expanded`, `aria-haspopup`, `aria-pressed`,
- * `aria-describedby` …) are delegated to the inner `<button>`/`<a>`; they stay on the host too, so
- * overlays can set them on a slotted `tec-button` trigger and styles can read them.
  */
 export class TecButton extends TectonElement {
   static styles = [hostStyles, buttonStyles]
