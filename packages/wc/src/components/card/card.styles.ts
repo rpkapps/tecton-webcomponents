@@ -20,6 +20,30 @@ import { css } from "lit"
  * the host computed from its own styles and the author's classes.
  */
 export const forwardLayout = css`
+  .base {
+    box-sizing: border-box;
+    display: inherit;
+    flex: 1 1 auto;
+    align-self: stretch;
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    min-width: 0;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    align-items: inherit;
+    align-content: inherit;
+    justify-content: inherit;
+    justify-items: inherit;
+    row-gap: inherit;
+    column-gap: inherit;
+    grid-template-columns: inherit;
+    grid-template-rows: inherit;
+    grid-auto-flow: inherit;
+    grid-auto-rows: inherit;
+    grid-auto-columns: inherit;
+    border-radius: inherit;
+  }
+`
 
 export const cardStyles = [
   forwardLayout,
@@ -65,31 +89,6 @@ export const cardStyles = [
   }
 `,
 ]
-
-  .base {
-    box-sizing: border-box;
-    display: inherit;
-    flex: 1 1 auto;
-    align-self: stretch;
-    grid-column: 1 / -1;
-    grid-row: 1 / -1;
-    min-width: 0;
-    flex-direction: inherit;
-    flex-wrap: inherit;
-    align-items: inherit;
-    align-content: inherit;
-    justify-content: inherit;
-    justify-items: inherit;
-    row-gap: inherit;
-    column-gap: inherit;
-    grid-template-columns: inherit;
-    grid-template-rows: inherit;
-    grid-auto-flow: inherit;
-    grid-auto-rows: inherit;
-    grid-auto-columns: inherit;
-    border-radius: inherit;
-  }
-`
 
 export const cardHeaderStyles = [
   forwardLayout,

@@ -65,6 +65,17 @@ describe("tec-card", () => {
     expect(getComputedStyle(base(custom!.querySelector("tec-card-content")!)).paddingInlineStart).toBe("32px")
   })
 
+  it("takes gap classes on the card itself", async () => {
+    const card = await fixture<TecCard>(html`<tec-card style="gap: 8px">
+      <tec-card-header><tec-card-title>A</tec-card-title></tec-card-header>
+      <tec-card-content>B</tec-card-content>
+    </tec-card>`)
+    expect(getComputedStyle(card).display).toBe("flex")
+    const header = card.querySelector("tec-card-header")!.getBoundingClientRect()
+    const content = card.querySelector("tec-card-content")!.getBoundingClientRect()
+    expect(content.top - header.bottom).toBe(8)
+  })
+
   it("makes the host the layout box: layout styles on the parts arrange their children", async () => {
     const card = await fixture<TecCard>(html`<tec-card style="width: 300px">
       <tec-card-content style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px"><i>A</i><i>B</i></tec-card-content>
