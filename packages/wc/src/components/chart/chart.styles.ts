@@ -191,14 +191,6 @@ export const tooltipStyles = [
       z-index: 10;
       display: block;
       min-width: 8rem;
-      padding: 0.375rem 0.625rem;
-      border: 1px solid color-mix(in oklab, var(--tec-border) 50%, transparent);
-      border-radius: var(--tec-radius-lg);
-      background: var(--tec-background);
-      color: var(--tec-foreground);
-      box-shadow: var(--tec-shadow-xl);
-      font-size: var(--tec-text-xs);
-      line-height: var(--tec-text-xs--line-height);
       pointer-events: none;
       white-space: nowrap;
     }
@@ -210,10 +202,19 @@ export const tooltipStyles = [
       z-index: auto;
       pointer-events: auto;
     }
-    .content {
+    .base {
       display: grid;
       align-items: start;
       gap: 0.375rem;
+      min-width: 8rem;
+      padding: 0.375rem 0.625rem;
+      border: 1px solid color-mix(in oklab, var(--tec-border) 50%, transparent);
+      border-radius: var(--tec-radius-lg);
+      background: var(--tec-background);
+      color: var(--tec-foreground);
+      box-shadow: var(--tec-shadow-xl);
+      font-size: var(--tec-text-xs);
+      line-height: var(--tec-text-xs--line-height);
     }
     .label {
       font-weight: 500;
@@ -293,26 +294,32 @@ export const tooltipStyles = [
     }
   `),
   forcedColors(css`
-    :host {
+    .base {
       border-color: CanvasText;
     }
   `),
 ]
 
-/** `<tec-chart-legend>`: `flex items-center justify-center gap-4 pt-3` (`pb-3` on top). */
+/** `<tec-chart-legend>`: `flex items-center justify-center gap-4 pt-3` (`pb-3` on top), wrapping. */
 export const legendStyles = css`
   :host {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+    display: block;
     order: 1;
-    padding-block-start: 0.75rem;
     font-size: var(--tec-text-xs);
     line-height: var(--tec-text-xs--line-height);
   }
   :host([vertical-align="top"]) {
     order: -1;
+  }
+  .base {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+    padding-block-start: 0.75rem;
+  }
+  :host([vertical-align="top"]) .base {
     padding-block: 0 0.75rem;
   }
   .item {

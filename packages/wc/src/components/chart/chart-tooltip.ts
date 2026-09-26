@@ -69,6 +69,7 @@ export function resolveTooltip(options: TooltipResolveOptions): { label: unknown
  *
  * @tag tec-chart-tooltip
  *
+ * @csspart base - The tooltip box (border, background, padding, shadow).
  * @csspart label - The label (the category name).
  * @csspart items - The list of rows.
  * @csspart item - One row.
@@ -78,7 +79,7 @@ export function resolveTooltip(options: TooltipResolveOptions): { label: unknown
  *
  * @cssstate active - The tooltip is shown.
  *
- * The host is the tooltip box: size it with classes (`class="w-[150px]"`).
+ * Size the tooltip with classes on the element (`class="w-[150px]"`); the box fills it.
  */
 export class TecChartTooltip extends TectonElement {
   static styles = [hostStyles, tooltipStyles]
@@ -179,7 +180,7 @@ export class TecChartTooltip extends TectonElement {
     const labelTemplate = label == null || label === "" ? nothing : html`<div part="label" class="label">${label}</div>`
     const locale = localeOf(this)
     return html`
-      <div class="content" aria-hidden=${this.standalone ? nothing : "true"}>
+      <div part="base" class="base" aria-hidden=${this.standalone ? nothing : "true"}>
         ${nestLabel ? nothing : labelTemplate}
         <div part="items" class="items">
           ${items.map(({ item, entry, name }, index) => {

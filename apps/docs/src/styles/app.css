@@ -17,6 +17,7 @@
    "@tecton/wc/fonts.css" once the package exports them. */
 @import "../../node_modules/@tecton/wc/src/styles/tecton.css";
 @import "../../node_modules/@tecton/wc/src/styles/tailwind.css";
+@import "../../node_modules/@tecton/wc/src/utilities/tailwind-utilities.css";
 @import "@fontsource/figtree/400.css";
 @import "@fontsource/figtree/500.css";
 @import "@fontsource/figtree/600.css";

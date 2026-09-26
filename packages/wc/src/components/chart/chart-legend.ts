@@ -12,11 +12,11 @@ import { legendStyles } from "./chart.styles.js"
  *
  * @tag tec-chart-legend
  *
+ * @csspart base - The row of entries (centred, wrapping).
  * @csspart item - One entry.
  * @csspart swatch - The colour swatch of an entry.
  * @csspart label - The label of an entry.
  *
- * The host is the legend row (a centred flex row): add classes such as `flex-wrap` to it.
  */
 export class TecChartLegend extends TectonElement {
   static styles = [hostStyles, legendStyles]
@@ -38,7 +38,7 @@ export class TecChartLegend extends TectonElement {
 
   protected render() {
     if (!this.items?.length) return nothing
-    return this.items.map((item) => {
+    return html`<div part="base" class="base">${this.items.map((item) => {
       const key = `${this.nameKey ?? item.dataKey ?? "value"}`
       const entry = itemConfig(this.config ?? {}, item, key)
       return html`
@@ -49,7 +49,7 @@ export class TecChartLegend extends TectonElement {
           <span part="label">${entry?.label ?? item.dataKey}</span>
         </div>
       `
-    })
+    })}</div>`
   }
 }
 
