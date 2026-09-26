@@ -9,3 +9,5 @@ test-results
 .vitest
 tmp
 packages/wc/custom-elements.json
+*.tmp.*
+/.*.mjs
