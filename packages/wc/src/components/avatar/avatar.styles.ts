@@ -22,7 +22,7 @@ export const avatarStyles = css`
     flex-shrink: 0;
     width: 2rem;
     height: 2rem;
-    border-radius: 9999px;
+    border-radius: var(--tec-avatar-radius, 9999px);
     user-select: none;
     -webkit-user-select: none;
   }
@@ -77,7 +77,7 @@ export const avatarImageStyles = css`
     width: 100%;
     height: 100%;
     aspect-ratio: 1;
-    border-radius: 9999px;
+    border-radius: var(--tec-avatar-radius, 9999px);
     overflow: hidden;
   }
   :host(:state(error)) {
@@ -99,7 +99,7 @@ export const avatarFallbackStyles = css`
     height: 100%;
     align-items: center;
     justify-content: center;
-    border-radius: 9999px;
+    border-radius: var(--tec-avatar-radius, 9999px);
     background-color: var(--tec-avatar);
     color: var(--tec-avatar-foreground);
     font-size: var(--_tec-avatar-fallback-size, var(--tec-text-sm));

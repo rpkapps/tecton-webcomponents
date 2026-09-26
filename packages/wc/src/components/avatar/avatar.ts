@@ -30,6 +30,8 @@ export type AvatarImageStatus = "loading" | "loaded" | "error"
  *
  * @csspart ring - The hairline ring drawn over the picture.
  *
+ * @cssprop --tec-avatar-radius - Corner radius of the avatar, its picture and its fallback (default fully round, `9999px`).
+ *
  * @cssstate image - A `tec-avatar-image` is loading or loaded (the fallback is hidden).
  */
 export class TecAvatar extends TectonElement {

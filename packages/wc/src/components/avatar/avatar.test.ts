@@ -85,6 +85,15 @@ describe("tec-avatar", () => {
     expect(getComputedStyle(badge).backgroundColor).toBe("rgb(1, 2, 3)")
   })
 
+  it("takes its corner radius from --tec-avatar-radius", async () => {
+    const avatar = await fixture<TecAvatar>(
+      html`<tec-avatar style="--tec-avatar-radius: 6px"><tec-avatar-fallback>A</tec-avatar-fallback></tec-avatar>`
+    )
+    expect(getComputedStyle(avatar).borderTopLeftRadius).toBe("6px")
+    expect(getComputedStyle(avatar.querySelector("tec-avatar-fallback")!).borderTopLeftRadius).toBe("6px")
+    expect(getComputedStyle(avatar.shadowRoot!.querySelector(".ring")!).borderTopLeftRadius).toBe("6px")
+  })
+
   it("announces a labelled badge", async () => {
     const avatar = await fixture<TecAvatar>(
       html`<tec-avatar><tec-avatar-fallback>A</tec-avatar-fallback><tec-avatar-badge label="Online"></tec-avatar-badge></tec-avatar>`
