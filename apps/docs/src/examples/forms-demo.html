@@ -3,6 +3,7 @@
     <tec-field-label>Well name</tec-field-label>
     <tec-input name="well" required placeholder="34/10-A-12" pattern="\d+/\d+-[A-Z]-\d+"></tec-input>
     <tec-field-description>Licence block, platform and slot.</tec-field-description>
+    <tec-field-error></tec-field-error>
   </tec-field>
   <tec-field>
     <tec-field-label>Fluid</tec-field-label>
@@ -11,6 +12,7 @@
       <tec-select-item value="gas">Gas</tec-select-item>
       <tec-select-item value="water">Water</tec-select-item>
     </tec-select>
+    <tec-field-error></tec-field-error>
   </tec-field>
   <tec-field orientation="horizontal">
     <tec-checkbox name="notify" value="yes" checked></tec-checkbox>
