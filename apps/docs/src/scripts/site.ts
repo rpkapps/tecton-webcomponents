@@ -221,8 +221,16 @@ if (menu && input && list) {
   for (const trigger of document.querySelectorAll("[data-command-trigger]")) trigger.addEventListener("click", openMenu)
   for (const key of document.querySelectorAll("[data-mod-key]")) key.textContent = isMac ? "⌘" : "Ctrl"
   document.addEventListener("keydown", (event) => {
-    const target = event.target as HTMLElement
-    const typing = target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName) || target.closest?.("[contenteditable]")
+    // composedPath()[0] is the real focused element, also inside a component's shadow root
+    // (event.target is retargeted to the host, e.g. a tec-input).
+    const target = (event.composedPath()[0] ?? event.target) as HTMLElement
+    const typing =
+      event.defaultPrevented ||
+      target.isContentEditable ||
+      /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName) ||
+      target.closest?.("[contenteditable]") ||
+      target.getAttribute?.("role") === "textbox" ||
+      target.getAttribute?.("role") === "spinbutton"
     if ((event.key === "k" || event.key === "K") && (event.metaKey || event.ctrlKey)) {
       event.preventDefault()
       if (menu.open) menu.close()
