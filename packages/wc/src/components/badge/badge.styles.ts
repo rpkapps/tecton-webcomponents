@@ -25,8 +25,8 @@ export const badgeStyles = css`
     --_pad-icon: 0.375rem;
     --tec-icon-size: 0.75rem;
 
+    /* inline-flex on the baseline, like a span badge: rows holding a badge keep their height. */
     display: inline-flex;
-    vertical-align: middle;
     flex-shrink: 0;
     width: fit-content;
     max-width: 100%;

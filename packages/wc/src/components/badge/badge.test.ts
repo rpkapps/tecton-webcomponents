@@ -72,6 +72,15 @@ describe("tec-badge", () => {
     await expectAccessible(root)
   })
 
+  it("sits in a line like an inline-flex span badge (no extra row height)", async () => {
+    const root = await fixture<HTMLElement>(html`<table style="border-collapse: collapse; font-size: 14px; line-height: 20px">
+      <tr><td style="padding: 8px">Producing <tec-badge variant="success">Active</tec-badge></td></tr>
+      <tr><td style="padding: 8px">Producing <span style="display: inline-flex; height: 20px; align-items: center; font-size: 12px; line-height: 16px; border: 1px solid transparent; padding: 0 8px">Active</span></td></tr>
+    </table>`)
+    const [a, b] = [...root.querySelectorAll("tr")].map((r) => r.getBoundingClientRect().height)
+    expect(a).toBe(b)
+  })
+
   it("sizes a slotted spinner like an icon", async () => {
     const el = await fixture<TecBadge>(html`<tec-badge variant="secondary"><tec-spinner slot="end"></tec-spinner>Generating</tec-badge>`)
     expect(el.querySelector("tec-spinner")!.getBoundingClientRect().width).toBe(12)

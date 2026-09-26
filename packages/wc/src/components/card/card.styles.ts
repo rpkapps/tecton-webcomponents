@@ -1,8 +1,9 @@
 import { css } from "lit"
 
 /*
- * `tec-card` draws its surface (background, ring, radius, block padding) on the inner `part="base"`,
- * which lays its slotted parts out as a column spaced by `--tec-card-spacing`.
+ * `tec-card` is the layout box of its parts: a flex column on `:host` spaced by `--tec-card-spacing`
+ * (so `gap-*` / `flex-*` classes on the element work). Its surface (background, ring, radius, block
+ * padding) is the inner `part="base"`, which inherits that layout (`forwardLayout`).
  *
  * The layout parts (`tec-card-header`, `-content`, `-footer`) follow the library rule "the host is
  * the layout box": their flex/grid layout is declared on `:host`, so layout utilities on the element
@@ -14,12 +15,21 @@ import { css } from "lit"
  * The card publishes `--tec-card-spacing` (and a private title size) on its host; every part
  * inherits them, so a size or spacing change reaches all of them.
  */
-export const cardStyles = css`
+/**
+ * The inner part of a layout part: fills the host (in a flex or grid host) and takes over the layout
+ * the host computed from its own styles and the author's classes.
+ */
+export const forwardLayout = css`
+
+export const cardStyles = [
+  forwardLayout,
+  css`
   :host {
     --tec-card-spacing: 1.5rem;
     --_tec-card-title-size: var(--tec-text-base);
     display: flex;
     flex-direction: column;
+    gap: var(--tec-card-spacing);
     min-width: 0;
     color: var(--tec-card-foreground);
     font-size: var(--tec-text-sm);
@@ -30,11 +40,6 @@ export const cardStyles = css`
     --_tec-card-title-size: var(--tec-text-sm);
   }
   .base {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    gap: var(--tec-card-spacing);
-    min-width: 0;
     overflow: hidden;
     padding-block: var(--tec-card-spacing);
     border-radius: var(--tec-radius-xl);
@@ -58,13 +63,9 @@ export const cardStyles = css`
       outline: 1px solid CanvasText;
     }
   }
-`
+`,
+]
 
-/**
- * The inner part of a layout part: fills the host (in a flex or grid host) and takes over the layout
- * the host computed from its own styles and the author's classes.
- */
-export const forwardLayout = css`
   .base {
     box-sizing: border-box;
     display: inherit;
