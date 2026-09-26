@@ -1,0 +1,60 @@
+<div id="questionnaire-demo" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire item="direction" shortcuts="letters">
+    <tec-questionnaire-progress></tec-questionnaire-progress>
+    <tec-questionnaire-item name="direction" required>
+      <tec-questionnaire-title>What should the agent build next?</tec-questionnaire-title>
+      <tec-questionnaire-description>Choose a direction or describe another task.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="tool-calls">
+          <span class="font-medium">Tool call timeline</span>
+          <tec-questionnaire-choice-description>Show what the agent ran and what came back.</tec-questionnaire-choice-description>
+        </tec-questionnaire-choice>
+        <tec-questionnaire-choice value="approvals">
+          <span class="font-medium">Approval checkpoints</span>
+          <tec-questionnaire-choice-description>Ask before sensitive or destructive actions.</tec-questionnaire-choice-description>
+        </tec-questionnaire-choice>
+        <tec-questionnaire-choice value="handoffs">
+          <span class="font-medium">Sub-agent handoffs</span>
+          <tec-questionnaire-choice-description>Make delegated work and results easier to follow.</tec-questionnaire-choice-description>
+        </tec-questionnaire-choice>
+        <tec-questionnaire-input aria-label="Another agent feature" placeholder="Describe another feature…"></tec-questionnaire-input>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="signals" multiple>
+      <tec-questionnaire-title>What should every progress update include?</tec-questionnaire-title>
+      <tec-questionnaire-description>Select all that apply, or skip this question.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="progress">Progress</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="decisions">Decisions</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="risks">Risks</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="next-step">Next step</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="timing" required>
+      <tec-questionnaire-title>When should work begin?</tec-questionnaire-title>
+      <tec-questionnaire-description>Choose when the agent should begin the work.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="now">Start now</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="next-cycle">Next development cycle</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="backlog">Add it to the backlog</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-previous></tec-questionnaire-previous>
+      <tec-questionnaire-skip></tec-questionnaire-skip>
+      <tec-questionnaire-next>Next</tec-questionnaire-next>
+      <tec-questionnaire-submit>Save plan</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-demo")
+  root.querySelector("tec-questionnaire").addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent = `Agent plan saved. Direction: ${answers.get("direction") ?? "None"} · Progress signals: ${answers.getAll("signals").join(", ") || "None"} · Timing: ${answers.get("timing") ?? "None"}`
+  })
+</script>

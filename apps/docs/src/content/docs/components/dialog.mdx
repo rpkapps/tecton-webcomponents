@@ -1,0 +1,234 @@
+---
+title: Dialog
+description: A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.
+tags: ["tec-dialog", "tec-dialog-header", "tec-dialog-title", "tec-dialog-description", "tec-dialog-footer", "tec-dialog-close"]
+---
+
+<ComponentPreview name="dialog-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/dialog"
+```
+
+```html
+<tec-dialog>
+  <tec-button slot="trigger">Open</tec-button>
+  <tec-dialog-header>
+    <tec-dialog-title>Are you absolutely sure?</tec-dialog-title>
+    <tec-dialog-description>
+      This action cannot be undone. This will permanently delete your account and remove your data
+      from our servers.
+    </tec-dialog-description>
+  </tec-dialog-header>
+</tec-dialog>
+```
+
+The import registers `<tec-dialog>` and its parts (and `<tec-button>`, which it renders).
+
+## Composition
+
+```text
+tec-dialog
+├── tec-button slot="trigger"
+├── tec-dialog-header
+│   ├── tec-dialog-title
+│   └── tec-dialog-description
+├── (body)
+└── tec-dialog-footer
+    └── tec-dialog-close
+```
+
+The trigger is optional: open the dialog with the `open` attribute, `dialog.open = true` or `dialog.show()`.
+
+## Opening and closing
+
+`open` is the state. The user opens or closes the dialog through the trigger, <Kbd>Esc</Kbd>, a press on the overlay, the ✕ button or a `tec-dialog-close`; each fires a cancelable `tec-open-change` with `detail: { open, reason }`. Call `preventDefault()` to keep the current state — for example to confirm before discarding unsaved edits. `show()`, `hide()` and `toggle()` change the state without an event.
+
+```ts
+dialog.addEventListener("tec-open-change", (event) => {
+  if (!event.detail.open && form.dirty && event.detail.reason !== "close") event.preventDefault()
+})
+```
+
+`tec-dialog-close` is a `tec-button` (outline by default) that closes the dialog after its `click`; a `click` listener that calls `preventDefault()` keeps it open. Add `persistent` to ignore presses on the overlay (<Kbd>Esc</Kbd> and the close buttons still work).
+
+## Custom Close Button
+
+Replace the default close control with your own button.
+
+<ComponentPreview name="dialog-close-button" />
+
+## No Close Button
+
+Use `hide-close` to hide the ✕ button. `tec-dialog-footer show-close` adds an outline "Close" button to the footer instead.
+
+<ComponentPreview name="dialog-no-close-button" />
+
+## Sticky Footer
+
+Keep actions visible while the content scrolls.
+
+<ComponentPreview name="dialog-sticky-footer" />
+
+## Scrollable Content
+
+Long content can scroll while the header stays in view.
+
+<ComponentPreview name="dialog-scrollable-content" />
+
+## Width
+
+The panel is the viewport width minus 2rem on small screens and at most `28rem` from the `sm` breakpoint. Change it with `--tec-dialog-max-width` (`style="--tec-dialog-max-width: 24rem"`); the panel is also exposed as `::part(content)`.
+
+## Forms
+
+The content is light DOM, so a `<form>` inside the dialog works as anywhere else. Wrap the whole content in `<form class="contents">` to keep the dialog's spacing, and close the dialog from the `submit` handler with `dialog.hide()`.
+
+## RTL
+
+The ✕ button sits at the inline end and the footer follows the text direction.
+
+<ComponentPreview name="dialog-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space / Enter", "On the trigger: opens the dialog."],
+    ["Tab", "Moves focus to the next focusable element in the dialog; wraps from the last to the first."],
+    ["Shift+Tab", "Moves focus to the previous focusable element in the dialog; wraps from the first to the last."],
+    ["Esc", "Closes the dialog (a popover or menu open inside it closes first)."],
+  ]}
+/>
+
+## Accessibility
+
+- A native `<dialog>` opened with `showModal()`: it sits in the top layer, and the rest of the page is inert for pointer, keyboard and assistive technology. The page does not scroll while it is open.
+- The dialog is named by `tec-dialog-title` (a level-2 heading) and described by `tec-dialog-description`, through ARIA element reflection. Without a title, set `label`.
+- On open, focus moves to the dialog itself (so screen readers announce its name and description first), or to an element with `autofocus`. <Kbd>Tab</Kbd> stays inside. On close, focus returns to the element that opened it.
+- The trigger gets `aria-expanded`. The ✕ button is labelled "Close"; translate it with `close-label`.
+
+## API Reference
+
+<ApiReference tags={["tec-dialog", "tec-dialog-header", "tec-dialog-title", "tec-dialog-description", "tec-dialog-footer", "tec-dialog-close"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A decision or a short form must be finished before the page continues.
+- The task deserves the whole screen: everything behind it goes inert.
+- The user may abandon it — <Kbd>Esc</Kbd> and the overlay both cancel.
+
+### Not for
+
+- a confirmation before a destructive action: use [Alert Dialog](/docs/components/alert-dialog)
+- a side panel that keeps the page visible behind it: use [Sheet](/docs/components/sheet)
+- a bottom sheet the user drags with a thumb: use [Drawer](/docs/components/drawer)
+- content anchored to the control that opened it: use [Popover](/docs/components/popover)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Put the trigger in `slot="trigger"` of the `tec-dialog`; it opens the dialog, gets `aria-expanded` and receives focus back on close.
+
+</Do>
+
+<Do>
+
+Read and set the state with `open` and listen to `tec-open-change`; call `preventDefault()` on it to veto a change.
+
+</Do>
+
+<Do>
+
+Give every dialog a `tec-dialog-title`: it is the dialog's accessible name.
+
+</Do>
+
+<Do>
+
+Close from the footer with `tec-dialog-close`, and use `persistent` with `hide-close` when the user must pick a footer action.
+
+</Do>
+
+<Do>
+
+Keep classes on the element to layout; set the width with `--tec-dialog-max-width`. The dialog owns the surface, radius and padding.
+
+</Do>
+
+<Do>
+
+A dialog, sheet or drawer with unsaved input ignores overlay presses (`persistent`), but <Kbd>Esc</Kbd> and Cancel still close it.
+
+</Do>
+
+<Do>
+
+Never open a dialog from inside another; use steps within one, except an alert dialog confirming a destructive action like discarding edits.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="The dialog as a sibling of its trigger">
+
+<Wrong>
+
+```html
+<tec-button id="edit">Edit well</tec-button>
+<tec-dialog>
+  <tec-dialog-title>Edit well</tec-dialog-title>
+</tec-dialog>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-dialog>
+  <tec-button slot="trigger">Edit well</tec-button>
+  <tec-dialog-title>Edit well</tec-dialog-title>
+</tec-dialog>
+```
+
+</Correct>
+
+A button outside the dialog opens nothing by itself, gets no `aria-expanded`, and focus has nowhere meaningful to return to. When the trigger really lives elsewhere, call `dialog.show()` from its `click` handler.
+
+</Dont>
+
+<Dont severity="HIGH" title="Closing with a plain button that toggles a class">
+
+<Wrong>
+
+```html
+<tec-dialog-footer>
+  <tec-button onclick="this.closest('tec-dialog').classList.add('hidden')">Cancel</tec-button>
+</tec-dialog-footer>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-dialog-footer>
+  <tec-dialog-close>Cancel</tec-dialog-close>
+</tec-dialog-footer>
+```
+
+</Correct>
+
+Hiding the element leaves the native dialog modal: the page stays inert, scrolling stays locked and focus never returns to the trigger. Close through `tec-dialog-close`, `hide()` or `open = false`.
+
+</Dont>

@@ -1,0 +1,51 @@
+<div id="questionnaire-card" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire item="task" shortcuts="numbers">
+    <tec-card>
+      <tec-questionnaire-item name="task" required>
+        <tec-card-header>
+          <tec-questionnaire-title>What should the agent work on?</tec-questionnaire-title>
+          <tec-questionnaire-description>Choose the task that should be handled next.</tec-questionnaire-description>
+          <tec-card-action><tec-questionnaire-progress></tec-questionnaire-progress></tec-card-action>
+        </tec-card-header>
+        <tec-card-content>
+          <tec-questionnaire-choices>
+          <tec-questionnaire-choice value="fix">Fix the failing tests</tec-questionnaire-choice>
+          <tec-questionnaire-choice value="refactor">Refactor the data layer</tec-questionnaire-choice>
+          <tec-questionnaire-choice value="docs">Update the integration guide</tec-questionnaire-choice>
+          </tec-questionnaire-choices>
+          <tec-questionnaire-error></tec-questionnaire-error>
+        </tec-card-content>
+      </tec-questionnaire-item>
+      <tec-questionnaire-item name="output" required>
+        <tec-card-header>
+          <tec-questionnaire-title>What should the final handoff include?</tec-questionnaire-title>
+          <tec-questionnaire-description>Pick the level of detail needed for review.</tec-questionnaire-description>
+          <tec-card-action><tec-questionnaire-progress></tec-questionnaire-progress></tec-card-action>
+        </tec-card-header>
+        <tec-card-content>
+          <tec-questionnaire-choices>
+          <tec-questionnaire-choice value="summary">Summary only</tec-questionnaire-choice>
+          <tec-questionnaire-choice value="files">Summary and changed files</tec-questionnaire-choice>
+          <tec-questionnaire-choice value="review">Full review handoff</tec-questionnaire-choice>
+          </tec-questionnaire-choices>
+          <tec-questionnaire-error></tec-questionnaire-error>
+        </tec-card-content>
+      </tec-questionnaire-item>
+      <tec-card-footer>
+        <tec-questionnaire-actions>
+          <tec-questionnaire-previous></tec-questionnaire-previous>
+          <tec-questionnaire-next>Next</tec-questionnaire-next>
+          <tec-questionnaire-submit>Create task</tec-questionnaire-submit>
+        </tec-questionnaire-actions>
+      </tec-card-footer>
+    </tec-card>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-card")
+  root.querySelector("tec-questionnaire").addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent = `Task: ${answers.get("task")} · Handoff: ${answers.get("output")}`
+  })
+</script>

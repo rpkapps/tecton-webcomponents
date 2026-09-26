@@ -1,0 +1,52 @@
+<div id="drawer-dialog">
+  <!-- md and up: a dialog -->
+  <tec-dialog class="hidden md:contents" style="--tec-dialog-max-width: 425px">
+    <tec-button slot="trigger" variant="outline">Edit Profile</tec-button>
+    <tec-dialog-header>
+      <tec-dialog-title>Edit profile</tec-dialog-title>
+      <tec-dialog-description>Make changes to your profile here. Click save when you&apos;re done.</tec-dialog-description>
+    </tec-dialog-header>
+    <form class="grid items-start gap-6">
+      <div class="grid gap-3">
+        <tec-label for="drawer-dialog-email">Email</tec-label>
+        <tec-input type="email" id="drawer-dialog-email" value="pedro@example.com"></tec-input>
+      </div>
+      <div class="grid gap-3">
+        <tec-label for="drawer-dialog-username">Username</tec-label>
+        <tec-input id="drawer-dialog-username" value="@peduarte"></tec-input>
+      </div>
+      <tec-button type="submit">Save changes</tec-button>
+    </form>
+  </tec-dialog>
+  <!-- below md: a drawer -->
+  <tec-drawer class="md:hidden">
+    <tec-button slot="trigger" variant="outline">Edit Profile</tec-button>
+    <tec-drawer-header class="text-start">
+      <tec-drawer-title>Edit profile</tec-drawer-title>
+      <tec-drawer-description>Make changes to your profile here. Click save when you&apos;re done.</tec-drawer-description>
+    </tec-drawer-header>
+    <form class="grid items-start gap-6 px-4">
+      <div class="grid gap-3">
+        <tec-label for="drawer-dialog-email-m">Email</tec-label>
+        <tec-input type="email" id="drawer-dialog-email-m" value="pedro@example.com"></tec-input>
+      </div>
+      <div class="grid gap-3">
+        <tec-label for="drawer-dialog-username-m">Username</tec-label>
+        <tec-input id="drawer-dialog-username-m" value="@peduarte"></tec-input>
+      </div>
+      <tec-button type="submit">Save changes</tec-button>
+    </form>
+    <tec-drawer-footer class="pt-2">
+      <tec-drawer-close>Cancel</tec-drawer-close>
+    </tec-drawer-footer>
+  </tec-drawer>
+</div>
+<script type="module">
+  const root = document.getElementById("drawer-dialog")
+  for (const form of root.querySelectorAll("form")) {
+    form.addEventListener("submit", (event) => {
+      event.preventDefault()
+      form.closest("tec-dialog, tec-drawer").hide()
+    })
+  }
+</script>

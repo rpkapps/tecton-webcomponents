@@ -1,0 +1,278 @@
+---
+title: Calendar
+description: A calendar component that allows users to select a date or a range of dates.
+tags: ["tec-calendar", "tec-range-calendar"]
+---
+
+<ComponentPreview name="calendar-demo" class="min-h-96" />
+
+## Usage
+
+```ts
+import "@tecton/wc/calendar"
+```
+
+```html
+<tec-calendar value="2026-09-26" class="rounded-lg border"></tec-calendar>
+```
+
+The import registers `<tec-calendar>` and `<tec-range-calendar>`. Values are ISO 8601 strings in the Gregorian calendar — `2026-09-26` for a day, `2026-01-12/2026-02-11` for a range — whatever calendar system the locale displays. Listen for `change` and read `value`:
+
+```js
+const calendar = document.querySelector("tec-calendar")
+calendar.addEventListener("change", () => console.log(calendar.value))
+```
+
+The calendar is built on [`@internationalized/date`](https://react-spectrum.adobe.com/internationalized/date/): month and weekday names, the first day of the week and the calendar system follow the `locale` attribute, else the `lang` of the closest ancestor.
+
+## Date Picker
+
+A calendar behind a field or a button is a [Date Picker](/docs/components/date-picker): `<tec-date-picker>` and `<tec-date-range-picker>` put this calendar in a popover.
+
+## Basic
+
+A basic calendar. The element is the calendar's box, so `class="rounded-lg border"` rounds and outlines it.
+
+<ComponentPreview name="calendar-basic" class="min-h-96" />
+
+## Range Calendar
+
+`<tec-range-calendar>` selects a range: the first day anchors it, hovering or moving focus previews it, the second day completes it (dragging works too). `visible-months` shows several months side by side (stacked below 768px); the buttons page by that many months.
+
+<ComponentPreview name="calendar-range" class="min-h-[36rem] md:min-h-96" />
+
+## Month and Year Selector
+
+`caption-layout="dropdown"` shows month and year selects. The years span twenty years around the shown one, kept within `min` and `max`.
+
+<ComponentPreview name="calendar-caption" class="min-h-96" />
+
+## Presets
+
+Set `value` to select a day and `focusedDate` to show its month. `fixed-weeks` keeps six rows so the card does not change height between months.
+
+<ComponentPreview name="calendar-presets" class="min-h-[40rem]" />
+
+## Date and Time Picker
+
+Pair the calendar with [`<tec-time-field>`](/docs/components/date-picker#time-field) inputs for the time of day. `--tec-calendar-padding: 0` removes the calendar's own padding inside a card.
+
+<ComponentPreview name="calendar-time" class="min-h-[37rem]" />
+
+## Booked dates
+
+`isDateUnavailable` (a property: a function that receives a `CalendarDate`) marks days that cannot be chosen. They stay focusable, are struck through and announced as unavailable. A range cannot span an unavailable day unless `allows-non-contiguous-ranges` is set.
+
+<ComponentPreview name="calendar-booked-dates" class="min-h-96" />
+
+## Custom Cell Size
+
+<ComponentPreview name="calendar-custom-days" class="min-h-[35rem]" />
+
+Resize the cells with the `--tec-calendar-cell-size` custom property (default `2rem`); breakpoint-specific values work as Tailwind classes on the element:
+
+```html
+<tec-calendar class="rounded-lg border [--tec-calendar-cell-size:2.75rem] md:[--tec-calendar-cell-size:3rem]"></tec-calendar>
+```
+
+Or from a stylesheet:
+
+```css
+tec-calendar {
+  --tec-calendar-cell-size: 2.75rem;
+}
+```
+
+`renderDay` (a property) replaces the content of each day. It receives the day (`date`, `iso`, `formatted`, `isWeekend`, `isOutsideMonth`, `isSelected`, `isToday`, `isUnavailable`…) and returns a string, a new node or an array of them; `<span>` children render as a smaller, dimmed second line.
+
+## Week numbers
+
+`show-week-number` adds the week number at the start of each row, using the locale's week rules (ISO 8601 weeks where Monday starts the week). `first-day-of-week` overrides the locale's first day (`sun` … `sat`).
+
+<ComponentPreview name="calendar-week-numbers" class="min-h-96" />
+
+## Multiple days
+
+With `multiple`, each day toggles. The selection is the `values` property (an array of ISO dates); in a form, every day is submitted as its own entry.
+
+<ComponentPreview name="calendar-multiple" class="min-h-[28rem]" />
+
+## Forms
+
+The calendars are form-associated: with a `name`, the value is submitted with the form (a range as `start/end`, or as two entries with `start-name` / `end-name`). `required`, `min`, `max` and unavailable dates are validated, `form.reset()` restores the `value` attribute, and a `disabled` fieldset disables the calendar. See [Forms](/docs/forms).
+
+<ComponentPreview name="calendar-form" class="min-h-[30rem]" />
+
+## RTL
+
+The grid, the buttons and the arrow keys follow `dir="rtl"`. With `lang="ar"` the calendar uses Arabic month and weekday names and starts the week on Saturday.
+
+<ComponentPreview name="calendar-rtl" direction="rtl" class="min-h-96" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves focus to the previous / next buttons, the dropdowns and the focused day (one tab stop for the grid)."],
+    ["ArrowLeft / ArrowRight", "Moves focus to the previous / next day (mirrored in right-to-left layouts). Crossing the month edge shows the next month."],
+    ["ArrowUp / ArrowDown", "Moves focus to the same day of the previous / next week."],
+    ["PageUp / PageDown", "Moves focus to the same day of the previous / next month."],
+    ["Shift+PageUp / Shift+PageDown", "Moves focus to the same day of the previous / next year."],
+    ["Home / End", "Moves focus to the first / last day of the week."],
+    ["Enter / Space", "Selects the focused day. In a range calendar the first press starts the range (focus moves on a day), the second completes it."],
+    ["Escape", "Cancels a range being selected."],
+  ]}
+/>
+
+## Accessibility
+
+- Follows the WAI-ARIA date grid pattern as React Aria implements it: a `role="application"` region named after the visible months, one `role="grid"` table per month named "September 2026", and a focusable `role="button"` per day inside its `gridcell`. The grid is one tab stop (the focused day).
+- Each day is named with its full date ("Thursday, September 10, 2026"), plus "Today", "selected", "First available date" / "Last available date"; the start and end of a range carry the whole selected range. Unavailable and out-of-range days are `aria-disabled`.
+- The previous / next buttons are named "Previous" / "Next" (localize with `previous-label` / `next-label`) and are disabled past `min` / `max`. Paging with them and selecting a day are announced through a polite live region.
+- While a range is being chosen, the focused day is described as "Click to finish selecting date range".
+- Give the calendar a name with `label` (or `aria-label`) when the page has several; the visible month is appended.
+- Selected days use the primary fill and today a muted tint; under forced colours selection uses `Highlight` and unavailable days `GrayText`.
+
+## API Reference
+
+<ApiReference tags={["tec-calendar", "tec-range-calendar"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A month grid is the point: choosing a spud date, reading which days are booked, stepping through a schedule.
+- The calendar stays on the page — in a card, a panel or a wizard step — rather than hiding behind a trigger.
+- Days need state the value alone cannot carry: unavailable dates, a highlighted span, two months side by side.
+
+### Not for
+
+- a compact date field that opens a calendar on demand: use [Date Picker](/docs/components/date-picker)
+- a year or a month picked in a dense form row: use [Native Select](/docs/components/native-select)
+- two dates bounding a period in two separate calendars: use `<tec-range-calendar>`
+
+### Do
+
+<DoList>
+
+<Do>
+
+Hold the value as an ISO date string (`2026-09-26`, or `start/end` for a range) and drive it with `value` and the `change` event.
+
+</Do>
+
+<Do>
+
+Show more months with `visible-months`, month and year dropdowns with `caption-layout="dropdown"`, week numbers with `show-week-number`.
+
+</Do>
+
+<Do>
+
+Block days with `isDateUnavailable`, `min` and `max`; they carry the struck-through and dimmed cell styling.
+
+</Do>
+
+<Do>
+
+Resize the grid through its variable, `--tec-calendar-cell-size`, and add per-day content with `renderDay`, never by restyling the cells.
+
+</Do>
+
+<Do>
+
+For a date field, use [`<tec-date-picker>`](/docs/components/date-picker) rather than wiring a calendar into a popover yourself.
+
+</Do>
+
+<Do>
+
+When days are unavailable (rig move, shutdown), say why beside the calendar or in the day; never block days unexplained (`isDateUnavailable`, not `disabled`).
+
+</Do>
+
+<Do>
+
+Let users type a date they already know or one far from today (`<tec-date-field>` or a date picker) instead of paging a calendar month by month.
+
+</Do>
+
+<Do>
+
+An optional or filtering date gets a clear button that empties it (`value = ""`).
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="react-day-picker props on the calendar">
+
+<Wrong>
+
+```html
+<tec-calendar mode="single" selected="2026-09-26" disabled-days="…"></tec-calendar>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-calendar value="2026-09-26" min="2026-09-01"></tec-calendar>
+```
+
+</Correct>
+
+`mode`, `selected`, `onSelect` and `disabled` (as a day matcher) belong to react-day-picker. Here the selection is `value`, a range is `<tec-range-calendar>`, and bounds are `min` / `max` / `isDateUnavailable`; unknown attributes are ignored and the calendar comes up with every day selectable. (`disabled` disables the whole calendar.)
+
+</Dont>
+
+<Dont severity="HIGH" title="A JavaScript Date as the value">
+
+<Wrong>
+
+```js
+calendar.value = new Date()
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+const d = new Date()
+calendar.value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+```
+
+</Correct>
+
+The value is an ISO date string. A `Date` is turned into its `toString()` ("Sat Sep 26 2026 …"), which does not parse: nothing is selected. `toISOString()` is not a fix either — it is in UTC and can be a day off.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Two calendars for a start and an end">
+
+<Wrong>
+
+```html
+<div class="flex gap-4">
+  <tec-calendar id="start"></tec-calendar>
+  <tec-calendar id="end"></tec-calendar>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-range-calendar visible-months="2"></tec-range-calendar>
+```
+
+</Correct>
+
+`<tec-range-calendar>` draws the span (range start, middle and end cells), keeps the end on or after the start and stops a range at unavailable days — none of which two independent calendars can do.
+
+</Dont>

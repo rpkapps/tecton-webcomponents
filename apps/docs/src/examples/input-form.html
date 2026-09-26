@@ -1,0 +1,41 @@
+<form id="input-form" class="w-full max-w-sm">
+  <tec-field-group>
+    <tec-field>
+      <tec-field-label>Name</tec-field-label>
+      <tec-input name="name" type="text" placeholder="Evil Rabbit" required></tec-input>
+      <tec-field-error></tec-field-error>
+    </tec-field>
+    <tec-field>
+      <tec-field-label>Email</tec-field-label>
+      <tec-input name="email" type="email" placeholder="john@example.com"></tec-input>
+      <tec-field-description>We'll never share your email with anyone.</tec-field-description>
+      <tec-field-error></tec-field-error>
+    </tec-field>
+    <div class="grid grid-cols-2 gap-4">
+      <tec-field>
+        <tec-field-label>Phone</tec-field-label>
+        <tec-input name="phone" type="tel" placeholder="+1 (555) 123-4567"></tec-input>
+      </tec-field>
+      <tec-field>
+        <tec-field-label>Country</tec-field-label>
+        <tec-select name="country" value="us">
+          <tec-select-item value="us">United States</tec-select-item>
+          <tec-select-item value="uk">United Kingdom</tec-select-item>
+          <tec-select-item value="ca">Canada</tec-select-item>
+        </tec-select>
+      </tec-field>
+    </div>
+    <tec-field>
+      <tec-field-label>Address</tec-field-label>
+      <tec-input name="address" type="text" placeholder="123 Main St"></tec-input>
+    </tec-field>
+    <tec-field orientation="horizontal">
+      <tec-button type="reset" variant="outline">Cancel</tec-button>
+      <tec-button type="submit">Submit</tec-button>
+    </tec-field>
+  </tec-field-group>
+</form>
+<script type="module">
+  const form = document.getElementById("input-form")
+  form.addEventListener("submit", (event) => event.preventDefault())
+</script>

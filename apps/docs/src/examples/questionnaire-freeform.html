@@ -1,0 +1,26 @@
+<div id="questionnaire-freeform" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire shortcuts="letters">
+    <tec-questionnaire-item name="approach" required>
+      <tec-questionnaire-title>How should the agent approach this refactor?</tec-questionnaire-title>
+      <tec-questionnaire-description>Choose a strategy or write a more specific instruction.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="incremental">Make the smallest safe change</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="module">Refactor one module at a time</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="rewrite">Replace the implementation completely</tec-questionnaire-choice>
+        <tec-questionnaire-input aria-label="Another refactoring approach" placeholder="Describe another approach…"></tec-questionnaire-input>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-submit>Use this approach</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-freeform")
+  root.querySelector("tec-questionnaire").addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent = `Approach: ${answers.get("approach") ?? "None"}`
+  })
+</script>

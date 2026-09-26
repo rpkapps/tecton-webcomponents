@@ -1,0 +1,50 @@
+<div id="questionnaire-dialog" class="flex flex-col items-center gap-4">
+  <tec-dialog label="Clarification">
+    <tec-button slot="trigger" variant="outline">Open clarification</tec-button>
+    <tec-questionnaire item="scope">
+      <tec-questionnaire-item name="scope" required>
+        <tec-dialog-header>
+          <tec-questionnaire-progress></tec-questionnaire-progress>
+          <tec-questionnaire-title>Which files are in scope?</tec-questionnaire-title>
+          <tec-dialog-description>Choose how broadly the agent can update the workspace.</tec-dialog-description>
+        </tec-dialog-header>
+        <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="component">Component only</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="feature">Complete feature directory</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="workspace">Any related workspace file</tec-questionnaire-choice>
+        </tec-questionnaire-choices>
+        <tec-questionnaire-error></tec-questionnaire-error>
+      </tec-questionnaire-item>
+      <tec-questionnaire-item name="tests" required>
+        <tec-dialog-header>
+          <tec-questionnaire-progress></tec-questionnaire-progress>
+          <tec-questionnaire-title>How much verification is needed?</tec-questionnaire-title>
+          <tec-dialog-description>Choose the checks the agent should run before handoff.</tec-dialog-description>
+        </tec-dialog-header>
+        <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="targeted">Targeted tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="package">Package tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="full">Full workspace verification</tec-questionnaire-choice>
+        </tec-questionnaire-choices>
+        <tec-questionnaire-error></tec-questionnaire-error>
+      </tec-questionnaire-item>
+      <tec-dialog-footer>
+        <tec-dialog-close variant="outline">Cancel</tec-dialog-close>
+        <tec-questionnaire-actions class="w-auto">
+          <tec-questionnaire-previous></tec-questionnaire-previous>
+          <tec-questionnaire-next>Next</tec-questionnaire-next>
+          <tec-questionnaire-submit>Send answer</tec-questionnaire-submit>
+        </tec-questionnaire-actions>
+      </tec-dialog-footer>
+    </tec-questionnaire>
+  </tec-dialog>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-dialog")
+  root.querySelector("tec-questionnaire").addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("tec-dialog").hide()
+    root.querySelector("[data-result]").textContent = `Clarification sent. Scope: ${answers.get("scope")} · Verification: ${answers.get("tests")}`
+  })
+</script>

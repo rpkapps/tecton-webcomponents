@@ -1,0 +1,65 @@
+<tec-drawer id="drawer-nested">
+  <tec-button slot="trigger" variant="secondary">Open Drawer</tec-button>
+  <tec-drawer-header>
+    <tec-drawer-title>Drawer</tec-drawer-title>
+    <tec-drawer-description>Open another drawer from the same direction.</tec-drawer-description>
+  </tec-drawer-header>
+  <div class="flex-1 p-4">
+    <div class="size-full min-h-40 rounded-md bg-muted"></div>
+  </div>
+  <tec-drawer-footer>
+    <tec-drawer>
+      <tec-button slot="trigger" variant="outline">Open Nested Drawer</tec-button>
+      <tec-drawer-header>
+        <tec-drawer-title>Nested Drawer</tec-drawer-title>
+        <tec-drawer-description>The parent drawer stays mounted behind this one.</tec-drawer-description>
+      </tec-drawer-header>
+      <div class="flex-1 p-4">
+        <div class="size-full min-h-40 rounded-md bg-muted"></div>
+      </div>
+      <tec-drawer-footer>
+        <tec-drawer>
+          <tec-button slot="trigger" variant="outline">Open Third Drawer</tec-button>
+          <tec-drawer-header>
+            <tec-drawer-title>Third Drawer</tec-drawer-title>
+            <tec-drawer-description>Two drawers are stacked behind this one.</tec-drawer-description>
+          </tec-drawer-header>
+          <div class="flex-1 p-4">
+            <div class="size-full min-h-40 rounded-md bg-muted"></div>
+          </div>
+          <tec-drawer-footer>
+            <tec-drawer>
+              <tec-button slot="trigger" variant="outline">Open Fourth Drawer</tec-button>
+              <tec-drawer-header>
+                <tec-drawer-title>Fourth Drawer</tec-drawer-title>
+                <tec-drawer-description>This is the frontmost drawer in the stack.</tec-drawer-description>
+              </tec-drawer-header>
+              <div class="flex-1 p-4">
+                <div class="size-full min-h-40 rounded-md bg-muted"></div>
+              </div>
+              <tec-drawer-footer>
+                <tec-drawer-close>Close</tec-drawer-close>
+              </tec-drawer-footer>
+            </tec-drawer>
+            <tec-drawer-close>Close</tec-drawer-close>
+          </tec-drawer-footer>
+        </tec-drawer>
+        <tec-drawer-close>Close</tec-drawer-close>
+      </tec-drawer-footer>
+    </tec-drawer>
+    <tec-drawer-close>Close</tec-drawer-close>
+  </tec-drawer-footer>
+</tec-drawer>
+<script type="module">
+  // Bottom drawers with a swipe handle on phones, side drawers on larger screens.
+  const drawers = [document.getElementById("drawer-nested"), ...document.getElementById("drawer-nested").querySelectorAll("tec-drawer")]
+  const mobile = matchMedia("(max-width: 767px)")
+  const layout = () => {
+    for (const drawer of drawers) {
+      drawer.swipeDirection = mobile.matches ? "down" : "right"
+      drawer.showSwipeHandle = mobile.matches
+    }
+  }
+  layout()
+  mobile.addEventListener("change", layout)
+</script>

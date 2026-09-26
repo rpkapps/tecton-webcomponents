@@ -14,7 +14,8 @@ describe("tec-link", () => {
     expect(await axNode(anchor(el))).toMatchObject({ role: "link", name: "34/10-A-12" })
     const probe = document.createElement("span")
     probe.style.color = "var(--tec-link-foreground)"
-    el.append(probe)
+    el.after(probe)
+    for (const a of anchor(el).getAnimations()) a.finish()
     expect(getComputedStyle(anchor(el)).color).toBe(getComputedStyle(probe).color)
     await expectAccessible(el)
   })

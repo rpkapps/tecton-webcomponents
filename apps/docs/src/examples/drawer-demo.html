@@ -1,0 +1,79 @@
+<tec-drawer id="drawer-demo" swipe-direction="right">
+  <tec-button slot="trigger" variant="secondary">Open Drawer</tec-button>
+  <tec-drawer-header>
+    <tec-drawer-title>Pick a delivery time</tec-drawer-title>
+    <tec-drawer-description>We&apos;ll prepare your order as soon as possible.</tec-drawer-description>
+  </tec-drawer-header>
+  <div class="flex-1 overflow-y-auto p-4">
+    <tec-radio-group aria-label="Delivery time" value="asap" class="gap-2">
+        <tec-field-label for="drawer-demo-asap">
+          <tec-field orientation="horizontal">
+            <tec-field-content>
+              <tec-field-title class="flex items-center gap-2">Standard delivery <tec-badge variant="secondary">Fastest</tec-badge></tec-field-title>
+              <tec-field-description>25–35 min · Driver assigned now</tec-field-description>
+            </tec-field-content>
+            <tec-radio-group-item value="asap" id="drawer-demo-asap"></tec-radio-group-item>
+          </tec-field>
+        </tec-field-label>
+        <tec-field-label for="drawer-demo-5-00">
+          <tec-field orientation="horizontal">
+            <tec-field-content>
+              <tec-field-title class="flex items-center gap-2">5:00 PM – 5:15 PM</tec-field-title>
+              <tec-field-description>Prep starts at 4:45 PM</tec-field-description>
+            </tec-field-content>
+            <tec-radio-group-item value="5-00" id="drawer-demo-5-00"></tec-radio-group-item>
+          </tec-field>
+        </tec-field-label>
+        <tec-field-label for="drawer-demo-5-30">
+          <tec-field orientation="horizontal">
+            <tec-field-content>
+              <tec-field-title class="flex items-center gap-2">5:30 PM – 5:45 PM</tec-field-title>
+              <tec-field-description>Good if you&apos;re heading home</tec-field-description>
+            </tec-field-content>
+            <tec-radio-group-item value="5-30" id="drawer-demo-5-30"></tec-radio-group-item>
+          </tec-field>
+        </tec-field-label>
+        <tec-field-label for="drawer-demo-6-00">
+          <tec-field orientation="horizontal">
+            <tec-field-content>
+              <tec-field-title class="flex items-center gap-2">6:00 PM – 6:15 PM</tec-field-title>
+              <tec-field-description>Most popular · High demand</tec-field-description>
+            </tec-field-content>
+            <tec-radio-group-item value="6-00" id="drawer-demo-6-00"></tec-radio-group-item>
+          </tec-field>
+        </tec-field-label>
+        <tec-field-label for="drawer-demo-6-30">
+          <tec-field orientation="horizontal">
+            <tec-field-content>
+              <tec-field-title class="flex items-center gap-2">6:30 PM – 6:45 PM</tec-field-title>
+              <tec-field-description>Last slot before kitchen closes</tec-field-description>
+            </tec-field-content>
+            <tec-radio-group-item value="6-30" id="drawer-demo-6-30"></tec-radio-group-item>
+          </tec-field>
+        </tec-field-label>
+    </tec-radio-group>
+  </div>
+  <tec-drawer-footer>
+    <tec-button id="drawer-demo-confirm">Confirm Delivery Time</tec-button>
+    <tec-drawer-close>Cancel</tec-drawer-close>
+  </tec-drawer-footer>
+</tec-drawer>
+<tec-toaster></tec-toaster>
+<script type="module">
+  import { toast } from "@tecton/wc/sonner"
+  const drawer = document.getElementById("drawer-demo")
+  // A bottom drawer with a swipe handle on phones, a side drawer on larger screens.
+  const mobile = matchMedia("(max-width: 767px)")
+  const layout = () => {
+    drawer.swipeDirection = mobile.matches ? "down" : "right"
+    drawer.showSwipeHandle = mobile.matches
+  }
+  layout()
+  mobile.addEventListener("change", layout)
+  document.getElementById("drawer-demo-confirm").addEventListener("click", () => {
+    const group = drawer.querySelector("tec-radio-group")
+    const label = drawer.querySelector(`#drawer-demo-${group.value}`)?.closest("tec-field")?.querySelector("tec-field-title")?.firstChild?.textContent?.trim()
+    drawer.hide()
+    toast("Delivery time confirmed", { description: label })
+  })
+</script>

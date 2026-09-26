@@ -1,0 +1,228 @@
+---
+title: Message
+description: Displays a message in a conversation, with optional avatar, header, footer, and alignment.
+tags: ["tec-message", "tec-message-group", "tec-message-avatar", "tec-message-content", "tec-message-header", "tec-message-footer"]
+---
+
+<ComponentPreview name="message-demo" />
+
+`<tec-message>` lays out a single turn of a conversation: the avatar, the side it sits on, the header and the footer around the message surface. For AI apps, render reasoning steps, tool calls and assistant replies with it too.
+
+## Usage
+
+```ts
+import "@tecton/wc/message"
+import "@tecton/wc/bubble"
+import "@tecton/wc/avatar"
+```
+
+```html
+<tec-message>
+  <tec-message-avatar>
+    <tec-avatar>
+      <tec-avatar-image src="/avatars/02.png" alt="Olivia"></tec-avatar-image>
+      <tec-avatar-fallback>OL</tec-avatar-fallback>
+    </tec-avatar>
+  </tec-message-avatar>
+  <tec-message-content>
+    <tec-bubble><tec-bubble-content>How can I help you today?</tec-bubble-content></tec-bubble>
+  </tec-message-content>
+</tec-message>
+```
+
+`<tec-message>` owns the row layout. Render the visible surface inside it with [`<tec-bubble>`](/docs/components/bubble), and use [`<tec-message-scroller>`](/docs/components/message-scroller) for the scroll container around the conversation.
+
+## Composition
+
+```text
+tec-message
+├── tec-message-avatar
+└── tec-message-content
+    ├── tec-message-header
+    ├── tec-bubble (or tec-bubble-group, tec-attachment)
+    └── tec-message-footer
+```
+
+Stack consecutive messages from the same sender in a `tec-message-group`:
+
+```text
+tec-message-group
+├── tec-message
+└── tec-message
+```
+
+## Avatar
+
+Put a [`<tec-avatar>`](/docs/components/avatar) in `tec-message-avatar`. It anchors to the bottom of the message and lifts itself above a footer, so it stays level with the bubble. Set `align="end"` on the message for the current user's turns: the row reverses and every part of the content aligns to the end.
+
+<ComponentPreview name="message-avatar" />
+
+| `align` | Description |
+| --- | --- |
+| `start` | The message belongs to another participant or the assistant (default). |
+| `end` | The message belongs to the current user. |
+
+## Group
+
+Use `tec-message-group` to stack consecutive messages from the same sender. Put an empty `tec-message-avatar` in the earlier messages to keep them aligned with the avatar of the last one.
+
+<ComponentPreview name="message-group" />
+
+## Header and Footer
+
+Use `tec-message-header` for the sender's name and `tec-message-footer` for metadata such as a delivery or read status. The footer follows the message side. Next to a `ghost` bubble both drop their inline padding so the text lines up.
+
+<ComponentPreview name="message-header-footer" />
+
+## Actions
+
+Put message actions — copy, retry, feedback — in `tec-message-footer` as ghost icon buttons, each with an `aria-label`. Layout utilities on the footer (`class="gap-2"`) apply to its row.
+
+<ComponentPreview name="message-actions" />
+
+## Attachment
+
+Files and images of a turn are [`<tec-attachment>`](/docs/components/attachment) elements in the message content, next to the bubbles.
+
+<ComponentPreview name="message-attachment" />
+
+## RTL
+
+The row, the avatar and the end alignment use logical directions, so they mirror under `dir="rtl"`.
+
+<ComponentPreview name="message-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+`<tec-message>` is not interactive; keyboard behaviour comes from the content inside it.
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves through the actions in the header, bubbles and footer."],
+  ]}
+/>
+
+## Accessibility
+
+- `<tec-message>` is a layout wrapper with no role. The transcript semantics come from its container: inside a [`<tec-message-scroller-content>`](/docs/components/message-scroller) (a `role="log"`) new turns are announced politely.
+- Say who wrote each turn: a visible `tec-message-header`, or an avatar image with meaningful `alt` text. Do not rely on the side (`align`) alone.
+- Footer actions are usually icon-only: give each one an `aria-label` ("Copy", "Retry").
+- For an in-progress turn, add a [`<tec-marker role="status">`](/docs/components/marker) so assistive technology announces it as it appears.
+- The `align` attribute is read, not reflected, and its legacy `text-align` hint is neutralised: text inside an end-aligned message keeps the reading direction's alignment.
+
+## API Reference
+
+<ApiReference tags={["tec-message", "tec-message-group", "tec-message-avatar", "tec-message-content", "tec-message-header", "tec-message-footer"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- One turn of a conversation: the avatar, the sender name, the message surface and the actions under it.
+- The turn belongs to a side — an assistant or tool row at the start, the user's own row at the end.
+- Consecutive turns from the same sender should stack tightly: wrap them in `tec-message-group`.
+
+### Not for
+
+- the framed surface the message text is printed on: use [Bubble](/docs/components/bubble)
+- a row of an application list, with media, title and actions: use [Item](/docs/components/item)
+- the scroll container that follows a growing transcript: use [Message Scroller](/docs/components/message-scroller)
+- a status or system line between turns: use [Marker](/docs/components/marker)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `tec-message-avatar`, then `tec-message-content` holding `tec-message-header`, a `tec-bubble` and `tec-message-footer`.
+
+</Do>
+
+<Do>
+
+Choose the side with `align="start"` or `align="end"`; the content, bubbles and footer follow it.
+
+</Do>
+
+<Do>
+
+Put copy, retry and feedback controls in `tec-message-footer` as `tec-button variant="ghost"` with an `aria-label`.
+
+</Do>
+
+<Do>
+
+Wrap each `tec-message` in a `tec-message-scroller-item` so the transcript can anchor, preserve and jump to it.
+
+</Do>
+
+<Do>
+
+Show how long each finished tool call took on its marker ("Queried production history · 4.2 s").
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Choosing the message side by hand">
+
+<Wrong>
+
+```html
+<tec-message class="flex-row-reverse text-right">
+  <tec-message-content>
+    <tec-bubble><tec-bubble-content>Re-run the import with the 2024 survey.</tec-bubble-content></tec-bubble>
+  </tec-message-content>
+</tec-message>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-message align="end">
+  <tec-message-content>
+    <tec-bubble><tec-bubble-content>Re-run the import with the 2024 survey.</tec-bubble-content></tec-bubble>
+  </tec-message-content>
+</tec-message>
+```
+
+</Correct>
+
+The reversed row is only half of the side: `align="end"` also moves the bubbles, the attachments and the footer to the end and lifts nothing else out of place, while the hand-written classes leave the content on the start side.
+
+</Dont>
+
+<Dont severity="HIGH" title="A hand-built action row under the message">
+
+<Wrong>
+
+```html
+<tec-message-content>
+  <tec-bubble variant="muted"><tec-bubble-content>…</tec-bubble-content></tec-bubble>
+  <div class="mt-2 flex gap-2"><button onclick="copy()">Copy</button></div>
+</tec-message-content>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-message-content>
+  <tec-bubble variant="muted"><tec-bubble-content>…</tec-bubble-content></tec-bubble>
+  <tec-message-footer>
+    <tec-button variant="ghost" size="icon-sm" aria-label="Copy">…</tec-button>
+  </tec-message-footer>
+</tec-message-content>
+```
+
+</Correct>
+
+The avatar lifts itself only above a `tec-message-footer`, and only the footer follows the message side and drops its padding next to a ghost bubble, so a plain `div` leaves the avatar and the actions misaligned.
+
+</Dont>

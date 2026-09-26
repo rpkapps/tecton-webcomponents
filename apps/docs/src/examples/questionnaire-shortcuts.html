@@ -1,0 +1,34 @@
+<div id="questionnaire-shortcuts" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-native-select aria-label="Shortcut style" class="self-end">
+    <option value="">No shortcuts</option>
+    <option value="letters" selected>Letters</option>
+    <option value="numbers">Numbers</option>
+  </tec-native-select>
+  <tec-questionnaire shortcuts="letters">
+    <tec-questionnaire-item name="action" required>
+      <tec-questionnaire-title>What should the agent do next?</tec-questionnaire-title>
+      <tec-questionnaire-description>Use the displayed shortcut or navigate with the keyboard.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="inspect">Inspect the implementation</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="tests">Run the relevant tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="patch">Prepare the patch</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-submit>Confirm action</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-shortcuts")
+  const questionnaire = root.querySelector("tec-questionnaire")
+  root.querySelector("tec-native-select").addEventListener("change", (event) => {
+    questionnaire.shortcuts = event.target.value
+  })
+  questionnaire.addEventListener("tec-submit", (event) => {
+    root.querySelector("[data-result]").textContent =
+      `Action: ${event.detail.formData.get("action") ?? "None"} · Shortcuts: ${questionnaire.shortcuts || "none"}`
+  })
+</script>

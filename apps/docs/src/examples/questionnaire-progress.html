@@ -1,0 +1,54 @@
+<div id="questionnaire-progress" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire item="scope">
+    <tec-questionnaire-progress segments format="Checkpoint {current} of {total}"></tec-questionnaire-progress>
+    <tec-questionnaire-item name="scope" required>
+      <tec-questionnaire-title>How large is the change?</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="small">Small patch</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="medium">Feature-sized change</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="large">Cross-package change</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="strategy" required>
+      <tec-questionnaire-title>How should commits be organized?</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="single">Single commit</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="logical">Logical commits</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="squash">Squash before review</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="tests" required>
+      <tec-questionnaire-title>Which tests should run?</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="targeted">Targeted tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="package">Package suite</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="workspace">Full workspace</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="delivery" required>
+      <tec-questionnaire-title>How should the work be delivered?</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="patch">Patch only</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="commit">Committed locally</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="branch">Push a review branch</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-previous></tec-questionnaire-previous>
+      <tec-questionnaire-next>Next</tec-questionnaire-next>
+      <tec-questionnaire-submit>Finish plan</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-progress")
+  root.querySelector("tec-questionnaire").addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent = `Scope: ${answers.get("scope")} · Commits: ${answers.get("strategy")} · Tests: ${answers.get("tests")} · Delivery: ${answers.get("delivery")}`
+  })
+</script>

@@ -1,0 +1,82 @@
+<div id="message-scroller-group-chat" class="flex w-full max-w-sm flex-col gap-4">
+  <tec-card class="h-[35rem] w-full gap-0">
+    <tec-card-header class="gap-1 border-b">
+      <tec-card-title>Group Chat</tec-card-title>
+      <tec-card-description>A group chat with several participants and an assistant. The marker is marked as a turn.</tec-card-description>
+      <tec-card-action>
+        <tec-tooltip>
+          <tec-button slot="trigger" variant="outline" size="icon" aria-label="Reset conversation" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></tec-button>
+          Reset
+        </tec-tooltip>
+      </tec-card-action>
+    </tec-card-header>
+    <tec-card-content class="min-h-0 flex-1 px-0">
+      <tec-message-scroller>
+        <tec-message-scroller-viewport>
+          <tec-message-scroller-content class="p-6">
+            <tec-message-scroller-item message-id="group-1">
+              <tec-message align="end"><tec-message-content>
+                <tec-bubble variant="muted"><tec-bubble-content>@mary, the flowline pressure keeps matching the separator output. Can you check my numbers?</tec-bubble-content></tec-bubble>
+              </tec-message-content></tec-message>
+            </tec-message-scroller-item>
+            <tec-message-scroller-item message-id="group-2">
+              <tec-message><tec-message-content>
+                <tec-message-header>Mary (Agent)</tec-message-header>
+                <tec-bubble variant="ghost"><tec-bubble-content>Confirmed. The curve points to a partial blockage between the manifold and the separator. If @rocky agrees, this is the clue we need.</tec-bubble-content></tec-bubble>
+              </tec-message-content></tec-message>
+            </tec-message-scroller-item>
+            <tec-message-scroller-item message-id="group-3" scroll-anchor>
+              <tec-message align="end"><tec-message-content>
+                <tec-bubble variant="muted"><tec-bubble-content>ping @rocky</tec-bubble-content></tec-bubble>
+              </tec-message-content></tec-message>
+            </tec-message-scroller-item>
+          </tec-message-scroller-content>
+        </tec-message-scroller-viewport>
+        <tec-message-scroller-button></tec-message-scroller-button>
+      </tec-message-scroller>
+    </tec-card-content>
+    <tec-card-footer class="flex-col gap-2 border-t">
+      <tec-button class="w-full" variant="secondary" data-action="next">Add Rocky</tec-button>
+      <p class="text-xs text-muted-foreground" data-hint>This will create a marker and make it the anchor</p>
+    </tec-card-footer>
+  </tec-card>
+  <p class="px-0.5 text-center text-xs text-balance text-muted-foreground">When a user joins, a marker is created. scroll-anchor on the marker marks it as the next turn.</p>
+</div>
+<script type="module">
+  const root = document.getElementById("message-scroller-group-chat")
+  const content = root.querySelector("tec-message-scroller-content")
+  const next = root.querySelector('[data-action="next"]')
+  const reset = root.querySelector('tec-button[aria-label="Reset conversation"]')
+  const hint = root.querySelector("[data-hint]")
+  const initial = content.innerHTML
+  let step = 0
+  const render = () => {
+    next.textContent = step === 0 ? "Add Rocky" : "Send Message as Rocky"
+    next.disabled = step === 2
+    reset.disabled = step === 0
+    hint.textContent = step === 0 ? "This will create a marker and make it the anchor" : "Now send Rocky's reply into the conversation"
+  }
+  next.addEventListener("click", () => {
+    const item = document.createElement("tec-message-scroller-item")
+    if (step === 0) {
+      item.setAttribute("scroll-anchor", "")
+      item.innerHTML = '<tec-marker variant="separator"><tec-marker-content>Rocky has joined the chat</tec-marker-content></tec-marker>'
+    } else {
+      item.setAttribute("message-id", "group-5")
+      item.innerHTML =
+        '<tec-message><tec-message-content><tec-message-header>Rocky</tec-message-header><tec-bubble variant="tinted"><tec-bubble-content>Amaze. Blockage makes pressure, pressure goes to separator. Rocky has flow model. Grace is smart.</tec-bubble-content></tec-bubble></tec-message-content></tec-message>'
+    }
+    content.append(item)
+    step++
+    render()
+  })
+  reset.addEventListener("click", () => {
+    // Replacing the scroller resets it to a fresh transcript.
+    const scroller = root.querySelector("tec-message-scroller")
+    const fresh = scroller.cloneNode(true)
+    fresh.querySelector("tec-message-scroller-content").innerHTML = initial
+    scroller.replaceWith(fresh)
+    step = 0
+    render()
+  })
+</script>

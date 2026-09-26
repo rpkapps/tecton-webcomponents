@@ -1,0 +1,26 @@
+<div id="questionnaire-multiple" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire shortcuts="letters">
+    <tec-questionnaire-item name="context" multiple required>
+      <tec-questionnaire-title>What context should the agent inspect?</tec-questionnaire-title>
+      <tec-questionnaire-description>Select every source that may affect the implementation.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="source">Relevant source files</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="tests">Existing tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="docs">Architecture documentation</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="history">Recent commit history</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-submit>Share context</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-multiple")
+  root.querySelector("tec-questionnaire").addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent = `Context: ${answers.getAll("context").join(", ") || "None"}`
+  })
+</script>

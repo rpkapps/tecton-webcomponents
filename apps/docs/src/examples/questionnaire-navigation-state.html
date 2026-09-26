@@ -1,0 +1,46 @@
+<div id="questionnaire-navigation-state" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire item="permission">
+    <tec-questionnaire-progress></tec-questionnaire-progress>
+    <tec-questionnaire-item name="permission" required>
+      <tec-questionnaire-title>What may the agent modify?</tec-questionnaire-title>
+      <tec-questionnaire-description>Next is intentionally disabled until an answer is selected.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="files">Project files</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="tests">Project files and tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="config">Files, tests, and configuration</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="verification" required>
+      <tec-questionnaire-title>What must pass before completion?</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="tests">Tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="types">Tests and types</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="all">Tests, types, and visual QA</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-previous></tec-questionnaire-previous>
+      <tec-questionnaire-next variant="secondary" disabled>Next</tec-questionnaire-next>
+      <tec-questionnaire-submit disabled>Save permissions</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-navigation-state")
+  const questionnaire = root.querySelector("tec-questionnaire")
+  const buttons = root.querySelectorAll("tec-questionnaire-next, tec-questionnaire-submit")
+  // Disable forward navigation while the active question is unanswered.
+  const sync = () => {
+    const unanswered = questionnaire.activeItem?.status === "unanswered"
+    for (const button of buttons) button.disabled = unanswered
+  }
+  questionnaire.addEventListener("tec-status-change", sync)
+  questionnaire.addEventListener("tec-item-change", () => requestAnimationFrame(sync))
+  questionnaire.addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent = `Permission: ${answers.get("permission")} · Verification: ${answers.get("verification")}`
+  })
+</script>

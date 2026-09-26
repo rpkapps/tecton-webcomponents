@@ -1,0 +1,25 @@
+<tec-sheet id="sheet-rtl" side="left" lang="ar" close-label="إغلاق">
+  <tec-button slot="trigger" variant="outline">فتح</tec-button>
+  <tec-sheet-header>
+    <tec-sheet-title>تعديل الملف الشخصي</tec-sheet-title>
+    <tec-sheet-description>قم بإجراء تغييرات على ملفك الشخصي هنا. انقر حفظ عند الانتهاء.</tec-sheet-description>
+  </tec-sheet-header>
+  <div class="grid flex-1 auto-rows-min gap-6 px-4">
+    <div class="grid gap-3">
+      <tec-label for="sheet-rtl-name">الاسم</tec-label>
+      <tec-input id="sheet-rtl-name" value="Pedro Duarte"></tec-input>
+    </div>
+    <div class="grid gap-3">
+      <tec-label for="sheet-rtl-username">اسم المستخدم</tec-label>
+      <tec-input id="sheet-rtl-username" value="@peduarte"></tec-input>
+    </div>
+  </div>
+  <tec-sheet-footer>
+    <tec-button id="sheet-rtl-save">حفظ التغييرات</tec-button>
+    <tec-sheet-close>إغلاق</tec-sheet-close>
+  </tec-sheet-footer>
+</tec-sheet>
+<script type="module">
+  const sheet = document.getElementById("sheet-rtl")
+  document.getElementById("sheet-rtl-save").addEventListener("click", () => sheet.hide())
+</script>

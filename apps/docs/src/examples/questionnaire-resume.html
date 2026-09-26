@@ -1,0 +1,47 @@
+<form id="questionnaire-resume" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire item="verification">
+    <tec-questionnaire-progress></tec-questionnaire-progress>
+    <tec-questionnaire-item name="change" required>
+      <tec-questionnaire-title>What kind of migration is this?</tec-questionnaire-title>
+      <tec-questionnaire-description>This answer was saved during the previous session.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="incremental" checked>Incremental migration</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="cutover">Single cutover</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="verification" multiple required>
+      <tec-questionnaire-title>How should the migration be verified?</tec-questionnaire-title>
+      <tec-questionnaire-description>These checks were selected during the previous session.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="tests" checked>Run migration tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="typecheck" checked>Run the typecheck</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="manual">Perform a manual smoke test</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="notes">
+      <tec-questionnaire-title>Anything else the agent should remember?</tec-questionnaire-title>
+      <tec-questionnaire-description>This note was saved with the draft.</tec-questionnaire-description>
+      <tec-questionnaire-input aria-label="Saved migration note" value="Keep the existing public API stable."></tec-questionnaire-input>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-button type="reset" variant="outline">Reset changes</tec-button>
+      <tec-questionnaire-previous></tec-questionnaire-previous>
+      <tec-questionnaire-next>Next</tec-questionnaire-next>
+      <tec-questionnaire-submit>Update draft</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</form>
+<script type="module">
+  const form = document.getElementById("questionnaire-resume")
+  const result = form.querySelector("[data-result]")
+  // The items are form-associated: the surrounding form submits (and resets) the answers.
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    const answers = new FormData(form)
+    result.textContent = `Migration: ${answers.get("change")} · Verification: ${answers.getAll("verification").join(", ")} · Notes: ${answers.get("notes") || "None"}`
+  })
+  form.addEventListener("reset", () => (result.textContent = "Saved answers restored"))
+</script>

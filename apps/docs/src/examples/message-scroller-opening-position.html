@@ -1,0 +1,56 @@
+<div id="message-scroller-opening-position" class="flex w-full max-w-sm flex-col gap-4">
+  <tec-card class="h-[35rem] w-full gap-0">
+    <tec-card-header class="gap-1 border-b">
+      <tec-card-title>Opening Position</tec-card-title>
+      <tec-card-description>Choose where a saved transcript opens.</tec-card-description>
+    </tec-card-header>
+    <tec-card-content class="min-h-0 flex-1 overflow-hidden px-0">
+      <tec-message-scroller default-scroll-position="last-anchor">
+        <tec-message-scroller-viewport>
+          <tec-message-scroller-content class="p-6">
+            <tec-message-scroller-item message-id="open-1" scroll-anchor>
+              <tec-message align="end"><tec-message-content>
+                <tec-bubble variant="muted"><tec-bubble-content>This is the first message the user sent in the conversation.</tec-bubble-content></tec-bubble>
+              </tec-message-content></tec-message>
+            </tec-message-scroller-item>
+            <tec-message-scroller-item message-id="open-2">
+              <tec-message><tec-message-content>
+                <tec-bubble variant="ghost"><tec-bubble-content>Workspace creation rose 8%, but first invite completion only rose 2%.</tec-bubble-content></tec-bubble>
+              </tec-message-content></tec-message>
+            </tec-message-scroller-item>
+            <tec-message-scroller-item message-id="open-3" scroll-anchor>
+              <tec-message align="end"><tec-message-content>
+                <tec-bubble variant="muted"><tec-bubble-content>This is the last message the user sent in the conversation.</tec-bubble-content></tec-bubble>
+              </tec-message-content></tec-message>
+            </tec-message-scroller-item>
+            <tec-message-scroller-item message-id="open-4">
+              <tec-message><tec-message-content>
+                <tec-bubble variant="ghost"><tec-bubble-content><p>Start with the invite step. Teams are creating workspaces but waiting to add collaborators.</p>
+                <p class="mt-2">Recommended follow-up:</p>
+                <p class="mt-2">1. Compare invite drop-off by account size.<br />2. Check whether users who skip invites still return within 24 hours.<br />3. Review the empty-state copy on the first project screen.<br />4. Segment activation by template, since template users may not need invites right away.</p>
+                <p class="mt-2">If that pattern holds, the next experiment should make collaboration useful earlier instead of prompting for invites harder.</p></tec-bubble-content></tec-bubble>
+              </tec-message-content></tec-message>
+            </tec-message-scroller-item>
+          </tec-message-scroller-content>
+        </tec-message-scroller-viewport>
+        <tec-message-scroller-button></tec-message-scroller-button>
+      </tec-message-scroller>
+    </tec-card-content>
+    <tec-card-footer class="justify-center border-t">
+      <tec-tabs value="last-anchor" class="w-full">
+        <tec-tabs-list class="w-full">
+          <tec-tabs-trigger value="start">start</tec-tabs-trigger>
+          <tec-tabs-trigger value="end">end</tec-tabs-trigger>
+          <tec-tabs-trigger value="last-anchor">last-anchor</tec-tabs-trigger>
+        </tec-tabs-list>
+      </tec-tabs>
+    </tec-card-footer>
+  </tec-card>
+  <p class="px-0.5 text-center text-xs text-muted-foreground">Toggle default-scroll-position to see where the transcript starts when you open the thread.</p>
+</div>
+<script type="module">
+  const root = document.getElementById("message-scroller-opening-position")
+  root.querySelector("tec-tabs").addEventListener("tec-value-change", (event) => {
+    root.querySelector("tec-message-scroller").defaultScrollPosition = event.detail.value
+  })
+</script>

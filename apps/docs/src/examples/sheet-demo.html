@@ -1,0 +1,25 @@
+<tec-sheet id="sheet-demo">
+  <tec-button slot="trigger" variant="outline">Open</tec-button>
+  <tec-sheet-header>
+    <tec-sheet-title>Edit profile</tec-sheet-title>
+    <tec-sheet-description>Make changes to your profile here. Click save when you&apos;re done.</tec-sheet-description>
+  </tec-sheet-header>
+  <div class="grid flex-1 auto-rows-min gap-6 px-4">
+    <div class="grid gap-3">
+      <tec-label for="sheet-demo-name">Name</tec-label>
+      <tec-input id="sheet-demo-name" value="Pedro Duarte"></tec-input>
+    </div>
+    <div class="grid gap-3">
+      <tec-label for="sheet-demo-username">Username</tec-label>
+      <tec-input id="sheet-demo-username" value="@peduarte"></tec-input>
+    </div>
+  </div>
+  <tec-sheet-footer>
+    <tec-button id="sheet-demo-save">Save changes</tec-button>
+    <tec-sheet-close>Close</tec-sheet-close>
+  </tec-sheet-footer>
+</tec-sheet>
+<script type="module">
+  const sheet = document.getElementById("sheet-demo")
+  document.getElementById("sheet-demo-save").addEventListener("click", () => sheet.hide())
+</script>

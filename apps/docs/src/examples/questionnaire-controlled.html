@@ -1,0 +1,54 @@
+<div id="questionnaire-controlled" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <p class="self-end text-sm text-muted-foreground" role="status" data-checkpoint>Current checkpoint: Change scope</p>
+  <tec-questionnaire item="scope">
+    <tec-questionnaire-progress></tec-questionnaire-progress>
+    <tec-questionnaire-item name="scope" required>
+      <tec-questionnaire-title>What may the agent change?</tec-questionnaire-title>
+      <tec-questionnaire-description>The page stores the active checkpoint while the questionnaire navigates.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="component">Only the target component</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="tests">Component and related tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="feature">The complete feature area</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="checks" required>
+      <tec-questionnaire-title>Which verification level should it use?</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="targeted">Targeted tests</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="package">Package tests and typecheck</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="full">Full workspace verification</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="output" required>
+      <tec-questionnaire-title>What should the agent return when finished?</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="summary">Concise summary</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="diff">Summary with changed files</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="handoff">Detailed implementation handoff</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-previous></tec-questionnaire-previous>
+      <tec-questionnaire-next>Next</tec-questionnaire-next>
+      <tec-questionnaire-submit>Save workflow</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-controlled")
+  const questionnaire = root.querySelector("tec-questionnaire")
+  const labels = { scope: "Change scope", checks: "Verification", output: "Final output" }
+  // Keep the active item in page state; the page may also set questionnaire.item itself.
+  questionnaire.addEventListener("tec-item-change", (event) => {
+    root.querySelector("[data-checkpoint]").textContent = `Current checkpoint: ${labels[event.detail.item]}`
+  })
+  questionnaire.addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent =
+      `Scope: ${answers.get("scope")} · Verification: ${answers.get("checks")} · Output: ${answers.get("output")}`
+  })
+</script>

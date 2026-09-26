@@ -1,0 +1,29 @@
+<div class="mx-auto flex w-full max-w-md flex-col gap-4" lang="ar">
+  <tec-questionnaire item="well" shortcuts="numbers">
+    <tec-questionnaire-progress format="السؤال {current} من {total}" value-text="السؤال {current} من {total}" label="تقدم الاستبيان"></tec-questionnaire-progress>
+    <tec-questionnaire-item name="well" required>
+      <tec-questionnaire-title>أي بئر يجب فحصه أولًا؟</tec-questionnaire-title>
+      <tec-questionnaire-description>اختر بئرًا أو اكتب اسم بئر آخر.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="a-12">البئر A-12</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="b-07">البئر B-07</tec-questionnaire-choice>
+        <tec-questionnaire-input aria-label="بئر آخر" placeholder="اكتب اسم بئر آخر…"></tec-questionnaire-input>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error required-message="اختر إجابة للمتابعة."></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="report" multiple>
+      <tec-questionnaire-title>ماذا يتضمن التقرير؟</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="pressure">الضغط</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="temperature">الحرارة</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error optional-message="اختر إجابة أو تخطَّ هذا السؤال."></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-previous>السابق</tec-questionnaire-previous>
+      <tec-questionnaire-skip>تخطٍّ</tec-questionnaire-skip>
+      <tec-questionnaire-next>التالي</tec-questionnaire-next>
+      <tec-questionnaire-submit>إرسال</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+</div>

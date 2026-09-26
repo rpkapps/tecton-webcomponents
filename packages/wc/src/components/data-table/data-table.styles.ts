@@ -261,7 +261,7 @@ export const dataTableLightStyles = unsafeCSS(`
     max-width: calc(100% + 1rem);
     border-radius: var(--tec-radius-sm);
     background: transparent;
-    color: inherit;
+    color: var(--tec-ghost-foreground);
     font: inherit;
     font-weight: inherit;
     text-align: inherit;
@@ -282,9 +282,6 @@ export const dataTableLightStyles = unsafeCSS(`
     height: 0.875rem;
     flex: none;
     color: var(--tec-muted-foreground);
-  }
-  tec-data-table th[aria-sort] .tec-data-table-sort {
-    color: var(--tec-foreground);
   }
   tec-data-table th[data-tec-select] {
     width: 2.5rem;

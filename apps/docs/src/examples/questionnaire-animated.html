@@ -1,0 +1,61 @@
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    #questionnaire-animated tec-questionnaire-item:state(active) {
+      animation: questionnaire-animated-enter 300ms var(--tec-ease-out);
+    }
+  }
+  @keyframes questionnaire-animated-enter {
+    from {
+      opacity: 0;
+      translate: 0 0.5rem;
+    }
+  }
+</style>
+<div id="questionnaire-animated" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire item="task">
+    <tec-questionnaire-progress></tec-questionnaire-progress>
+    <tec-questionnaire-item name="task" required>
+      <tec-questionnaire-title>What should the agent do?</tec-questionnaire-title>
+      <tec-questionnaire-description>Choose the task for this run.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="implement">Implement the requested change</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="debug">Debug the current behavior</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="review">Review the implementation</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="review" required>
+      <tec-questionnaire-title>How should the work be reviewed?</tec-questionnaire-title>
+      <tec-questionnaire-description>Select the verification depth.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="targeted">Targeted checks</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="complete">Complete test suite</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="manual">Tests and manual QA</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="delivery" required>
+      <tec-questionnaire-title>How should the result be delivered?</tec-questionnaire-title>
+      <tec-questionnaire-description>Choose the final handoff format.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="summary">Concise summary</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="diff">Summary and changed files</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="handoff">Detailed review handoff</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-previous></tec-questionnaire-previous>
+      <tec-questionnaire-next>Next</tec-questionnaire-next>
+      <tec-questionnaire-submit>Save workflow</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-animated")
+  root.querySelector("tec-questionnaire").addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent = `Task: ${answers.get("task")} · Review: ${answers.get("review")} · Delivery: ${answers.get("delivery")}`
+  })
+</script>

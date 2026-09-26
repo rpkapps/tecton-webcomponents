@@ -1,0 +1,241 @@
+---
+title: Date Picker
+description: A date picker component with range and presets.
+tags: ["tec-date-picker", "tec-date-range-picker", "tec-date-field", "tec-time-field"]
+---
+
+<ComponentPreview name="date-picker-demo" class="min-h-96 items-start" />
+
+## Usage
+
+```ts
+import "@tecton/wc/date-picker" // tec-date-picker, tec-date-range-picker (and the calendars)
+import "@tecton/wc/date-field" // tec-date-field, tec-time-field
+```
+
+```html
+<label for="due">Due date</label>
+<tec-date-picker id="due" name="due"></tec-date-picker>
+
+<tec-date-picker appearance="button" placeholder="Pick a date"></tec-date-picker>
+```
+
+A date picker is a [calendar](/docs/components/calendar) in a popover, opened from one of two appearances:
+
+- **`field`** (default) — a segmented date input you can type into, with a calendar button at the end.
+- **`button`** — an outline button that shows the formatted date (`date-style`, default `long`) or the `placeholder`, and opens the calendar. Put icons in the `start` / `end` slots.
+
+Choosing a day closes the popover and returns focus. The value is an ISO date (`2026-09-26`), `YYYY-MM-DDTHH:mm` with a time `granularity`, or `start/end` for `<tec-date-range-picker>`; listen for `change`. Both pickers are form controls with validation.
+
+## Composition
+
+```text
+tec-date-picker
+├── field (segments + calendar button) | button (formatted value)
+└── popover (role="dialog")
+    ├── tec-calendar / tec-range-calendar
+    └── slot="footer"
+```
+
+## Basic
+
+A button-style date picker labelled by a [field label](/docs/components/field).
+
+<ComponentPreview name="date-picker-basic" class="min-h-96 items-start" />
+
+## Range Picker
+
+`<tec-date-range-picker>` selects a range in a `tec-range-calendar`; `visible-months="2"` shows two months. The button shows the range formatted with `Intl.DateTimeFormat#formatRange`.
+
+<ComponentPreview name="date-picker-range" class="min-h-[28rem] items-start" />
+
+## Date of Birth
+
+`caption-layout="dropdown"` adds month and year selects to the calendar — quicker for dates far from today. `date-style="short"` shows the numeric date.
+
+<ComponentPreview name="date-picker-dob" class="min-h-96 items-start" />
+
+## Input
+
+The default `field` appearance: type the date segment by segment, or open the calendar with the button or <Kbd>Alt</Kbd> <Kbd>↓</Kbd>. Typing and picking keep each other in sync.
+
+<ComponentPreview name="date-picker-input" class="min-h-96 items-start" />
+
+## Time Picker
+
+Pair a date picker with a [`<tec-time-field>`](#time-field) for the time of day.
+
+<ComponentPreview name="date-picker-time" class="min-h-96 items-start" />
+
+## Date and time
+
+With `granularity="minute"` (or `hour`, `second`) the field also edits the time and the value becomes `2026-03-02T06:30`. Picking a day in the calendar keeps the time.
+
+<ComponentPreview name="date-picker-date-time" class="min-h-96 items-start" />
+
+## Range field
+
+The `field` appearance of `<tec-date-range-picker>` has a start and an end date field.
+
+<ComponentPreview name="date-picker-range-field" class="min-h-[28rem] items-start" />
+
+## Presets
+
+Content in `slot="footer"` renders under the calendar in the popover. Set `value`, then `hide()` the popover.
+
+<ComponentPreview name="date-picker-presets" class="min-h-[28rem] items-start" />
+
+## Forms
+
+Both pickers are form-associated. `required`, `min`, `max` and `isDateUnavailable` are validated (with localized messages such as "Value must be 1/1/2026 or later."), a partly typed date is `badInput`, and a reversed range is invalid. A range is submitted as `name=start/end`, or as two entries with `start-name` / `end-name`. Errors display after interaction or a submit attempt (`:state(user-invalid)`). See [Forms](/docs/forms).
+
+<ComponentPreview name="date-picker-form" class="min-h-[28rem] items-start" />
+
+## Date field
+
+`<tec-date-field>` is the segmented input on its own — no popover. Each part (month, day, year, and with a time `granularity` hour, minute, AM/PM) is a spin button in the locale's order, with localized placeholders (`mm/dd/yyyy`, `tt.mm.jjjj`). It has the `outline`, `filled` and `text` variants of [Input](/docs/components/input).
+
+<ComponentPreview name="date-picker-date-field" class="items-start" />
+
+## Time field
+
+`<tec-time-field>` edits a time of day: `HH:mm`, or `HH:mm:ss` with `granularity="second"`. The clock follows the locale; `hour-cycle="24"` or `"12"` forces one. `min` / `max` are times.
+
+<ComponentPreview name="date-picker-time-field" class="items-start" />
+
+## RTL
+
+With `lang="ar"`, the date, the calendar and the placeholders are Arabic and the layout follows `dir="rtl"`.
+
+<ComponentPreview name="date-picker-rtl" direction="rtl" class="min-h-96 items-start" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves between the segments of the field, then to the calendar button."],
+    ["0-9", "Types into the focused segment; focus moves on when the segment is complete. Typing the separator (`/`, `.`, `:`) also moves on."],
+    ["A / P", "Sets AM / PM."],
+    ["ArrowUp / ArrowDown", "Increments / decrements the focused segment (wraps around). An empty segment starts at today's value."],
+    ["PageUp / PageDown", "Steps by a larger amount (5 years, 2 months, 7 days, 2 hours, 15 minutes)."],
+    ["Home / End", "Sets the segment to its minimum / maximum."],
+    ["Backspace / Delete", "Removes the last digit; in an empty segment, moves to the previous one."],
+    ["ArrowLeft / ArrowRight", "Moves to the previous / next segment (mirrored in right-to-left layouts)."],
+    ["Alt+ArrowDown", "Opens the calendar from the field."],
+    ["Enter / Space", "On the calendar button or the button appearance, opens the calendar. In the calendar, selects the focused day and closes it."],
+    ["Escape", "Closes the calendar and returns focus to the button."],
+  ]}
+/>
+
+In the calendar, the [calendar keys](/docs/components/calendar#keyboard-interactions) apply.
+
+## Accessibility
+
+- The field is a `role="group"` of `role="spinbutton"` segments. Each segment is named after its part and the field label ("month Due date") and reports `aria-valuenow`, `aria-valuemin`, `aria-valuemax` and `aria-valuetext` ("9 – September", or "Empty"). Separators are hidden from assistive technology.
+- Label the picker with `<label for>`, `<tec-label for>` / `<tec-field-label>` or `aria-label`. The calendar button is named "Calendar" plus the label (`button-label` localizes it); it has `aria-haspopup="dialog"` and `aria-expanded`.
+- The popover is a `role="dialog"` named by the label. Opening moves focus to the selected (or today's) day, Tab stays inside, and closing returns focus to the button.
+- The button appearance is a button named by the label and the shown value ("Date September 26, 2026").
+- Invalid values set `aria-invalid` on the segments (or the button) once invalidity is displayed; `aria-describedby` on the element describes the field.
+- Segments are `contenteditable` so on-screen keyboards open with a numeric layout; their caret is hidden.
+
+## API Reference
+
+<ApiReference tags={["tec-date-picker", "tec-date-range-picker", "tec-date-field", "tec-time-field"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A form needs a date (or a date range, or a date and time) and space is short: the field shows the value, the calendar is one press away.
+- Users may know the date already (typing is faster) or need to see the month (picking is easier): the `field` appearance offers both.
+
+### Not for
+
+- a calendar that stays visible, with booked days or a schedule to read: use [Calendar](/docs/components/calendar)
+- a time of day only: use `<tec-time-field>`
+- a month or a year alone: use [Native Select](/docs/components/native-select)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Label every picker (`<tec-field-label for>`, `<label for>` or `aria-label`), and give the format hint in a description when users type dates.
+
+</Do>
+
+<Do>
+
+Prefer the `field` appearance when the date is often known (birth date, a document date); the `button` appearance suits filters and dates close to today.
+
+</Do>
+
+<Do>
+
+Use `caption-layout="dropdown"` for dates far from today, such as a date of birth.
+
+</Do>
+
+<Do>
+
+Constrain with `min`, `max` and `isDateUnavailable`, and say why a day is unavailable.
+
+</Do>
+
+<Do>
+
+Use `<tec-date-range-picker>` for a period, not two pickers — it validates that the end is on or after the start.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A text input with a date parser">
+
+<Wrong>
+
+```html
+<tec-input placeholder="June 01, 2025"></tec-input>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-date-picker value="2025-06-01"></tec-date-picker>
+```
+
+</Correct>
+
+A free-text date is ambiguous (is 06/01 June or January?), cannot be stepped with the keyboard and is announced as plain text. The segmented field follows the locale's order, validates each part and submits an ISO date.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Rebuilding the picker from a popover and a calendar">
+
+<Wrong>
+
+```html
+<tec-popover>
+  <tec-button slot="trigger">Pick a date</tec-button>
+  <tec-calendar></tec-calendar>
+</tec-popover>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-date-picker appearance="button" name="due"></tec-date-picker>
+```
+
+</Correct>
+
+The hand-built version needs script to format the value, close on selection and move focus, and it takes no part in forms. `<tec-date-picker>` does all of that and validates.
+
+</Dont>

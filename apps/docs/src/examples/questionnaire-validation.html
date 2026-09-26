@@ -1,0 +1,70 @@
+<div id="questionnaire-validation" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire item="detail">
+    <tec-card class="w-full">
+      <tec-questionnaire-item name="detail" required>
+        <tec-card-header>
+          <tec-questionnaire-title>How much detail should the answer include?</tec-questionnaire-title>
+          <tec-questionnaire-description>Choose the response depth.</tec-questionnaire-description>
+          <tec-card-action><tec-questionnaire-progress format="{current} / {total}" class="min-w-0"></tec-questionnaire-progress></tec-card-action>
+        </tec-card-header>
+        <tec-card-content>
+          <tec-questionnaire-choices>
+            <tec-questionnaire-choice value="summary">Concise summary</tec-questionnaire-choice>
+            <tec-questionnaire-choice value="complete">Complete answer</tec-questionnaire-choice>
+          </tec-questionnaire-choices>
+          <tec-questionnaire-error></tec-questionnaire-error>
+        </tec-card-content>
+      </tec-questionnaire-item>
+      <tec-questionnaire-item name="audience" required>
+        <tec-card-header>
+          <tec-questionnaire-title>Who will read the answer?</tec-questionnaire-title>
+          <tec-questionnaire-description>Public answers require complete context.</tec-questionnaire-description>
+          <tec-card-action><tec-questionnaire-progress format="{current} / {total}" class="min-w-0"></tec-questionnaire-progress></tec-card-action>
+        </tec-card-header>
+        <tec-card-content>
+          <tec-questionnaire-choices>
+            <tec-questionnaire-choice value="team">My team</tec-questionnaire-choice>
+            <tec-questionnaire-choice value="public">Public audience</tec-questionnaire-choice>
+          </tec-questionnaire-choices>
+          <tec-questionnaire-error></tec-questionnaire-error>
+        </tec-card-content>
+      </tec-questionnaire-item>
+      <tec-card-footer>
+        <tec-questionnaire-actions>
+          <tec-questionnaire-previous></tec-questionnaire-previous>
+          <tec-questionnaire-next>Next</tec-questionnaire-next>
+          <tec-questionnaire-submit>Validate answers</tec-questionnaire-submit>
+        </tec-questionnaire-actions>
+      </tec-card-footer>
+    </tec-card>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-validation")
+  const questionnaire = root.querySelector("tec-questionnaire")
+  const detail = root.querySelector('tec-questionnaire-item[name="detail"]')
+  const error = detail.querySelector("tec-questionnaire-error")
+  // A rule across questions, checked on submit (a schema library such as Zod works the same way).
+  function validate(answers) {
+    if (answers.get("audience") === "public" && answers.get("detail") === "summary") {
+      return { item: "detail", message: "Public answers need enough context. Choose a complete answer." }
+    }
+    return null
+  }
+  detail.addEventListener("change", () => {
+    detail.invalid = false
+    error.textContent = ""
+  })
+  questionnaire.addEventListener("tec-submit", (event) => {
+    const issue = validate(event.detail.formData)
+    if (issue) {
+      detail.invalid = true
+      error.textContent = issue.message
+      questionnaire.item = issue.item
+      return
+    }
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent = `Detail: ${answers.get("detail")} · Audience: ${answers.get("audience")}`
+  })
+</script>

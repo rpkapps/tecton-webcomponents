@@ -125,7 +125,7 @@ function choiceOptions(control: Element): Option[] {
         : "tec-radio-group-item, tec-radio, input[type=radio]"
   return [...control.querySelectorAll(selector)].map((element) => ({
     element,
-    label: element.getAttribute("aria-label") || textOf(element),
+    label: textOf(element) || element.getAttribute("aria-label") || "",
     icon: iconOf(element),
     disabled: isDisabled(element),
     checked: isOn(element),

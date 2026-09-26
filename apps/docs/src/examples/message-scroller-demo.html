@@ -1,0 +1,59 @@
+<div id="message-scroller-demo" class="flex w-full max-w-sm flex-col gap-4">
+  <tec-card class="h-[26rem] w-full gap-0 py-0">
+    <tec-message-scroller auto-scroll default-scroll-position="last-anchor" class="flex-1">
+      <tec-message-scroller-viewport>
+        <tec-message-scroller-content class="p-4">
+          <tec-message-scroller-item message-id="d1" scroll-anchor>
+            <tec-message align="end"><tec-message-content>
+              <tec-bubble variant="muted"><tec-bubble-content>What changed in the pressure logs overnight?</tec-bubble-content></tec-bubble>
+            </tec-message-content></tec-message>
+          </tec-message-scroller-item>
+          <tec-message-scroller-item message-id="d2">
+            <tec-message><tec-message-content>
+              <tec-bubble variant="ghost"><tec-bubble-content>Tubing pressure on well A-12 dropped 6% between 02:00 and 04:00, then recovered after the choke change. The other wells stayed within their normal band.</tec-bubble-content></tec-bubble>
+            </tec-message-content></tec-message>
+          </tec-message-scroller-item>
+        </tec-message-scroller-content>
+      </tec-message-scroller-viewport>
+      <tec-message-scroller-button></tec-message-scroller-button>
+    </tec-message-scroller>
+    <tec-card-footer class="gap-2 border-t py-3">
+      <tec-button class="flex-1" variant="secondary">Ask a follow-up</tec-button>
+    </tec-card-footer>
+  </tec-card>
+  <p class="text-center text-xs text-muted-foreground">The question is anchored near the top; the answer streams in below it.</p>
+</div>
+<script type="module">
+  const root = document.getElementById("message-scroller-demo")
+  const content = root.querySelector("tec-message-scroller-content")
+  const button = root.querySelector("tec-card-footer tec-button")
+  const questions = ["Which well should we check first?", "Can you summarise the trend for the shift report?", "What would you change on A-12?"]
+  const answer =
+    "Start with A-12: the drop lines up with the choke change at 02:10, so the separator back-pressure is the likely cause. " +
+    "Compare the wellhead temperature over the same window, then confirm the choke position in the control log. " +
+    "If both agree, the recovery after 04:00 is the new baseline and no intervention is needed tonight."
+  let turn = 0
+  const row = (id, anchor, align, variant, text) => {
+    const item = document.createElement("tec-message-scroller-item")
+    item.setAttribute("message-id", id)
+    if (anchor) item.setAttribute("scroll-anchor", "")
+    item.innerHTML = `<tec-message align="${align}"><tec-message-content><tec-bubble variant="${variant}"><tec-bubble-content></tec-bubble-content></tec-bubble></tec-message-content></tec-message>`
+    item.querySelector("tec-bubble-content").textContent = text
+    return item
+  }
+  button.addEventListener("click", async () => {
+    button.disabled = true
+    turn++
+    content.append(row(`q${turn}`, true, "end", "muted", questions[(turn - 1) % questions.length]))
+    const reply = row(`a${turn}`, false, "start", "ghost", "")
+    content.setAttribute("aria-busy", "true")
+    content.append(reply)
+    const text = reply.querySelector("tec-bubble-content")
+    for (const word of answer.split(" ")) {
+      text.textContent += (text.textContent ? " " : "") + word
+      await new Promise((resolve) => setTimeout(resolve, 40))
+    }
+    content.removeAttribute("aria-busy")
+    button.disabled = false
+  })
+</script>

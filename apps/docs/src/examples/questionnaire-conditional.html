@@ -1,0 +1,51 @@
+<div id="questionnaire-conditional" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire item="runtime">
+    <tec-questionnaire-progress></tec-questionnaire-progress>
+    <tec-questionnaire-item name="runtime" required>
+      <tec-questionnaire-title>Where should the agent run?</tec-questionnaire-title>
+      <tec-questionnaire-description>Cloud runs add an environment question to this flow.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="local" checked>Local workspace</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="cloud">Cloud workspace</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="environment" required disabled>
+      <tec-questionnaire-title>Which cloud environment should it use?</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="preview">Preview</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="staging">Staging</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="isolated">Isolated sandbox</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="approval" required>
+      <tec-questionnaire-title>When should the agent request approval?</tec-questionnaire-title>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="writes">Before writing files</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="commands">Before running commands</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="sensitive">Only for sensitive actions</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-previous></tec-questionnaire-previous>
+      <tec-questionnaire-next>Next</tec-questionnaire-next>
+      <tec-questionnaire-submit>Save execution plan</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-conditional")
+  const environment = root.querySelector('tec-questionnaire-item[name="environment"]')
+  // The environment question only applies to cloud runs.
+  root.querySelector('tec-questionnaire-item[name="runtime"]').addEventListener("change", (event) => {
+    environment.disabled = event.target.value !== "cloud"
+  })
+  root.querySelector("tec-questionnaire").addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    root.querySelector("[data-result]").textContent =
+      `Runtime: ${answers.get("runtime")} · Environment: ${answers.get("environment") ?? "Not applicable"} · Approval: ${answers.get("approval")}`
+  })
+</script>

@@ -1,0 +1,54 @@
+<div id="questionnaire-skip" class="mx-auto flex w-full max-w-md flex-col gap-4">
+  <tec-questionnaire item="task">
+    <tec-questionnaire-progress></tec-questionnaire-progress>
+    <tec-questionnaire-item name="task" required>
+      <tec-questionnaire-title>What kind of change is this?</tec-questionnaire-title>
+      <tec-questionnaire-description>Choose the category that best describes the work.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="feature">New feature</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="fix">Bug fix</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="refactor">Refactor</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="constraints">
+      <tec-questionnaire-title>Are there any implementation constraints?</tec-questionnaire-title>
+      <tec-questionnaire-description>Answer if needed, or intentionally skip this question.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="no-dependencies">Do not add dependencies</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="no-migrations">Do not change the database</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="preserve-api">Preserve the public API</tec-questionnaire-choice>
+        <tec-questionnaire-input aria-label="Another implementation constraint" placeholder="Describe another constraint…"></tec-questionnaire-input>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-item name="review" required>
+      <tec-questionnaire-title>How should the work be reviewed?</tec-questionnaire-title>
+      <tec-questionnaire-description>Choose the checks the agent should complete before handoff.</tec-questionnaire-description>
+      <tec-questionnaire-choices>
+        <tec-questionnaire-choice value="tests">Run the test suite</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="diff">Review the final diff</tec-questionnaire-choice>
+        <tec-questionnaire-choice value="both">Tests and diff review</tec-questionnaire-choice>
+      </tec-questionnaire-choices>
+      <tec-questionnaire-error></tec-questionnaire-error>
+    </tec-questionnaire-item>
+    <tec-questionnaire-actions>
+      <tec-questionnaire-previous></tec-questionnaire-previous>
+      <tec-questionnaire-skip></tec-questionnaire-skip>
+      <tec-questionnaire-next>Next</tec-questionnaire-next>
+      <tec-questionnaire-submit>Submit brief</tec-questionnaire-submit>
+    </tec-questionnaire-actions>
+  </tec-questionnaire>
+  <p class="text-sm text-muted-foreground" role="status" data-result></p>
+</div>
+<script type="module">
+  const root = document.getElementById("questionnaire-skip")
+  const questionnaire = root.querySelector("tec-questionnaire")
+  const constraints = root.querySelector('tec-questionnaire-item[name="constraints"]')
+  questionnaire.addEventListener("tec-submit", (event) => {
+    const answers = event.detail.formData
+    const skipped = constraints.status === "skipped"
+    root.querySelector("[data-result]").textContent =
+      `Task: ${answers.get("task") ?? "None"} · Constraints: ${skipped ? "Skipped" : (answers.get("constraints") ?? "None")} · Review: ${answers.get("review") ?? "None"}`
+  })
+</script>

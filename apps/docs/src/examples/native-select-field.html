@@ -1,0 +1,21 @@
+<form id="native-select-field" class="flex w-full max-w-xs flex-col gap-4" novalidate>
+  <tec-field>
+    <tec-field-label>Fluid</tec-field-label>
+    <tec-native-select name="fluid" required class="w-full">
+      <option value="">Select a fluid</option>
+      <option value="oil">Oil</option>
+      <option value="gas">Gas</option>
+      <option value="water">Water</option>
+    </tec-native-select>
+    <tec-field-description>The main phase produced by the well.</tec-field-description>
+    <tec-field-error></tec-field-error>
+  </tec-field>
+  <tec-button type="submit" class="self-start">Save</tec-button>
+</form>
+<script type="module">
+  const form = document.getElementById("native-select-field")
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    form.reportValidity()
+  })
+</script>
