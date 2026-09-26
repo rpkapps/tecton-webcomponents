@@ -1,0 +1,13 @@
+---
+// A lucide icon, inlined as SVG (docs chrome only; examples use <tec-icon> or inline SVG).
+import { iconSvg } from "../lib/icons.mjs"
+
+interface Props {
+  name: string
+  class?: string
+}
+
+const { name, class: className = "size-4" } = Astro.props
+---
+
+<Fragment set:html={iconSvg(name, { class: className })} />

@@ -1,0 +1,81 @@
+---
+import type { NavSection } from "../lib/nav"
+import { siteConfig } from "../lib/nav"
+import Icon from "./Icon.astro"
+
+interface Props {
+  sections: NavSection[]
+  pathname: string
+}
+
+const { sections, pathname } = Astro.props
+const current = pathname.replace(/\/$/, "") || "/"
+const linkClass =
+  "rounded-md text-2xl font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:text-muted-foreground"
+---
+
+<button
+  type="button"
+  data-mobile-nav-trigger
+  aria-haspopup="dialog"
+  aria-expanded="false"
+  class="extend-touch-target flex h-8 touch-manipulation items-center justify-start gap-2.5 rounded-md p-0 outline-none focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
+>
+  <span class="relative flex h-8 w-4 items-center justify-center" aria-hidden="true">
+    <span class="relative size-4">
+      <span class="absolute top-1 left-0 block h-0.5 w-4 bg-foreground"></span>
+      <span class="absolute top-2.5 left-0 block h-0.5 w-4 bg-foreground"></span>
+    </span>
+  </span>
+  <span class="flex h-8 items-center text-lg leading-none font-medium">Menu</span>
+</button>
+
+<dialog
+  data-mobile-nav
+  aria-label="Menu"
+  class="fixed inset-y-0 start-0 m-0 h-dvh max-h-none w-80 max-w-[85vw] overflow-y-auto border-e border-border bg-background p-0 text-foreground shadow-lg backdrop:bg-black/50 open:flex open:flex-col"
+>
+  <div class="flex items-center justify-between gap-2 p-6">
+    <a href="/" class="flex items-center gap-2 font-medium">
+      <img src="/favicon.svg" alt="" aria-hidden="true" class="size-5" />
+      {siteConfig.name}
+    </a>
+    <button
+      type="button"
+      data-mobile-nav-close
+      aria-label="Close menu"
+      class="inline-flex size-8 items-center justify-center rounded-md outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <Icon name="x" />
+    </button>
+  </div>
+  <nav aria-label="Documentation" class="flex flex-col gap-12 px-6 pb-6">
+    <div class="flex flex-col gap-4">
+      <div class="text-sm font-medium text-muted-foreground">Menu</div>
+      <div class="flex flex-col gap-3">
+        <a href="/" class={linkClass} aria-current={current === "/" ? "page" : undefined}>Home</a>
+        {
+          siteConfig.nav.map((item) => (
+            <a href={item.href} class={linkClass} aria-current={current === item.href ? "page" : undefined}>
+              {item.title}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+    {
+      sections.map((section) => (
+        <div class="flex flex-col gap-4">
+          <div class="text-sm font-medium text-muted-foreground">{section.title}</div>
+          <div class="flex flex-col gap-3">
+            {section.pages.map((page) => (
+              <a href={page.url} class={linkClass} aria-current={current === page.url ? "page" : undefined}>
+                {page.isIndex && section.id ? "Overview" : page.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </nav>
+</dialog>

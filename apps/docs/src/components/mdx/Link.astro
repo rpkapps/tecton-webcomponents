@@ -1,0 +1,11 @@
+---
+// Markdown links: external ones open in a new tab.
+interface Props {
+  href?: string
+  [key: string]: unknown
+}
+const { href = "", ...rest } = Astro.props
+const external = /^https?:\/\//.test(href)
+---
+
+<a href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined} {...rest}><slot /></a>

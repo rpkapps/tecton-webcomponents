@@ -1,0 +1,9 @@
+---
+/** One "Do" bullet; children are markdown and stay in the prose styles. */
+import Icon from "../Icon.astro"
+---
+
+<li data-slot="do" class="flex gap-2.5 ps-0!">
+  <span data-not-typeset class="mt-1.5 shrink-0 text-success"><Icon name="check" class="size-4" /></span>
+  <div class="min-w-0 flex-1 [&>*:first-child]:mt-0"><slot /></div>
+</li>

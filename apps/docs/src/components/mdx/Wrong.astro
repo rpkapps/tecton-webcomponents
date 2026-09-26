@@ -1,0 +1,12 @@
+---
+/** A labelled code example inside <Dont>. */
+import Icon from "../Icon.astro"
+---
+
+<div data-slot="wrong" class="mt-4 border-s-2 border-destructive ps-3 [&>figure]:mx-0! [&>figure]:mt-2!">
+  <div data-not-typeset class="flex items-center gap-1.5 text-xs font-medium tracking-wide text-destructive uppercase">
+    <Icon name="x" class="size-3.5 shrink-0" />
+    Wrong
+  </div>
+  <slot />
+</div>

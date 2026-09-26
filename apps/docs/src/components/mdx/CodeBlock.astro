@@ -1,0 +1,20 @@
+---
+/**
+ * Highlighted code from a string (for generated code; in prose use a ``` fence).
+ *
+ *   <CodeBlock code={source} lang="ts" title="main.ts" />
+ */
+import { highlight } from "../../lib/highlight"
+
+interface Props {
+  code: string
+  lang?: string
+  title?: string
+  copy?: boolean
+}
+
+const { code, lang = "html", title, copy = true } = Astro.props
+const html = await highlight(code, { lang, title, copy })
+---
+
+<Fragment set:html={html} />

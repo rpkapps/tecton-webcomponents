@@ -1,0 +1,37 @@
+---
+/**
+ * A highlighted note in the prose.
+ *
+ *   <Callout title="One import" variant="info">Text with **markdown**.</Callout>
+ */
+import Icon from "../Icon.astro"
+
+interface Props {
+  title?: string
+  variant?: "default" | "info" | "success" | "warning" | "danger"
+  icon?: string
+}
+
+const { title, variant = "default", icon } = Astro.props
+const icons = { default: "info", info: "info", success: "circle-check", warning: "triangle-alert", danger: "octagon-alert" }
+const tone = {
+  default: "text-foreground",
+  info: "text-info",
+  success: "text-success",
+  warning: "text-warning",
+  danger: "text-destructive",
+}[variant]
+---
+
+<div
+  data-slot="callout"
+  data-variant={variant}
+  role="note"
+  class="callout mt-6 flex gap-3 rounded-xl border border-border bg-surface px-4 py-3 text-[0.95em] text-surface-foreground data-[variant=danger]:border-destructive/50 data-[variant=warning]:border-warning/50"
+>
+  <span class:list={["mt-[0.3em] shrink-0", tone]} data-not-typeset><Icon name={icon ?? icons[variant]} class="size-4" /></span>
+  <div class="min-w-0 flex-1 [&>*:first-child]:mt-0 [&>p]:mt-2">
+    {title && <div class="font-medium">{title}</div>}
+    <slot />
+  </div>
+</div>

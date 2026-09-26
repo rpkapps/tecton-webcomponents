@@ -1,0 +1,27 @@
+---
+import type { TocItem } from "../lib/toc"
+
+interface Props {
+  items: TocItem[]
+}
+
+const { items } = Astro.props
+---
+
+{
+  items.length > 0 && (
+    <nav aria-labelledby="toc-title" data-toc class="flex flex-col gap-2 p-4 pt-0 text-sm">
+      <p id="toc-title" class="h-6 bg-background text-xs font-medium text-muted-foreground">On This Page</p>
+      {items.map((item) => (
+        <a
+          href={`#${item.slug}`}
+          data-toc-link={item.slug}
+          data-depth={item.depth}
+          class="rounded-sm text-[0.8rem] text-muted-foreground no-underline transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:font-medium data-[active=true]:text-foreground data-[depth=3]:pl-4"
+        >
+          {item.text}
+        </a>
+      ))}
+    </nav>
+  )
+}

@@ -1,0 +1,65 @@
+---
+import { getNavSections, isNavActive, siteConfig } from "../lib/nav"
+import Icon from "./Icon.astro"
+import MobileNav from "./MobileNav.astro"
+
+const pathname = Astro.url.pathname
+const sections = await getNavSections()
+---
+
+<header class="sticky top-0 z-50 w-full bg-background">
+  <div class="container-wrapper px-6">
+    <div class="flex h-(--header-height) items-center">
+      <MobileNav sections={sections} pathname={pathname} />
+      <nav aria-label="Main" class="hidden items-center gap-0 lg:flex">
+        <a
+          href="/"
+          class="mr-4 flex items-center gap-2 rounded-md text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <img src="/favicon.svg" alt="" aria-hidden="true" draggable="false" class="size-5 select-none" />
+          <span>{siteConfig.name}</span>
+        </a>
+        {
+          siteConfig.nav.map((item) => (
+            <a
+              href={item.href}
+              aria-current={pathname.replace(/\/$/, "") === item.href ? "page" : undefined}
+              data-active={isNavActive(pathname, item.href)}
+              class="relative inline-flex h-8 items-center rounded-md px-2.5 text-sm font-medium text-foreground/70 transition-colors outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:text-foreground"
+            >
+              {item.title}
+            </a>
+          ))
+        }
+      </nav>
+      <div class="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
+        <button
+          type="button"
+          data-command-trigger
+          aria-label="Search documentation"
+          aria-keyshortcuts="Control+K Meta+K"
+          class="relative inline-flex size-8 items-center justify-center gap-2 rounded-lg bg-muted p-0 text-sm font-normal text-foreground transition-colors outline-none hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring md:w-48 md:justify-start md:pr-2 md:pl-3 lg:w-40 xl:w-64 dark:bg-card"
+        >
+          <Icon name="search" class="size-4 md:hidden" />
+          <span class="hidden xl:inline-flex">Search documentation...</span>
+          <span class="hidden md:inline-flex xl:hidden">Search...</span>
+          <kbd
+            class="pointer-events-none ml-auto hidden h-5 items-center gap-0.5 rounded border border-border bg-background px-1 font-sans text-[0.7rem] font-medium text-muted-foreground select-none md:flex"
+            ><span data-mod-key>Ctrl</span>K</kbd
+          >
+        </button>
+        <div class="ml-2 hidden h-4 w-px bg-border lg:block" aria-hidden="true"></div>
+        <button
+          type="button"
+          data-theme-toggle
+          aria-label="Toggle theme"
+          title="Toggle light / dark"
+          class="relative inline-flex size-8 items-center justify-center rounded-md text-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Icon name="sun" class="size-4 dark:hidden" />
+          <Icon name="moon" class="hidden size-4 dark:block" />
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

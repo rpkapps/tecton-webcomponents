@@ -1,0 +1,12 @@
+---
+// Markdown headings (h2–h4) with a hover "#" anchor.
+interface Props {
+  as: "h2" | "h3" | "h4"
+  id?: string
+  [key: string]: unknown
+}
+
+const { as: Tag, id, ...rest } = Astro.props
+---
+
+<Tag id={id} {...rest}>{id ? <a class="heading-anchor" href={`#${id}`}><span><slot /></span><span aria-hidden="true">#</span></a> : <slot />}</Tag>

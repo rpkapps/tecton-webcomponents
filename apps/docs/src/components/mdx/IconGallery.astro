@@ -1,0 +1,108 @@
+---
+/**
+ * Every Tecton domain icon, rendered with <tec-icon>, with search and the variant and
+ * size switches. The list comes from the icon modules of @tecton/wc (src/icons).
+ */
+import { getIcons } from "../../lib/icons-data"
+
+const icons = await getIcons()
+const sizes = [16, 20, 24]
+const toggle =
+  "h-7 rounded-sm px-2.5 text-xs font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-background aria-pressed:text-foreground"
+---
+
+<div data-not-typeset data-icon-gallery class="my-6 flex flex-col gap-4">
+  <div class="flex flex-wrap items-center gap-3">
+    <input
+      type="search"
+      data-icon-search
+      aria-label="Search icons"
+      placeholder="Search icons…"
+      class="h-8 w-full max-w-xs rounded-md border border-input bg-transparent px-2.5 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring"
+    />
+    <div role="group" aria-label="Variant" class="flex items-center gap-1 rounded-md bg-muted p-0.5">
+      <button type="button" data-icon-variant="outlined" aria-pressed="true" class={toggle}>Outlined</button>
+      <button type="button" data-icon-variant="filled" aria-pressed="false" class={toggle}>Filled</button>
+    </div>
+    <div role="group" aria-label="Size" class="flex items-center gap-1 rounded-md bg-muted p-0.5">
+      {sizes.map((size) => <button type="button" data-icon-size={size} aria-pressed={size === 20 ? "true" : "false"} class={toggle}>{size}px</button>)}
+    </div>
+    <span role="status" aria-live="polite" data-icon-status class="font-mono text-xs text-success"></span>
+  </div>
+  {
+    icons.length === 0 ? (
+      <p class="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
+        The icon set of @tecton/wc is not built yet.
+      </p>
+    ) : (
+      <ul class="grid grid-cols-[repeat(auto-fill,minmax(7.5rem,1fr))] gap-2">
+        {icons.map((icon) => (
+          <li data-icon-item data-search={`${icon.name} ${icon.description ?? ""}`.toLowerCase()}>
+            <button
+              type="button"
+              data-icon-copy={icon.name}
+              title={icon.description ? `${icon.description} — click to copy the markup` : "Click to copy the markup"}
+              class="flex w-full flex-col items-center gap-2 rounded-md border border-border bg-card p-3 text-xs outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <tec-icon name={icon.name} variant="outlined" style="font-size: 20px; width: 20px; height: 20px" aria-hidden="true" />
+              <span class="w-full truncate text-center text-muted-foreground">{icon.name}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  <p data-icon-empty hidden class="text-sm text-muted-foreground">No icons match.</p>
+</div>
+
+<script>
+  for (const gallery of document.querySelectorAll<HTMLElement>("[data-icon-gallery]")) {
+    let variant = "outlined"
+    const status = gallery.querySelector<HTMLElement>("[data-icon-status]")!
+    const empty = gallery.querySelector<HTMLElement>("[data-icon-empty]")!
+    const press = (selector: string, button: HTMLElement) => {
+      for (const b of gallery.querySelectorAll(selector)) b.setAttribute("aria-pressed", String(b === button))
+    }
+    gallery.querySelector<HTMLInputElement>("[data-icon-search]")?.addEventListener("input", (event) => {
+      const q = (event.target as HTMLInputElement).value.trim().toLowerCase()
+      let shown = 0
+      for (const item of gallery.querySelectorAll<HTMLElement>("[data-icon-item]")) {
+        item.hidden = !!q && !item.dataset.search!.includes(q)
+        if (!item.hidden) shown++
+      }
+      empty.hidden = shown > 0
+    })
+    gallery.addEventListener("click", async (event) => {
+      const target = event.target as HTMLElement
+      const v = target.closest<HTMLElement>("[data-icon-variant]")
+      if (v) {
+        variant = v.dataset.iconVariant!
+        press("[data-icon-variant]", v)
+        for (const icon of gallery.querySelectorAll("tec-icon")) icon.setAttribute("variant", variant)
+        return
+      }
+      const s = target.closest<HTMLElement>("[data-icon-size]")
+      if (s) {
+        press("[data-icon-size]", s)
+        const px = `${s.dataset.iconSize}px`
+        for (const icon of gallery.querySelectorAll<HTMLElement>("tec-icon")) {
+          icon.style.fontSize = px
+          icon.style.width = px
+          icon.style.height = px
+        }
+        return
+      }
+      const copy = target.closest<HTMLElement>("[data-icon-copy]")
+      if (copy) {
+        const markup = `<tec-icon name="${copy.dataset.iconCopy}"${variant === "filled" ? ' variant="filled"' : ""}></tec-icon>`
+        try {
+          await navigator.clipboard.writeText(markup)
+          status.textContent = `Copied ${markup}`
+        } catch {
+          status.textContent = `Could not copy ${markup}`
+        }
+        setTimeout(() => (status.textContent = ""), 2000)
+      }
+    })
+  }
+</script>

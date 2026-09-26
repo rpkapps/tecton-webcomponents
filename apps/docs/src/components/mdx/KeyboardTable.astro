@@ -1,0 +1,60 @@
+---
+/**
+ * The "Keyboard interactions" table of a component page.
+ *
+ *   <KeyboardTable rows={[["Space", "Activates the button."], ["Enter", "Activates the button."]]} />
+ *
+ * Keys may be combined with "+" ("Shift+Tab") and alternatives separated by " / "
+ * ("ArrowDown / ArrowRight"); each key renders as <kbd>. Descriptions accept inline
+ * markdown.
+ */
+import { inlineMarkdown } from "../../lib/markdown"
+
+interface Props {
+  rows: [keys: string, description: string][]
+}
+
+const { rows } = Astro.props
+const names: Record<string, string> = {
+  ArrowDown: "↓",
+  ArrowUp: "↑",
+  ArrowLeft: "←",
+  ArrowRight: "→",
+  Escape: "Esc",
+  Control: "Ctrl",
+  Meta: "⌘",
+}
+---
+
+<div class="typeset-scroll no-scrollbar">
+  <table class="w-full">
+    <thead>
+      <tr>
+        <th>Key</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map(([keys, description]) => (
+          <tr>
+            <td class="whitespace-nowrap">
+              {keys.split(" / ").map((alt, i) => (
+                <>
+                  {i > 0 && <span class="text-muted-foreground"> / </span>}
+                  {alt.split("+").map((key, j) => (
+                    <>
+                      {j > 0 && <span class="text-muted-foreground">+</span>}
+                      <kbd title={names[key.trim()] ? key.trim() : undefined}>{names[key.trim()] ?? key.trim()}</kbd>
+                    </>
+                  ))}
+                </>
+              ))}
+            </td>
+            <td set:html={inlineMarkdown(description)} />
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

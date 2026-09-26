@@ -1,0 +1,299 @@
+---
+/**
+ * API tables of one or more custom elements, generated from the Custom Elements
+ * Manifest of @tecton/wc (JSDoc of the element classes):
+ *
+ *   <ApiReference tags={["tec-button"]} />
+ *
+ * Per tag: summary, attributes & properties, events, slots, CSS parts, CSS custom
+ * properties, custom states and methods. Empty tables are left out.
+ */
+import { findElement, loadManifest, propertyRows, publicMethods, signature } from "../lib/manifest"
+import { inlineMarkdown } from "../lib/markdown"
+
+interface Props {
+  tags: string[]
+}
+
+const { tags } = Astro.props
+const { manifest, error } = loadManifest()
+
+const md = (text?: string) => inlineMarkdown(text) || "—"
+const code = (text?: string) => (text ? `<code>${inlineMarkdown(text).replace(/<\/?code>/g, "")}</code>` : "—")
+const deprecated = (value?: boolean | string) =>
+  value ? `<span class="api-deprecated">Deprecated${typeof value === "string" ? `: ${inlineMarkdown(value)}` : ""}.</span> ` : ""
+
+const elements = tags.map((tag) => ({ tag, doc: manifest ? findElement(manifest, tag) : undefined }))
+---
+
+{
+  !manifest ? (
+    <p class="api-missing">
+      {error
+        ? `The API reference could not be read from custom-elements.json (${error}).`
+        : "The API reference is generated from the library's custom-elements.json, which has not been built yet. Run the manifest analyzer in packages/wc to generate it."}
+    </p>
+  ) : null
+}
+
+{
+  elements.map(({ tag, doc }) => {
+    const d = doc?.declaration
+    const props = d ? propertyRows(d) : []
+    const methods = d ? publicMethods(d) : []
+    return (
+      <section data-api-reference={tag}>
+        <h3 id={tag}>
+          <a class="heading-anchor" href={`#${tag}`}>
+            <span>
+              <code>{`<${tag}>`}</code>
+            </span>
+            <span aria-hidden="true">#</span>
+          </a>
+        </h3>
+        {manifest && !d && (
+          <p class="api-missing">
+            <code>{tag}</code> is not in the manifest yet.
+          </p>
+        )}
+        {d && (d.summary || d.description) && <p set:html={deprecated(d.deprecated) + inlineMarkdown(d.summary ?? d.description)} />}
+        {d && d.name && (
+          <p class="api-meta">
+            Class <code>{d.name}</code>
+            {doc?.modulePath && (
+              <>
+                {" · "}module <code>{doc.modulePath}</code>
+              </>
+            )}
+          </p>
+        )}
+
+        {props.length > 0 && (
+          <>
+            <h4>Attributes &amp; properties</h4>
+            <div class="typeset-scroll no-scrollbar">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Attribute / property</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {props.map((row) => (
+                    <tr>
+                      <td class="whitespace-nowrap">
+                        {row.attribute ? <code>{row.attribute}</code> : <span class="api-muted">—</span>}
+                        {row.property && row.property !== row.attribute && (
+                          <div class="api-muted">
+                            <code>.{row.property}</code>
+                          </div>
+                        )}
+                        {(row.reflects || row.readonly) && (
+                          <div class="api-muted text-xs">{[row.reflects && "reflects", row.readonly && "read-only"].filter(Boolean).join(", ")}</div>
+                        )}
+                      </td>
+                      <td set:html={code(row.type)} />
+                      <td class="whitespace-nowrap" set:html={code(row.default)} />
+                      <td set:html={deprecated(row.deprecated) + md(row.description)} />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {d?.events?.length ? (
+          <>
+            <h4>Events</h4>
+            <div class="typeset-scroll no-scrollbar">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {d.events.map((event) => (
+                    <tr>
+                      <td class="whitespace-nowrap">
+                        <code>{event.name}</code>
+                      </td>
+                      <td set:html={code(event.type?.text)} />
+                      <td set:html={deprecated(event.deprecated) + md(event.description ?? event.summary)} />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : null}
+
+        {d?.slots?.length ? (
+          <>
+            <h4>Slots</h4>
+            <div class="typeset-scroll no-scrollbar">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Slot</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {d.slots.map((slot) => (
+                    <tr>
+                      <td class="whitespace-nowrap">{slot.name ? <code>{slot.name}</code> : <span class="api-muted">(default)</span>}</td>
+                      <td set:html={md(slot.description ?? slot.summary)} />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : null}
+
+        {d?.cssParts?.length ? (
+          <>
+            <h4>CSS parts</h4>
+            <div class="typeset-scroll no-scrollbar">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Part</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {d.cssParts.map((part) => (
+                    <tr>
+                      <td class="whitespace-nowrap">
+                        <code>{part.name}</code>
+                      </td>
+                      <td set:html={md(part.description ?? part.summary)} />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : null}
+
+        {d?.cssProperties?.length ? (
+          <>
+            <h4>CSS custom properties</h4>
+            <div class="typeset-scroll no-scrollbar">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {d.cssProperties.map((prop) => (
+                    <tr>
+                      <td class="whitespace-nowrap">
+                        <code>{prop.name}</code>
+                      </td>
+                      <td set:html={code(prop.default)} />
+                      <td set:html={md(prop.description ?? prop.summary)} />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : null}
+
+        {d?.cssStates?.length ? (
+          <>
+            <h4>Custom states</h4>
+            <div class="typeset-scroll no-scrollbar">
+              <table>
+                <thead>
+                  <tr>
+                    <th>State</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {d.cssStates.map((state) => (
+                    <tr>
+                      <td class="whitespace-nowrap">
+                        <code>{`:state(${state.name})`}</code>
+                      </td>
+                      <td set:html={md(state.description ?? state.summary)} />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : null}
+
+        {methods.length > 0 && (
+          <>
+            <h4>Methods</h4>
+            <div class="typeset-scroll no-scrollbar">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {methods.map((method) => (
+                    <tr>
+                      <td>
+                        <code>{signature(method)}</code>
+                      </td>
+                      <td set:html={deprecated(method.deprecated) + md(method.description ?? method.summary)} />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+      </section>
+    )
+  })
+}
+
+<style>
+  @layer components {
+    .api-missing {
+      border: 1px dashed var(--tec-border);
+      border-radius: var(--tec-radius-lg);
+      padding: 0.75rem 1rem;
+      font-size: var(--tec-text-sm);
+      color: var(--tec-muted-foreground);
+    }
+    .api-meta,
+    .api-muted {
+      color: var(--tec-muted-foreground);
+    }
+    .api-meta {
+      font-size: var(--tec-text-sm);
+    }
+    section :global(.api-deprecated) {
+      font-weight: 500;
+      color: var(--tec-destructive);
+    }
+    table {
+      width: 100%;
+    }
+    td :global(code),
+    th :global(code) {
+      font-size: 0.8em;
+    }
+  }
+</style>

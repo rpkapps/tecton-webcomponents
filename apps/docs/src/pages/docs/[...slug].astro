@@ -1,0 +1,123 @@
+---
+import { render } from "astro:content"
+
+import DocsSidebar from "../../components/DocsSidebar.astro"
+import DocsToc from "../../components/DocsToc.astro"
+import Icon from "../../components/Icon.astro"
+import { mdxComponents } from "../../components/mdx"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { getDocsPages, getNavSections, getVisiblePages, type DocsPage } from "../../lib/nav"
+import { buildToc } from "../../lib/toc"
+
+export async function getStaticPaths() {
+  const pages = await getDocsPages()
+  return pages.map((page) => ({ params: { slug: page.slug || undefined }, props: { slug: page.slug } }))
+}
+
+const { slug } = Astro.props as { slug: string }
+const page = (await getDocsPages()).find((p) => p.slug === slug) as DocsPage
+const visible = await getVisiblePages()
+const index = visible.indexOf(page)
+const previous = index > 0 ? visible[index - 1] : undefined
+const next = index !== -1 && index < visible.length - 1 ? visible[index + 1] : undefined
+const sections = await getNavSections()
+const { Content, headings } = await render(page.entry)
+const toc = buildToc(headings, page.entry.body)
+const status = page.status && page.status !== "stable" ? page.status : undefined
+
+const iconButton =
+  "extend-touch-target inline-flex size-8 items-center justify-center rounded-md bg-secondary text-secondary-foreground outline-none hover:bg-secondary-hover focus-visible:ring-2 focus-visible:ring-ring md:size-7"
+const pagerButton =
+  "inline-flex h-8 items-center gap-1.5 rounded-md bg-secondary px-3 text-sm font-medium text-secondary-foreground outline-none hover:bg-secondary-hover focus-visible:ring-2 focus-visible:ring-ring"
+---
+
+<BaseLayout title={page.isIndex && !page.section ? undefined : page.title} description={page.description} footer={false}>
+  <div class="container-wrapper flex flex-1 flex-col px-2">
+    <div class="flex min-h-min flex-1 items-start px-0 lg:grid lg:grid-cols-[var(--sidebar-width)_minmax(0,1fr)]">
+      <DocsSidebar sections={sections} pathname={Astro.url.pathname} />
+      <div class="h-full w-full">
+        <div data-slot="docs" class="flex items-stretch pb-8 text-[1.05rem] sm:text-[15px] xl:w-full">
+          <div class="flex min-w-0 flex-1 flex-col">
+            <div class="h-0 shrink-0 lg:h-4"></div>
+            <div class="mx-auto flex w-full max-w-160 min-w-0 flex-1 flex-col gap-6 px-4 py-6 text-foreground md:px-0 lg:py-8">
+              <div class="flex flex-col gap-2">
+                <div class="flex items-center justify-between gap-4 md:items-start">
+                  <h1 class="scroll-m-24 text-3xl font-medium tracking-tight">{page.title}</h1>
+                  <nav aria-label="Previous and next page" class="docs-nav flex shrink-0 items-center gap-2">
+                    {
+                      previous && (
+                        <a href={previous.url} class={iconButton} aria-label={`Previous: ${previous.title}`} title={previous.title}>
+                          <Icon name="arrow-left" />
+                        </a>
+                      )
+                    }
+                    {
+                      next && (
+                        <a href={next.url} class={iconButton} aria-label={`Next: ${next.title}`} title={next.title}>
+                          <Icon name="arrow-right" />
+                        </a>
+                      )
+                    }
+                  </nav>
+                </div>
+                {
+                  page.description && (
+                    <p class="text-[1.05rem] text-muted-foreground sm:text-base sm:text-balance md:max-w-[80%]">{page.description}</p>
+                  )
+                }
+                {
+                  (status || page.tags.length > 0) && (
+                    <div class="flex flex-wrap items-center gap-2 pt-2">
+                      {status && (
+                        <span class="inline-flex h-6 items-center rounded-md border border-warning/60 px-2 text-xs font-medium text-warning capitalize">
+                          {status}
+                        </span>
+                      )}
+                      {page.tags.map((tag) => (
+                        <a
+                          href={`#${tag}`}
+                          class="inline-flex h-6 items-center rounded-md bg-secondary px-2 font-mono text-xs text-secondary-foreground outline-none hover:bg-secondary-hover focus-visible:ring-2 focus-visible:ring-ring"
+                        >
+                          {`<${tag}>`}
+                        </a>
+                      ))}
+                    </div>
+                  )
+                }
+              </div>
+              <article class="typeset w-full flex-1 pb-16 sm:pb-0">
+                <Content components={mdxComponents} />
+              </article>
+              <nav aria-label="Pagination" class="hidden h-16 w-full items-center gap-2 sm:flex">
+                {
+                  previous && (
+                    <a href={previous.url} class={pagerButton}>
+                      <Icon name="arrow-left" class="size-4" />
+                      {previous.title}
+                    </a>
+                  )
+                }
+                {
+                  next && (
+                    <a href={next.url} class:list={[pagerButton, "ml-auto"]}>
+                      {next.title}
+                      <Icon name="arrow-right" class="size-4" />
+                    </a>
+                  )
+                }
+              </nav>
+            </div>
+          </div>
+          <div
+            class="sticky top-[calc(var(--header-height)+1px)] z-30 ml-auto hidden h-[90svh] w-(--sidebar-width) shrink-0 flex-col gap-4 overflow-hidden overscroll-none pb-8 xl:flex"
+          >
+            <div class="h-4 shrink-0"></div>
+            <div class="no-scrollbar scroll-fade flex flex-col gap-8 overflow-y-auto px-8 pt-4">
+              <DocsToc items={toc} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

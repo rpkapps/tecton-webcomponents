@@ -1,0 +1,34 @@
+---
+/**
+ * One "Don't" entry of the usage guidelines: a title, its severity and a
+ * <Wrong>/<Correct> pair of code fences, then the reason.
+ *
+ *   <Dont severity="HIGH" title="Colouring a button with classes">
+ *   <Wrong>```html …```</Wrong>
+ *   <Correct>```html …```</Correct>
+ *   Why it is wrong.
+ *   </Dont>
+ */
+import Icon from "../Icon.astro"
+
+interface Props {
+  title: string
+  severity?: "CRITICAL" | "HIGH" | "MEDIUM"
+}
+
+const { title, severity = "MEDIUM" } = Astro.props
+const tone = {
+  CRITICAL: "border-destructive text-destructive",
+  HIGH: "border-warning text-warning",
+  MEDIUM: "border-border text-muted-foreground",
+}[severity]
+---
+
+<div data-slot="dont" data-severity={severity} class="mt-8">
+  <div data-not-typeset class="flex flex-wrap items-center gap-x-2 gap-y-1">
+    <span class="text-destructive"><Icon name="x" class="size-4 shrink-0" /></span>
+    <span class="font-medium">{title}</span>
+    <span class:list={["inline-flex h-5 items-center rounded-full border px-2 text-xs font-medium", tone]}>{severity}</span>
+  </div>
+  <slot />
+</div>

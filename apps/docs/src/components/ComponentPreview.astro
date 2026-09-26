@@ -1,0 +1,138 @@
+---
+/**
+ * A live example and its source.
+ *
+ *   <ComponentPreview name="button-demo" />
+ *
+ * `name` is `src/examples/<name>.html`. The file is rendered inline (outside the prose
+ * styles) and shown, highlighted, as the code. A `<script type="module">` in the file is
+ * removed from the inline markup and loaded as a real module instead, so it can import
+ * packages; it runs once the page (and the example markup) is parsed.
+ */
+import { highlight } from "../lib/highlight"
+import Icon from "./Icon.astro"
+
+interface Props {
+  name: string
+  /** `rtl` renders the preview right-to-left, with a toggle to compare with LTR. */
+  direction?: "ltr" | "rtl"
+  /** Classes for the preview area (height, alignment, padding): `class="min-h-96 items-start"`. */
+  class?: string
+  /** Vertical alignment of the example in the preview area. */
+  align?: "center" | "start" | "end"
+  /** Preview only. */
+  hideCode?: boolean
+  /** Short text under the preview. */
+  caption?: string
+}
+
+const { name, direction = "ltr", class: className, align = "center", hideCode = false, caption } = Astro.props
+
+const examples = import.meta.glob<string>("/src/examples/*.html", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+})
+
+const source = examples[`/src/examples/${name}.html`]
+const scriptRe = /<script\b[^>]*type=["']module["'][^>]*>[\s\S]*?<\/script>/gi
+const markup = source?.replace(scriptRe, "").trim()
+const hasScript = source ? scriptRe.test(source) : false
+const code = source && !hideCode ? await highlight(source.trim(), { lang: "html" }) : ""
+if (!source) console.warn(`[docs] ComponentPreview: src/examples/${name}.html does not exist`)
+---
+
+{
+  !source ? (
+    <p data-not-typeset class="mt-6 rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
+      Example <code class="font-mono">{name}</code> is not available yet (<code class="font-mono">src/examples/{name}.html</code>).
+    </p>
+  ) : (
+    <figure class="not-typeset mt-4 mb-12 flex flex-col gap-3" data-not-typeset>
+      <div
+        data-slot="component-preview"
+        data-example={name}
+        class="group relative flex flex-col overflow-hidden rounded-2xl border border-border"
+      >
+        {direction === "rtl" && (
+          <div class="flex h-12 items-center justify-between gap-2 border-b border-border px-4 text-sm">
+            <span class="font-medium text-muted-foreground">Direction</span>
+            <div role="group" aria-label="Preview direction" class="flex items-center gap-1 rounded-md bg-muted p-0.5">
+              {["rtl", "ltr"].map((dir) => (
+                <button
+                  type="button"
+                  data-preview-dir={dir}
+                  aria-pressed={dir === "rtl" ? "true" : "false"}
+                  class="h-7 rounded-sm px-2.5 text-xs font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-background aria-pressed:text-foreground"
+                >
+                  {dir.toUpperCase()}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        <div data-slot="preview" dir={direction}>
+          <div
+            data-align={align}
+            data-example-script={hasScript ? name : undefined}
+            class:list={[
+              "preview relative flex min-h-72 w-full flex-wrap justify-center p-10 data-[align=center]:items-center data-[align=end]:items-end data-[align=start]:items-start",
+              className,
+            ]}
+          >
+            <Fragment set:html={markup} />
+          </div>
+        </div>
+        {!hideCode && (
+          <div data-slot="code" class="relative">
+            <Fragment set:html={code} />
+            <div data-slot="view-code" class="absolute inset-0 flex items-center justify-center pb-2">
+              <div class="absolute inset-0 bg-[linear-gradient(to_top,var(--color-code),color-mix(in_oklab,var(--color-code)_60%,transparent),transparent)]" />
+              <button
+                type="button"
+                data-view-code
+                aria-label={`View code of the ${name} example`}
+                class="relative z-10 inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-background px-3 text-sm font-medium text-foreground outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Icon name="code" class="size-3.5" />
+                View Code
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+      {caption && <figcaption class="text-center text-sm text-muted-foreground">{caption}</figcaption>}
+    </figure>
+  )
+}
+
+<script>
+  // Load the <script type="module"> of every example on the page (see the plugin in
+  // plugins/tecton-docs.mjs), once each.
+  const modules = import.meta.glob("/src/examples/*.html", { query: "?example-script" })
+  for (const el of document.querySelectorAll<HTMLElement>("[data-example-script]")) {
+    const name = el.dataset.exampleScript
+    const load = modules[`/src/examples/${name}.html`]
+    load?.().catch((error: unknown) => console.error(`[docs] example "${name}" failed:`, error))
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as Element | null
+    const viewCode = target?.closest?.("[data-view-code]")
+    if (viewCode) {
+      const preview = viewCode.closest<HTMLElement>("[data-slot=component-preview]")
+      preview?.setAttribute("data-code-open", "")
+      preview?.querySelector<HTMLElement>("[data-slot=code] pre")?.focus()
+      return
+    }
+    const dirButton = target?.closest?.<HTMLElement>("[data-preview-dir]")
+    if (dirButton) {
+      const preview = dirButton.closest<HTMLElement>("[data-slot=component-preview]")
+      const area = preview?.querySelector<HTMLElement>("[data-slot=preview]")
+      if (!preview || !area) return
+      area.dir = dirButton.dataset.previewDir ?? "rtl"
+      for (const button of preview.querySelectorAll<HTMLElement>("[data-preview-dir]"))
+        button.setAttribute("aria-pressed", String(button === dirButton))
+    }
+  })
+</script>

@@ -1,0 +1,66 @@
+---
+import "../styles/app.css"
+
+import CommandMenu from "../components/CommandMenu.astro"
+import SiteFooter from "../components/SiteFooter.astro"
+import SiteHeader from "../components/SiteHeader.astro"
+import { siteConfig } from "../lib/nav"
+
+interface Props {
+  title?: string
+  description?: string
+  /** Docs pages have no footer (the sidebar and TOC run to the bottom). */
+  footer?: boolean
+}
+
+const { title, description = siteConfig.description, footer = true } = Astro.props
+const pageTitle = title ? `${title} – ${siteConfig.title}` : siteConfig.title
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/manifest.json" />
+    <script is:inline>
+      // Before first paint: the stored mode (default dark), so the page never flashes.
+      ;(() => {
+        let theme = "dark"
+        try {
+          const stored = localStorage.getItem("tecton-docs:theme")
+          if (stored === "light" || stored === "dark") theme = stored
+          else if (stored === "system") theme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"
+        } catch {}
+        document.documentElement.classList.toggle("dark", theme === "dark")
+      })()
+    </script>
+  </head>
+  <body class="min-h-svh overscroll-none bg-background font-sans text-foreground antialiased">
+    <div data-slot="layout" class="relative z-10 flex min-h-svh flex-col bg-background">
+      <a
+        href="#content"
+        class="sr-only z-[60] rounded-md bg-background px-3 py-2 text-sm font-medium ring-2 ring-ring focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+      >
+        Skip to content
+      </a>
+      <SiteHeader />
+      <main id="content" tabindex="-1" class="flex min-h-0 flex-1 flex-col outline-none">
+        <slot />
+      </main>
+      {footer && <SiteFooter />}
+    </div>
+    <CommandMenu />
+    <script>
+      // Every tec-* element, on every page (examples need no imports).
+      import "virtual:tecton-components"
+      import "../scripts/site"
+    </script>
+  </body>
+</html>

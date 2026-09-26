@@ -1,0 +1,44 @@
+---
+/**
+ * Cards linking to every page of a docs section (generated from the content
+ * collection), for the section overview pages:
+ *
+ *   <SectionCards section="components" />
+ */
+import { getSectionPages } from "../../lib/nav"
+
+interface Props {
+  section: string
+}
+
+const { section } = Astro.props
+const pages = await getSectionPages(section)
+---
+
+<div data-not-typeset class="mt-8 grid gap-3 sm:grid-cols-2">
+  {
+    pages.map((page) => (
+      <a
+        href={page.url}
+        class="group flex flex-col gap-1.5 rounded-xl border border-border bg-card p-4 text-card-foreground outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <span class="flex items-center gap-2 text-sm font-medium">
+          {page.title}
+          {page.status && page.status !== "stable" && (
+            <span class="rounded-full border border-border px-1.5 text-[0.7rem] font-medium text-muted-foreground">{page.status}</span>
+          )}
+        </span>
+        <span class="line-clamp-2 text-sm text-muted-foreground">{page.description}</span>
+        {page.tags.length > 0 && (
+          <span class="mt-1 flex flex-wrap gap-1">
+            {page.tags.slice(0, 4).map((tag) => (
+              <code class="rounded bg-muted px-1 font-mono text-[0.7rem] text-muted-foreground">{`<${tag}>`}</code>
+            ))}
+            {page.tags.length > 4 && <span class="text-[0.7rem] text-muted-foreground">+{page.tags.length - 4}</span>}
+          </span>
+        )}
+      </a>
+    ))
+  }
+  {pages.length === 0 && <p class="text-sm text-muted-foreground">No pages in this section yet.</p>}
+</div>

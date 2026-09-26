@@ -1,0 +1,122 @@
+---
+/**
+ * The Tecton colour ramps (packages/wc/src/styles/palette.css): one row per family,
+ * one swatch per contrast step, painted with the live variable so it follows the
+ * page mode. A swatch copies its Tailwind class, CSS variable or current value.
+ */
+import { getTheme } from "../../lib/theme-css"
+
+const { families, steps, shades, vars } = getTheme()
+const modes = [
+  ["class", "Tailwind class"],
+  ["variable", "CSS variable"],
+  ["value", "Colour"],
+]
+const swatch = (name: string) => {
+  const key = `--tecton-palette-${name}`
+  const light = vars.light.get(key) ?? ""
+  const dark = vars.dark.get(key) ?? ""
+  return { name, key, light, dark }
+}
+---
+
+<div data-not-typeset data-palette-table class="my-6 flex flex-col gap-2">
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="text-xs font-medium text-muted-foreground" id="palette-copy-label">Click a colour to copy its</span>
+    <div role="radiogroup" aria-labelledby="palette-copy-label" class="flex items-center gap-1 rounded-md bg-muted p-0.5">
+      {
+        modes.map(([id, label], i) => (
+          <button
+            type="button"
+            role="radio"
+            data-palette-mode={id}
+            aria-checked={i === 0 ? "true" : "false"}
+            tabindex={i === 0 ? 0 : -1}
+            class="h-7 rounded-sm px-2.5 text-xs font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring aria-checked:bg-background aria-checked:text-foreground"
+          >
+            {label}
+          </button>
+        ))
+      }
+    </div>
+    <span role="status" aria-live="polite" data-palette-status class="min-h-4 font-mono text-xs text-success"></span>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="border-separate border-spacing-0.5 text-sm">
+      <thead>
+        <tr class="text-left text-muted-foreground">
+          <th class="pr-1 text-xs font-medium">family</th>
+          {steps.map((step) => <th class="w-5 text-center font-mono text-[8px] font-normal">{step}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {
+          [...families.map((family) => ({ label: family, cells: steps.map((step) => swatch(`${family}-${step}`)) })), { label: "shades", cells: shades.map(swatch) }].map((row) => (
+            <tr>
+              <td class="pr-1 font-mono text-[11px] whitespace-nowrap">{row.label}</td>
+              {row.cells.map((cell) => (
+                <td class="p-0">
+                  <button
+                    type="button"
+                    data-swatch={cell.name}
+                    data-light={cell.light}
+                    data-dark={cell.dark}
+                    aria-label={`Copy bg-${cell.name} (${cell.light} light, ${cell.dark} dark)`}
+                    title={`bg-${cell.name}\nvar(${cell.key})\nlight ${cell.light}\ndark ${cell.dark}`}
+                    class="flex size-5 cursor-pointer items-center justify-center rounded-xs outline-none transition-transform hover:relative hover:z-10 hover:scale-150 hover:shadow-md focus-visible:relative focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring"
+                    style={`background: var(${cell.key})`}
+                  />
+                </td>
+              ))}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  for (const table of document.querySelectorAll<HTMLElement>("[data-palette-table]")) {
+    let mode = "class"
+    const status = table.querySelector<HTMLElement>("[data-palette-status]")!
+    const radios = [...table.querySelectorAll<HTMLElement>("[data-palette-mode]")]
+    const select = (radio: HTMLElement) => {
+      mode = radio.dataset.paletteMode!
+      for (const r of radios) {
+        r.setAttribute("aria-checked", String(r === radio))
+        r.tabIndex = r === radio ? 0 : -1
+      }
+    }
+    table.addEventListener("keydown", (event) => {
+      const index = radios.indexOf(event.target as HTMLElement)
+      if (index === -1) return
+      const delta = event.key === "ArrowRight" || event.key === "ArrowDown" ? 1 : event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 0
+      if (!delta) return
+      event.preventDefault()
+      const next = radios[(index + delta + radios.length) % radios.length]
+      select(next)
+      next.focus()
+    })
+    let timer: ReturnType<typeof setTimeout> | undefined
+    table.addEventListener("click", async (event) => {
+      const target = event.target as HTMLElement
+      const radio = target.closest<HTMLElement>("[data-palette-mode]")
+      if (radio) return select(radio)
+      const swatch = target.closest<HTMLElement>("[data-swatch]")
+      if (!swatch) return
+      const name = swatch.dataset.swatch!
+      const dark = document.documentElement.classList.contains("dark")
+      const text =
+        mode === "class" ? `bg-${name}` : mode === "variable" ? `var(--tecton-palette-${name})` : (dark ? swatch.dataset.dark : swatch.dataset.light) ?? ""
+      try {
+        await navigator.clipboard.writeText(text)
+        status.textContent = `Copied ${text}`
+      } catch {
+        status.textContent = `Could not copy ${text}`
+      }
+      clearTimeout(timer)
+      timer = setTimeout(() => (status.textContent = ""), 2000)
+    })
+  }
+</script>

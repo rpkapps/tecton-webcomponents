@@ -1,0 +1,119 @@
+---
+/**
+ * Every --tec-* theme variable (packages/wc/src/styles/theme.css), grouped, with the
+ * Tecton token it points at, its resolved light and dark values and the mapping note
+ * (tokens/tecton.map.json).
+ *
+ *   <TokenTable />                       all groups
+ *   <TokenTable groups={["Status"]} />   some groups
+ */
+import { getTheme, getTokenNotes, isColor } from "../../lib/theme-css"
+
+interface Props {
+  groups?: string[]
+}
+
+const GROUPS: [string, RegExp][] = [
+  ["Surfaces & text", /^--tec-(background|foreground|card|popover|muted|accent|surface-alt)(-|$)/],
+  ["Actions", /^--tec-(primary|secondary|ghost|outline|link)(-|$)/],
+  ["Status", /^--tec-(success|warning|info|neutral|destructive)(-|$)/],
+  ["Borders & focus", /^--tec-(border|input|ring|focus-ring)(-|$)/],
+  ["Charts", /^--tec-chart-/],
+  ["Sidebar", /^--tec-sidebar/],
+  ["Component colours", /^--tec-(avatar|table|slider|progress)/],
+  ["Radius", /^--tec-radius/],
+  ["Typography", /^--tec-(font|text)/],
+  ["Shadows", /^--tec-shadow/],
+  ["Motion", /^--tec-(duration|ease)/],
+  ["Other", /./],
+]
+
+const { groups: only } = Astro.props
+const theme = getTheme()
+const notes = getTokenNotes()
+
+const grouped = new Map<string, string[]>()
+for (const name of theme.themeVars.keys()) {
+  const group = GROUPS.find(([, re]) => re.test(name))![0]
+  if (!grouped.has(group)) grouped.set(group, [])
+  grouped.get(group)!.push(name)
+}
+const sections = GROUPS.map(([title]) => ({ title, names: grouped.get(title) ?? [] })).filter(
+  (s) => s.names.length && (!only || only.includes(s.title)),
+)
+
+const badge: Record<string, string> = {
+  exact: "border-success/60 text-success",
+  approximated: "border-warning/60 text-warning",
+  derived: "border-info/60 text-info",
+}
+---
+
+{
+  sections.length === 0 ? (
+    <p class="text-sm text-muted-foreground">The theme stylesheet of @tecton/wc was not found.</p>
+  ) : (
+    <div data-not-typeset class="my-6 flex flex-col gap-8">
+      {sections.map((section) => (
+        <div class="overflow-x-auto">
+          <div class="mb-2 text-sm font-medium">{section.title}</div>
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-border text-left text-xs text-muted-foreground">
+                <th class="py-2 pr-4 font-medium">Variable / Tecton token</th>
+                <th class="py-2 pr-4 font-medium">Value</th>
+                <th class="py-2 font-medium">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {section.names.map((name) => {
+                const raw = theme.themeVars.get(name)!
+                const light = theme.resolveValue(theme.vars.light.get(name) ?? raw, "light")
+                const dark = theme.resolveValue(theme.vars.dark.get(name) ?? raw, "dark")
+                const mapping = notes.get(name)
+                const token = /^var\((--tecton-[\w-]+)\)$/.exec(raw)?.[1]
+                return (
+                  <tr class="border-b border-border-subtle align-top">
+                    <td class="max-w-64 py-2 pr-4 font-mono text-xs">
+                      <span class="block whitespace-nowrap">{name}</span>
+                      {token && <span class="block break-all text-muted-foreground">{token}</span>}
+                    </td>
+                    <td class="py-2 pr-4">
+                      <div class="flex flex-col gap-1 font-mono text-xs whitespace-nowrap">
+                        {light === dark ? (
+                          <span class="flex items-center gap-2">
+                            {isColor(light) && <span class="size-4 shrink-0 rounded-sm border border-border" style={`background:${light}`} />}
+                            <span class="max-w-64 truncate" title={light}>{light}</span>
+                          </span>
+                        ) : (
+                          [
+                            ["dark", dark],
+                            ["light", light],
+                          ].map(([mode, value]) => (
+                            <span class="flex items-center gap-2">
+                              <span class="w-8 text-[10px] text-muted-foreground uppercase">{mode}</span>
+                              {isColor(value) && <span class="size-4 shrink-0 rounded-sm border border-border" style={`background:${value}`} />}
+                              <span class="max-w-56 truncate" title={value}>{value}</span>
+                            </span>
+                          ))
+                        )}
+                      </div>
+                    </td>
+                    <td class="py-2 text-xs text-muted-foreground">
+                      {mapping?.confidence && (
+                        <span class:list={["mr-1.5 inline-flex h-5 items-center rounded-full border px-2 font-medium", badge[mapping.confidence] ?? "border-border"]}>
+                          {mapping.confidence}
+                        </span>
+                      )}
+                      {mapping?.note}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      ))}
+    </div>
+  )
+}

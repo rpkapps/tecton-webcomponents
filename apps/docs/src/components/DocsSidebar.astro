@@ -1,0 +1,68 @@
+---
+import type { NavSection } from "../lib/nav"
+
+interface Props {
+  sections: NavSection[]
+  pathname: string
+}
+
+const { sections, pathname } = Astro.props
+const current = pathname.replace(/\/$/, "") || "/"
+
+const statusDot: Record<string, string> = {
+  beta: "bg-info",
+  experimental: "bg-warning",
+  planned: "bg-muted-foreground",
+  deprecated: "bg-destructive",
+}
+---
+
+<aside
+  aria-label="Documentation"
+  class="sticky top-[calc(var(--header-height)+0.6rem)] z-30 hidden h-[calc(100svh-var(--header-height)-2rem)] w-(--sidebar-width) shrink-0 overflow-hidden overscroll-none lg:flex"
+>
+  <div
+    class="absolute top-12 right-2 bottom-0 w-px bg-[linear-gradient(to_bottom,transparent_0%,var(--tec-border)_10%,var(--tec-border)_90%,transparent_100%)]"
+    aria-hidden="true"
+  >
+  </div>
+  <nav
+    data-docs-sidebar
+    class="no-scrollbar scroll-fade flex w-56 flex-col gap-2 overflow-x-hidden overflow-y-auto pb-12 pl-2.5"
+  >
+    {
+      sections.map((section, i) => (
+        <div class:list={["flex flex-col gap-1 p-2", i === 0 && "pt-12"]}>
+          <div id={`sidebar-${section.id || "start"}`} class="flex h-8 items-center px-2 text-xs font-medium text-muted-foreground">
+            {section.title}
+          </div>
+          <ul class="flex flex-col gap-0.5" aria-labelledby={`sidebar-${section.id || "start"}`}>
+            {section.pages.map((page) => {
+              const active = current === page.url
+              return (
+                <li>
+                  <a
+                    href={page.url}
+                    aria-current={active ? "page" : undefined}
+                    data-active={active}
+                    class="relative flex h-[30px] w-fit items-center gap-2 rounded-md border border-transparent px-2 text-[0.8rem] font-medium text-foreground outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring data-[active=true]:border-accent data-[active=true]:bg-accent"
+                  >
+                    {page.isIndex && section.id ? "Overview" : page.label}
+                    {page.status && statusDot[page.status] && (
+                      <span
+                        class={`size-1.5 rounded-full ${statusDot[page.status]}`}
+                        title={page.status}
+                        aria-label={`(${page.status})`}
+                        role="img"
+                      />
+                    )}
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      ))
+    }
+  </nav>
+</aside>

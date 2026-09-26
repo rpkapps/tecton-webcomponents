@@ -1,0 +1,271 @@
+/* Docs-site stylesheet.
+ *
+ * The design system itself comes from @tecton/wc: tecton.css (tokens, palette, --tec-*
+ * theme) and the Tailwind preset (Tecton colours as utilities, stock palette reset).
+ *
+ * Rules for this file, so docs styling never leaks into the examples (which must look
+ * exactly as they do in an application):
+ * - Every rule lives in `@layer base` / `@layer components` or is a `@utility`.
+ * - Prose styling is the typeset system (typeset.css): it applies only inside `.typeset`
+ *   and skips every `[data-not-typeset]` subtree (previews, code, docs widgets).
+ * - No rule targets bare elements outside `.typeset`.
+ */
+@layer theme, tecton-base, base, components, utilities;
+
+@import "tailwindcss";
+/* TODO(packaging): switch to "@tecton/wc/tecton.css", "@tecton/wc/tailwind.css" and
+   "@tecton/wc/fonts.css" once the package exports them. */
+@import "../../node_modules/@tecton/wc/src/styles/tecton.css";
+@import "../../node_modules/@tecton/wc/src/styles/tailwind.css";
+@import "@fontsource/figtree/400.css";
+@import "@fontsource/figtree/500.css";
+@import "@fontsource/figtree/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "./typeset.css";
+
+@source "../content";
+@source "../examples";
+
+/* Docs-only tokens: surfaces for code blocks and callouts, and text selection. They
+   derive from the Tecton theme so both modes follow it. */
+@theme inline {
+  --breakpoint-3xl: 1600px;
+  --color-surface: var(--tec-card);
+  --color-surface-foreground: var(--tec-card-foreground);
+  --color-code: var(--tec-card);
+  --color-code-foreground: var(--tec-card-foreground);
+  --color-code-highlight: var(--tec-accent);
+  --color-code-number: var(--tec-muted-foreground);
+  --color-selection: var(--tec-primary);
+  --color-selection-foreground: var(--tec-primary-foreground);
+}
+
+@layer base {
+  :root {
+    --header-height: calc(var(--spacing) * 14);
+    --sidebar-width: calc(var(--spacing) * 72);
+    /* typeset.css reads the Tailwind colour variables; point them at the theme. */
+    --color-foreground: var(--tec-foreground);
+    --color-muted: var(--tec-muted);
+    --color-muted-foreground: var(--tec-muted-foreground);
+    --color-border: var(--tec-border);
+    --color-ring: var(--tec-ring);
+    --color-primary: var(--tec-primary);
+    --font-mono: var(--tec-font-mono);
+    --radius: var(--tec-radius-lg);
+  }
+  @media (width >= 64rem) {
+    :root {
+      --header-height: calc(var(--spacing) * 16);
+    }
+  }
+
+  /* Anchor jumps clear the sticky header. */
+  html {
+    scroll-padding-top: calc(var(--header-height) + 1rem);
+    overscroll-behavior-y: none;
+  }
+  body {
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+  /* Text selection of the docs chrome only: examples keep the browser default. */
+  :where(body :not([data-not-typeset], [data-not-typeset] *))::selection {
+    background-color: var(--color-selection);
+    color: var(--color-selection-foreground);
+  }
+}
+
+@utility container-wrapper {
+  @apply mx-auto w-full px-2;
+}
+
+@utility container {
+  @apply 3xl:max-w-screen-2xl mx-auto max-w-[1400px] px-4 lg:px-8;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility scroll-fade {
+  mask-image: linear-gradient(to bottom, transparent, black 1.5rem, black calc(100% - 3rem), transparent);
+}
+
+@utility extend-touch-target {
+  @media (pointer: coarse) {
+    @apply relative touch-manipulation after:absolute after:-inset-2;
+  }
+}
+
+@layer components {
+  /* Tecton typography: headings are weight 500 (Figtree Medium), not 600. */
+  .typeset :where(h1, h2, h3, h4) {
+    font-weight: 500;
+  }
+  .typeset :where(strong, b) {
+    font-weight: 500;
+  }
+
+  /* Heading anchors (Heading.astro). */
+  .typeset .heading-anchor {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration-line: none;
+  }
+  .typeset .heading-anchor:hover > span:first-child {
+    text-decoration-line: underline;
+    text-underline-offset: 4px;
+  }
+  .typeset .heading-anchor > span[aria-hidden] {
+    margin-inline-start: 0.5rem;
+    color: var(--tec-muted-foreground);
+    opacity: 0;
+  }
+  .typeset .heading-anchor:hover > span[aria-hidden],
+  .typeset .heading-anchor:focus-visible > span[aria-hidden] {
+    opacity: 1;
+  }
+
+  /* <Steps>: numbered h3 headings with a rail. */
+  .steps {
+    counter-reset: step;
+    border-inline-start: 1px solid var(--tec-border);
+    margin-inline-start: 1rem;
+    padding-inline-start: 2rem;
+  }
+  .typeset .steps > h3 {
+    position: relative;
+    counter-increment: step;
+    margin-block-start: 2rem;
+  }
+  .typeset .steps > h3:first-child {
+    margin-block-start: 1.5rem;
+  }
+  .steps > h3::before {
+    content: counter(step);
+    position: absolute;
+    inset-inline-start: calc(-2rem - 1.125rem);
+    top: -0.25rem;
+    display: inline-flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid var(--tec-background);
+    border-radius: 9999px;
+    background: var(--tec-muted);
+    font-family: var(--tec-font-mono);
+    font-size: var(--tec-text-sm);
+    font-weight: 500;
+  }
+  .typeset .steps > h3 + * {
+    margin-block-start: 0.5rem;
+  }
+
+  /* Code blocks: markdown fences, <CodeBlock> and <ComponentPreview> all render
+     <figure data-code-block> (src/lib/shiki-transformers.mjs). */
+  [data-code-block] {
+    position: relative;
+    margin-top: calc(var(--spacing) * 6);
+    margin-inline: -0.25rem;
+    overflow: hidden;
+    border-radius: var(--tec-radius-2xl);
+    background-color: var(--color-code);
+    color: var(--color-code-foreground);
+    font-size: var(--tec-text-sm);
+  }
+  [data-code-block]:has([data-code-block-title]) .copy-button {
+    top: calc(var(--spacing) * 1.5);
+  }
+  [data-code-block] pre {
+    margin: 0;
+    min-width: 0;
+    max-height: 32rem;
+    overflow: auto;
+    overscroll-behavior-x: contain;
+    background: transparent !important;
+    padding: 0.875rem 1rem;
+    padding-inline-end: 3rem;
+    font-family: var(--tec-font-mono);
+    font-size: var(--tec-text-sm);
+    line-height: 1.625;
+    outline: none;
+    scrollbar-width: none;
+  }
+  [data-code-block] pre:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--tec-ring);
+  }
+  [data-code-block] code {
+    display: grid;
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "calt" 0;
+  }
+  [data-code-block] [data-line] {
+    display: inline-block;
+    width: 100%;
+    min-height: 1lh;
+  }
+  [data-code-block-title] {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--tec-border) 30%, transparent);
+    padding: 0.625rem 1rem;
+    font-family: var(--tec-font-mono);
+    font-size: var(--tec-text-sm);
+    color: var(--color-code-foreground);
+  }
+
+  /* Shiki dual themes (defaultColor: false). */
+  .shiki,
+  .shiki span {
+    color: var(--shiki-light);
+  }
+  .dark .shiki,
+  .dark .shiki span,
+  [data-theme="dark"] .shiki,
+  [data-theme="dark"] .shiki span {
+    color: var(--shiki-dark);
+  }
+  .light .shiki,
+  .light .shiki span {
+    color: var(--shiki-light);
+  }
+
+  /* Copy buttons swap their icon after a copy. */
+  .copy-button .check-icon,
+  .copy-button[data-copied] .copy-icon {
+    display: none;
+  }
+  .copy-button[data-copied] .check-icon {
+    display: block;
+  }
+
+  /* <ComponentPreview>: collapsed code shows three lines under a fade. */
+  [data-slot="component-preview"] [data-code-block] {
+    margin: 0;
+    border-radius: 0;
+    border-top: 1px solid var(--tec-border);
+  }
+  [data-slot="component-preview"] [data-code-block] pre {
+    max-height: 18rem;
+  }
+  [data-slot="component-preview"]:not([data-code-open]) [data-code-block] pre {
+    max-height: 5.25rem;
+    overflow: hidden;
+  }
+  [data-slot="component-preview"]:not([data-code-open]) .copy-button {
+    display: none;
+  }
+  [data-slot="component-preview"][data-code-open] [data-slot="view-code"] {
+    display: none;
+  }
+}
