@@ -241,16 +241,18 @@ export const calendarStyles = css`
   .cell[data-unavailable] .day {
     color: inherit;
   }
+  /* The second line (e.g. a price) uses the muted text colour, which keeps 4.5:1 (a faded day colour does not). */
   .day > span {
     font-size: var(--tec-text-xs);
     line-height: var(--tec-text-xs--line-height);
-    opacity: 0.7;
+    color: var(--tec-muted-foreground);
   }
-  /* On the primary fill the dimmed line would fall below 4.5:1. */
+  /* On the primary fill: the fill's own text colour, slightly dimmed. */
   .cell[data-selection="single"] .day > span,
   .cell[data-selection="start"] .day > span,
   .cell[data-selection="end"] .day > span,
   .cell[data-selection="both"] .day > span {
+    color: inherit;
     opacity: 0.9;
   }
   .cell:not([data-disabled], [data-unavailable]):hover .day {
