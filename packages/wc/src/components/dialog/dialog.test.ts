@@ -226,9 +226,15 @@ describe("tec-dialog", () => {
     await open(el)
     el.hide()
     await el.updateComplete
+    const events = recordEvents(el, "tec-open-change")
     el.show()
     await el.updateComplete
     expect(dlg(el).open).toBe(true)
     expect(dlg(el).matches(":modal")).toBe(true)
+    // the (asynchronous) close event of the first close must not close the re-opened dialog
+    await aTimeout(50)
+    expect(el.open).toBe(true)
+    expect(dlg(el).open).toBe(true)
+    expect(events.events).toHaveLength(0)
   })
 })

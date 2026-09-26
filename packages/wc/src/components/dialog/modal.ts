@@ -250,6 +250,10 @@ export class TecModalElement extends TectonElement {
 
   /** The browser closed the dialog on its own (a close request that could not be cancelled). */
   #onNativeClose = () => {
+    // `close` is dispatched asynchronously: a stale one from our own close() can arrive after the
+    // dialog was re-opened. Only a dialog that is actually closed now was closed by the browser.
+    const dialog = this.dialog
+    if (!dialog || dialog.open) return
     if (this.open && this.#shown && this.modal) {
       this.#shown = false
       this.emit<ModalOpenChangeDetail>("tec-open-change", { detail: { open: false, reason: "escape" } })
