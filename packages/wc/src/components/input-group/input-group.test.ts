@@ -35,7 +35,7 @@ describe("tec-input-group", () => {
     expect(group.querySelector("tec-input-group-input")!.shadowRoot!.activeElement).toBe(input(group))
     expect(group.matches(":state(focused)")).toBe(true)
     expect(getComputedStyle(base(group)).boxShadow).not.toBe("none")
-    await userEvent.keyboard("{Tab}")
+    input(group).blur()
     await waitUntil(() => !group.matches(":state(focused)"))
   })
 
