@@ -23,7 +23,8 @@ export type CardSize = "default" | "sm"
  * The card sets `--tec-card-spacing` on itself (1.5rem, 1rem with `size="sm"`): it is the gap
  * between the parts, the card's block padding and the inline inset of every part. Override it on the
  * card (`style="--tec-card-spacing: 2rem"`), and use it in your own content to bleed to the edges
- * (`class="-mx-(--tec-card-spacing)"`).
+ * (`class="-mx-(--tec-card-spacing)"`). The element is the flex column of its parts, so layout classes on it
+ * (`gap-2`) apply.
  *
  * @summary Displays a card with header, content, and footer.
  *

@@ -50,7 +50,7 @@ Set `size="sm"` for a denser card: 16px spacing instead of 24px, and a smaller t
 
 ## Spacing
 
-Besides `size`, the `--tec-card-spacing` custom property sets the gap between the parts, the card's top and bottom padding and the inline inset of every part. Set it on the card, with a `style` attribute, a stylesheet or a Tailwind class such as `[--tec-card-spacing:2rem]`.
+Besides `size`, the `--tec-card-spacing` custom property sets the gap between the parts, the card's top and bottom padding and the inline inset of every part. The card itself is the flex column of its parts, so a `gap-*` class on it changes only the gap between them. Set it on the card, with a `style` attribute, a stylesheet or a Tailwind class such as `[--tec-card-spacing:2rem]`.
 
 <ComponentPreview name="card-spacing" class="h-[34rem]" />
 
