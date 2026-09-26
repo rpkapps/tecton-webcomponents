@@ -1,4 +1,4 @@
-import { ListEmptyBase, ListGroupBase, ListItemBase, ListLabelBase, ListSeparatorBase } from "../select/listbox-core.js"
+import { ListEmptyBase, ListGroupBase, ListItemBase, ListLabelBase, ListSeparatorBase } from "../../internal/listbox-core.js"
 
 /**
  * Selection is owned by the parent `tec-combobox`: the item is an `option` whose `aria-selected`

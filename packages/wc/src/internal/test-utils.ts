@@ -169,7 +169,7 @@ interface CdpAxNode {
   role?: { value: string }
   name?: { value: string }
   description?: { value: string }
-  properties?: { name: string; value: { value: unknown } }[]
+  properties?: { name: string; value: { type?: string; value?: unknown; relatedNodes?: { text?: string }[] } }[]
 }
 
 interface CdpDomNode {
@@ -190,10 +190,31 @@ function findProbe(node: CdpDomNode, token: string): CdpDomNode | undefined {
   return undefined
 }
 
+const utf8 = new TextDecoder("utf-8", { fatal: true })
+
+/**
+ * Chrome returns some string-valued AX properties (e.g. `valuetext` from `aria-valuetext`) as UTF-8
+ * bytes read as Latin-1 ("–" arrives as "\u00e2\u0080\u0093"). Re-decode such strings; anything
+ * that is not a valid UTF-8 byte sequence is returned unchanged.
+ */
+function repairUtf8(value: string): string {
+  if (!/[\u0080-\u00ff]/.test(value) || /[^\u0000-\u00ff]/.test(value)) return value
+  try {
+    return utf8.decode(Uint8Array.from(value, (c) => c.charCodeAt(0)))
+  } catch {
+    return value
+  }
+}
+
 function toAxNode(n: CdpAxNode): AxNode {
   const out: AxNode = { role: n.role?.value ?? "", name: n.name?.value ?? "" }
   if (n.description?.value) out.description = n.description.value
-  for (const p of n.properties ?? []) out[p.name] = String(p.value?.value)
+  for (const p of n.properties ?? []) {
+    const { value, relatedNodes } = p.value ?? {}
+    // Relation properties (labelledby, describedby, controls …) carry nodes, not a value: their text.
+    if (value === undefined && relatedNodes) out[p.name] = relatedNodes.map((r) => r.text ?? "").join(" ").trim()
+    else out[p.name] = typeof value === "string" ? repairUtf8(value) : String(value)
+  }
   return out
 }
 
@@ -258,5 +279,42 @@ export async function axTree(el: Element): Promise<string[]> {
       })
   } finally {
     el.removeAttribute("data-ax-probe")
+  }
+}
+
+/**
+ * The element Chrome's accessibility tree reports as the `aria-activedescendant` of `el` (resolved
+ * through element reflection and shadow roots), found among `candidates`; `null` when none.
+ *
+ * ```ts
+ * expect(await axActiveDescendant(input, items)).toBe(items[1])
+ * ```
+ */
+export async function axActiveDescendant<T extends Element>(el: Element, candidates: T[]): Promise<T | null> {
+  const session = cdp()
+  const tokens = new Map<string, Element>()
+  const all = [el, ...candidates]
+  all.forEach((c, i) => {
+    const token = `ad${i}-${Math.random().toString(36).slice(2)}`
+    c.setAttribute("data-ax-probe", token)
+    tokens.set(token, c)
+  })
+  try {
+    const { root } = (await session.send("DOM.getDocument", { depth: -1, pierce: true })) as { root: CdpDomNode }
+    const ids = new Map<number, Element>()
+    for (const [token, element] of tokens) {
+      const node = findProbe(root, token)
+      if (node) ids.set(node.backendNodeId, element)
+    }
+    const own = [...ids].find(([, e]) => e === el)?.[0]
+    if (own === undefined) throw new Error("axActiveDescendant: element not found")
+    const { nodes } = (await session.send("Accessibility.getPartialAXTree", { backendNodeId: own, fetchRelatives: false })) as {
+      nodes: { properties?: { name: string; value: { relatedNodes?: { backendDOMNodeId: number }[] } }[] }[]
+    }
+    const prop = nodes[0]?.properties?.find((p) => p.name === "activedescendant")
+    const target = prop?.value.relatedNodes?.[0]?.backendDOMNodeId
+    return target === undefined ? null : ((ids.get(target) as T | undefined) ?? null)
+  } finally {
+    for (const c of all) c.removeAttribute("data-ax-probe")
   }
 }

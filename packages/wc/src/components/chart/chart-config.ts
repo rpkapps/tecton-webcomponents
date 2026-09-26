@@ -118,6 +118,4 @@ export function formatValue(value: unknown, locale?: string): string {
 }
 
 /** The language of `el` (nearest `lang` attribute), or undefined for the browser default. */
-export function localeOf(el: Element): string | undefined {
-  return el.closest("[lang]")?.getAttribute("lang") || undefined
-}
+export { localeOf } from "../../internal/locale.js"

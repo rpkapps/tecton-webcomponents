@@ -44,6 +44,14 @@ class TestPicker extends FormControlMixin(TectonElement) {
 }
 defineElement("test-picker", TestPicker)
 
+/** Manages its inner control's name itself: `aria-label` is not delegated. */
+class TestNamedInput extends TestInput {
+  protected override get ariaDelegationExclude(): readonly string[] {
+    return ["aria-label"]
+  }
+}
+defineElement("test-named-input", TestNamedInput)
+
 const inputOf = (el: TestInput) => el.shadowRoot!.querySelector("input")!
 
 describe("FormControlMixin", () => {
@@ -121,6 +129,15 @@ describe("FormControlMixin", () => {
     expect(await axNode(inputOf(root.querySelector("#zip")!))).toMatchObject({ name: "Zip code" })
     await userEvent.click(root.querySelector("label")!)
     expect(root.querySelector("#city")!.shadowRoot!.activeElement).toBe(inputOf(root.querySelector("#city")!))
+  })
+
+  it("ariaDelegationExclude keeps attributes the component manages off the inner control", async () => {
+    const el = await fixture<TestNamedInput>(html`<test-named-input aria-label="Host name" aria-describedby="d"></test-named-input>`)
+    expect(inputOf(el).hasAttribute("aria-label")).toBe(false)
+    el.setAttribute("aria-expanded", "true")
+    await el.updateComplete
+    await Promise.resolve()
+    expect(inputOf(el).getAttribute("aria-expanded")).toBe("true")
   })
 
   it("fieldset disabled: isDisabled, :disabled, not submitted, inner control disabled", async () => {

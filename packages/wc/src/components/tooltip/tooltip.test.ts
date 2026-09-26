@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it } from "vitest"
 import { userEvent } from "vitest/browser"
 import "../button/define.js"
 import { aTimeout, animationsFinished, axNode, expectAccessible, fixture, recordEvents, waitUntil } from "../../internal/test-utils.js"
-import { resetHoverDelay } from "./hover-delay.js"
+import { resetHoverDelay } from "../../internal/hover-delay.js"
 import type { TecTooltip } from "./tooltip.js"
 import "./define.js"
 

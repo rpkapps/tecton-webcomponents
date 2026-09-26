@@ -13,11 +13,11 @@ import { PopupController, popupStyles, type PopupAlign, type PopupCloseReason, t
 import { HasSlotController } from "../../internal/slot.js"
 import { hostStyles, srOnly } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { filterConverter, observeCollection, syncCollection, type CollectionFilter, type CollectionTags } from "../select/listbox-core.js"
+import { filterConverter, observeCollection, syncCollection, type CollectionFilter, type CollectionTags } from "../../internal/listbox-core.js"
 import type { TecComboboxItem } from "./combobox-item.js"
 import { comboboxStyles } from "./combobox.styles.js"
 
-export type { CollectionFilter, FilterFunction, FilterMode } from "../select/listbox-core.js"
+export type { CollectionFilter, FilterFunction, FilterMode } from "../../internal/listbox-core.js"
 export type { PopupAlign, PopupSide } from "../../internal/popup.js"
 
 /** When the popup opens: while typing (default), on focus, or only from the arrow keys / button. */

@@ -74,6 +74,35 @@ export function getTabbables(container: Element | ShadowRoot): HTMLElement[] {
   return out
 }
 
+const FOCUSABLE = "button, a[href], input:not([type=hidden]), select, textarea, [tabindex], [contenteditable]"
+
+/**
+ * The element that actually takes focus for `el`: the native control inside a host that delegates
+ * focus (`tec-button` → its `<button>`, recursively), `el` itself when it is focusable, else the first
+ * such element among its light children (a wrapper around a slotted trigger). `null` when nothing is
+ * focusable (e.g. not rendered yet).
+ *
+ * Put a roving `tabindex` on this element rather than on a wrapper host (see
+ * `RovingFocusOptions.focusTarget`): a host with `tabindex` becomes a focusable generic node, and a
+ * host with a negative `tabindex` takes its whole flat subtree out of the Tab order.
+ */
+export function focusTargetOf(el: Element): HTMLElement | null {
+  const root = el.shadowRoot
+  if (root?.delegatesFocus) {
+    for (const child of root.querySelectorAll("*")) {
+      const inner = child.matches(FOCUSABLE) || child.shadowRoot?.delegatesFocus ? focusTargetOf(child) : null
+      if (inner) return inner
+    }
+    return null
+  }
+  if (el.matches(FOCUSABLE)) return el as HTMLElement
+  for (const child of el.children) {
+    const inner = focusTargetOf(child)
+    if (inner) return inner
+  }
+  return null
+}
+
 /**
  * Moves focus to the first tabbable element inside `container`; falls back to `container` itself
  * (which then needs `tabindex="-1"`). Returns the element that received focus.

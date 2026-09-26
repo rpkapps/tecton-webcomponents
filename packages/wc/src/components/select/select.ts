@@ -3,7 +3,7 @@ import { property, query, state } from "lit/decorators.js"
 import { live } from "lit/directives/live.js"
 import { ChevronDown, Search } from "lucide"
 import { animationStyles, popupMotion } from "../../internal/animations.js"
-import { AriaDelegateController, resolveIdRefs } from "../../internal/aria.js"
+import { resolveIdRefs } from "../../internal/aria.js"
 import { FormControlMixin, requiredValidator, type FormValue, type Validator } from "../../internal/form-control.js"
 import { icon } from "../../internal/icons.js"
 import { ListNavigationController } from "../../internal/list-navigation.js"
@@ -11,11 +11,12 @@ import { PopupController, popupStyles, type PopupAlign, type PopupCloseReason, t
 import { hostStyles, srOnly } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
 import { Typeahead } from "../../internal/typeahead.js"
-import { cloneItemContent, filterConverter, observeCollection, syncCollection, type CollectionFilter, type CollectionTags } from "./listbox-core.js"
+import { localeOf } from "../../internal/locale.js"
+import { cloneItemContent, filterConverter, observeCollection, syncCollection, type CollectionFilter, type CollectionTags } from "../../internal/listbox-core.js"
 import type { TecSelectItem } from "./select-item.js"
 import { selectStyles } from "./select.styles.js"
 
-export type { CollectionFilter, FilterFunction, FilterMode } from "./listbox-core.js"
+export type { CollectionFilter, FilterFunction, FilterMode } from "../../internal/listbox-core.js"
 export type { PopupAlign, PopupSide } from "../../internal/popup.js"
 
 /** Trigger surface. */
@@ -157,7 +158,6 @@ export class TecSelect extends FormControlMixin(TectonElement) {
 
   constructor() {
     super()
-    new AriaDelegateController(this, { target: () => this._button, exclude: ["aria-label", "aria-labelledby", "aria-invalid"] })
     this.addEventListener("click", this.#onHostClick)
   }
 
@@ -200,6 +200,16 @@ export class TecSelect extends FormControlMixin(TectonElement) {
   }
 
   // ---------------------------------------------------------------- form
+  /** The trigger: receives the host's delegated ARIA, `aria-invalid` and the validation anchor. */
+  protected override get formControl(): HTMLElement | null {
+    return this._button ?? null
+  }
+
+  /** The trigger is named "<value> <label>" by `#syncAria()`. */
+  protected override get ariaDelegationExclude(): readonly string[] {
+    return ["aria-label", "aria-labelledby"]
+  }
+
   protected override get validators(): Validator<TecSelect>[] {
     return [requiredValidator<TecSelect>((el) => el.values.length === 0, "select")]
   }
@@ -274,8 +284,6 @@ export class TecSelect extends FormControlMixin(TectonElement) {
     list.ariaLabelledByElements = labels.length ? labels : null
     list.ariaLabel = labels.length ? null : this.placeholder
     button.ariaControlsElements = [list]
-    if (this.showInvalid) button.setAttribute("aria-invalid", "true")
-    else button.removeAttribute("aria-invalid")
     if (this._search) this._search.ariaControlsElements = [list]
   }
 
@@ -424,7 +432,7 @@ export class TecSelect extends FormControlMixin(TectonElement) {
     let value: unknown
     if (!selected.length) value = this.placeholder
     else if (!this.multiple) value = cloneItemContent(selected[0]!)
-    else value = new Intl.ListFormat(this.closest<HTMLElement>("[lang]")?.lang || undefined, { type: "conjunction" }).format(selected.map((i) => i.textValue))
+    else value = new Intl.ListFormat(localeOf(this), { type: "conjunction" }).format(selected.map((i) => i.textValue))
     return html`<button
         class="trigger"
         part="trigger"

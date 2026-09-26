@@ -3,7 +3,7 @@ import { property } from "lit/decorators.js"
 import { uniqueId } from "../../internal/id.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { findDescendant, isLabelable, updateIdRefs } from "./labelable.js"
+import { findDescendant, isLabelable, updateIdRefs } from "../../internal/labelable.js"
 import { labelStyles } from "./label.styles.js"
 
 /**

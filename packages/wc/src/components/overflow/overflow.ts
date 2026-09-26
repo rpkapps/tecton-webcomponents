@@ -3,7 +3,7 @@ import { property, query, state } from "lit/decorators.js"
 import { Check, ChevronRight, Ellipsis } from "lucide"
 import { animationStyles, popupMotion } from "../../internal/animations.js"
 import { horizontalStep } from "../../internal/direction.js"
-import { containsFlat, deepActiveElement } from "../../internal/focus.js"
+import { containsFlat, deepActiveElement, focusTargetOf } from "../../internal/focus.js"
 import { icon } from "../../internal/icons.js"
 import { uniqueId } from "../../internal/id.js"
 import { PopupController, popupStyles } from "../../internal/popup.js"
@@ -41,30 +41,6 @@ type Entry =
 
 /** Size assumed for an icon-only control (and the More button) before it has been measured. */
 const ICON_ONLY = 32
-
-const FOCUSABLE = "button, a[href], input:not([type=hidden]), select, textarea, [tabindex], [contenteditable]"
-
-/**
- * The element that takes focus for `el`, looking through hosts that delegate focus (the native
- * control inside a `tec-button`, say). Roving tabindex goes on that element, so a host never becomes a
- * focusable generic node of its own.
- */
-function focusTarget(el: Element): HTMLElement | null {
-  const root = el.shadowRoot
-  if (root?.delegatesFocus) {
-    for (const child of root.querySelectorAll("*")) {
-      const inner = child.matches(FOCUSABLE) || child.shadowRoot?.delegatesFocus ? focusTarget(child) : null
-      if (inner) return inner
-    }
-    return null
-  }
-  if (el.matches(FOCUSABLE)) return el as HTMLElement
-  for (const child of el.children) {
-    const inner = focusTarget(child)
-    if (inner) return inner
-  }
-  return null
-}
 
 function isTextField(el: Element | undefined): boolean {
   if (!el) return false
@@ -656,7 +632,7 @@ export class TecOverflow extends TectonElement implements OverflowRowLike {
     this.#roving.update()
     if (focusTrigger) this.#trigger?.focus()
     if (returning) {
-      const target = focusTarget(returning)
+      const target = focusTargetOf(returning)
       // The menu closes first (it would restore focus to its button), then the item takes focus.
       void this.updateComplete.then(() => target?.focus())
     }
@@ -689,10 +665,10 @@ export class TecOverflow extends TectonElement implements OverflowRowLike {
     for (const entry of this.#entries()) {
       if (entry.kind === "divider" || entry.kind === "spacer") continue
       if (entry.kind === "item" && this.#hidden.has(entry.el)) continue
-      const target = focusTarget(entry.el)
+      const target = focusTargetOf(entry.el)
       if (target) stops.push(target)
     }
-    const trigger = this.#trigger ? focusTarget(this.#trigger) : null
+    const trigger = this.#trigger ? focusTargetOf(this.#trigger) : null
     if (this.#hidden.size && trigger) stops.push(trigger)
     return stops
   }

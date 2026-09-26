@@ -89,6 +89,37 @@ describe("tec-item", () => {
     expect(getComputedStyle(first!).rowGap).toBe("0px")
   })
 
+  it("upgrades parent-first (HTML parsed before its children upgrade) without errors", async () => {
+    // innerHTML upgrades in tree order: tec-item connects while its tec-item-content children are
+    // still plain HTMLElements (this threw "content.requestUpdate is not a function").
+    const errors: unknown[] = []
+    const onError = (event: ErrorEvent) => errors.push(event.error ?? event.message)
+    window.addEventListener("error", onError)
+    try {
+      const root = await fixture<HTMLElement>(`<div class="flex w-full max-w-xs flex-col gap-4">
+        <tec-item variant="muted">
+          <tec-item-media><span>*</span></tec-item-media>
+          <tec-item-content><tec-item-title>Processing payment...</tec-item-title></tec-item-content>
+          <tec-item-content><span>$100.00</span></tec-item-content>
+        </tec-item>
+      </div>`)
+      await nextFrame()
+      const [first, second] = [...root.querySelectorAll("tec-item-content")]
+      expect(second!.matches(":state(after-content)")).toBe(true)
+      expect(first!.matches(":state(after-content)")).toBe(false)
+      // Content added later is re-evaluated by the item.
+      const third = document.createElement("tec-item-content")
+      root.querySelector("tec-item")!.insertBefore(third, first!)
+      await nextFrame()
+      await nextFrame()
+      expect(first!.matches(":state(after-content)")).toBe(true)
+      expect(third.matches(":state(after-content)")).toBe(false)
+    } finally {
+      window.removeEventListener("error", onError)
+    }
+    expect(errors).toEqual([])
+  })
+
   it("puts header and footer on full-width rows", async () => {
     const item = await fixture<TecItem>(html`<tec-item style="width: 400px">
       <tec-item-header>H</tec-item-header>

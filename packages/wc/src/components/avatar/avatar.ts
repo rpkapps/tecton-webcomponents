@@ -3,7 +3,7 @@ import { property, query, state } from "lit/decorators.js"
 import { ifDefined } from "lit/directives/if-defined.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { LightDomObserver } from "../card/light-dom-observer.js"
+import { LightDomObserver } from "../../internal/light-dom-observer.js"
 import {
   avatarBadgeStyles,
   avatarFallbackStyles,

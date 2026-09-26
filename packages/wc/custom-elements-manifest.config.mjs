@@ -5,7 +5,7 @@
  * JSDoc of each public property.
  */
 export default {
-  globs: ["src/components/**/*.ts", "src/internal/tecton-element.ts", "src/internal/form-control.ts"],
+  globs: ["src/components/**/*.ts", "src/internal/tecton-element.ts", "src/internal/form-control.ts", "src/internal/listbox-core.ts"],
   exclude: ["src/**/*.test.ts", "src/**/*.styles.ts"],
   outdir: ".",
   litelement: true,

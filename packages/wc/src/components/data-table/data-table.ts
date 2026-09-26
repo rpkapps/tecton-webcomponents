@@ -30,6 +30,7 @@ import { PopupController, popupStyles } from "../../internal/popup.js"
 import { RovingFocusController } from "../../internal/roving-focus.js"
 import { hostStyles, srOnly } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
+import { localeOf } from "../../internal/locale.js"
 import { adoptLightStyles, type TableDensity, type TecTable } from "../table/table.js"
 import { tableLightStyles } from "../table/table.styles.js"
 import type {
@@ -563,7 +564,7 @@ export class TecDataTable<T extends DataTableRow = DataTableRow> extends TectonE
   /* -------------------------------------------------------------- rendering */
 
   #lang(): string | undefined {
-    return this.closest("[lang]")?.getAttribute("lang") || undefined
+    return localeOf(this)
   }
 
   #renderHeaderContent(column: DataTableColumn<T>, tcol: AnyColumn): unknown {

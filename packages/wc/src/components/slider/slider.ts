@@ -7,6 +7,7 @@ import { FocusVisibleController } from "../../internal/focus.js"
 import { FormControlMixin, type FormValue } from "../../internal/form-control.js"
 import { hostStyles, srOnly } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
+import { localeOf } from "../../internal/locale.js"
 import { sliderStyles } from "./slider.styles.js"
 
 export type SliderOrientation = "horizontal" | "vertical"
@@ -99,7 +100,6 @@ export class TecSlider extends FormControlMixin(TectonElement) {
   }
 
   /** The current values as a comma-separated string (`"25,75"`); setting it sets `values`. */
-  // @ts-expect-error TS2611 — the mixin types `value` as a field; overriding it with an accessor is fine at runtime.
   override get value(): string {
     return this.values.join(",")
   }
@@ -200,7 +200,7 @@ export class TecSlider extends FormControlMixin(TectonElement) {
   }
 
   #format(value: number): string {
-    const lang = this.closest("[lang]")?.getAttribute("lang") || undefined
+    const lang = localeOf(this)
     try {
       return new Intl.NumberFormat(lang, this.formatOptions).format(value)
     } catch {

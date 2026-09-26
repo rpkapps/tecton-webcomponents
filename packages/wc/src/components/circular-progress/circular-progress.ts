@@ -1,5 +1,6 @@
 import { html, nothing, svg, type PropertyValues } from "lit"
 import { property } from "lit/decorators.js"
+import { formatRangeValue } from "../../internal/locale.js"
 import { HasSlotController } from "../../internal/slot.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
@@ -12,28 +13,6 @@ export type CircularProgressColor = "default" | "foreground" | "success" | "warn
 
 const RADIUS = 20
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
-
-/** The language of `el` (closest `lang`, crossing shadow roots), for `Intl` formatting. */
-export function localeOf(el: Element): string | undefined {
-  let node: Node | null = el
-  while (node) {
-    if (node instanceof Element) {
-      const lang = node.getAttribute("lang")
-      if (lang) return lang
-    }
-    node = node.parentNode ?? (node instanceof ShadowRoot ? node.host : null)
-  }
-  return undefined
-}
-
-/** Formats `value` in the range `min`–`max` like React Aria's progress bar / meter value text. */
-export function formatRangeValue(el: Element, value: number, min: number, max: number, options: Intl.NumberFormatOptions | null | undefined): string {
-  const opts = options ?? { style: "percent" }
-  const clamped = Math.min(max, Math.max(min, value))
-  const range = max - min
-  const share = range > 0 ? (clamped - min) / range : 0
-  return new Intl.NumberFormat(localeOf(el), opts).format(opts.style === "percent" ? share : clamped)
-}
 
 /**
  * The host is the `progressbar` (ElementInternals): `aria-valuenow`/`min`/`max` and an

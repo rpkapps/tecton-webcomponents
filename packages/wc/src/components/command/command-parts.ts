@@ -4,7 +4,7 @@ import { Check } from "lucide"
 import { icon } from "../../internal/icons.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { ListEmptyBase, ListGroupBase, ListItemBase, ListSeparatorBase } from "../select/listbox-core.js"
+import { ListEmptyBase, ListGroupBase, ListItemBase, ListSeparatorBase } from "../../internal/listbox-core.js"
 
 /** How `tec-command-item`s of a list are checked: not at all, one at a time, or independently. */
 export type CommandSelectionMode = "none" | "single" | "multiple"
@@ -57,7 +57,7 @@ export class TecCommandList extends TectonElement {
     super.willUpdate(changed)
     this.internals.role = "menu"
     this.internals.ariaLabel = this.label || null
-    if (changed.has("selectionMode")) for (const item of this.querySelectorAll<TecCommandItem>("tec-command-item")) item.requestUpdate()
+    if (changed.has("selectionMode")) for (const item of this.querySelectorAll<Element & Partial<Pick<TecCommandItem, "requestUpdate">>>("tec-command-item")) item.requestUpdate?.()
   }
 
   protected override render() {

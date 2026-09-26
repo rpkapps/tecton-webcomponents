@@ -1,9 +1,8 @@
 import { html } from "lit"
 import { describe, expect, it, vi } from "vitest"
 import { userEvent } from "vitest/browser"
-import { aTimeout, animationsFinished, axNode, axTree, expectAccessible, fixture, recordEvents, waitUntil } from "../../internal/test-utils.js"
-import { axActiveDescendant } from "./listbox-test-utils.js"
-import { matchesFilter } from "./listbox-core.js"
+import { axActiveDescendant, aTimeout, animationsFinished, axNode, axTree, expectAccessible, fixture, recordEvents, waitUntil } from "../../internal/test-utils.js"
+import { matchesFilter } from "../../internal/listbox-core.js"
 import type { TecSelect } from "./select.js"
 import "./define.js"
 

@@ -17,9 +17,9 @@
 import { css, html, nothing, type CSSResultGroup, type PropertyValues } from "lit"
 import { property } from "lit/decorators.js"
 import { Check } from "lucide"
-import { icon } from "../../internal/icons.js"
-import { hostStyles, slottedIconStyles } from "../../internal/styles.js"
-import { TectonElement } from "../../internal/tecton-element.js"
+import { icon } from "./icons.js"
+import { hostStyles, slottedIconStyles } from "./styles.js"
+import { TectonElement } from "./tecton-element.js"
 
 // ---------------------------------------------------------------------------------------- filter
 

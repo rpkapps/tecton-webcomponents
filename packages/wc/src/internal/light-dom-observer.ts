@@ -10,7 +10,7 @@
  * #children = new LightDomObserver(this, () => this.toggleState("has-action", !!this.querySelector(":scope > tec-card-action")))
  * ```
  *
- * Used by the card, item and avatar families. (Candidate for `src/internal/`.)
+ * Used by the card, item and avatar families.
  */
 import type { ReactiveController, ReactiveControllerHost } from "lit"
 

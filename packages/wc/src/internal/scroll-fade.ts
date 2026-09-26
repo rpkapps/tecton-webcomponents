@@ -1,5 +1,6 @@
 /**
- * Scroll-position-aware edge fades for an element that is itself a scroll container (the
+ * @module scroll-fade
+ * `ScrollFadeController` — scroll-position-aware edge fades for an element that is itself a scroll container (the
  * `scroll-fade` utility behaviour, for shadow roots).
  *
  * The utility eases each fade in with a scroll-driven animation of registered custom properties;
@@ -11,7 +12,7 @@
  * ```
  *
  * Each fade grows to `min(12%, 2.5rem)` over the first 6rem of scroll away from its edge.
- * @internal
+ * Used by the attachment and message-scroller families.
  */
 import type { ReactiveController, ReactiveControllerHost } from "lit"
 

@@ -16,7 +16,7 @@ import {
   attachmentTitleStyles,
   attachmentTriggerStyles,
 } from "./attachment.styles.js"
-import { ScrollFadeController } from "./scroll-fade.js"
+import { ScrollFadeController } from "../../internal/scroll-fade.js"
 
 export type AttachmentState = "idle" | "uploading" | "processing" | "error" | "done"
 export type AttachmentSize = "default" | "sm" | "xs"

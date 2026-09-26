@@ -11,7 +11,7 @@ import {
   cardStyles,
   cardTitleStyles,
 } from "./card.styles.js"
-import { LightDomObserver } from "./light-dom-observer.js"
+import { LightDomObserver } from "../../internal/light-dom-observer.js"
 
 export type CardSize = "default" | "sm"
 

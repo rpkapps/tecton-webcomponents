@@ -3,14 +3,10 @@ import { property } from "lit/decorators.js"
 import { styleMap } from "lit/directives/style-map.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
+import { localeOf } from "../../internal/locale.js"
 import { progressLabelStyles, progressStyles, progressValueStyles } from "./progress.styles.js"
 
 const clamp = (n: number, min: number, max: number) => Math.min(Math.max(n, min), max)
-
-/** The language of `el`: its closest `lang` attribute, else the browser's. */
-function localeOf(el: Element): string {
-  return el.closest("[lang]")?.getAttribute("lang") || navigator.language || "en"
-}
 
 /**
  * Implements the WAI-ARIA `progressbar` role on the element itself: `aria-valuenow`, `-valuemin`,

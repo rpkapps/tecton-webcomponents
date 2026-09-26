@@ -1,5 +1,8 @@
 import { defineElement } from "../../internal/define.js"
+import "../avatar/define.js"
 import "../button/define.js"
+import "../shortcuts/define.js"
+import "../tooltip/define.js"
 import {
   TecAppShell,
   TecAppShellActions,
@@ -29,9 +32,10 @@ defineElement("tec-app-shell-command-trigger", TecAppShellCommandTrigger)
 defineElement("tec-app-shell-divider", TecAppShellDivider)
 defineElement("tec-app-shell-overflow-trigger", TecAppShellOverflowTrigger)
 defineElement("tec-app-shell-user-menu-trigger", TecAppShellUserMenuTrigger)
-defineElement("tec-app-shell-split", TecAppShellSplit)
+// Split parts first: the split drives its panels and handles.
 defineElement("tec-app-shell-split-panel", TecAppShellSplitPanel)
 defineElement("tec-app-shell-split-handle", TecAppShellSplitHandle)
+defineElement("tec-app-shell-split", TecAppShellSplit)
 
 export {
   TecAppShell,
@@ -52,3 +56,4 @@ export {
   TecAppShellSplitPanel,
   TecAppShellUserMenuTrigger,
 }
+export type { SplitLayoutChangeDetail, SplitOrientation } from "./app-shell-split.js"

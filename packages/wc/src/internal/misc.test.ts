@@ -10,7 +10,7 @@ import { uniqueId } from "./id.js"
 import { isScrollLocked, lockScroll, unlockScroll } from "./scroll-lock.js"
 import { HasSlotController } from "./slot.js"
 import { TectonElement } from "./tecton-element.js"
-import { aTimeout, fixture } from "./test-utils.js"
+import { aTimeout, axNode, axTree, fixture } from "./test-utils.js"
 
 class TestSlots extends TectonElement {
   slots = new HasSlotController(this, "icon", "[default]", { states: true })
@@ -146,5 +146,35 @@ describe("internal helpers", () => {
     el.removeAttribute("aria-label")
     await aTimeout()
     expect(button.hasAttribute("aria-label")).toBe(false)
+  })
+})
+
+describe("test-utils", () => {
+  it("axNode / axTree decode non-ASCII names", async () => {
+    const root = await fixture<HTMLElement>(`<div><button aria-label="1 – 10 · Ärger ✓ 日本 😀">x</button></div>`)
+    const button = root.querySelector("button")!
+    expect((await axNode(button)).name).toBe("1 – 10 · Ärger ✓ 日本 😀")
+    expect(await axTree(root)).toEqual(["button: 1 – 10 · Ärger ✓ 日本 😀"])
+  })
+
+  it("axNode decodes non-ASCII string properties (aria-valuetext) and lists relation targets", async () => {
+    const root = await fixture<HTMLElement>(
+      `<div><span id="l">Größe</span><div role="spinbutton" tabindex="0" aria-labelledby="l" aria-valuenow="9" aria-valuetext="9 – September · Größe ✓"></div></div>`
+    )
+    expect(await axNode(root.querySelector("[role=spinbutton]")!)).toMatchObject({
+      name: "Größe",
+      valuetext: "9 – September · Größe ✓",
+      labelledby: "Größe",
+    })
+  })
+
+  it("axNode decodes non-ASCII names in a large document", async () => {
+    const filler = Array.from({ length: 3000 }, (_, i) => `<span title="filler – ${i}">é ${i}</span>`).join("")
+    const root = await fixture<HTMLElement>(`<div>${filler}<button aria-label="1 – 10">x</button><p>Größe – ok</p></div>`)
+    expect((await axNode(root.querySelector("button")!)).name).toBe("1 – 10")
+    const p = root.querySelector("p")!
+    p.setAttribute("role", "note")
+    p.setAttribute("aria-label", p.textContent!)
+    expect((await axNode(p)).name).toBe("Größe – ok")
   })
 })

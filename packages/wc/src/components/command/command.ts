@@ -3,11 +3,11 @@ import { property } from "lit/decorators.js"
 import { ListNavigationController } from "../../internal/list-navigation.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { filterConverter, observeCollection, syncCollection, type CollectionFilter, type CollectionTags } from "../select/listbox-core.js"
+import { filterConverter, observeCollection, syncCollection, type CollectionFilter, type CollectionTags } from "../../internal/listbox-core.js"
 import type { TecCommandInput } from "./command-input.js"
 import type { TecCommandItem, TecCommandList } from "./command-parts.js"
 
-export type { CollectionFilter, FilterFunction, FilterMode } from "../select/listbox-core.js"
+export type { CollectionFilter, FilterFunction, FilterMode } from "../../internal/listbox-core.js"
 
 /** Detail of `tec-select`. */
 export interface CommandSelectDetail {

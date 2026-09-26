@@ -4,7 +4,7 @@ import { ArrowDown } from "lucide"
 import { icon } from "../../internal/icons.js"
 import { hostStyles, srOnly } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { ScrollFadeController } from "../attachment/scroll-fade.js"
+import { ScrollFadeController } from "../../internal/scroll-fade.js"
 import { TecButton, type ButtonSize, type ButtonVariant } from "../button/button.js"
 import {
   messageScrollerButtonStyles,

@@ -6,7 +6,7 @@ import { setAriaElements } from "../../internal/aria.js"
 import { PopupController, popupStyles, type PopupAlign, type PopupSide } from "../../internal/popup.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { describeTrigger, HoverDelayState } from "../tooltip/hover-delay.js"
+import { describeTrigger, HoverDelayState } from "../../internal/hover-delay.js"
 
 export type { PopupAlign, PopupSide } from "../../internal/popup.js"
 

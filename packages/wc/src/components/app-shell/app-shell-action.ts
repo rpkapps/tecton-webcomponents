@@ -2,13 +2,20 @@ import { css, html, LitElement, nothing, type PropertyValues } from "lit"
 import { property, query, state } from "lit/decorators.js"
 import { EllipsisVertical, Search } from "lucide"
 import { AriaDelegateController } from "../../internal/aria.js"
-import { animationStyles, popupMotion } from "../../internal/animations.js"
 import { icon } from "../../internal/icons.js"
-import { PopupController, popupStyles } from "../../internal/popup.js"
-import { hostStyles, srOnly } from "../../internal/styles.js"
+import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
 import type { TecButton } from "../button/button.js"
-import { shortcutKeys, shortcutKeysStyles, spokenShortcut } from "./shortcut-keys.js"
+import { describeShortcut } from "../shortcuts/registry.js"
+import type { TecTooltip } from "../tooltip/tooltip.js"
+
+/* Key chords read left to right in every script (Ctrl + K). */
+const keysDirectionStyles = css`
+  tec-shortcut-keys {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+`
 
 /*
  * The icon buttons of the header are `tec-button`s (ghost, icon-sm) rendered in the shadow root;
@@ -34,88 +41,44 @@ const quietButtonStyles = css`
   }
 `
 
+/*
+ * The tooltip is a `tec-tooltip` rendered in the shadow root around the button. Its bubble and the
+ * key caps of `tec-shortcut-keys` are styled through their public parts: the caps invert inside the
+ * bubble and the bubble tightens its end padding around them, like `tec-kbd` in a tooltip.
+ */
 const tooltipStyles = css`
-  .tooltip {
-    box-sizing: border-box;
-    align-items: center;
-    gap: 0.375rem;
-    width: max-content;
-    max-width: 20rem;
-    padding: 0.375rem 0.75rem;
-    border-radius: var(--tec-radius-md);
-    background-color: var(--tec-foreground);
-    color: var(--tec-background);
-    font-family: var(--tec-font-sans);
-    font-size: var(--tec-text-xs);
-    line-height: var(--tec-text-xs--line-height);
-    font-weight: normal;
-    text-align: start;
-    white-space: normal;
-    pointer-events: none;
-    overflow: visible;
-  }
-  .tooltip:popover-open {
-    display: inline-flex;
-  }
-  .tooltip.has-keys {
+  .tooltip.has-keys::part(tooltip) {
     padding-inline-end: 0.375rem;
   }
-  .tooltip .keys {
+  .tip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  .keys {
     margin-inline-start: 0.25rem;
   }
-  .tooltip .kbd {
-    position: relative;
+  .keys::part(kbd) {
     background-color: light-dark(
       color-mix(in oklab, var(--tec-background) 20%, transparent),
       color-mix(in oklab, var(--tec-background) 10%, transparent)
     );
     color: var(--tec-background);
   }
-  .tooltip .sep {
+  .keys::part(separator),
+  .keys::part(then) {
     color: inherit;
     opacity: 0.7;
-  }
-  .arrow {
-    position: absolute;
-    width: 0.625rem;
-    height: 0.625rem;
-    border-radius: 2px;
-    background-color: var(--tec-foreground);
-    rotate: 45deg;
-    z-index: -1;
-  }
-  .arrow[data-side="bottom"] {
-    top: 0;
-    translate: 0 -50%;
-  }
-  .arrow[data-side="top"] {
-    bottom: 0;
-    translate: 0 50%;
-  }
-  .arrow[data-side="left"] {
-    right: 0;
-    translate: 50% 0;
-  }
-  .arrow[data-side="right"] {
-    left: 0;
-    translate: -50% 0;
-  }
-  @media (forced-colors: active) {
-    .tooltip {
-      border: 1px solid CanvasText;
-    }
-    .arrow {
-      display: none;
-    }
   }
 `
 
 /**
  * The button is a ghost icon button (`tec-button`, `icon-sm`) in muted colours; `label` is its
- * accessible name and the text of its tooltip, which opens on hover and on keyboard focus (not on a
- * mouse press) and closes on leave, blur, press and Escape. `shortcut` adds the key hint to the
- * tooltip (drawn for the platform) and to the button's description; it binds nothing — register the
- * key with the application's shortcut handling.
+ * accessible name and the text of its `tec-tooltip` (placed below it), which opens on hover and on
+ * keyboard focus (not on a mouse press), closes on leave, blur, press and Escape, and shares the
+ * page's tooltip timing (moving between actions switches the tooltip at once). `shortcut` adds the
+ * key hint to the tooltip (a `tec-shortcut-keys`, drawn for the platform) and to the button's
+ * description; it binds nothing — register the key with a `tec-shortcut`.
  *
  * It can be the `slot="trigger"` of a `tec-dropdown-menu` or `tec-popover`: `aria-expanded` and
  * `aria-haspopup` set on it reach the inner button.
@@ -127,13 +90,14 @@ const tooltipStyles = css`
  * @slot - The icon (`<svg>` or `tec-icon`, sized 16px).
  *
  * @csspart button - The inner `tec-button`.
- * @csspart tooltip - The tooltip (top layer).
- * @csspart keys - The key caps of the shortcut in the tooltip.
+ * @csspart tooltip - The tooltip bubble (the `content` part of the inner `tec-tooltip`, top layer).
+ * @csspart tooltip-arrow - The tooltip's arrow.
+ * @csspart keys - The `tec-shortcut-keys` in the tooltip.
  *
  * @cssstate tooltip-open - The tooltip is shown.
  */
 export class TecAppShellAction extends TectonElement {
-  static styles = [hostStyles, srOnly, popupStyles, animationStyles, popupMotion(".tooltip"), shortcutKeysStyles, quietButtonStyles, tooltipStyles]
+  static styles = [hostStyles, keysDirectionStyles, quietButtonStyles, tooltipStyles]
   static shadowRootOptions: ShadowRootInit = { ...LitElement.shadowRootOptions, delegatesFocus: true }
 
   /** Accessible name of the button and text of the tooltip (required). */
@@ -146,37 +110,11 @@ export class TecAppShellAction extends TectonElement {
   @property({ type: Boolean, reflect: true }) disabled = false
 
   @query(".button") protected button!: TecButton
-  @query(".tooltip") private tooltip!: HTMLElement
-  @query(".arrow") private arrow!: HTMLElement
-  @state() private tooltipOpen = false
-
-  #popup = new PopupController(this, {
-    popup: () => this.tooltip,
-    trigger: () => this.button,
-    haspopup: false,
-    expanded: false,
-    placement: () => ({ side: "bottom", align: "center", sideOffset: 4 }),
-    arrow: () => this.arrow,
-    focus: { initial: "none", restore: false },
-    dismiss: { escape: true, outsidePress: false },
-    onRequestClose: () => (this.tooltipOpen = false),
-  })
+  @query(".tooltip") private tooltip!: TecTooltip
 
   constructor() {
     super()
     new AriaDelegateController(this, { target: () => this.button, exclude: ["aria-label", "aria-description"] })
-    this.addEventListener("pointerenter", (e) => {
-      if (e.pointerType !== "touch" && !this.disabled) this.tooltipOpen = true
-    })
-    this.addEventListener("pointerleave", () => (this.tooltipOpen = false))
-    this.addEventListener("pointerdown", () => (this.tooltipOpen = false))
-    this.addEventListener("focusin", () => {
-      // Keyboard focus only (focus-visible), like React Aria's tooltip trigger.
-      queueMicrotask(() => {
-        if (!this.disabled && this.button?.matches(":state(focus-visible)")) this.tooltipOpen = true
-      })
-    })
-    this.addEventListener("focusout", () => (this.tooltipOpen = false))
   }
 
   /** Clicks the inner button. */
@@ -184,30 +122,47 @@ export class TecAppShellAction extends TectonElement {
     this.button?.click()
   }
 
+  /*
+   * The tooltip belongs to the action: its `tec-open-change` stays inside (a menu the action
+   * triggers must not see it), and its state is mirrored as `:state(tooltip-open)`.
+   */
+  #onTooltipChange = (event: Event) => {
+    event.stopPropagation()
+    void this.tooltip?.updateComplete.then(() => this.toggleState("tooltip-open", !!this.tooltip?.open))
+  }
+
   protected override updated(changed: PropertyValues): void {
     super.updated(changed)
-    if (changed.has("disabled") && this.disabled) this.tooltipOpen = false
-    if (changed.has("tooltipOpen")) {
-      void this.#popup.setOpen(this.tooltipOpen)
-      this.toggleState("tooltip-open", this.tooltipOpen)
-    }
+    if (changed.has("disabled") && this.disabled) this.toggleState("tooltip-open", false)
   }
 
   protected override render() {
-    return html`<tec-button
+    // The label is the button's name already: inside the tooltip it is hidden from assistive
+    // technology, so the description (the key hint) never repeats it.
+    return html`<tec-tooltip
+      class="tooltip ${this.shortcut ? "has-keys" : ""}"
+      side="bottom"
+      exportparts="content:tooltip, arrow:tooltip-arrow"
+      ?disabled=${this.disabled}
+      @tec-open-change=${this.#onTooltipChange}
+    >
+      <tec-button
+        slot="trigger"
         class="button"
         part="button"
         variant="ghost"
         size="icon-sm"
         ?disabled=${this.disabled}
         aria-label=${this.label || nothing}
-        aria-description=${this.shortcut ? spokenShortcut(this.shortcut) : nothing}
+        aria-description=${this.shortcut ? describeShortcut(this.shortcut) : nothing}
         ><slot></slot
       ></tec-button>
-      <div class="tooltip ${this.shortcut ? "has-keys" : ""}" part="tooltip" popover="manual" role="tooltip" aria-hidden="true">
-        ${this.label}${this.shortcut ? shortcutKeys(this.shortcut, { spoken: false }) : nothing}
-        <div class="arrow"></div>
-      </div>`
+      <span class="tip"
+        ><span aria-hidden="true">${this.label}</span>${this.shortcut
+          ? html`<tec-shortcut-keys class="keys" part="keys" keys=${this.shortcut}></tec-shortcut-keys>`
+          : nothing}</span
+      >
+    </tec-tooltip>`
   }
 }
 
@@ -341,10 +296,10 @@ const commandTriggerStyles = css`
  * @slot - The placeholder text (default "Search").
  *
  * @csspart base - The native `<button>`.
- * @csspart keys - The key hint.
+ * @csspart keys - The key hint (a `tec-shortcut-keys`).
  */
 export class TecAppShellCommandTrigger extends TectonElement {
-  static styles = [hostStyles, srOnly, shortcutKeysStyles, commandTriggerStyles]
+  static styles = [hostStyles, keysDirectionStyles, commandTriggerStyles]
   static shadowRootOptions: ShadowRootInit = { ...LitElement.shadowRootOptions, delegatesFocus: true }
 
   /** Key hint at the end, in shortcut syntax. */
@@ -379,7 +334,9 @@ export class TecAppShellCommandTrigger extends TectonElement {
     return html`<button class="base" part="base" type="button" ?disabled=${this.disabled} aria-label=${label}>
       ${icon(Search, { class: "icon", size: 16 })}
       <span class="label"><slot @slotchange=${this.#onSlotChange}>Search</slot></span>
-      ${this.shortcut && !this.hideShortcut ? shortcutKeys(this.shortcut, { spoken: false }) : nothing}
+      ${this.shortcut && !this.hideShortcut
+        ? html`<tec-shortcut-keys class="keys" part="keys" keys=${this.shortcut} aria-hidden="true"></tec-shortcut-keys>`
+        : nothing}
     </button>`
   }
 }
@@ -421,53 +378,12 @@ export class TecAppShellOverflowTrigger extends TectonElement {
 }
 
 const userMenuTriggerStyles = css`
-  :host {
-    display: inline-flex;
-    flex-shrink: 0;
-    vertical-align: middle;
-  }
   .wrap {
     display: inline-flex;
     margin-inline-start: 0.25rem;
   }
   .button {
     --tec-button-radius: 9999px;
-  }
-  .avatar {
-    position: relative;
-    display: flex;
-    flex-shrink: 0;
-    width: 1.5rem;
-    height: 1.5rem;
-    border-radius: 9999px;
-    user-select: none;
-  }
-  .avatar::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 9999px;
-    border: 1px solid color-mix(in oklab, var(--tec-border) 60%, transparent);
-  }
-  .image {
-    width: 100%;
-    height: 100%;
-    aspect-ratio: 1;
-    border-radius: 9999px;
-    object-fit: cover;
-  }
-  .fallback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    border-radius: 9999px;
-    background-color: var(--tec-avatar);
-    color: var(--tec-avatar-foreground);
-    font-size: var(--tec-text-xs);
-    line-height: var(--tec-text-xs--line-height);
-    font-weight: var(--tec-font-weight-medium);
   }
 `
 
@@ -481,8 +397,8 @@ function initialsOf(name: string): string {
 }
 
 /**
- * A round ghost button showing the signed-in user's avatar (the image, or the initials on the
- * avatar surface when there is none or it fails to load). Its accessible name is
+ * A round ghost button showing the signed-in user's small `tec-avatar` (the image, or the initials
+ * on the avatar surface when there is none or it fails to load). Its accessible name is
  * "Account: <name>". Put it in `slot="trigger"` of a `tec-dropdown-menu` (`align="end"`) with the
  * account items.
  *
@@ -491,7 +407,7 @@ function initialsOf(name: string): string {
  * @tag tec-app-shell-user-menu-trigger
  *
  * @csspart button - The inner round `tec-button`.
- * @csspart avatar - The 24px avatar.
+ * @csspart avatar - The 24px `tec-avatar` (`size="sm"`).
  */
 export class TecAppShellUserMenuTrigger extends TectonElement {
   static styles = [hostStyles, quietButtonStyles, userMenuTriggerStyles]
@@ -510,7 +426,6 @@ export class TecAppShellUserMenuTrigger extends TectonElement {
   @property() label = ""
 
   @query(".button") protected button!: TecButton
-  @state() private imageFailed = false
 
   constructor() {
     super()
@@ -521,20 +436,14 @@ export class TecAppShellUserMenuTrigger extends TectonElement {
     this.button?.click()
   }
 
-  protected override willUpdate(changed: PropertyValues): void {
-    super.willUpdate(changed)
-    if (changed.has("image")) this.imageFailed = false
-  }
-
   protected override render() {
     const label = this.label || (this.name ? `Account: ${this.name}` : "Account")
-    const showImage = this.image && !this.imageFailed
     return html`<span class="wrap"
       ><tec-button class="button" part="button" variant="ghost" size="icon-sm" aria-label=${label}
-        ><span class="avatar" part="avatar"
-          >${showImage
-            ? html`<img class="image" src=${this.image} alt="" @error=${() => (this.imageFailed = true)} />`
-            : html`<span class="fallback">${this.initials || initialsOf(this.name)}</span>`}</span
+        ><tec-avatar class="avatar" part="avatar" size="sm"
+          >${this.image ? html`<tec-avatar-image src=${this.image} alt=""></tec-avatar-image>` : nothing}<tec-avatar-fallback
+            >${this.initials || initialsOf(this.name)}</tec-avatar-fallback
+          ></tec-avatar
         ></tec-button
       ></span
     >`

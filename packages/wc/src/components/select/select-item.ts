@@ -1,6 +1,6 @@
 import { css, html } from "lit"
 import { property } from "lit/decorators.js"
-import { ListEmptyBase, ListGroupBase, ListItemBase, ListLabelBase, ListSeparatorBase } from "./listbox-core.js"
+import { ListEmptyBase, ListGroupBase, ListItemBase, ListLabelBase, ListSeparatorBase } from "../../internal/listbox-core.js"
 
 /**
  * Selection is owned by the parent `tec-select`: the item is an `option` whose `aria-selected`

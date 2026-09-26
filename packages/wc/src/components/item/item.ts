@@ -4,7 +4,7 @@ import { ifDefined } from "lit/directives/if-defined.js"
 import { AriaDelegateController } from "../../internal/aria.js"
 import { focusRing, hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { LightDomObserver } from "../card/light-dom-observer.js"
+import { LightDomObserver } from "../../internal/light-dom-observer.js"
 import {
   itemActionsStyles,
   itemContentStyles,
@@ -92,7 +92,9 @@ export class TecItem extends TectonElement {
 
   #syncChildren(): void {
     this.toggleState("has-description", !!this.querySelector("tec-item-description"))
-    for (const content of this.querySelectorAll<TecItemContent>(":scope > tec-item-content")) content.requestUpdate?.()
+    // Children may not be upgraded yet (parsed HTML upgrades parent-first): those compute their
+    // state in their own first update, so only poke the upgraded ones.
+    for (const content of this.querySelectorAll<Element & Partial<Pick<TecItemContent, "requestUpdate">>>(":scope > tec-item-content")) content.requestUpdate?.()
   }
 
   protected override willUpdate(changed: PropertyValues): void {

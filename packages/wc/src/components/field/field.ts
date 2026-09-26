@@ -4,7 +4,7 @@ import { property } from "lit/decorators.js"
 import { observeControl, unobserveControl, type ControlObserver } from "../../internal/form-control.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { isFieldControl, updateIdRefs } from "../label/labelable.js"
+import { isFieldControl, updateIdRefs } from "../../internal/labelable.js"
 import { fieldContext, type FieldContextValue, type FieldOrientation } from "./field-context.js"
 import { fieldStyles } from "./field.styles.js"
 

@@ -33,6 +33,7 @@
  * | Hook | Default |
  * | --- | --- |
  * | `formControl` | `null` — the inner native control whose `validity` is mirrored and that receives delegated ARIA and `<label for>` labelling |
+ * | `ariaDelegationExclude` | `[]` — host `aria-*` attributes not delegated to `formControl` (the component manages them itself) |
  * | `formValue()` | `this.value` — the submitted value (`null` = nothing, `FormData` for several entries) |
  * | `formState()` | `formValue()` — what the browser stores for restore |
  * | `formResetValue()` | forgets the dirty `value` (back to the `value` attribute) |
@@ -173,8 +174,12 @@ export declare class FormControl {
   required: boolean
   /** Marks the control invalid (displayed immediately; the form refuses to submit with "Invalid value."). */
   invalid: boolean
-  /** Current value. */
-  value: string
+  /**
+   * Current value. Declared as an accessor so subclasses can override it with their own
+   * getter/setter (e.g. a slider mapping `value` to `values`).
+   */
+  get value(): string
+  set value(value: string)
   /** Default value (the `value` attribute); form reset returns to it. */
   defaultValue: string
   /** `disabled`, or disabled by an ancestor `<fieldset disabled>`. */
@@ -193,6 +198,7 @@ export declare class FormControl {
   syncFormState(): void
   protected formDisabled: boolean
   protected get formControl(): HTMLElement | null
+  protected get ariaDelegationExclude(): readonly string[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected get validators(): Validator<any>[]
   protected formValue(): FormValue
@@ -256,7 +262,7 @@ export function FormControlMixin<T extends Constructor<TectonElement>>(Base: T) 
       new AriaDelegateController(this, {
         target: () => this.formControl,
         labels: () => this.formLabels(),
-        exclude: ["aria-invalid"],
+        exclude: () => ["aria-invalid", ...this.ariaDelegationExclude],
       })
       // A submit attempt (or reportValidity / form.checkValidity) fires "invalid": show the errors.
       this.addEventListener("invalid", () => {
@@ -268,6 +274,14 @@ export function FormControlMixin<T extends Constructor<TectonElement>>(Base: T) 
     // ---------------------------------------------------------------- hooks
     protected get formControl(): HTMLElement | null {
       return null
+    }
+    /**
+     * Host `aria-*` attributes NOT mirrored onto `formControl`, because the component manages them
+     * itself (e.g. a select that names its trigger "<value> <label>" excludes `aria-label` and
+     * `aria-labelledby`). `aria-invalid` is always excluded (the mixin sets it from `showInvalid`).
+     */
+    protected get ariaDelegationExclude(): readonly string[] {
+      return []
     }
     /** Custom validators, run when the `formControl` (if any) is valid. Typed loosely so subclasses can return `Validator<TheirClass>[]`. */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

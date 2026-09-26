@@ -5,6 +5,7 @@ import { isRtl } from "../../internal/direction.js"
 import { getTabbables } from "../../internal/focus.js"
 import { hostStyles, prefersReducedMotion } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
+import { localeOf } from "../../internal/locale.js"
 import { carouselContext, type CarouselContextValue, type CarouselOrientation } from "./carousel-context.js"
 import type { TecCarouselContent } from "./carousel-content.js"
 import type { TecCarouselItem } from "./carousel-item.js"
@@ -288,7 +289,7 @@ export class TecCarousel extends TectonElement {
 
   #syncLabels(): void {
     const items = this.items
-    const format = new Intl.NumberFormat(this.closest("[lang]")?.getAttribute("lang") || undefined)
+    const format = new Intl.NumberFormat(localeOf(this))
     items.forEach((item, i) => item.setSlideLabel(fill(this.slideLabel, { index: format.format(i + 1), count: format.format(items.length) })))
   }
 
@@ -333,7 +334,7 @@ export class TecCarousel extends TectonElement {
   }
 
   #announce(): void {
-    const format = new Intl.NumberFormat(this.closest("[lang]")?.getAttribute("lang") || undefined)
+    const format = new Intl.NumberFormat(localeOf(this))
     const text = fill(this.announcementLabel, { index: format.format(this._index + 1), count: format.format(this._snaps.length) })
     // Re-set even when unchanged so repeated announcements are spoken.
     this._announcement = ""

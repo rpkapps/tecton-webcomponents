@@ -98,8 +98,11 @@ export function setAriaElements(
 export interface AriaDelegateOptions {
   /** The inner control (re-evaluated on every sync, so it may change between renders). */
   target: () => Element | null | undefined
-  /** Attributes the component manages itself on the control (never overwritten). */
-  exclude?: readonly string[]
+  /**
+   * Attributes the component manages itself on the control (never delegated or overwritten). A
+   * function is re-read on every sync, so the list can come from an overridable hook.
+   */
+  exclude?: readonly string[] | (() => readonly string[])
   /**
    * Label elements used when the host has neither `aria-labelledby` nor `aria-label` — e.g. the
    * `<label for>` elements of a form control (`internals.labels`). Empty → the control's native
@@ -154,7 +157,8 @@ export class AriaDelegateController implements ReactiveController {
       this.#lastTarget = target
     }
     const host = this.#host
-    const exclude = this.#options.exclude ?? []
+    const option = this.#options.exclude ?? []
+    const exclude = typeof option === "function" ? option() : option
     for (const name of DELEGATED_ARIA_ATTRIBUTES) {
       if (exclude.includes(name)) continue
       const value = host.getAttribute(name)

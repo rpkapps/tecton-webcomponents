@@ -4,7 +4,7 @@ import { styleMap } from "lit/directives/style-map.js"
 import { HasSlotController } from "../../internal/slot.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
-import { formatRangeValue } from "../circular-progress/circular-progress.js"
+import { formatRangeValue } from "../../internal/locale.js"
 import { meterStyles } from "./meter.styles.js"
 
 /** Track height 4 / 6 / 10 px. */

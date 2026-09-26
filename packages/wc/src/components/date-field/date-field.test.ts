@@ -15,8 +15,7 @@ describe("tec-date-field", () => {
     const el = root.querySelector("tec-date-field")!
     expect(texts(el)).toEqual(["9", "26", "2026"])
     const [month] = segments(el)
-    expect(await axNode(month!)).toMatchObject({ role: "spinbutton", name: "month Birthday" })
-    expect(month!.getAttribute("aria-valuetext")).toBe("9 \u2013 September")
+    expect(await axNode(month!)).toMatchObject({ role: "spinbutton", name: "month Birthday", valuetext: "9 – September" })
     expect(month!.getAttribute("aria-valuemax")).toBe("12")
     await expectAccessible(root)
   })
