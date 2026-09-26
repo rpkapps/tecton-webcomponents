@@ -95,5 +95,5 @@
   for (const box of boxes) box.addEventListener("change", render)
   bar.addEventListener("tec-clear", clear)
   bar.addEventListener("tec-dismiss", clear)
-  render()
+  customElements.whenDefined("tec-checkbox").then(render)
 </script>

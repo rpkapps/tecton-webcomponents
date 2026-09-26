@@ -103,5 +103,5 @@
   bar.addEventListener("tec-clear", clear)
   // Escape while focus is in the bar clears the selection.
   bar.addEventListener("tec-dismiss", clear)
-  render()
+  customElements.whenDefined("tec-checkbox").then(render)
 </script>
