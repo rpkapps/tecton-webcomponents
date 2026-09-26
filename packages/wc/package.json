@@ -41,6 +41,7 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
@@ -52,16 +53,19 @@
     "./styles/*": "./dist/styles/*",
     "./custom-elements.json": "./custom-elements.json",
     "./icons": {
+      "source": "./src/icons/index.ts",
       "types": "./dist/icons/index.d.ts",
       "default": "./dist/icons/index.js"
     },
     "./internal/*": null,
     "./package.json": "./package.json",
     "./*.js": {
+      "source": "./src/components/*.ts",
       "types": "./dist/components/*.d.ts",
       "default": "./dist/components/*.js"
     },
     "./*": {
+      "source": "./src/components/*/define.ts",
       "types": "./dist/components/*/define.d.ts",
       "default": "./dist/components/*/define.js"
     }

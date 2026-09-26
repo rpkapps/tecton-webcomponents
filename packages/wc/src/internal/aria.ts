@@ -40,6 +40,7 @@ export const DELEGATED_ARIA_ATTRIBUTES = [
   "aria-expanded",
   "aria-haspopup",
   "aria-pressed",
+  "aria-disabled",
   "aria-current",
   "aria-invalid",
   "aria-keyshortcuts",

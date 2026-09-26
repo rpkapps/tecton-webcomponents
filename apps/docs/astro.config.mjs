@@ -22,6 +22,9 @@ export default defineConfig({
   integrations: [mdx()],
   vite: {
     plugins: [tailwindcss(), tectonDocs()],
+    // Resolve @tecton/wc to its TypeScript source (the "source" export condition), so the
+    // site always shows the current components without a library build.
+    resolve: { conditions: ["source", "module", "browser", "development|production"] },
     build: {
       rollupOptions: {
         onwarn(warning, warn) {
