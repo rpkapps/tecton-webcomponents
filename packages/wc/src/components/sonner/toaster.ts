@@ -675,7 +675,10 @@ export class TecToaster extends TectonElement {
         const list = this.#list(position)
         if (!list.length) return nothing
         const [y, x] = position.split("-")
-        const front = list.find((r) => !r.removed)
+        // A new toast is measured after its first render: until then the stack keeps the height
+        // of the previous front toast (0 would collapse the toasts behind it for a frame, then
+        // grow them back).
+        const front = list.find((r) => !r.removed && r.height)
         const styles = {
           "--front-toast-height": `${front?.height ?? 0}px`,
           "--width": `${TOAST_WIDTH}px`,

@@ -19,7 +19,9 @@
 //
 // Build: family chunks are named `_astro/tec-<family>.<hash>.js`, example scripts
 // `_astro/example-<name>.<hash>.js`, and the HTML is rewritten once the site is written.
-// Dev: HTML responses get imports of the families' source (`/@fs/…`) and of the examples.
+// Dev: HTML responses get imports of the families' source (`/@fs/…`) only. The examples' scripts
+// load from <ComponentPreview> as before: after an edit Vite imports them with a `?t=` query, so a
+// static import here would be a second module instance and each script would run twice.
 import { readdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -80,11 +82,7 @@ export function componentPreload() {
             if (!(html || isHtml())) return end.call(this, chunk, ...args)
             if (chunk && typeof chunk !== "function") chunks.push(Buffer.from(chunk))
             const page = Buffer.concat(chunks).toString("utf8")
-            const urls = [
-              ...familiesIn(page, familyOfTag()).map(devUrl),
-              ...examplesIn(page).map((name) => `/src/examples/${name}.html?example-script`),
-            ]
-            const out = inject(page, urls)
+            const out = inject(page, familiesIn(page, familyOfTag()).map(devUrl))
             if (!res.headersSent) res.removeHeader("content-length")
             write.call(this, out)
             return end.call(this)

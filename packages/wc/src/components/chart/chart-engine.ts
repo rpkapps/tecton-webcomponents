@@ -394,14 +394,16 @@ export interface AxisTick {
   index: number
   /** Position of the tick along the axis. */
   coordinate: number
-  /** Position of the label (moved inwards when the last label would overflow). */
+  /** Position of the label (moved inwards when the first or last label would overflow). */
   labelCoordinate: number
 }
 
 /**
  * Picks which tick labels to show so that none overlap: walks from the end (the last label is always
  * kept, nudged inside the range when needed) and keeps a label when it clears the previous one by
- * `minGap` pixels. `sizeOf(i)` is the label's extent along the axis.
+ * `minGap` pixels. The first label is nudged inside the range too, rather than dropped. `sizeOf(i)`
+ * is the label's extent along the axis; `start`/`end` bound the labels (the chart's whole width,
+ * so edge labels can use its margin).
  */
 export function thinTicks(
   coordinates: number[],
@@ -419,6 +421,10 @@ export function thinTicks(
     if (i === coordinates.length - 1) {
       const overflow = coordinate + size / 2 - end
       if (overflow > 0) label = coordinate - overflow
+    }
+    if (i === 0) {
+      const overflow = start - (label - size / 2)
+      if (overflow > 0) label += overflow
     }
     if (label < start || label > limit) continue
     if (label - size / 2 - start >= -0.001 && label + size / 2 - limit <= 0.001) {

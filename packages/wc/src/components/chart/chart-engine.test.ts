@@ -89,5 +89,7 @@ describe("chart engine", () => {
     // The last label is nudged inwards when it would overflow the axis.
     const edge = thinTicks([0, 100], () => 20, 0, 100, 5)
     expect(edge.at(-1)).toMatchObject({ index: 1, labelCoordinate: 90 })
+    // So is the first one, instead of being dropped.
+    expect(edge[0]).toMatchObject({ index: 0, coordinate: 0, labelCoordinate: 10 })
   })
 })

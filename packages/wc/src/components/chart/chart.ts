@@ -756,11 +756,13 @@ export class TecChart extends TectonElement {
       const items = horizontal
         ? model.valueTicks.map((t, i) => ({ coordinate: t.pos, text: this.#tickText(xAxis, t.value, i) }))
         : slots.map((s, i) => ({ coordinate: s.center, text: this.#tickText(xAxis, categories[i], i) }))
+      // Labels may extend into the chart's margins (the first and last category sit at the edges of
+      // the plot), and are only thinned or nudged where they would leave the chart.
       const shown = thinTicks(
         items.map((t) => t.coordinate),
         (i) => this.#measure(items[i]!.text),
-        plot.x,
-        plot.x + plot.w,
+        0,
+        this._width,
         xAxis.minTickGap
       )
       const ty = y + TICK_SIZE + xAxis.tickMargin

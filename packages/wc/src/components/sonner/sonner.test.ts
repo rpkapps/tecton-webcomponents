@@ -38,6 +38,20 @@ describe("tec-toaster", () => {
     await waitUntil(() => toasts(el).length === 0, "toast removed")
   })
 
+  it("keeps the stack's height while a new toast is measured (the toasts behind do not collapse)", async () => {
+    const el = await fixture<TecToaster>(html`<tec-toaster></tec-toaster>`)
+    toast("First", { description: "Two lines of content" })
+    await mounted(el)
+    const list = el.shadowRoot!.querySelector("ol")!
+    const height = list.style.getPropertyValue("--front-toast-height")
+    expect(Number.parseFloat(height)).toBeGreaterThan(0)
+    toast("Second", { description: "Two lines of content" })
+    // First render of the new toast, before it has been measured.
+    await el.updateComplete
+    expect(list.style.getPropertyValue("--front-toast-height")).toBe(height)
+    await mounted(el, 2)
+  })
+
   it("announces through live regions: status for normal toasts, alert for errors", async () => {
     const el = await fixture<TecToaster>(html`<tec-toaster></tec-toaster>`)
     const status = el.shadowRoot!.querySelector('[role="status"]')!
