@@ -459,3 +459,9 @@
   --color-blue-1440: var(--tecton-palette-blue-1440);
   --color-blue-1570: var(--tecton-palette-blue-1570);
 }
+/* Borders default to the theme's divider colour (a bare `border` class), as in Tecton. */
+@layer base {
+  *, ::before, ::after, ::backdrop, ::file-selector-button {
+    border-color: var(--tec-border);
+  }
+}
