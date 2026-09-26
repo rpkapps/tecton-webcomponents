@@ -239,6 +239,16 @@ Rules:
   `@media (forced-colors: active)` (use `CanvasText`, `Highlight`, `outline` instead of box-shadow
   rings there). `src/internal/styles.ts` exports `focusRingStyles` that already do this.
 
+- **Layout containers: the host is the layout box.** A component that lays out slotted children
+  (groups, lists, rows, content areas) makes `:host` the flex/grid container, so an application's
+  layout classes (`flex-wrap`, `gap-6`, `flex-col`, `items-center`) work on the element itself. Box
+  styles still live on an inner part; forward layout to it with `inherit` when both are needed.
+- **Visual overrides on controls go through custom properties and `::part()`**, never utility classes
+  on the host (`style="--tec-button-radius: 9999px"`, not `class="rounded-full"`). Every custom
+  property an example needs is documented with `@cssprop`.
+- No `text-wrap: balance` unless the Tecton spec asks for it; focus rings appear only for keyboard
+  focus, never after a pointer-initiated open.
+
 ## 6. Accessibility (non-negotiable)
 
 - Implement the **WAI-ARIA APG pattern** React Aria implements for the component, including the full
