@@ -171,6 +171,19 @@ describe("tec-data-table", () => {
     await expectAccessible(el)
   })
 
+  it("renders Previous / Next text buttons with pager=text", async () => {
+    const rows = Array.from({ length: 12 }, (_, i) => ({ ...data[i % 5]!, id: `r${i}` }))
+    const el = await setup('pagination pager="text"', { rows })
+    expect(el.shadowRoot!.querySelector(".page")).toBeNull()
+    const [prev, next] = [...el.shadowRoot!.querySelectorAll<HTMLElement & { disabled: boolean; control: HTMLElement }>(".pager tec-button")]
+    expect(prev!.textContent!.trim()).toBe("Previous")
+    expect(prev!.disabled).toBe(true)
+    expect(await axNode(next!.control)).toMatchObject({ role: "button", name: "Next" })
+    await userEvent.click(next!)
+    await el.updateComplete
+    expect(el.pageIndex).toBe(1)
+  })
+
   it("shows and hides columns from the column menu", async () => {
     const el = await setup("column-menu")
     const events = recordEvents<CustomEvent>(el, "tec-column-visibility-change")

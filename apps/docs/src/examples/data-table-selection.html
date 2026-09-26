@@ -1,4 +1,4 @@
-<div id="data-table-selection" class="flex w-full max-w-3xl flex-col gap-3">
+<div id="data-table-selection" class="w-full max-w-3xl">
   <tec-data-table
     label="Wells"
     selectable
@@ -6,7 +6,6 @@
     select-row-label="Select well"
     empty-label="No wells."
   ></tec-data-table>
-  <p class="text-sm text-muted-foreground" aria-live="polite">No wells selected.</p>
 </div>
 <script type="module">
   import { html } from "@tecton/wc/data-table/data-table.js"
@@ -19,9 +18,9 @@
   ]
   const statusVariant = { Producing: "success", "Shut in": "warning", Drilling: "info" }
 
-  const root = document.getElementById("data-table-selection")
-  const table = root.querySelector("tec-data-table")
-  const output = root.querySelector("p")
+  // The selection is in `table.selection` (row ids) and `table.selectedRows` (the objects);
+  // listen to `tec-selection-change` to react to it.
+  const table = document.querySelector("#data-table-selection tec-data-table")
   table.columns = [
     { accessor: "name", header: "Well", rowHeader: true },
     { accessor: "field", header: "Field" },
@@ -39,10 +38,4 @@
     { accessor: "operator", header: "Operator" },
   ]
   table.data = wells
-
-  table.addEventListener("tec-selection-change", async () => {
-    await table.updateComplete
-    const names = table.selectedRows.map((well) => well.name)
-    output.textContent = names.length ? `Selected: ${names.join(", ")}` : "No wells selected."
-  })
 </script>

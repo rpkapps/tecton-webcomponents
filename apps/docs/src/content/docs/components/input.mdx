@@ -4,7 +4,7 @@ description: A text input for forms and data entry, form-associated, with the Te
 tags: ["tec-input"]
 ---
 
-<ComponentPreview name="input-demo" />
+<ComponentPreview name="input-demo" class="*:max-w-xs" />
 
 ## Usage
 
@@ -20,79 +20,79 @@ import "@tecton/wc/input"
 
 ## Basic
 
-<ComponentPreview name="input-basic" />
+<ComponentPreview name="input-basic" class="*:max-w-xs" />
 
 ## Field
 
 Compose the input in a [`<tec-field>`](/docs/components/field) with a `tec-field-label` and a `tec-field-description`: the field names and describes the input for you — no ids needed.
 
-<ComponentPreview name="input-field" />
+<ComponentPreview name="input-field" class="*:max-w-xs" />
 
 ## Field Group
 
 Use `tec-field-group` to stack several fields and build forms.
 
-<ComponentPreview name="input-fieldgroup" />
+<ComponentPreview name="input-fieldgroup" class="*:max-w-xs" />
 
 ## Disabled
 
 `disabled` disables the input: it leaves the tab order and the form data. The field around it dims its label by itself.
 
-<ComponentPreview name="input-disabled" />
+<ComponentPreview name="input-disabled" class="*:max-w-xs" />
 
 ## Invalid
 
 `invalid` marks the input invalid: destructive border and ring, `aria-invalid` on the inner input, and the surrounding field turns destructive. Constraint failures (`required`, `type="email"`, `pattern` …) show the same state once the user has changed the value or tried to submit.
 
-<ComponentPreview name="input-invalid" />
+<ComponentPreview name="input-invalid" class="*:max-w-xs" />
 
 ## File
 
 `type="file"` renders a file picker. The selected files are submitted with the form (`FormData.getAll(name)`) and available as `files`.
 
-<ComponentPreview name="input-file" />
+<ComponentPreview name="input-file" class="*:max-w-xs" />
 
 ## Inline
 
 A horizontal `tec-field` puts the input beside a button.
 
-<ComponentPreview name="input-inline" />
+<ComponentPreview name="input-inline" class="*:max-w-xs" />
 
 ## Grid
 
 Use a grid layout to place several inputs side by side.
 
-<ComponentPreview name="input-grid" />
+<ComponentPreview name="input-grid" class="p-6" />
 
 ## Required
 
 `required` blocks form submission while the input is empty. Put a visible mark in the label; a `tec-field-error` without content shows the browser's own message once the constraint fails.
 
-<ComponentPreview name="input-required" />
+<ComponentPreview name="input-required" class="*:max-w-xs" />
 
 ## Badge
 
 A [`<tec-badge>`](/docs/components/badge) in the label highlights a new or recommended field.
 
-<ComponentPreview name="input-badge" />
+<ComponentPreview name="input-badge" class="*:max-w-xs" />
 
 ## Input Group
 
 To put icons, text or buttons inside the input's border, use [`<tec-input-group>`](/docs/components/input-group).
 
-<ComponentPreview name="input-input-group" />
+<ComponentPreview name="input-input-group" class="*:max-w-xs" />
 
 ## Button Group
 
 To attach buttons to an input, use [`<tec-button-group>`](/docs/components/button-group).
 
-<ComponentPreview name="input-button-group" />
+<ComponentPreview name="input-button-group" class="*:max-w-xs" />
 
 ## Form
 
 A complete form with inputs, a select and buttons. Values are submitted, validated and reset like native controls.
 
-<ComponentPreview name="input-form" class="min-h-[32rem]" />
+<ComponentPreview name="input-form" class="h-[32rem]" />
 
 ## Variants
 
@@ -104,7 +104,7 @@ A complete form with inputs, a select and buttons. Values are submitted, validat
 
 The input uses logical properties, so padding and text direction follow `dir="rtl"` on any ancestor.
 
-<ComponentPreview name="input-rtl" direction="rtl" />
+<ComponentPreview name="input-rtl" direction="rtl" class="*:max-w-xs" />
 
 ## Keyboard interactions
 

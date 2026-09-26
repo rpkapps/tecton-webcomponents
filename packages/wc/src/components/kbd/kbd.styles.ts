@@ -53,14 +53,15 @@ export const kbdStyles = css`
 `
 
 export const kbdGroupStyles = css`
+  /* The host is the layout box (the <kbd> only carries the semantics). */
   :host {
-    display: inline-flex;
-    vertical-align: middle;
-  }
-  .base {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
+    vertical-align: middle;
+  }
+  .base {
+    display: contents;
     font: inherit;
   }
 `

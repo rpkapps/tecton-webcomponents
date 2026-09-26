@@ -4,7 +4,7 @@ description: Displays a list of options for the user to pick from — triggered 
 tags: ["tec-select", "tec-select-item", "tec-select-group", "tec-select-label", "tec-select-separator", "tec-select-empty"]
 ---
 
-<ComponentPreview name="select-demo" class="min-h-80 items-start" />
+<ComponentPreview name="select-demo" />
 
 ## Usage
 
@@ -44,13 +44,13 @@ tec-select
 
 Use `tec-select-group`, `tec-select-label` and `tec-select-separator` to organize items. A group can also take its heading from a `label` attribute.
 
-<ComponentPreview name="select-groups" class="min-h-96 items-start" />
+<ComponentPreview name="select-groups" />
 
 ## Scrollable
 
 A select with many items scrolls inside the popup, which never grows past the space left in the viewport.
 
-<ComponentPreview name="select-scrollable" class="min-h-96 items-start" />
+<ComponentPreview name="select-scrollable" />
 
 ## Disabled
 
@@ -76,13 +76,13 @@ Add `invalid` to show the error state immediately. Inside a [Field](/docs/compon
 
 `searchable` adds a search field at the top of the popup. Typing filters the options (case- and accent-insensitive `contains`; `filter="starts-with" | "fuzzy"` or a filter function change it) and the arrow keys move into the results; put a `tec-select-empty` in the select for the no-match message.
 
-<ComponentPreview name="select-autocomplete" class="min-h-96 items-start" />
+<ComponentPreview name="select-autocomplete" />
 
 ## Multiple
 
 With `multiple` the popup stays open while the user toggles options; the trigger lists the chosen items. Items marked `selected` are the initial choice; the `values` property holds the current one, and each value is submitted as its own form entry.
 
-<ComponentPreview name="select-multiple" class="min-h-72 items-start" />
+<ComponentPreview name="select-multiple" />
 
 ## Variants
 
@@ -96,17 +96,28 @@ With `multiple` the popup stays open while the user toggles options; the trigger
 
 <ComponentPreview name="select-size" />
 
+## Trigger value
+
+By default the trigger shows a copy of the chosen option's content (icons included). `value-display="text"` shows only its text (or `label`), and `value-display="value"` its `value` — for a short code in a compact trigger, such as the currency symbol of an option reading "$ US Dollar" (see [Button Group](/docs/components/button-group)).
+
+```html
+<tec-select value="$" value-display="value" aria-label="Currency" class="font-mono">
+  <tec-select-item value="$">$ <span class="text-muted-foreground">US Dollar</span></tec-select-item>
+  <tec-select-item value="€">€ <span class="text-muted-foreground">Euro</span></tec-select-item>
+</tec-select>
+```
+
 ## Form
 
 A required select in a form: submitting without a choice shows the browser's message in the field's error; reset returns to the `value` attribute.
 
-<ComponentPreview name="select-form" class="min-h-72 items-start" />
+<ComponentPreview name="select-form" />
 
 ## RTL
 
 The chevron, the check marks and the popup alignment follow the text direction.
 
-<ComponentPreview name="select-rtl" direction="rtl" class="min-h-96 items-start" />
+<ComponentPreview name="select-rtl" direction="rtl" />
 
 ## Keyboard interactions
 

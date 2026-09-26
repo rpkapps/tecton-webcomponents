@@ -4,7 +4,7 @@ description: Command menu for search and quick actions.
 tags: ["tec-command", "tec-command-input", "tec-command-list", "tec-command-group", "tec-command-item", "tec-command-shortcut", "tec-command-separator", "tec-command-empty", "tec-command-dialog"]
 ---
 
-<ComponentPreview name="command-demo" align="start" class="min-h-[24.5rem]" />
+<ComponentPreview name="command-demo" align="start" class="h-[24.5rem]" />
 
 ## Usage
 
@@ -38,7 +38,7 @@ document.querySelector("tec-command").addEventListener("tec-select", (event) => 
 })
 ```
 
-Typing filters the items (case- and accent-insensitive `contains` over each item's text and `keywords`; `filter="fuzzy" | "starts-with"` or a filter function change it); groups without a match and separators hide, and `tec-command-empty` shows when nothing matches. <Kbd>Enter</Kbd> or a click fires `tec-select` on the item.
+Typing filters the items (case- and accent-insensitive `contains` over each item's text and `keywords`; `filter="fuzzy" | "starts-with"` or a filter function change it) and highlights the first match; groups without a match and separators hide, and `tec-command-empty` shows when nothing matches. <Kbd>Enter</Kbd> or a click fires `tec-select` on the item.
 
 ## Composition
 
@@ -89,13 +89,13 @@ The list scrolls past 18rem (`--tec-command-list-max-height`); the highlighted i
 
 ## RTL
 
-<ComponentPreview name="command-rtl" direction="rtl" align="start" class="min-h-[24.5rem]" />
+<ComponentPreview name="command-rtl" direction="rtl" align="start" class="h-[24.5rem]" />
 
 ## Keyboard interactions
 
 <KeyboardTable
   rows={[
-    ["A–Z", "Types into the search field; the list filters. The arrow keys then move into the results."],
+    ["A–Z", "Types into the search field; the list filters and the first match is highlighted, so Enter runs it."],
     ["ArrowDown / ArrowUp", "Highlights the next / previous item (disabled ones are skipped). From nothing: the first / last item."],
     ["Home / End", "Highlights the first / last item."],
     ["PageUp / PageDown", "Moves the highlight by ten items."],

@@ -4,7 +4,7 @@ description: A multi-step questionnaire with single-choice, multiple-choice, fre
 tags: ["tec-questionnaire", "tec-questionnaire-progress", "tec-questionnaire-item", "tec-questionnaire-title", "tec-questionnaire-description", "tec-questionnaire-choices", "tec-questionnaire-choice", "tec-questionnaire-choice-description", "tec-questionnaire-input", "tec-questionnaire-error", "tec-questionnaire-actions", "tec-questionnaire-previous", "tec-questionnaire-skip", "tec-questionnaire-next", "tec-questionnaire-submit"]
 ---
 
-<ComponentPreview name="questionnaire-demo" class="min-h-[35rem]" />
+<ComponentPreview name="questionnaire-demo" align="end" class="min-h-[560px] p-4 sm:p-8" />
 
 `<tec-questionnaire>` asks a short, ordered set of questions one at a time, with progress, back, skip and submit around them, and gathers the answers once, on submit.
 
@@ -75,85 +75,85 @@ The questionnaire owns the ordered items (enabled `tec-questionnaire-item`s in d
 
 Use `multiple` for a question that accepts more than one fixed answer: the choices become checkboxes.
 
-<ComponentPreview name="questionnaire-multiple" class="min-h-[26rem]" />
+<ComponentPreview name="questionnaire-multiple" align="end" class="min-h-[420px] p-4 sm:p-8" />
 
 ## Freeform Answer
 
 Add a `tec-questionnaire-input` next to the choices when the user can provide another answer. In a single-answer question, typing replaces the selected choice.
 
-<ComponentPreview name="questionnaire-freeform" class="min-h-[26rem]" />
+<ComponentPreview name="questionnaire-freeform" align="end" class="min-h-[420px] p-4 sm:p-8" />
 
 ## Explicit Skip
 
 Add `tec-questionnaire-skip` so an optional question can be left unanswered on purpose. The item's `status` is then `skipped` (it fires `tec-status-change`) and nothing is submitted for it.
 
-<ComponentPreview name="questionnaire-skip" class="min-h-[32rem]" />
+<ComponentPreview name="questionnaire-skip" align="end" class="min-h-[520px] p-4 sm:p-8" />
 
 ## Shortcuts
 
 `shortcuts="letters"` or `"numbers"` assigns a key to each choice of the active question; the key is shown on the card and exposed as `aria-keyshortcuts`. Shortcuts never act while a text field has focus.
 
-<ComponentPreview name="questionnaire-shortcuts" class="min-h-[30rem]" />
+<ComponentPreview name="questionnaire-shortcuts" align="end" class="min-h-[480px] p-4 sm:p-8" />
 
 ## Custom Validation
 
 Check rules across questions yourself on `tec-submit` (with a schema library such as Zod, or by hand): mark the offending item `invalid`, put the message in its `tec-questionnaire-error`, and set `item` to return to it.
 
-<ComponentPreview name="questionnaire-validation" class="min-h-[32rem]" />
+<ComponentPreview name="questionnaire-validation" align="end" class="min-h-[520px] p-4 sm:p-8" />
 
 ## Controlled
 
 `item` is the active question: the `item` attribute sets the initial one, the property the current one. Listen to `tec-item-change` to keep it in page state (or `preventDefault()` to stay), and set `item` to move.
 
-<ComponentPreview name="questionnaire-controlled" class="min-h-[32rem]" />
+<ComponentPreview name="questionnaire-controlled" align="end" class="min-h-[520px] p-4 sm:p-8" />
 
 ## Resume
 
 Restore a saved draft with `checked` choices, a `value` on the input and `item` on the questionnaire; a reset of the surrounding form returns to that saved state.
 
-<ComponentPreview name="questionnaire-resume" class="min-h-[32rem]" />
+<ComponentPreview name="questionnaire-resume" align="end" class="min-h-[520px] p-4 sm:p-8" />
 
 ## Conditional Items
 
 Set `disabled` on an item that does not apply to earlier answers: it leaves the flow, the progress and the submission.
 
-<ComponentPreview name="questionnaire-conditional" class="min-h-[32rem]" />
+<ComponentPreview name="questionnaire-conditional" align="end" class="min-h-[520px] p-4 sm:p-8" />
 
 ## Navigation State
 
 Read `activeItem.status` (or listen to `tec-status-change`) to opt into disabled navigation. The navigation buttons also expose the active status as `:state(unanswered)`, `:state(answered)` and `:state(skipped)`.
 
-<ComponentPreview name="questionnaire-navigation-state" class="min-h-[30rem]" />
+<ComponentPreview name="questionnaire-navigation-state" align="end" class="min-h-[480px] p-4 sm:p-8" />
 
 ## Custom Progress
 
 `format` sets the progress text (`{current}` and `{total}` are replaced) and `segments` adds a bar with one segment per question. For a fully custom indicator, read `questionnaire.navState` on `tec-item-change`.
 
-<ComponentPreview name="questionnaire-progress" class="min-h-[32rem]" />
+<ComponentPreview name="questionnaire-progress" align="end" class="min-h-[520px] p-4 sm:p-8" />
 
 ## Animated Items
 
 Animate the active item with `tec-questionnaire-item:state(active)` while the progress and navigation stay still. Keep the animation under `prefers-reduced-motion: no-preference`.
 
-<ComponentPreview name="questionnaire-animated" class="min-h-[32rem]" />
+<ComponentPreview name="questionnaire-animated" align="end" class="min-h-[520px] p-4 sm:p-8" />
 
 ## Card
 
 Compose the questionnaire with [card](/docs/components/card) parts while the question title and description keep their semantics.
 
-<ComponentPreview name="questionnaire-card" class="min-h-[35rem]" />
+<ComponentPreview name="questionnaire-card" align="end" class="min-h-[560px] p-4 sm:p-8" />
 
 ## Dialog
 
 Compose the questionnaire inside a [dialog](/docs/components/dialog); cancellation and dismissal stay with the dialog.
 
-<ComponentPreview name="questionnaire-dialog" />
+<ComponentPreview name="questionnaire-dialog" align="end" class="min-h-[320px] p-4 sm:p-8" />
 
 ## RTL
 
 Arrow Left and Right on a radio answer follow the reading direction, and the layout mirrors. Localise the default texts with `format`, `value-text` and `label` on the progress, `required-message` and `optional-message` on the error, and the button labels.
 
-<ComponentPreview name="questionnaire-rtl" direction="rtl" class="min-h-[30rem]" />
+<ComponentPreview name="questionnaire-rtl" direction="rtl" align="end" class="min-h-[480px] p-4 sm:p-8" />
 
 ## Keyboard interactions
 

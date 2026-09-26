@@ -4,7 +4,7 @@ description: Autocomplete input with a filterable list of suggestions.
 tags: ["tec-combobox", "tec-combobox-item", "tec-combobox-group", "tec-combobox-label", "tec-combobox-separator", "tec-combobox-empty"]
 ---
 
-<ComponentPreview name="combobox-demo" class="min-h-80 items-start" />
+<ComponentPreview name="combobox-demo" />
 
 ## Usage
 
@@ -45,37 +45,37 @@ tec-combobox
 
 A simple combobox with a list of frameworks.
 
-<ComponentPreview name="combobox-basic" class="min-h-80 items-start" />
+<ComponentPreview name="combobox-basic" />
 
 ## Multiple
 
 With `multiple`, chosen options become chips in front of the input and the list stays open while choosing. <Kbd>Backspace</Kbd> in the empty input removes the last chip; <Kbd>←</Kbd> at the start of the input moves to the chips, where <Kbd>Delete</Kbd> removes one. `values` holds the choice; each value is submitted as its own form entry.
 
-<ComponentPreview name="combobox-multiple" class="min-h-80 items-start" />
+<ComponentPreview name="combobox-multiple" />
 
 ## Clear Button
 
 `show-clear` shows a clear button (in place of the chevron) while the input has text.
 
-<ComponentPreview name="combobox-clear" class="min-h-80 items-start" />
+<ComponentPreview name="combobox-clear" />
 
 ## Groups
 
 Use `tec-combobox-group` with a `tec-combobox-label` (or a `label` attribute) and `tec-combobox-separator` to group items. Groups whose items are all filtered out hide, and separators hide while filtering.
 
-<ComponentPreview name="combobox-groups" class="min-h-96 items-start" />
+<ComponentPreview name="combobox-groups" />
 
 ## Custom Items
 
 Items can hold any markup. Give them a `label`: it is what the filter matches and what the input shows once the item is chosen.
 
-<ComponentPreview name="combobox-custom" class="min-h-96 items-start" />
+<ComponentPreview name="combobox-custom" />
 
 ## Custom Value
 
 `allow-custom-value` keeps typed text that matches no option as the value.
 
-<ComponentPreview name="combobox-custom-value" class="min-h-80 items-start" />
+<ComponentPreview name="combobox-custom-value" />
 
 ## Invalid
 
@@ -93,13 +93,13 @@ Use the `disabled` attribute to disable the combobox.
 
 Put an icon in `slot="start"` (or content in `slot="end"`). `--tec-combobox-content-width` and `align-offset` size and shift the popup.
 
-<ComponentPreview name="combobox-input-group" class="min-h-96 items-start" />
+<ComponentPreview name="combobox-input-group" />
 
 ## RTL
 
 Chips, addons and the check marks follow the text direction; <Kbd>→</Kbd> moves from the start of the input to the chips.
 
-<ComponentPreview name="combobox-rtl" direction="rtl" align="start" class="min-h-96 items-start" />
+<ComponentPreview name="combobox-rtl" direction="rtl" align="start" />
 
 ## Keyboard interactions
 

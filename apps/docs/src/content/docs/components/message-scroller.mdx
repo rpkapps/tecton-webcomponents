@@ -4,7 +4,7 @@ description: A chat scroll container that anchors turns, opens saved transcripts
 tags: ["tec-message-scroller", "tec-message-scroller-viewport", "tec-message-scroller-content", "tec-message-scroller-item", "tec-message-scroller-button"]
 ---
 
-<ComponentPreview name="message-scroller-demo" />
+<ComponentPreview name="message-scroller-demo" class="bg-card p-4 min-[480px]:p-8 min-[560px]:p-10 sm:px-10 sm:py-16 dark:bg-background" />
 
 Streaming breaks the classic chat list. Replies arrive in chunks while the reader may still be reading, scrolling back, or looking elsewhere. A good transcript preserves the reader's place while the conversation keeps changing:
 
@@ -58,7 +58,7 @@ Wrap **every** row of the transcript in a `tec-message-scroller-item` so the scr
 
 A turn starts a new exchange — in an AI chat, usually the user's question. Mark that row with `scroll-anchor`. When an anchor is appended, the view moves it near the top and keeps `scroll-previous-item-peek` pixels (64 by default) of the previous row visible, and the reply streams in below it. Anchors are not tied to a role: a marker such as "Rocky joined the chat" can start a turn too, while typing indicators and history controls usually should not.
 
-<ComponentPreview name="message-scroller-group-chat" />
+<ComponentPreview name="message-scroller-group-chat" class="bg-card p-4 min-[480px]:p-8 min-[560px]:p-10 sm:px-10 sm:py-16 dark:bg-background" />
 
 ## Following the live edge
 
@@ -72,7 +72,7 @@ With `auto-scroll`, the view follows content growing at the end while the reader
 
 `default-scroll-position` chooses where a transcript opens: `end` (default), `start`, or `last-anchor` — the last turn (the user's latest question) with the reply below it, which gives the reader an immediate place in the thread. `last-anchor` falls back to `end` when there is no anchor or the last turn already fits. The viewport stays hidden (`:state(pending-scroll)`) until the position is applied, so there is no visible jump.
 
-<ComponentPreview name="message-scroller-opening-position" />
+<ComponentPreview name="message-scroller-opening-position" class="bg-card p-4 min-[480px]:p-8 min-[560px]:p-10 sm:px-10 sm:py-16 dark:bg-background" hideCode />
 
 To avoid a flash of the oldest messages before the element upgrades, hide the scroller until it is defined: `tec-message-scroller:not(:defined) { visibility: hidden }`.
 
@@ -109,7 +109,7 @@ Scroll position, anchoring and following are tracked imperatively; nothing re-re
 
 The button centres itself in either direction and the transcript follows the reading direction.
 
-<ComponentPreview name="message-scroller-rtl" direction="rtl" />
+<ComponentPreview name="message-scroller-rtl" direction="rtl" class="bg-card p-4 min-[480px]:p-8 min-[560px]:p-10 sm:px-10 sm:py-16 dark:bg-background" />
 
 ## Keyboard interactions
 

@@ -4,7 +4,7 @@ description: Displays a file or image attachment with media, metadata, upload st
 tags: ["tec-attachment", "tec-attachment-media", "tec-attachment-content", "tec-attachment-title", "tec-attachment-description", "tec-attachment-actions", "tec-attachment-action", "tec-attachment-trigger", "tec-attachment-group"]
 ---
 
-<ComponentPreview name="attachment-demo" />
+<ComponentPreview name="attachment-demo" class="bg-card dark:bg-background" />
 
 `<tec-attachment>` displays a file or image attachment — its media, name and metadata — with optional actions and upload state. Use it for files and images in chat composers, message threads and upload lists.
 
@@ -52,31 +52,31 @@ tec-attachment-group
 
 Set `variant="image"` on `tec-attachment-media` and put an `<img>` with meaningful `alt` text inside. Use `orientation="vertical"` to stack the media above the content; the actions then float over the corner of the image.
 
-<ComponentPreview name="attachment-image" />
+<ComponentPreview name="attachment-image" class="bg-card dark:bg-background" />
 
 ## States
 
 Set `state` to follow the upload lifecycle. `uploading` and `processing` shimmer the title (not under reduced motion), `idle` dashes the border, and `error` switches to a destructive treatment.
 
-<ComponentPreview name="attachment-states" />
+<ComponentPreview name="attachment-states" class="bg-card dark:bg-background" />
 
 ## Sizes
 
 Use `size` to switch between `default`, `sm` and `xs`.
 
-<ComponentPreview name="attachment-sizes" />
+<ComponentPreview name="attachment-sizes" class="bg-card dark:bg-background" />
 
 ## Group
 
 `tec-attachment-group` lays attachments out in a horizontally scrollable, snapping row whose edges fade while there is more to scroll.
 
-<ComponentPreview name="attachment-group" />
+<ComponentPreview name="attachment-group" class="bg-card dark:bg-background" />
 
 ## Trigger
 
 Add a `tec-attachment-trigger` to make the whole card open a link (`href`) or a dialog (listen for `click`). It covers the card behind the actions, so the actions stay clickable.
 
-<ComponentPreview name="attachment-trigger" />
+<ComponentPreview name="attachment-trigger" class="bg-card dark:bg-background" />
 
 ```html
 <tec-attachment>
@@ -92,7 +92,7 @@ Add a `tec-attachment-trigger` to make the whole card open a link (`href`) or a 
 
 The media, the actions (also in the vertical corner position) and the group's fades follow the reading direction.
 
-<ComponentPreview name="attachment-rtl" direction="rtl" />
+<ComponentPreview name="attachment-rtl" direction="rtl" class="bg-card dark:bg-background" />
 
 ## Keyboard interactions
 

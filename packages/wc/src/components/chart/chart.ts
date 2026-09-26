@@ -255,12 +255,21 @@ export class TecChart extends TectonElement {
     // Parts shown or hidden with the `hidden` attribute (e.g. a series toggled from a legend).
     this.#mutations ??= new MutationObserver(() => this.requestUpdate())
     this.#mutations.observe(this, { attributes: true, attributeFilter: ["hidden"], subtree: true })
+    // Tick labels are measured to thin them out: measure again once web fonts have loaded.
+    document.fonts?.addEventListener("loadingdone", this.#onFontsLoaded)
+    void document.fonts?.ready.then(this.#onFontsLoaded)
+  }
+
+  #onFontsLoaded = () => {
+    this.#font = ""
+    this.requestUpdate()
   }
 
   disconnectedCallback(): void {
     super.disconnectedCallback()
     this.#observer?.disconnect()
     this.#mutations?.disconnect()
+    document.fonts?.removeEventListener("loadingdone", this.#onFontsLoaded)
   }
 
   protected firstUpdated(): void {

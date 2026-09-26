@@ -34,6 +34,19 @@ A native `<label for>` also works with every Tecton form control; `tec-label` ad
 
 <ComponentPreview name="label-wrapping" />
 
+## Label in Field
+
+For form fields, use the [Field](/docs/components/field) component: its `tec-field-label`, `tec-field-description` and `tec-field-error` are wired to the control without ids.
+
+```html
+<tec-field>
+  <tec-field-label>Your email address</tec-field-label>
+  <tec-input type="email"></tec-input>
+</tec-field>
+```
+
+<ComponentPreview name="field-demo" class="h-[44rem]" />
+
 ## RTL
 
 <ComponentPreview name="label-rtl" direction="rtl" />

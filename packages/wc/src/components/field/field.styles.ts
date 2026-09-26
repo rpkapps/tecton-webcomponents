@@ -66,8 +66,11 @@ export const fieldGroupStyles = css`
 `
 
 export const fieldSetStyles = css`
+  /* The shadow fieldset is the flex box; it takes its layout from the host, so layout classes on
+     the element (gap-3, flex-row, items-start) work. */
   :host {
     display: block;
+    flex-direction: column;
     gap: 1.5rem;
   }
   :host(:state(compact)) {
@@ -75,7 +78,10 @@ export const fieldSetStyles = css`
   }
   fieldset {
     display: flex;
-    flex-direction: column;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
     gap: inherit;
     min-inline-size: 0;
     margin: 0;

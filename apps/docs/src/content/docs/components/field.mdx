@@ -4,7 +4,7 @@ description: Combine labels, controls, help text and error messages into accessi
 tags: ["tec-field", "tec-field-label", "tec-field-description", "tec-field-error", "tec-field-content", "tec-field-title", "tec-field-group", "tec-field-set", "tec-field-legend", "tec-field-separator"]
 ---
 
-<ComponentPreview name="field-demo" class="min-h-[52rem]" />
+<ComponentPreview name="field-demo" class="h-[800px] p-6 md:h-[850px]" />
 
 ## Usage
 
@@ -93,7 +93,7 @@ A slider that names itself (`aria-label`) takes a `tec-field-title`, a heading t
 
 ## Checkbox
 
-<ComponentPreview name="field-checkbox" class="min-h-[32rem]" />
+<ComponentPreview name="field-checkbox" class="h-[32rem]" />
 
 ## Radio
 
@@ -113,7 +113,7 @@ Wrap a whole `tec-field` in a `tec-field-label` to turn it into a selectable car
 
 Stack fields with `tec-field-group`, and divide sections with `tec-field-separator`.
 
-<ComponentPreview name="field-group" class="min-h-96" />
+<ComponentPreview name="field-group" class="h-96" />
 
 ## Responsive Layout
 
@@ -121,7 +121,7 @@ Stack fields with `tec-field-group`, and divide sections with `tec-field-separat
 - **Horizontal** (`orientation="horizontal"`) puts the control beside its label. Add a `tec-field-content` to keep the label and its description together.
 - **Responsive** (`orientation="responsive"`) is vertical until the enclosing `tec-field-group` is at least 28rem wide, then horizontal. The group is a size container, so the switch follows the space the form gets, not the viewport.
 
-<ComponentPreview name="field-responsive" class="min-h-[28rem]" />
+<ComponentPreview name="field-responsive" class="h-[650px] p-6 md:h-[500px] md:p-10" />
 
 ## Validation and Errors
 
@@ -135,7 +135,7 @@ A form library or a server passes its issues through the `errors` property (stri
 
 ## RTL
 
-<ComponentPreview name="field-rtl" direction="rtl" class="min-h-[52rem]" />
+<ComponentPreview name="field-rtl" direction="rtl" class="h-auto p-6" />
 
 ## Keyboard interactions
 

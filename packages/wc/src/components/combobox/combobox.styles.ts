@@ -38,7 +38,7 @@ export const comboboxStyles = css`
     box-shadow: var(--tec-focus-ring);
   }
   :host(:state(user-invalid)) .field {
-    border-color: light-dark(var(--tec-destructive), color-mix(in oklab, var(--tec-destructive) 50%, transparent));
+    border-color: var(--tec-destructive);
     box-shadow: var(--tec-focus-ring-invalid);
   }
   @media (prefers-reduced-motion: no-preference) {
@@ -148,6 +148,12 @@ export const comboboxStyles = css`
   }
   .trigger svg {
     color: var(--tec-muted-foreground);
+  }
+  /* The clear and chip-remove crosses are 12px (icon-xs button), the chevron 16px. */
+  .clear svg,
+  .chip-remove svg {
+    width: 0.75rem;
+    height: 0.75rem;
   }
 
   /* ------------------------------------------------------------------ chips (multiple) */
