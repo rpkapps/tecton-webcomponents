@@ -1,0 +1,30 @@
+<tec-card class="w-full max-w-sm">
+  <tec-card-header>
+    <tec-card-title>Login to your account</tec-card-title>
+    <tec-card-description>Enter your email below to login to your account</tec-card-description>
+    <tec-card-action>
+      <tec-button variant="link">Sign Up</tec-button>
+    </tec-card-action>
+  </tec-card-header>
+  <tec-card-content>
+    <form>
+      <div class="flex flex-col gap-6">
+        <div class="grid gap-2">
+          <tec-label for="card-demo-email">Email</tec-label>
+          <tec-input id="card-demo-email" type="email" placeholder="m@example.com" required></tec-input>
+        </div>
+        <div class="grid gap-2">
+          <div class="flex items-center">
+            <tec-label for="card-demo-password">Password</tec-label>
+            <a href="#" class="ms-auto inline-block text-sm underline-offset-4 hover:underline">Forgot your password?</a>
+          </div>
+          <tec-input id="card-demo-password" type="password" required></tec-input>
+        </div>
+      </div>
+    </form>
+  </tec-card-content>
+  <tec-card-footer class="flex-col gap-2">
+    <tec-button type="submit" class="w-full">Login</tec-button>
+    <tec-button variant="outline" class="w-full">Login with Google</tec-button>
+  </tec-card-footer>
+</tec-card>

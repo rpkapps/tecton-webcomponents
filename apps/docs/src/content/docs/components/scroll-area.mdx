@@ -1,0 +1,195 @@
+---
+title: Scroll Area
+description: Augments native scroll functionality for custom, cross-browser styling.
+tags: ["tec-scroll-area"]
+---
+
+<ComponentPreview name="scroll-area-demo" class="min-h-96" />
+
+## Usage
+
+```ts
+import "@tecton/wc/scroll-area"
+```
+
+```html
+<tec-scroll-area class="h-[200px] w-[350px] rounded-md border border-border">
+  <div class="p-4">Your scrollable content here.</div>
+</tec-scroll-area>
+```
+
+The element itself is the scroll container. It keeps the platform's scrolling (wheel, touch, keyboard, scroll anchoring, `scrollTo()`, `scrollTop`) and only styles the native scrollbar: thin, with the theme's border colour as the thumb, in every browser.
+
+## Horizontal
+
+Content wider than the box scrolls sideways: use `whitespace-nowrap` or an inner `flex w-max` row. There is no orientation to set.
+
+<ComponentPreview name="scroll-area-horizontal-demo" />
+
+## RTL
+
+In a right-to-left context the vertical scrollbar moves to the left edge and horizontal scrolling starts at the right, as the browser does for any scroll container.
+
+<ComponentPreview name="scroll-area-rtl" direction="rtl" class="min-h-96" />
+
+## Keyboard interactions
+
+While the content overflows and contains nothing focusable, the scroll area is a tab stop itself, so the keys below scroll it. When the content has links or buttons, tabbing to them scrolls them into view instead.
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus to the scroll area (when it has no focusable content) or through its content."],
+    ["ArrowUp / ArrowDown", "Scrolls vertically by a small step."],
+    ["ArrowLeft / ArrowRight", "Scrolls horizontally by a small step."],
+    ["PageUp / PageDown", "Scrolls vertically by a page."],
+    ["Space / Shift+Space", "Scrolls down / up by a page."],
+    ["Home / End", "Scrolls to the start / end."],
+  ]}
+/>
+
+## Accessibility
+
+- With an `aria-label` (or `aria-labelledby`), the scroll area is exposed as a named `region`, so screen reader users know what the scrolling content is. Without one it has no role.
+- When the content overflows and has no focusable element, the element sets `tabindex="0"` on itself (and removes it when that is no longer true), so keyboard users can scroll it; label it in that case. A `tabindex` you set is left alone.
+- The focus ring is the Tecton ring on the element's edge, and it stays visible in forced-colours mode.
+- The scrollbar is the native one: it keeps its platform behaviour, contrast settings and assistive technology support.
+
+## API Reference
+
+<ApiReference tags={["tec-scroll-area"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A bounded region has more content than height: a tag list, a log, a long option list inside a card.
+- The scrollbar is going to be seen often enough that the browser default looks out of place.
+- The region scrolls on its own while the page around it stays still.
+
+### Not for
+
+- a chat transcript that follows new messages: use [Message Scroller](/docs/components/message-scroller)
+- the scrolling body of a titled tool surface: use [Panel](/docs/tecton/panel)
+- the scrolling work area of the application frame: use [App Shell](/docs/tecton/app-shell)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Give it a size: `h-*` or `max-h-*`, or `min-h-0 flex-1` when it is the growing child of a flex column.
+
+</Do>
+
+<Do>
+
+Scroll sideways by making the content wider than the box (`whitespace-nowrap`, or an inner `flex w-max` row).
+
+</Do>
+
+<Do>
+
+Put the padding on a wrapper inside the area, so the border and the scrollbar stay outside it.
+
+</Do>
+
+<Do>
+
+Give it an `aria-label` when the content holds nothing focusable; it then becomes a named region that keyboard users can focus and scroll.
+
+</Do>
+
+<Do>
+
+Keep the scrollbar visible as the sign that more rows exist.
+
+</Do>
+
+<Do>
+
+One element owns each scroll: never put a scroll area inside a box that already scrolls, such as a panel body or the app shell's main area.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A hand-styled scrollbar on a plain overflow-auto box">
+
+<Wrong>
+
+```html
+<div class="h-72 w-48 overflow-auto rounded-md border [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+  <div class="p-4">…</div>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-scroll-area class="h-72 w-48 rounded-md border border-border">
+  <div class="p-4">…</div>
+</tec-scroll-area>
+```
+
+</Correct>
+
+The scroll area styles the real scrollbar with the standard `scrollbar-width` and `scrollbar-color`, so it follows the theme in every engine and adds the keyboard tab stop; `::-webkit-scrollbar` does nothing in Firefox, and `bg-gray-300` is stock Tailwind, which the Tecton palette resets to no CSS at all.
+
+</Dont>
+
+<Dont severity="HIGH" title="A scroll area with no height">
+
+<Wrong>
+
+```html
+<tec-scroll-area class="w-full rounded-md border border-border">
+  <tec-table>…</tec-table>
+</tec-scroll-area>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-scroll-area class="h-96 w-full rounded-md border border-border">
+  <tec-table>…</tec-table>
+</tec-scroll-area>
+```
+
+</Correct>
+
+With no height the element grows with its content, never overflows, and the whole page scrolls instead of the region.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="An unnamed scroll region">
+
+<Wrong>
+
+```html
+<tec-scroll-area class="h-72 w-full rounded-md border border-border">
+  <pre class="p-4 text-xs">…</pre>
+</tec-scroll-area>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-scroll-area aria-label="Job log" class="h-72 w-full rounded-md border border-border">
+  <pre class="p-4 text-xs">…</pre>
+</tec-scroll-area>
+```
+
+</Correct>
+
+A log has nothing focusable, so the scroll area becomes the tab stop; without a label a screen reader announces an anonymous focusable group, with one it announces the "Job log" region.
+
+</Dont>

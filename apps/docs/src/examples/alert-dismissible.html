@@ -1,0 +1,33 @@
+<div id="alert-dismissible" class="flex w-full max-w-md flex-col items-center gap-3">
+  <tec-alert variant="success" role="status">
+    <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m16 9-5.5 5.5L8 12"/></svg>
+    <tec-alert-title>Three FDA alternatives ranked</tec-alert-title>
+    <tec-alert-description>Alternative B has the lowest cost per barrel.</tec-alert-description>
+    <tec-button slot="action" variant="ghost" size="xs">View</tec-button>
+    <tec-button slot="action" variant="ghost" size="icon-sm" aria-label="Dismiss" data-dismiss>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </tec-button>
+  </tec-alert>
+  <tec-alert variant="info" appearance="outline" role="status" dismissible>
+    <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    <tec-alert-title>Model out of date</tec-alert-title>
+    <tec-alert-description>The built-in close button: the dismissible attribute.</tec-alert-description>
+  </tec-alert>
+  <tec-button variant="outline" size="sm" hidden data-show>Show alerts</tec-button>
+</div>
+<script type="module">
+  const root = document.getElementById("alert-dismissible")
+  const show = root.querySelector("[data-show]")
+  const alerts = [...root.querySelectorAll("tec-alert")]
+  const sync = () => (show.hidden = alerts.some((alert) => !alert.hidden))
+  root.querySelector("[data-dismiss]").addEventListener("click", () => {
+    alerts[0].hidden = true
+    sync()
+    show.focus()
+  })
+  alerts[1].addEventListener("tec-dismiss", () => requestAnimationFrame(() => (sync(), show.focus())))
+  show.addEventListener("click", () => {
+    alerts.forEach((alert) => (alert.hidden = false))
+    sync()
+  })
+</script>

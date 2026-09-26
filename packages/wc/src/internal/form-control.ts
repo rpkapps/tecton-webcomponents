@@ -45,6 +45,13 @@
  *
  * Events: fire the native-named `input` (composed natively) and `change` (use `redispatchChange`,
  * native `change` is not composed) on user interaction only.
+ *
+ * **Control observers** (the field protocol). A container that presents a control — `<tec-field>`
+ * (label, description, error message) or `<tec-input-group>` (one ring around the input and its
+ * addons) — follows the control's displayed state with {@link observeControl}: the control calls the
+ * observer's `controlChanged(control)` after every value/validity sync (so `:state(user-invalid)`,
+ * `validationMessage` and `:disabled` can be read there), and displays invalidity while an observer
+ * reports `invalid: true` (a `<tec-field invalid>`), without failing validation.
  */
 import { property, state } from "lit/decorators.js"
 import type { PropertyValues } from "lit"
@@ -112,6 +119,45 @@ export function requiredValidator<E extends FormControl>(
 ): Validator<E> {
   return (el) =>
     el.required && isEmpty(el) ? { flags: { valueMissing: true }, message: nativeValueMissingMessage(kind) } : null
+}
+
+/**
+ * An element that follows a form control's displayed state (see "Control observers" in the module
+ * docs). Registered with {@link observeControl}.
+ */
+export interface ControlObserver {
+  /**
+   * While `true`, the control displays invalidity (`aria-invalid` on its inner control,
+   * `:state(user-invalid)`) without failing constraint validation. Call `requestUpdate()` on the
+   * control after changing it.
+   */
+  readonly invalid?: boolean
+  /** Called by the control after each sync of its value and validity. */
+  controlChanged(control: HTMLElement): void
+}
+
+// Shared through the global symbol registry, so two copies of the library still see each other.
+const observerKey = Symbol.for("tecton.control-observers")
+const globalScope = globalThis as unknown as Record<symbol, WeakMap<Element, Set<ControlObserver>> | undefined>
+const controlObservers: WeakMap<Element, Set<ControlObserver>> = (globalScope[observerKey] ??= new WeakMap())
+
+/**
+ * Registers `observer` on `control` (any element; only `FormControlMixin` controls call it back) and
+ * asks the control to re-sync, so the observer gets the current state. No-op when already registered.
+ */
+export function observeControl(control: Element, observer: ControlObserver): void {
+  let set = controlObservers.get(control)
+  if (!set) controlObservers.set(control, (set = new Set()))
+  if (set.has(observer)) return
+  set.add(observer)
+  ;(control as Partial<{ requestUpdate(): void }>).requestUpdate?.()
+}
+
+/** Removes an observer registered with {@link observeControl}. */
+export function unobserveControl(control: Element, observer: ControlObserver): void {
+  const set = controlObservers.get(control)
+  if (!set?.delete(observer)) return
+  ;(control as Partial<{ requestUpdate(): void }>).requestUpdate?.()
 }
 
 type Constructor<T = object> = new (...args: any[]) => T // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -250,7 +296,9 @@ export function FormControlMixin<T extends Constructor<TectonElement>>(Base: T) 
       return this.disabled || this.formDisabled
     }
     get showInvalid(): boolean {
-      return this.invalid || (this._interacted && !this.isDisabled && !this.internals.validity.valid)
+      if (this.invalid || (this._interacted && !this.isDisabled && !this.internals.validity.valid)) return true
+      for (const observer of controlObservers.get(this) ?? []) if (observer.invalid) return true
+      return false
     }
     protected markInteracted(): void {
       if (!this._interacted) this._interacted = true
@@ -355,6 +403,7 @@ export function FormControlMixin<T extends Constructor<TectonElement>>(Base: T) 
         if (show) control.setAttribute("aria-invalid", "true")
         else control.removeAttribute("aria-invalid")
       }
+      for (const observer of controlObservers.get(this) ?? []) observer.controlChanged(this)
     }
   }
   return FormControlElement as unknown as Constructor<FormControl> & T

@@ -1,0 +1,208 @@
+---
+title: Slider
+description: An input where the user selects a value, or a range of values, within a given range.
+tags: ["tec-slider"]
+---
+
+<ComponentPreview name="slider-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/slider"
+```
+
+```html
+<tec-slider aria-label="Volume" value="33" max="100" step="1"></tec-slider>
+```
+
+## Range
+
+Give the `value` attribute two numbers (comma- or space-separated) for a range with two thumbs. `thumb-labels` names each thumb for screen readers.
+
+<ComponentPreview name="slider-range" />
+
+## Multiple Thumbs
+
+Any number of values renders that many thumbs. A thumb never passes its neighbours.
+
+<ComponentPreview name="slider-multiple" />
+
+## Vertical
+
+Use `orientation="vertical"` and give the slider a height (it has a 10rem minimum).
+
+<ComponentPreview name="slider-vertical" />
+
+## Controlled
+
+The `values` property holds the current numbers. `input` fires continuously while the user drags or presses keys, `change` when a change is committed (pointer released, key pressed). Set `values` (or `value`) to control the slider; programmatic changes fire no events.
+
+<ComponentPreview name="slider-controlled" />
+
+## Value Format
+
+`formatOptions` takes `Intl.NumberFormat` options; they format `aria-valuetext`, so assistive technology reads "60%" instead of "0.6". The number format follows the nearest `lang`.
+
+<ComponentPreview name="slider-format" />
+
+## Disabled
+
+<ComponentPreview name="slider-disabled" />
+
+## Forms
+
+`<tec-slider>` is a form-associated custom element. With a `name`, it submits one `name=value` entry per thumb (`depth=1200&depth=2400`), which `FormData.getAll()` reads back as a list. Form reset restores the `value` attribute; a `disabled` ancestor `<fieldset>` disables it.
+
+<ComponentPreview name="slider-form" />
+
+## RTL
+
+In right-to-left layouts the slider fills from the right and Left/Right arrows are mirrored.
+
+<ComponentPreview name="slider-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["ArrowRight / ArrowUp", "Increases the focused thumb by one step (ArrowRight decreases in RTL)."],
+    ["ArrowLeft / ArrowDown", "Decreases the focused thumb by one step (ArrowLeft increases in RTL)."],
+    ["PageUp / Shift+ArrowUp", "Increases by a page: a tenth of the range, rounded to the step."],
+    ["PageDown / Shift+ArrowDown", "Decreases by a page."],
+    ["Home", "Sets the thumb to its minimum (the minimum, or the previous thumb's value)."],
+    ["End", "Sets the thumb to its maximum (the maximum, or the next thumb's value)."],
+    ["Tab / Shift+Tab", "Moves between the thumbs, then out of the slider."],
+  ]}
+/>
+
+## Accessibility
+
+- Every thumb is a focusable `role="slider"` with `aria-valuenow`, `aria-valuemin` / `aria-valuemax` (the neighbouring thumbs' values bound the inner thumbs), `aria-valuetext` and `aria-orientation`.
+- Name the slider with `aria-label`, `aria-labelledby` or a `<label for>` pointing at it; every thumb carries that name. Clicking the label focuses the first thumb. With several thumbs, add `thumb-labels` ("Minimum, Maximum") so each thumb says which end it is.
+- `aria-describedby` on the element describes every thumb.
+- Pressing the track moves the closest thumb there, focuses it and starts a drag. `disabled` removes the thumbs from the tab order and ignores pointer input.
+
+## API Reference
+
+<ApiReference tags={["tec-slider"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- An approximate value inside a known range: opacity, threshold, zoom, temperature.
+- A range with two or more thumbs, such as a price or depth filter.
+- The exact number matters less than the gesture of moving through the range.
+
+### Not for
+
+- an exact number the user types, with units or validation: use [Input](/docs/components/input)
+- the title, description and layout around the control: use [Field](/docs/components/field)
+- an on/off setting rather than a value: use [Switch](/docs/components/switch)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Bound the range with `min`, `max` and `step`, like a native range input.
+
+</Do>
+
+<Do>
+
+Read the numbers from the `values` property in an `input` or `change` listener; `value` is the same list as a comma-separated string.
+
+</Do>
+
+<Do>
+
+Name it with `aria-label`, `aria-labelledby` or a `<label for>`; the element renders a track and thumbs only.
+
+</Do>
+
+<Do>
+
+Inside a [Field](/docs/components/field), use a title and description and show the live value next to it.
+
+</Do>
+
+<Do>
+
+Disable with `disabled`; switch axis with `orientation="vertical"` plus a height class such as `h-40`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Reading the value as a single number">
+
+<Wrong>
+
+```js
+slider.addEventListener("change", () => setZoom(Number(slider.value)))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+slider.addEventListener("change", () => setZoom(slider.values[0]))
+```
+
+</Correct>
+
+`value` is a comma-separated string of every thumb ("25,75"), so `Number()` gives `NaN` as soon as there is a second thumb; `values` is always an array of numbers.
+
+</Dont>
+
+<Dont severity="HIGH" title="A slider without an accessible name">
+
+<Wrong>
+
+```html
+<p>Zoom</p>
+<tec-slider value="50"></tec-slider>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-label for="zoom">Zoom</tec-label>
+<tec-slider id="zoom" value="50"></tec-slider>
+```
+
+</Correct>
+
+Nearby text is not associated with the thumbs, which are then announced as unnamed sliders.
+
+</Dont>
+
+<Dont severity="MEDIUM" title='disabled="false" to enable a slider'>
+
+<Wrong>
+
+```html
+<tec-slider aria-label="Opacity" value="40" disabled="false"></tec-slider>
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+slider.disabled = false // or slider.removeAttribute("disabled")
+```
+
+</Correct>
+
+`disabled` is a boolean attribute: any value, including `"false"`, disables the slider.
+
+</Dont>

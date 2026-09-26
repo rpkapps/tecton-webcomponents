@@ -1,0 +1,225 @@
+---
+title: Toggle Group
+description: A set of two-state buttons that can be toggled on or off.
+tags: ["tec-toggle-group", "tec-toggle-group-item"]
+---
+
+<ComponentPreview name="toggle-group-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/toggle-group"
+```
+
+```html
+<tec-toggle-group aria-label="Alignment" value="a">
+  <tec-toggle-group-item value="a">A</tec-toggle-group-item>
+  <tec-toggle-group-item value="b">B</tec-toggle-group-item>
+  <tec-toggle-group-item value="c">C</tec-toggle-group-item>
+</tec-toggle-group>
+```
+
+## Composition
+
+```text
+tec-toggle-group
+├── tec-toggle-group-item
+└── tec-toggle-group-item
+```
+
+## Selection
+
+By default at most one item is on (like radio buttons; pressing the selected item turns it off, unless `disallow-empty` is set). With `multiple`, every item toggles on its own — the demo above is a multiple group. The `value` attribute is the initial selection (a space-separated list with `multiple`); the `values` property holds the current one (`value` is its first entry). The group fires `tec-value-change` with `detail: { value, values }` when the user changes it; `preventDefault()` keeps the current selection.
+
+## Outline
+
+Use `variant="outline"` for an outline style. `variant` and `size` set on the group apply to every item.
+
+<ComponentPreview name="toggle-group-outline" />
+
+## Size
+
+Use the `size` attribute to change the size of the toggle group.
+
+<ComponentPreview name="toggle-group-sizes" />
+
+## Spacing
+
+Use `spacing` to set the gap between items, in 0.25rem steps (default `2`).
+
+<ComponentPreview name="toggle-group-spacing" />
+
+## Joined
+
+`spacing="0"` joins the items into one segmented control: inner corners are square, the outline items share their borders, and only the group's outer corners are rounded (on the correct side in RTL).
+
+<ComponentPreview name="toggle-group-joined" />
+
+## Vertical
+
+Use `orientation="vertical"` for vertical toggle groups. The arrow keys follow the orientation.
+
+<ComponentPreview name="toggle-group-vertical" />
+
+## Disabled
+
+`disabled` on the group disables every item; `disabled` on an item disables that one.
+
+<ComponentPreview name="toggle-group-disabled" />
+
+## Custom
+
+Items are boxes you can resize with layout classes on the element (`size-16`) and round with `--tec-toggle-radius`; lay out their content with an inner element.
+
+<ComponentPreview name="toggle-group-font-weight-selector" />
+
+## RTL
+
+<ComponentPreview name="toggle-group-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves focus into the group — to the selected item in a single-selection group, else to the last focused one — and then out of it."],
+    ["ArrowRight / ArrowLeft", "Moves focus to the next / previous enabled item (horizontal groups; mirrored in RTL). Does not wrap."],
+    ["ArrowDown / ArrowUp", "Moves focus to the next / previous enabled item (vertical groups)."],
+    ["Home / End", "Moves focus to the first / last enabled item."],
+    ["Space / Enter", "Toggles the focused item."],
+  ]}
+/>
+
+## Accessibility
+
+- A single-selection group has the `radiogroup` role and its items are `radio`s with `aria-checked`; a `multiple` group is a `toolbar` of toggle buttons with `aria-pressed` (as React Aria's ToggleButtonGroup). Both expose `aria-orientation`.
+- Items take focus themselves, with one item in the tab order (roving tabindex); the arrow keys move focus without changing the selection.
+- Name the group with `aria-label` or `aria-labelledby`, and give icon-only items an `aria-label`.
+- The focused item is raised above its neighbours so its ring is never covered in a joined group.
+
+## API Reference
+
+<ApiReference tags={["tec-toggle-group", "tec-toggle-group-item"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A small fixed set of options works as a filter or a formatting control in a toolbar.
+- Several of those options may be on at the same time (`multiple`).
+- The options are icons or one-word labels that fit in a segmented row.
+
+### Not for
+
+- switching between panels of content: use [Tabs](/docs/components/tabs)
+- a single independent on/off control: use [Toggle](/docs/components/toggle)
+- buttons that perform actions rather than hold state: use [Button Group](/docs/components/button-group)
+- a choice submitted with a form: use [Radio Group](/docs/components/radio-group)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Key each item with `value`; read `values` (or `value`) on the group and listen for `tec-value-change`.
+
+</Do>
+
+<Do>
+
+Use the default single selection for an exclusive choice, `multiple` for independent toggles.
+
+</Do>
+
+<Do>
+
+Shape the bar with `variant="outline"`, `size` and `spacing="0"`; the joined corners and shared borders come from the group.
+
+</Do>
+
+<Do>
+
+Give every icon-only `tec-toggle-group-item` an `aria-label`, and stack with `orientation="vertical"`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Reading the selection from a click on an item">
+
+<Wrong>
+
+```js
+group.addEventListener("click", (event) => setWeight(event.target.value))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+group.addEventListener("tec-value-change", (event) => setWeight(event.detail.value))
+```
+
+</Correct>
+
+`click` also fires for disabled items, for the selected item that turns itself off, and from inside an item's content (where `event.target` is not the item); `tec-value-change` carries the resulting selection.
+
+</Dont>
+
+<Dont severity="HIGH" title="A toggle group used to switch content panels">
+
+<Wrong>
+
+```html
+<tec-toggle-group value="overview">
+  <tec-toggle-group-item value="overview">Overview</tec-toggle-group-item>
+  <tec-toggle-group-item value="reports">Reports</tec-toggle-group-item>
+</tec-toggle-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-tabs value="overview">
+  <tec-tabs-list>
+    <tec-tabs-trigger value="overview">Overview</tec-tabs-trigger>
+    <tec-tabs-trigger value="reports">Reports</tec-tabs-trigger>
+  </tec-tabs-list>
+  <tec-tabs-content value="overview">…</tec-tabs-content>
+  <tec-tabs-content value="reports">…</tec-tabs-content>
+</tec-tabs>
+```
+
+</Correct>
+
+Toggle items are radios or pressed buttons, not `tab`s with `tabpanel`s, so the panel is never associated with its control.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Icon-only items with no accessible name">
+
+<Wrong>
+
+```html
+<tec-toggle-group-item value="bold"><svg aria-hidden="true">…</svg></tec-toggle-group-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-toggle-group-item value="bold" aria-label="Toggle bold"><svg aria-hidden="true">…</svg></tec-toggle-group-item>
+```
+
+</Correct>
+
+The item's only content is a hidden SVG, so its accessible name is empty and it is announced as an unlabelled toggle.
+
+</Dont>

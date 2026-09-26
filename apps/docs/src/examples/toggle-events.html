@@ -1,0 +1,17 @@
+<div id="toggle-events" class="flex flex-col items-center gap-3">
+  <tec-toggle variant="outline" aria-label="Toggle bold">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/></svg>
+    Bold
+  </tec-toggle>
+  <p class="text-sm text-muted-foreground" aria-live="polite">Bold is off.</p>
+</div>
+<script type="module">
+  const root = document.getElementById("toggle-events")
+  const status = root.querySelector("p")
+
+  // Fires for pointer, Enter and Space — never for programmatic changes.
+  // Call event.preventDefault() to keep the current state.
+  root.querySelector("tec-toggle").addEventListener("tec-pressed-change", (event) => {
+    status.textContent = `Bold is ${event.detail.pressed ? "on" : "off"}.`
+  })
+</script>

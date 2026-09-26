@@ -1,0 +1,180 @@
+---
+title: Spinner
+description: An indicator that can be used to show a loading state.
+tags: ["tec-spinner"]
+---
+
+<ComponentPreview name="spinner-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/spinner"
+```
+
+```html
+<tec-spinner></tec-spinner>
+```
+
+## Customization
+
+Put any icon in the spinner to replace the default loader circle: it turns the same way and keeps the spinner's size, role and label.
+
+<ComponentPreview name="spinner-custom" />
+
+## Size
+
+The spinner is 16px, or the icon size of the component it sits in (`--tec-icon-size`). Resize it with a `size-*` class.
+
+<ComponentPreview name="spinner-size" />
+
+## Button
+
+Put the spinner in the `start` slot of a [button](/docs/components/button) (or `end`) to show that the action is running.
+
+<ComponentPreview name="spinner-button" />
+
+## Badge
+
+Put the spinner in the `start` or `end` slot of a [badge](/docs/components/badge).
+
+<ComponentPreview name="spinner-badge" />
+
+## Input Group
+
+<ComponentPreview name="spinner-input-group" />
+
+## Empty
+
+<ComponentPreview name="spinner-empty" />
+
+## RTL
+
+<ComponentPreview name="spinner-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A spinner is not focusable and has no keyboard interaction.
+
+## Accessibility
+
+- The element has `role="status"` and the accessible name `label` ("Loading" by default), both as default semantics: an `aria-label` or `role` attribute on the element overrides them. Localise the name with `label`.
+- A status is a polite live region; do not wrap the spinner in another one. Announce the result ("Upload complete") when the work ends.
+- The spinner keeps turning under `prefers-reduced-motion: reduce` — it is the only sign that work is going on — but three times slower.
+- The stroke is `currentColor`, so it follows forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-spinner"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A control is busy: a button that is saving, an input group that is validating, a badge that says "Generating".
+- A small region is waiting, and the wait is short and cannot be measured.
+- An [Empty](/docs/components/empty) state stands in for a running operation, with the spinner in `tec-empty-media`.
+
+### Not for
+
+- a measurable percentage: use [Progress](/docs/components/progress)
+- a ring with the value in the middle: use [Circular Progress](/docs/tecton/circular-progress)
+- a placeholder that holds the page layout while content loads: use [Skeleton](/docs/components/skeleton)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Inside a button or a badge, put it in `slot="start"` or `slot="end"` so the control trims its padding on that side.
+
+</Do>
+
+<Do>
+
+Make the label of the busy control a verb ("Saving…"), and keep the control from being pressed twice.
+
+</Do>
+
+<Do>
+
+Resize with `size-*` classes only (`size-3`, `size-6`); the stroke is `currentColor`, so set the colour on the parent with a semantic token.
+
+</Do>
+
+<Do>
+
+The spinner already is a status with the name "Loading"; do not wrap it in a second live region.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A spinner in the label of a button">
+
+<Wrong>
+
+```html
+<tec-button size="sm"><tec-spinner></tec-spinner> Saving…</tec-button>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-button size="sm"><tec-spinner slot="start"></tec-spinner> Saving…</tec-button>
+```
+
+</Correct>
+
+The button trims its leading padding only for the `start` slot, so a spinner in the label sits in full text padding and the button jumps in width the moment it appears.
+
+</Dont>
+
+<Dont severity="HIGH" title="A hand-rolled spinner div with borders">
+
+<Wrong>
+
+```html
+<div class="size-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-spinner></tec-spinner>
+```
+
+</Correct>
+
+`gray-300` and `blue-600` are not Tecton steps, so the ring gets no colour at all, and the bare `div` has neither `role="status"` nor an accessible name.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Colouring the spinner with a stock class">
+
+<Wrong>
+
+```html
+<tec-spinner class="size-5 text-gray-500"></tec-spinner>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-spinner class="size-5 text-muted-foreground"></tec-spinner>
+```
+
+</Correct>
+
+`gray-500` is not a Tecton step, so the class emits no CSS and the spinner keeps whatever colour it inherits.
+
+</Dont>

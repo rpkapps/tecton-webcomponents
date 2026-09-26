@@ -1,0 +1,202 @@
+---
+title: Badge
+description: Displays a badge or a link that looks like a badge.
+tags: ["tec-badge"]
+---
+
+<ComponentPreview name="badge-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/badge"
+```
+
+```html
+<tec-badge variant="secondary">Badge</tec-badge>
+```
+
+## Variants
+
+Use the `variant` attribute to change the look of the badge.
+
+<ComponentPreview name="badge-variants" />
+
+## With Icon
+
+Put an icon in `slot="start"` or `slot="end"`; the badge trims its padding on that side and sizes the icon with the badge (12, 14 or 16 px).
+
+<ComponentPreview name="badge-icon" />
+
+## With Spinner
+
+A [`<tec-spinner>`](/docs/components/spinner) in the `start` or `end` slot shows that the labelled work is in progress.
+
+<ComponentPreview name="badge-spinner" />
+
+## Link
+
+With `href`, the badge renders a real `<a>` in its shadow root, with a hover colour and a focus ring. `target` and `rel` work as on a link.
+
+<ComponentPreview name="badge-link" />
+
+## Custom Colors
+
+For a category colour that no `variant` carries, colour the badge box through its `base` part with a [palette](/docs/theming#palette) pair, such as `[&::part(base)]:bg-green-120 [&::part(base)]:text-green-830` (a step is a contrast level, so no `dark:` variant is needed).
+
+<ComponentPreview name="badge-colors" />
+
+## Status colours
+
+Tecton adds `variant="success" | "warning" | "info"` next to `destructive`, and `appearance="outline"` for a transparent badge with a coloured border and text. The interactive, selectable and removable version of the badge is the [Chip](/docs/tecton/chip), which takes the same `variant`, `appearance` and `size`.
+
+<ComponentPreview name="badge-status" />
+
+## Sizes
+
+Use `size="default" | "md" | "lg"` (20 / 24 / 28 px); icons scale with the size.
+
+<ComponentPreview name="badge-sizes" />
+
+## RTL
+
+Badges use logical padding, so start and end icons follow `dir="rtl"` on any ancestor.
+
+<ComponentPreview name="badge-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A badge is static text and is not focusable. A link badge (`href`) is a link:
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus to / away from a link badge."],
+    ["Enter", "Follows the link."],
+  ]}
+/>
+
+## Accessibility
+
+- A badge renders a `<span>` with no role: its text is read in place, as part of the surrounding content. Make the text self-explanatory ("12 errors", not "12").
+- With `href` the badge is a native link in its shadow root (`delegatesFocus`); `aria-label`, `aria-current` and other ARIA set on the element are forwarded to it.
+- Slotted icons are decorative: mark them `aria-hidden="true"`. A slotted `tec-spinner` is a status with the name "Loading".
+- A badge never reacts to clicks. For something the user selects or removes, use a [Chip](/docs/tecton/chip), which has the keyboard and ARIA of a tag group.
+
+## API Reference
+
+<ApiReference tags={["tec-badge"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A static label names a status, a category or a state: "Draft", "Producing", "12 errors".
+- The label carries a severity: `variant="success" | "warning" | "info" | "destructive"`.
+- The label links to the thing it names, inside a table cell, a list row or a card header.
+
+### Not for
+
+- a tag the user can select or remove: use [Chip](/docs/tecton/chip)
+- a count or dot pinned to the corner of an icon or avatar: use [Count Badge](/docs/tecton/count-badge)
+- a confirmation that disappears on its own: use [Toast](/docs/components/sonner)
+- a keyboard key or a shortcut hint: use [Kbd](/docs/components/kbd)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Pick meaning with `variant`, weight with `appearance="solid" | "outline"`, height with `size="default" | "md" | "lg"` (20 / 24 / 28 px).
+
+</Do>
+
+<Do>
+
+Put an icon or a `tec-spinner` in `slot="start"` or `slot="end"` so the badge trims its padding on that side.
+
+</Do>
+
+<Do>
+
+Make it a link with `href`; never wrap a badge in an `<a>` or give it a `click` handler.
+
+</Do>
+
+<Do>
+
+A category colour that no `variant` carries is the one documented exception: a Tecton palette pair on the `base` part, never a stock Tailwind colour. Otherwise `class` is for placement.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Hand-colouring a status label with classes">
+
+<Wrong>
+
+```html
+<tec-badge class="bg-green-600 text-white">Producing</tec-badge>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-badge variant="success">Producing</tec-badge>
+```
+
+</Correct>
+
+`green-600` is not a Tecton step, so the reset palette emits no rule at all — and a background on the element sits behind the badge box, which keeps its own colour.
+
+</Dont>
+
+<Dont severity="HIGH" title="Making a badge clickable with a handler">
+
+<Wrong>
+
+```html
+<tec-badge variant="info" onclick="setFilter('fault-seal')">Fault seal</tec-badge>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-chip-group aria-label="Filters" selection-mode="single">
+  <tec-chip value="fault-seal" variant="info">Fault seal</tec-chip>
+</tec-chip-group>
+```
+
+</Correct>
+
+A badge has no role, no tab stop and no key handling, so the label answers a mouse click and is unreachable by keyboard and silent to assistive technology.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="An icon in the default slot">
+
+<Wrong>
+
+```html
+<tec-badge variant="warning"><svg aria-hidden="true">…</svg> Unsaved</tec-badge>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-badge variant="warning"><svg slot="start" aria-hidden="true">…</svg> Unsaved</tec-badge>
+```
+
+</Correct>
+
+The padding trims only next to the `start` / `end` slots, so an icon in the label sits in full text padding and the badge is wider than every other badge in the row.
+
+</Dont>

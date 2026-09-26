@@ -1,0 +1,14 @@
+<div id="meter-auto-color" class="flex w-full max-w-xs flex-col gap-4">
+  <tec-meter label="Geological risk" color="auto" value="25" value-label="Low"></tec-meter>
+  <tec-slider aria-label="Risk" value="25"></tec-slider>
+</div>
+<script type="module">
+  const root = document.getElementById("meter-auto-color")
+  const meter = root.querySelector("tec-meter")
+  root.querySelector("tec-slider").addEventListener("input", (event) => {
+    const value = event.target.value
+    const risk = Number(Array.isArray(value) ? value[0] : value)
+    meter.value = risk
+    meter.valueLabel = risk >= 67 ? "High" : risk >= 34 ? "Medium" : "Low"
+  })
+</script>

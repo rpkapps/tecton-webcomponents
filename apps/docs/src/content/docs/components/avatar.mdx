@@ -1,0 +1,253 @@
+---
+title: Avatar
+description: An image element with a fallback for representing the user.
+tags: ["tec-avatar", "tec-avatar-image", "tec-avatar-fallback", "tec-avatar-badge", "tec-avatar-group", "tec-avatar-group-count"]
+---
+
+<ComponentPreview name="avatar-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/avatar"
+```
+
+```html
+<tec-avatar>
+  <tec-avatar-image src="/avatars/01.png" alt="Jane Doe"></tec-avatar-image>
+  <tec-avatar-fallback>JD</tec-avatar-fallback>
+</tec-avatar>
+```
+
+## Composition
+
+```text
+tec-avatar
+├── tec-avatar-image
+├── tec-avatar-fallback
+└── tec-avatar-badge
+```
+
+```text
+tec-avatar-group
+├── tec-avatar
+│   ├── tec-avatar-image
+│   ├── tec-avatar-fallback
+│   └── tec-avatar-badge
+├── tec-avatar
+└── tec-avatar-group-count
+```
+
+## Basic
+
+An avatar with a picture and a fallback. While the picture loads or is shown, the fallback stays hidden; when `src` is empty or the picture fails to load, `tec-avatar-image` hides itself and the fallback appears. The image exposes its state as `status` (`loading`, `loaded`, `error`), as the custom states `:state(loading)`, `:state(loaded)` and `:state(error)`, and fires `load` / `error` like an `<img>`.
+
+<ComponentPreview name="avatar-basic" />
+
+## Badge
+
+`tec-avatar-badge` puts a status dot on the bottom end corner of the avatar. Recolour it with a Tecton colour class, and give it a `label` when the status matters to screen reader users.
+
+<ComponentPreview name="avatar-badge" />
+
+```html
+<tec-avatar>
+  <tec-avatar-image src="/avatars/01.png" alt="@shadcn"></tec-avatar-image>
+  <tec-avatar-fallback>CN</tec-avatar-fallback>
+  <tec-avatar-badge class="bg-green-560" label="Online"></tec-avatar-badge>
+</tec-avatar>
+```
+
+## Badge with Icon
+
+A badge can hold a small icon. It is hidden on `sm` avatars, where the dot is too small for it.
+
+<ComponentPreview name="avatar-badge-icon" />
+
+## Avatar Group
+
+`tec-avatar-group` overlaps its avatars and outlines each with the page background.
+
+<ComponentPreview name="avatar-group" />
+
+## Avatar Group Count
+
+Close a group with `tec-avatar-group-count` for the people not shown. It takes the size of the avatars in the group.
+
+<ComponentPreview name="avatar-group-count" />
+
+## Avatar Group with Icon
+
+The count bubble can hold an icon instead of a number.
+
+<ComponentPreview name="avatar-group-count-icon" />
+
+## Sizes
+
+`size` sets the box: `sm` (24px), `default` (32px) or `lg` (40px). The fallback text and the badge follow it.
+
+<ComponentPreview name="avatar-size" />
+
+## Dropdown
+
+An avatar inside a ghost icon [Button](/docs/components/button) makes the trigger of an account [Dropdown Menu](/docs/components/dropdown-menu). The button needs its own `aria-label`.
+
+<ComponentPreview name="avatar-dropdown" />
+
+## RTL
+
+The badge sits on the inline end (bottom left in right-to-left) and a group overlaps towards the start.
+
+<ComponentPreview name="avatar-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+An avatar is not interactive and takes no focus. To make it act, put it in a button or a link.
+
+## Accessibility
+
+- The avatar has no role. The picture's `alt` is its name: set it when the picture carries the identity ("Jane Doe"); leave it empty (the default) when the person's name is already written next to the avatar, so it is not read twice.
+- The fallback text is read as text when it is shown; initials are a poor name on their own, so write the full name nearby or set `alt` on the image.
+- The badge is visual only unless it has a `label`, which exposes it as an image with that name ("Online").
+- An avatar used as a button's content needs the button's `aria-label` ("Account").
+- The hairline ring over the picture stays visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-avatar", "tec-avatar-image", "tec-avatar-fallback", "tec-avatar-badge", "tec-avatar-group", "tec-avatar-group-count"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A person or an account needs a face: a comment author, an assignee cell, the shell's user menu.
+- The picture may be missing, and initials are an acceptable stand-in.
+- Several people share one row and overlapping them reads better than listing them.
+
+### Not for
+
+- a glyph that stands for a thing rather than a person: use [Tecton icons](/docs/icons)
+- a colour value shown as a square: use [Color Swatch](/docs/tecton/color-swatch)
+- a number pinned to the corner of an icon: use [Count Badge](/docs/tecton/count-badge)
+- a person tag the user can select or remove: use [Chip](/docs/tecton/chip)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `tec-avatar-image`, then `tec-avatar-fallback`, plus `tec-avatar-badge` for a presence or status dot.
+
+</Do>
+
+<Do>
+
+Pick the box with `size="sm" | "default" | "lg"` (24 / 32 / 40px); the badge, the fallback text and a group's count follow it.
+
+</Do>
+
+<Do>
+
+Overlap a row with `tec-avatar-group` and close it with `tec-avatar-group-count`; give `tec-avatar-image` an `alt` only when the picture carries the identity.
+
+</Do>
+
+<Do>
+
+Recolour `tec-avatar-badge` only, and only with a Tecton step: `class="bg-green-560"`.
+
+</Do>
+
+<Do>
+
+Size avatars by context: small inline and in dense tables, default in lists and comments, large in profile headers.
+
+</Do>
+
+<Do>
+
+Show at most three to five avatars in a group and fold the rest into `tec-avatar-group-count` ("+4").
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="An avatar image with no fallback">
+
+<Wrong>
+
+```html
+<tec-avatar>
+  <tec-avatar-image src="/users/rk.png" alt="Rita Kolstad"></tec-avatar-image>
+</tec-avatar>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-avatar>
+  <tec-avatar-image src="/users/rk.png" alt="Rita Kolstad"></tec-avatar-image>
+  <tec-avatar-fallback>RK</tec-avatar-fallback>
+</tec-avatar>
+```
+
+</Correct>
+
+The image hides itself when `src` is empty or the request fails, so with nothing behind it the avatar is an empty ring.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="An avatar sized with a class in a group">
+
+<Wrong>
+
+```html
+<tec-avatar-group>
+  <tec-avatar class="size-10">…</tec-avatar>
+  <tec-avatar-group-count>+3</tec-avatar-group-count>
+</tec-avatar-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-avatar-group>
+  <tec-avatar size="lg">…</tec-avatar>
+  <tec-avatar-group-count>+3</tec-avatar-group-count>
+</tec-avatar-group>
+```
+
+</Correct>
+
+The badge, the fallback text and the group's count size themselves from the `size` attribute, so a hand-set `size-10` leaves the dot and the count bubble at the default 32px.
+
+</Dont>
+
+<Dont severity="HIGH" title="A stock colour on the status dot">
+
+<Wrong>
+
+```html
+<tec-avatar-badge class="bg-green-500"></tec-avatar-badge>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-avatar-badge class="bg-green-560" label="Online"></tec-avatar-badge>
+```
+
+</Correct>
+
+The Tecton palette replaces the stock Tailwind colours, so `green-500` is not a step: the class emits no CSS and the dot silently stays the primary colour.
+
+</Dont>

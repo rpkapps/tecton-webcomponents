@@ -1,0 +1,18 @@
+<form id="slider-form" class="mx-auto flex w-full max-w-xs flex-col gap-4">
+  <div class="grid gap-3">
+    <tec-label for="slider-form-depth">Depth interval (m)</tec-label>
+    <tec-slider id="slider-form-depth" name="depth" value="1200, 2400" min="0" max="4000" step="100" thumb-labels="From, To"></tec-slider>
+  </div>
+  <div class="flex gap-2">
+    <tec-button type="submit">Apply</tec-button>
+    <tec-button type="reset" variant="outline">Reset</tec-button>
+  </div>
+  <output class="text-sm text-muted-foreground">Submit to see the form data.</output>
+</form>
+<script type="module">
+  const form = document.getElementById("slider-form")
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    form.querySelector("output").textContent = [...new FormData(form)].map(([k, v]) => `${k}=${v}`).join("&")
+  })
+</script>

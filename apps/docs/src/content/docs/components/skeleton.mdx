@@ -1,0 +1,175 @@
+---
+title: Skeleton
+description: Use to show a placeholder while content is loading.
+tags: ["tec-skeleton"]
+---
+
+<ComponentPreview name="skeleton-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/skeleton"
+```
+
+```html
+<tec-skeleton class="h-5 w-24 rounded-full"></tec-skeleton>
+```
+
+The element has no size of its own: set it with classes (or CSS) on the element. A `rounded-*` class rounds it.
+
+## Avatar
+
+<ComponentPreview name="skeleton-avatar" />
+
+## Card
+
+<ComponentPreview name="skeleton-card" class="min-h-80" />
+
+## Text
+
+<ComponentPreview name="skeleton-text" />
+
+## Form
+
+<ComponentPreview name="skeleton-form" />
+
+## Table
+
+<ComponentPreview name="skeleton-table" />
+
+## RTL
+
+<ComponentPreview name="skeleton-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A skeleton is not focusable and has no keyboard interaction.
+
+## Accessibility
+
+- Skeletons are decorative and hidden from assistive technology (`aria-hidden`, as default semantics).
+- Mark the region that is loading with `aria-busy="true"` and remove it when the content arrives; announce the result through the content itself or a [status](/docs/components/spinner) if the wait was long.
+- The pulse stops under `prefers-reduced-motion: reduce`. In forced-colours mode the blocks keep a dashed outline.
+
+## API Reference
+
+<ApiReference tags={["tec-skeleton"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- The shape of the content is known before the data arrives: a card, a table, a form, a list of rows.
+- The wait is long enough to notice, and the layout must not move when the data lands.
+- Several regions load independently and each should keep its place.
+
+### Not for
+
+- a measurable percentage: use [Progress](/docs/components/progress)
+- a busy indicator inside a button or an input: use [Spinner](/docs/components/spinner)
+- the state when there is nothing to load: use [Empty](/docs/components/empty)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Give every skeleton a size from the spacing scale: `h-4 w-full`, `size-12 rounded-full`, `aspect-video w-full`.
+
+</Do>
+
+<Do>
+
+Mirror the real layout — the same wrappers, the same gaps, one skeleton per box the content will occupy.
+
+</Do>
+
+<Do>
+
+Vary the widths with fractions (`w-2/3`, `w-3/4`) so a block reads as text.
+
+</Do>
+
+<Do>
+
+`class` is for the box; the pulse and the muted surface belong to the component.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A skeleton with no height">
+
+<Wrong>
+
+```html
+<div class="flex flex-col gap-2">
+  <tec-skeleton class="w-full"></tec-skeleton>
+  <tec-skeleton class="w-3/4"></tec-skeleton>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<div class="flex flex-col gap-2">
+  <tec-skeleton class="h-4 w-full"></tec-skeleton>
+  <tec-skeleton class="h-4 w-3/4"></tec-skeleton>
+</div>
+```
+
+</Correct>
+
+A skeleton is empty, so without `h-*`, an aspect ratio or a fixed size it has zero height and nothing appears on the page.
+
+</Dont>
+
+<Dont severity="HIGH" title="Recolouring the placeholder with a stock class">
+
+<Wrong>
+
+```html
+<tec-skeleton class="h-4 w-full bg-gray-200"></tec-skeleton>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-skeleton class="h-4 w-full"></tec-skeleton>
+```
+
+</Correct>
+
+`gray-200` is not a Tecton step and emits no CSS; the muted surface is the component's, and it follows the theme in both modes.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Off-token pixel sizes on a skeleton">
+
+<Wrong>
+
+```html
+<tec-skeleton class="h-[18px] w-[240px]"></tec-skeleton>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-skeleton class="h-4 w-60"></tec-skeleton>
+```
+
+</Correct>
+
+An off-scale pixel size stops matching the line height of the text it stands in for and the spacing scale everything else uses.
+
+</Dont>

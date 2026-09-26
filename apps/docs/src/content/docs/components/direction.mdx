@@ -1,0 +1,180 @@
+---
+title: Direction
+description: Sets the text direction (left-to-right or right-to-left) for your application or a part of it.
+---
+
+Tecton components need no provider for text direction: they follow the HTML `dir` attribute of the document or of any ancestor, like native elements do. Set `dir="rtl"` (and the matching `lang`) and every component below it — its layout, its keyboard arrows, its popups — works right-to-left. This is essential for languages like Arabic, Hebrew and Persian.
+
+Here is a card in a right-to-left page. The RTL section of each component page shows more examples.
+
+<ComponentPreview name="card-rtl" direction="rtl" class="min-h-[30rem]" hideCode />
+
+## Usage
+
+Set the direction and the language once, on `<html>`:
+
+```html
+<html dir="rtl" lang="ar">
+  <body>
+    <!-- Your app content -->
+  </body>
+</html>
+```
+
+For one right-to-left (or left-to-right) region inside a page — a translation pane, an embedded preview — set them on a wrapper:
+
+```html
+<section dir="rtl" lang="he">
+  <tec-card>…</tec-card>
+</section>
+```
+
+`dir="auto"` works too, for user-generated text whose direction is not known in advance.
+
+## How components follow it
+
+- **Layout** uses logical CSS properties (`margin-inline-start`, `padding-inline`, `inset-inline-end`), so spacing, borders, icons in `start` / `end` slots and badges mirror without any component code.
+- **Keyboard**: components that move with horizontal arrow keys (tabs, toolbars, menus, sliders, radio groups) read the direction of the element itself, so <Kbd>ArrowRight</Kbd> moves towards the visual right in either direction.
+- **Popups** (menus, popovers, tooltips, dialogs) render in the top layer but stay inside their component in the DOM, so they keep the direction and language of the page region they belong to. Submenus open towards the inline end.
+- **Locale**: components that format numbers and dates or match typed text use the language of the nearest `lang` attribute, falling back to the document's.
+
+Direction is never read from a JavaScript setting: change the `dir` attribute and the components follow on their next interaction and immediately in CSS.
+
+## Reading the direction
+
+In your own code, read the resolved direction of an element from its computed style — it honours `dir` on any ancestor and `dir="auto"`:
+
+```ts
+const direction = getComputedStyle(element).direction // "ltr" | "rtl"
+```
+
+In CSS, use the `:dir()` pseudo-class, or Tailwind's `rtl:` / `ltr:` variants in markup:
+
+```css
+.chevron:dir(rtl) {
+  transform: scaleX(-1);
+}
+```
+
+```html
+<svg class="rtl:rotate-180" aria-hidden="true">…</svg>
+```
+
+## Usage guidelines
+
+### Use it when
+
+- The application runs in a right-to-left locale and every Tecton component has to follow it: set `dir` and `lang` on `<html>`.
+- One subtree reads in the other direction from the document: a translation pane, an embedded preview.
+- Your own code or styles need the resolved direction: read `getComputedStyle(el).direction` or use `:dir()`.
+
+### Not for
+
+- the colour scheme or theme of a subtree: use [Theme Root](/docs/tecton/theme-root)
+- formatting a single value in another locale: pass the locale to `Intl` yourself
+
+### Do
+
+<DoList>
+
+<Do>
+
+Set `dir` and `lang` together, as high as they go — on `<html>` for the whole application — so the document's own text flow, scrollbars and form controls match.
+
+</Do>
+
+<Do>
+
+Pass a real language tag (`lang="ar-EG"`, `lang="he"`); screen readers pick their voice from it and components format numbers and dates with it.
+
+</Do>
+
+<Do>
+
+Read the direction from the element (`getComputedStyle(el).direction`, `:dir(rtl)`), never from `document.dir` or a flag threaded through your code: a region can differ from the document.
+
+</Do>
+
+<Do>
+
+Write logical utilities in your own markup — `ms-*`, `pe-*`, `text-start`, `border-s`, `start-0` — the way the Tecton components do, and flip directional icons with `rtl:rotate-180`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Direction set with CSS instead of the dir attribute">
+
+<Wrong>
+
+```html
+<div style="direction: rtl">
+  <tec-tabs>…</tec-tabs>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<div dir="rtl" lang="ar">
+  <tec-tabs>…</tec-tabs>
+</div>
+```
+
+</Correct>
+
+The CSS `direction` property mirrors the layout but is not the document's direction: `:dir(rtl)` does not match, `rtl:` utilities do not apply, and assistive technology and the browser's bidi algorithm for form fields still treat the text as left-to-right.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A language and a direction that disagree">
+
+<Wrong>
+
+```html
+<html lang="en" dir="rtl">
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<html lang="ar" dir="rtl">
+```
+
+</Correct>
+
+Screen readers speak the content with the language's voice and components format numbers with it, so an English `lang` on Arabic content is read and formatted as English even though the layout is mirrored.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Physical spacing classes inside a flipped tree">
+
+<Wrong>
+
+```html
+<div class="ml-4 text-left">
+  <tec-button>Save</tec-button>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<div class="ms-4 text-start">
+  <tec-button>Save</tec-button>
+</div>
+```
+
+</Correct>
+
+`ml-*` and `text-left` compile to physical `margin-left` and `text-align: left`, which ignore the direction, so the button stays pinned to the left of a right-to-left layout while the components around it flip.
+
+</Dont>

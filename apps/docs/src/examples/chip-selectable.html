@@ -1,0 +1,17 @@
+<div id="chip-selectable" class="flex flex-col items-center gap-3">
+  <tec-chip-group aria-label="Facies" selection-mode="multiple">
+    <tec-chip value="Sandstone" variant="default" appearance="outline" selected>Sandstone</tec-chip>
+    <tec-chip value="Shale" variant="default" appearance="outline">Shale</tec-chip>
+    <tec-chip value="Limestone" variant="default" appearance="outline">Limestone</tec-chip>
+    <tec-chip value="Coal" variant="default" appearance="outline">Coal</tec-chip>
+    <tec-chip value="disabled" disabled>Disabled</tec-chip>
+  </tec-chip-group>
+  <p class="text-xs text-muted-foreground">Selected: <span>Sandstone</span></p>
+</div>
+<script type="module">
+  const root = document.getElementById("chip-selectable")
+  const output = root.querySelector("p span")
+  root.querySelector("tec-chip-group").addEventListener("tec-value-change", (event) => {
+    output.textContent = event.detail.values.join(", ") || "none"
+  })
+</script>

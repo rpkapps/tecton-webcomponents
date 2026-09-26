@@ -1,0 +1,193 @@
+---
+title: Progress
+description: Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.
+tags: ["tec-progress", "tec-progress-label", "tec-progress-value"]
+---
+
+<ComponentPreview name="progress-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/progress"
+```
+
+```html
+<tec-progress aria-label="Loading" value="33"></tec-progress>
+```
+
+## Composition
+
+```text
+tec-progress
+├── tec-progress-label
+├── tec-progress-value
+└── (track and indicator, rendered by the element)
+```
+
+## Label
+
+Use `tec-progress-label` and `tec-progress-value` for a label and the formatted value. The label names the bar; the value is printed at the end of the line.
+
+<ComponentPreview name="progress-label" />
+
+## Controlled
+
+The bar shows its `value` property: set it whenever the work advances. Here a [slider](/docs/components/slider) drives it.
+
+<ComponentPreview name="progress-controlled" />
+
+## Indeterminate
+
+While the total is unknown, set `indeterminate`: a segment slides along the track and no value is exposed. With `prefers-reduced-motion: reduce` the bar is full and still.
+
+<ComponentPreview name="progress-indeterminate" />
+
+## Scale and format
+
+`min` and `max` set the scale (0–100 by default). The value text is the percentage, formatted with `Intl.NumberFormat` for the closest `lang`; `value-label` replaces it with your own words, and the `formatOptions` property formats the value itself (any `style` other than `percent`).
+
+<ComponentPreview name="progress-format" />
+
+## RTL
+
+The bar fills from the start edge, so it grows from the right in right-to-left text. The value is formatted for the `lang` of the element (Eastern Arabic digits for `ar-EG`).
+
+<ComponentPreview name="progress-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A progress bar is not focusable and has no keyboard interaction.
+
+## Accessibility
+
+- The element has the `progressbar` role with `aria-valuemin`, `aria-valuemax`, `aria-valuenow` and `aria-valuetext` (the formatted value, or `value-label`), set as default semantics. While `indeterminate` it exposes no value.
+- Name it: a `tec-progress-label` child labels the bar; otherwise set `aria-label`.
+- A progress bar is not a live region. Announce the end of the work ("Upload complete") separately if it matters.
+- The indicator uses `Highlight` in forced-colours mode and the track keeps an outline.
+
+## API Reference
+
+<ApiReference tags={["tec-progress", "tec-progress-label", "tec-progress-value"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A task has a start, an end and a measurable fraction between them: an upload, an import, a batch run.
+- The bar belongs in the flow of a panel, a row or a dialog, across the available width.
+- The number matters as much as the bar: `tec-progress-label` plus `tec-progress-value`.
+
+### Not for
+
+- a gauge of risk, complexity or confidence: use [Meter](/docs/tecton/meter)
+- a ring with the value in the middle: use [Circular Progress](/docs/tecton/circular-progress)
+- a placeholder for content whose progress cannot be measured: use [Skeleton](/docs/components/skeleton)
+- a busy indicator inside a button: use [Spinner](/docs/components/spinner)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Name it: a `tec-progress-label` child, or `aria-label` when the label is already on screen.
+
+</Do>
+
+<Do>
+
+Let `tec-progress-value` print the number; it follows `formatOptions`, `min`, `max` and the page language.
+
+</Do>
+
+<Do>
+
+State the scale when it is not 0–100: `value="412" max="1024"`.
+
+</Do>
+
+<Do>
+
+Use `indeterminate` while the total is unknown.
+
+</Do>
+
+<Do>
+
+`class` sets the width (`w-full max-w-sm`), never the height or the colour.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A progress bar with no accessible name">
+
+<Wrong>
+
+```html
+<tec-progress value="66" class="w-full max-w-sm"></tec-progress>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-progress value="66" class="w-full max-w-sm">
+  <tec-progress-label>Uploading survey</tec-progress-label>
+  <tec-progress-value></tec-progress-value>
+</tec-progress>
+```
+
+</Correct>
+
+Without a label child or `aria-label`, the bar is announced as an unnamed progressbar with a bare percentage.
+
+</Dont>
+
+<Dont severity="HIGH" title="A fraction on the default 0–100 scale">
+
+<Wrong>
+
+```html
+<tec-progress aria-label="Uploading survey" value="0.66"></tec-progress>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-progress aria-label="Uploading survey" value="0.66" max="1"></tec-progress>
+```
+
+</Correct>
+
+The scale defaults to `min="0" max="100"`, so `0.66` is 0.66 % — the indicator is under a pixel wide and the bar looks stuck at zero.
+
+</Dont>
+
+<Dont severity="HIGH" title="Styling the bar through classes">
+
+<Wrong>
+
+```html
+<tec-progress aria-label="Uploading survey" value="66" class="h-2 rounded-full bg-blue-600"></tec-progress>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-progress aria-label="Uploading survey" value="66" class="w-full max-w-sm"></tec-progress>
+```
+
+</Correct>
+
+Classes land on the element, not on the track inside it, so the track keeps its own height; and `blue-600` is not a Tecton step, so it emits no CSS anywhere.
+
+</Dont>

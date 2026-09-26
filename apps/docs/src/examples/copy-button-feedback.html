@@ -1,0 +1,14 @@
+<div id="copy-button-feedback" class="flex flex-col items-center gap-3">
+  <div class="flex items-center gap-2">
+    <tec-copy-button value="Top Balder" aria-label="Copy Top Balder"></tec-copy-button>
+    <tec-copy-button value="Top Sele" aria-label="Copy Top Sele"></tec-copy-button>
+    <tec-copy-button value="Base Cretaceous" aria-label="Copy Base Cretaceous"></tec-copy-button>
+  </div>
+  <p aria-live="polite" class="text-xs text-muted-foreground">Nothing copied yet</p>
+</div>
+<script type="module">
+  const root = document.getElementById("copy-button-feedback")
+  const output = root.querySelector("p")
+  root.addEventListener("tec-copy", (event) => (output.textContent = `Copied "${event.detail.value}"`))
+  root.addEventListener("tec-copy-error", () => (output.textContent = "The clipboard is not available here"))
+</script>

@@ -1,0 +1,218 @@
+---
+title: Separator
+description: Visually or semantically separates content.
+tags: ["tec-separator"]
+---
+
+<ComponentPreview name="separator-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/separator"
+```
+
+```html
+<tec-separator></tec-separator>
+```
+
+## Vertical
+
+Use `orientation="vertical"` for a vertical separator. It takes its height from its flex row.
+
+<ComponentPreview name="separator-vertical" />
+
+## Menu
+
+Vertical separators between menu items with descriptions.
+
+<ComponentPreview name="separator-menu" />
+
+## List
+
+Horizontal separators between list items.
+
+<ComponentPreview name="separator-list" />
+
+## Emphasis
+
+Use `emphasis` for the three Tecton divider levels: `subtle`, `default` and `strong`. It works for both orientations.
+
+<ComponentPreview name="separator-emphasis" />
+
+## With label
+
+Text inside the separator renders a labelled divider: a rule on each side of the label (`align-label="start"` or `"end"` shortens the rule before or after it). A separator's content is presentational for assistive technology, so a labelled divider drops the `separator` role: the rules are decorative and the label is read as ordinary text.
+
+<ComponentPreview name="separator-label" />
+
+## RTL
+
+<ComponentPreview name="separator-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A separator is not focusable and has no keyboard interaction.
+
+## Accessibility
+
+- A separator has `role="separator"` (default semantics), with `aria-orientation="vertical"` when it is vertical, so screen readers can announce the break between groups.
+- `decorative` removes the role for a rule that is only visual — for example between items that a list, a toolbar or a menu already structures.
+- A labelled divider has no role; its label is read as text in place.
+- The rule stays visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-separator"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Two groups of content need a visible break that no heading or spacing gives them.
+- A toolbar or a meta row needs a vertical rule between clusters of controls.
+- A labelled divider: text inside `tec-separator`.
+
+### Not for
+
+- a divider between the rows of a list: use the separator of an [Item](/docs/components/item) group
+- the rule under a panel title: use the header of a [Panel](/docs/tecton/panel)
+- the borders between the regions of the application frame: use [App Shell](/docs/tecton/app-shell)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Pick the weight with `emphasis="subtle" | "default" | "strong"`; these are the three Tecton divider levels.
+
+</Do>
+
+<Do>
+
+Set the axis with `orientation="vertical"`, and let the parent flex row give it height — it stretches.
+
+</Do>
+
+<Do>
+
+Keep `class` to layout (`flex-1`, `my-2`): the attributes own colour and thickness.
+
+</Do>
+
+<Do>
+
+Reach for a component's own divider first — the item separator in an item group, a card header's border, a panel header's built-in rule.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A hand-drawn rule with a stock Tailwind colour">
+
+<Wrong>
+
+```html
+<div class="flex flex-col gap-4">
+  <p>Alternative A</p>
+  <div class="border-t border-gray-200"></div>
+  <p>Alternative B</p>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<div class="flex flex-col gap-4">
+  <p>Alternative A</p>
+  <tec-separator emphasis="subtle"></tec-separator>
+  <p>Alternative B</p>
+</div>
+```
+
+</Correct>
+
+Tecton resets Tailwind's stock palette, so `border-gray-200` generates no CSS and the rule is invisible in both modes; `tec-separator` also carries the `separator` role, which a bare `div` does not.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Recolouring the rule instead of raising its emphasis">
+
+<Wrong>
+
+```html
+<tec-separator class="bg-zinc-300 dark:bg-zinc-700"></tec-separator>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-separator emphasis="strong"></tec-separator>
+```
+
+</Correct>
+
+The three emphases map to `--tec-border-subtle`, `--tec-border` and `--tec-border-strong`, which already switch between modes; the stock `zinc` classes emit nothing.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A vertical rule with a hand-set height">
+
+<Wrong>
+
+```html
+<div class="flex items-center gap-4">
+  <span>Subtle</span>
+  <tec-separator orientation="vertical" class="h-4"></tec-separator>
+  <span>Strong</span>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<div class="flex h-8 items-center gap-4">
+  <span>Subtle</span>
+  <tec-separator orientation="vertical"></tec-separator>
+  <span>Strong</span>
+</div>
+```
+
+</Correct>
+
+A vertical separator stretches to the height of its flex row; `h-4` freezes it at one size instead.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A separator role on a labelled row">
+
+<Wrong>
+
+```html
+<div role="separator" class="flex items-center gap-3">
+  <tec-separator></tec-separator> or <tec-separator></tec-separator>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-separator>or</tec-separator>
+```
+
+</Correct>
+
+The children of a separator are presentational, so assistive technology drops the label of a `role="separator"` row; the labelled divider keeps the label readable.
+
+</Dont>

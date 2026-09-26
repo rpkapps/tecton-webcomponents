@@ -1,0 +1,14 @@
+<div id="progress-format" class="flex w-full max-w-sm flex-col gap-6">
+  <tec-progress value="3" max="8" value-label="3 of 8 files" class="w-full">
+    <tec-progress-label>Uploading survey</tec-progress-label>
+    <tec-progress-value></tec-progress-value>
+  </tec-progress>
+  <tec-progress value="412" max="1024" class="w-full">
+    <tec-progress-label>Downloading SEG-Y</tec-progress-label>
+    <tec-progress-value></tec-progress-value>
+  </tec-progress>
+</div>
+<script type="module">
+  const [, bytes] = document.getElementById("progress-format").querySelectorAll("tec-progress")
+  bytes.formatOptions = { style: "unit", unit: "megabyte", maximumFractionDigits: 0 }
+</script>

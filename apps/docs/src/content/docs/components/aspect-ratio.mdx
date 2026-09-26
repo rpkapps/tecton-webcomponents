@@ -1,0 +1,178 @@
+---
+title: Aspect Ratio
+description: Displays content within a desired ratio.
+tags: ["tec-aspect-ratio"]
+---
+
+<ComponentPreview name="aspect-ratio-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/aspect-ratio"
+```
+
+```html
+<tec-aspect-ratio ratio="16/9" class="w-full max-w-sm">
+  <img src="…" alt="Image" class="absolute inset-0 size-full rounded-md object-cover" />
+</tec-aspect-ratio>
+```
+
+`ratio` is the width divided by the height, written as a fraction (`16/9`, `16:9`) or a number (`1.7778`). It defaults to `1`. The element is the containing block of its content, so media fills it with `absolute inset-0 size-full`.
+
+## Square
+
+A square box with `ratio="1"`, for thumbnails and avatars of things.
+
+<ComponentPreview name="aspect-ratio-square" />
+
+## Portrait
+
+A portrait box with `ratio="9/16"`, for phone screenshots and vertical video.
+
+<ComponentPreview name="aspect-ratio-portrait" class="min-h-96" />
+
+## RTL
+
+The box has no direction of its own; content and captions around it follow `dir="rtl"`.
+
+<ComponentPreview name="aspect-ratio-rtl" direction="rtl" class="min-h-96" />
+
+## Keyboard interactions
+
+The element is a layout box and takes no focus.
+
+## Accessibility
+
+- The element has no role. Give the media inside it its own text alternative (`alt` on an `<img>`, `title` on an `<iframe>`, captions on a `<video>`), or `alt=""` when it is decorative.
+- Wrap it in a `<figure>` with a `<figcaption>` when the media needs a visible caption.
+
+## API Reference
+
+<ApiReference tags={["tec-aspect-ratio"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Media has to hold a shape before it loads, so the surrounding layout never jumps: a thumbnail grid, a card cover, a video embed.
+- The box should follow its available width rather than a height you picked.
+- The ratio is the design decision — 16:9, 1:1, 9:16 — not an approximate height.
+
+### Not for
+
+- a placeholder shape while the content loads: use [Skeleton](/docs/components/skeleton)
+- a round picture of a person or an account: use [Avatar](/docs/components/avatar)
+- a full-bleed map, schematic or 3D view: use [Canvas](/docs/tecton/canvas)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Write the ratio as the designer states it: `ratio="16/9"`, `ratio="1"`, `ratio="9/16"`.
+
+</Do>
+
+<Do>
+
+Make the child fill the box with `class="absolute inset-0 size-full object-cover"` on the `<img>`.
+
+</Do>
+
+<Do>
+
+Control the width from outside (`class="w-full max-w-sm"`) and let the height follow.
+
+</Do>
+
+<Do>
+
+Put the radius and the placeholder tone on the element itself (`class="rounded-lg bg-muted"`) so they show while the media is still loading.
+
+</Do>
+
+<Do>
+
+Put media directly inside one `tec-aspect-ratio`; never nest a second one.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="A child left at its intrinsic size">
+
+<Wrong>
+
+```html
+<tec-aspect-ratio ratio="16/9" class="w-full max-w-sm rounded-lg bg-muted">
+  <img src="survey.png" alt="Survey outline" class="rounded-lg" />
+</tec-aspect-ratio>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-aspect-ratio ratio="16/9" class="w-full max-w-sm rounded-lg bg-muted">
+  <img src="survey.png" alt="Survey outline" class="absolute inset-0 size-full rounded-lg object-cover" />
+</tec-aspect-ratio>
+```
+
+</Correct>
+
+The element only sizes and positions its box; it has no rules for its children, so an image keeps its own dimensions and overflows or floats inside the box whose shape it was meant to take.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A fixed height beside the ratio">
+
+<Wrong>
+
+```html
+<tec-aspect-ratio ratio="4/3" class="h-48 w-full rounded-lg bg-muted">
+  <img src="field-map.png" alt="Field map" class="absolute inset-0 size-full object-cover" />
+</tec-aspect-ratio>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-aspect-ratio ratio="4/3" class="w-full rounded-lg bg-muted">
+  <img src="field-map.png" alt="Field map" class="absolute inset-0 size-full object-cover" />
+</tec-aspect-ratio>
+```
+
+</Correct>
+
+The height always comes from the width and the ratio, so `h-48` gives the element a second, conflicting box: the background covers 12rem while the media keeps the ratio. A box with a fixed height does not need this component at all.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A ratio the element cannot read">
+
+<Wrong>
+
+```html
+<tec-aspect-ratio ratio="16x9" class="w-full rounded-lg bg-muted">…</tec-aspect-ratio>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-aspect-ratio ratio="16/9" class="w-full rounded-lg bg-muted">…</tec-aspect-ratio>
+```
+
+</Correct>
+
+Only fractions with `/` or `:` and plain numbers are understood; anything else falls back to a square without a warning.
+
+</Dont>

@@ -1,0 +1,206 @@
+---
+title: Switch
+description: A control that allows the user to toggle between on and off.
+tags: ["tec-switch"]
+---
+
+<ComponentPreview name="switch-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/switch"
+```
+
+```html
+<tec-switch id="airplane-mode"></tec-switch>
+<tec-label for="airplane-mode">Airplane Mode</tec-label>
+```
+
+Label the switch with a `<label for>` (or [`<tec-label>`](/docs/components/label)), with `aria-label`, or by putting the text inside the element.
+
+## Label
+
+Text inside `<tec-switch>` is rendered next to the track, and clicking it toggles the switch.
+
+<ComponentPreview name="switch-label" />
+
+## Description
+
+Put the switch in a horizontal [Field](/docs/components/field) with a `tec-field-content` holding the label and the description.
+
+<ComponentPreview name="switch-description" />
+
+## Choice Card
+
+Wrap the whole field in a `tec-field-label` so the card surface is the hit target.
+
+<ComponentPreview name="switch-choice-card" />
+
+## Size
+
+`size="sm"` is a 26×12px track, the default a 34×16px one; the thumb travel matches each.
+
+<ComponentPreview name="switch-sizes" />
+
+## Disabled
+
+Use the `disabled` attribute on the switch (and `disabled` on the field to dim its label). A `disabled` ancestor `<fieldset>` disables it too.
+
+<ComponentPreview name="switch-disabled" />
+
+## Invalid
+
+The `invalid` attribute shows the destructive border and ring, sets `aria-invalid` and makes the form refuse to submit. Put `invalid` on the field as well to colour its label.
+
+<ComponentPreview name="switch-invalid" />
+
+## Forms
+
+`<tec-switch>` is a form-associated custom element. While on, it submits `name=value` (`value` defaults to `"on"`); while off, nothing. `required` blocks submission until it is on, and the error shows after the first submit attempt. The `checked` attribute is the initial state: the `checked` property holds the current one, and form reset returns to the attribute. It fires `input` and `change` when the user toggles it — never for programmatic changes.
+
+<ComponentPreview name="switch-form" />
+
+## RTL
+
+The thumb travel is mirrored in right-to-left layouts.
+
+<ComponentPreview name="switch-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space", "Toggles the switch."],
+    ["Tab / Shift+Tab", "Moves focus to the next / previous focusable element. A disabled switch is skipped."],
+  ]}
+/>
+
+## Accessibility
+
+- A native `<input type="checkbox" role="switch">` in the shadow root is the focusable control, so the switch is announced as a switch with its on/off state. `focus()` on the host focuses it.
+- The accessible name comes from a `<label for>` pointing at the element, a wrapping `<label>`, `aria-label` / `aria-labelledby` on the host, or the slotted text. `aria-describedby` on the host is forwarded, so field descriptions are announced.
+- `invalid` and a failed `required` constraint set `aria-invalid="true"` on the control.
+- The hit area extends 12px left/right and 8px above/below the track. The focus ring stays visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-switch"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A setting takes effect the moment it is flipped, with no submit step.
+- An on/off preference in a settings panel or a choice card.
+- The two states are opposites of one thing, not two options to choose between.
+
+### Not for
+
+- a term the user ticks as part of submitting a form: use [Checkbox](/docs/components/checkbox)
+- the label, description and layout around the control: use [Field](/docs/components/field)
+- a value picked from a continuous range: use [Slider](/docs/components/slider)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Read the state from the `checked` property in a `change` listener, or set `checked` to control it; the `checked` attribute is only the initial state.
+
+</Do>
+
+<Do>
+
+Pick the scale with `size="sm"` or the default; the thumb travel is matched to each.
+
+</Do>
+
+<Do>
+
+Give it an `id` and point a `tec-field-label for` at it inside a `tec-field orientation="horizontal"`, with `tec-field-content` for the description.
+
+</Do>
+
+<Do>
+
+Disable with `disabled` and put `disabled` on the field; for an invalid value put `invalid` on both the switch and the field.
+
+</Do>
+
+<Do>
+
+For a choice card, wrap the whole field in a `tec-field-label` so the card surface is the hit target.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Reading the new state from a click listener">
+
+<Wrong>
+
+```js
+wifi.addEventListener("click", () => save(!wifi.checked))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+wifi.addEventListener("change", () => save(wifi.checked))
+```
+
+</Correct>
+
+`click` also fires for clicks that do not toggle (a `readonly` switch) and runs before the state changes; `change` fires once per user toggle, after `checked` is updated.
+
+</Dont>
+
+<Dont severity="HIGH" title='checked="false" to turn a switch off'>
+
+<Wrong>
+
+```html
+<tec-switch checked="false">Sync</tec-switch>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-switch>Sync</tec-switch>
+```
+
+</Correct>
+
+`checked` is a boolean attribute: any value, including `"false"`, turns the switch on. Leave the attribute out, or set the `checked` property.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Sizing the switch with height and width">
+
+<Wrong>
+
+```html
+<tec-switch class="h-6 w-11"></tec-switch>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-switch size="default"></tec-switch>
+```
+
+</Correct>
+
+The track and the thumb travel are sized together by `size`; a class size on the element does not resize the track, and the thumb would stop where the old track ended anyway.
+
+</Dont>

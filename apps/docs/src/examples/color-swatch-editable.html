@@ -1,0 +1,6 @@
+<tec-color-swatch id="color-swatch-editable" editable color="#cb8553" label="Series colour" value="#cb8553" aria-label="Edit series colour"></tec-color-swatch>
+<script type="module">
+  const swatch = document.getElementById("color-swatch-editable")
+  // The swatch updates its own `color`; the value text is the app's to keep in sync.
+  swatch.addEventListener("input", () => (swatch.value = swatch.color))
+</script>

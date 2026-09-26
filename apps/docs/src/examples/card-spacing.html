@@ -1,0 +1,45 @@
+<div id="card-spacing" class="mx-auto grid w-full max-w-sm gap-4">
+  <tec-toggle-group value="4" variant="outline" size="sm" disallow-empty aria-label="Card spacing" class="justify-center">
+    <tec-toggle-group-item value="4">16px</tec-toggle-group-item>
+    <tec-toggle-group-item value="5">20px</tec-toggle-group-item>
+    <tec-toggle-group-item value="6">24px</tec-toggle-group-item>
+    <tec-toggle-group-item value="8">32px</tec-toggle-group-item>
+  </tec-toggle-group>
+  <tec-card style="--tec-card-spacing: 1rem">
+    <tec-card-header>
+      <tec-card-title>Login to your account</tec-card-title>
+      <tec-card-description>Enter your email below to login to your account</tec-card-description>
+      <tec-card-action>
+        <tec-button variant="link">Sign Up</tec-button>
+      </tec-card-action>
+    </tec-card-header>
+    <tec-card-content>
+      <form>
+        <div class="flex flex-col gap-6">
+          <div class="grid gap-2">
+            <tec-label for="card-spacing-email">Email</tec-label>
+            <tec-input id="card-spacing-email" type="email" placeholder="m@example.com" required></tec-input>
+          </div>
+          <div class="grid gap-2">
+            <div class="flex items-center">
+              <tec-label for="card-spacing-password">Password</tec-label>
+              <a href="#" class="ms-auto inline-block text-sm underline-offset-4 hover:underline">Forgot your password?</a>
+            </div>
+            <tec-input id="card-spacing-password" type="password" required></tec-input>
+          </div>
+        </div>
+      </form>
+    </tec-card-content>
+    <tec-card-footer class="flex-col gap-2">
+      <tec-button type="submit" class="w-full">Login</tec-button>
+      <tec-button variant="outline" class="w-full">Login with Google</tec-button>
+    </tec-card-footer>
+  </tec-card>
+</div>
+<script type="module">
+  const root = document.getElementById("card-spacing")
+  const card = root.querySelector("tec-card")
+  root.querySelector("tec-toggle-group").addEventListener("tec-value-change", (event) => {
+    card.style.setProperty("--tec-card-spacing", `${Number(event.detail.value) * 0.25}rem`)
+  })
+</script>

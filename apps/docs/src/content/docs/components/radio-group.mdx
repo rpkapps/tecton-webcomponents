@@ -1,0 +1,258 @@
+---
+title: Radio Group
+description: A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked at a time.
+tags: ["tec-radio-group", "tec-radio-group-item"]
+---
+
+<ComponentPreview name="radio-group-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/radio-group"
+```
+
+```html
+<tec-radio-group aria-label="Options" value="option-one">
+  <div class="flex items-center gap-3">
+    <tec-radio-group-item value="option-one" id="option-one"></tec-radio-group-item>
+    <tec-label for="option-one">Option One</tec-label>
+  </div>
+  <div class="flex items-center gap-3">
+    <tec-radio-group-item value="option-two" id="option-two"></tec-radio-group-item>
+    <tec-label for="option-two">Option Two</tec-label>
+  </div>
+</tec-radio-group>
+```
+
+## Composition
+
+```text
+tec-radio-group
+├── tec-radio-group-item
+└── tec-radio-group-item
+```
+
+Items can sit directly in the group or inside layout wrappers — a `div`, a [Field](/docs/components/field), a choice-card label. The group finds every `tec-radio-group-item` inside it (except those of a nested group).
+
+## Label
+
+Text inside an item is rendered next to its circle and names it. `orientation="horizontal"` lays the options out in a wrapping row.
+
+<ComponentPreview name="radio-group-label" />
+
+## Description
+
+Radio group items with a description using the [Field](/docs/components/field) component.
+
+<ComponentPreview name="radio-group-description" />
+
+## Choice Card
+
+Use `tec-field-label` to wrap the entire field for a clickable card-style selection.
+
+<ComponentPreview name="radio-group-choice-card" />
+
+## Fieldset
+
+Use `tec-field-set` and `tec-field-legend` to group radio items with a label and description.
+
+<ComponentPreview name="radio-group-fieldset" />
+
+## Disabled
+
+Use `disabled` on an item to disable one option, or on `tec-radio-group` to disable all of them. A `disabled` ancestor `<fieldset>` disables the group.
+
+<ComponentPreview name="radio-group-disabled" />
+
+## Invalid
+
+Use `invalid` on `tec-radio-group` (every item turns destructive) and on each `tec-field` row to show validation errors.
+
+<ComponentPreview name="radio-group-invalid" />
+
+## Forms
+
+`<tec-radio-group>` is a form-associated custom element: it submits `name=value` of the checked item, and nothing while none is checked. `required` blocks submission until an option is checked — after the first submit attempt, every item shows the error. The `value` attribute is the initial selection; the `value` property is the current one, and form reset returns to the attribute. The group fires `input` and `change` when the user checks another item — never for programmatic changes.
+
+<ComponentPreview name="radio-group-form" />
+
+## RTL
+
+Left/Right arrows are mirrored in right-to-left layouts.
+
+<ComponentPreview name="radio-group-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves focus to the checked item (or the first enabled one when nothing is checked), then out of the group."],
+    ["Space", "Checks the focused item."],
+    ["ArrowDown / ArrowRight", "Moves focus to the next enabled item and checks it (wraps; ArrowLeft in RTL)."],
+    ["ArrowUp / ArrowLeft", "Moves focus to the previous enabled item and checks it (wraps; ArrowRight in RTL)."],
+  ]}
+/>
+
+## Accessibility
+
+- `tec-radio-group` has the `radiogroup` role, with `aria-required`, `aria-invalid`, `aria-disabled` and `aria-orientation`. Name it with `aria-label`, `aria-labelledby`, or a `<label for>` pointing at it.
+- Each `tec-radio-group-item` **is** the `radio` (`aria-checked`) and takes focus itself; only one item is in the tab order (roving tabindex).
+- Items are labelable: `<label for="item-id">` names an item and checks it when clicked, so rows built with `tec-field-label` work. Slotted text or `aria-label` name it too; `aria-describedby` on the item adds a description.
+- `readonly` keeps the selection while leaving the items focusable; `disabled` removes them from the tab order.
+- The focus ring stays visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-radio-group", "tec-radio-group-item"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- Two to about six mutually exclusive options are all worth showing at once.
+- Each option earns a description or a whole choice card, not just a word.
+- The set is fixed and belongs in a form, next to the other fields.
+
+### Not for
+
+- more than a handful of options: use [Select](/docs/components/select)
+- a compact segmented control in a toolbar: use [Toggle Group](/docs/components/toggle-group)
+- switching between panels of content: use [Tabs](/docs/components/tabs)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Read and set the selection with `value` on `tec-radio-group`, and listen for `change` on the group.
+
+</Do>
+
+<Do>
+
+Give each `tec-radio-group-item` a `value`; add `id` only so a `tec-field-label for` can point at it.
+
+</Do>
+
+<Do>
+
+Name the group with `aria-label`, or wrap it in `tec-field-set` and `tec-field-legend`.
+
+</Do>
+
+<Do>
+
+Disable everything with `disabled` on the group, one option with `disabled` on the item.
+
+</Do>
+
+<Do>
+
+Mark errors with `invalid` on the group and on each `tec-field` row, or let `required` report them.
+
+</Do>
+
+<Do>
+
+Preselect the sensible default option; leave the group empty only when the answer is optional or a default would bias it.
+
+</Do>
+
+<Do>
+
+Lay radio options side by side only for up to four short labels; otherwise keep them stacked.
+
+</Do>
+
+<Do>
+
+Label each radio option, toggle-group item and tab in one to three words that set it apart; detail goes in a description.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Listening for change on the items">
+
+<Wrong>
+
+```js
+for (const item of group.querySelectorAll("tec-radio-group-item")) {
+  item.addEventListener("change", () => setDensity(item.value))
+}
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+group.addEventListener("change", () => setDensity(group.value))
+```
+
+</Correct>
+
+The group is the form control: it holds the value and fires `input` and `change`. Items fire no change events, so the handler never runs.
+
+</Dont>
+
+<Dont severity="HIGH" title="Keying radio items with id instead of value">
+
+<Wrong>
+
+```html
+<tec-radio-group aria-label="Density" value="compact">
+  <tec-radio-group-item id="compact"></tec-radio-group-item>
+  <tec-radio-group-item id="comfortable"></tec-radio-group-item>
+</tec-radio-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-radio-group aria-label="Density" value="compact">
+  <tec-radio-group-item value="compact" id="density-compact"></tec-radio-group-item>
+  <tec-radio-group-item value="comfortable" id="density-comfortable"></tec-radio-group-item>
+</tec-radio-group>
+```
+
+</Correct>
+
+An item identifies itself to its group by `value`; `id` is only the DOM id used by `<label for>`, so nothing matches the group's `value` and no option renders as checked.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="A radio group with no accessible name">
+
+<Wrong>
+
+```html
+<tec-radio-group value="email">
+  <tec-radio-group-item value="email">Email</tec-radio-group-item>
+</tec-radio-group>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-field-set>
+  <tec-field-legend variant="label">Notifications</tec-field-legend>
+  <tec-radio-group aria-label="Notifications" value="email">
+    <tec-radio-group-item value="email">Email</tec-radio-group-item>
+  </tec-radio-group>
+</tec-field-set>
+```
+
+</Correct>
+
+The group is announced as a `radiogroup` with no name of its own, so the options lose the question they answer.
+
+</Dont>

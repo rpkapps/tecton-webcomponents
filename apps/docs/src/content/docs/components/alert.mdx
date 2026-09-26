@@ -1,0 +1,257 @@
+---
+title: Alert
+description: Displays a callout for user attention.
+tags: ["tec-alert", "tec-alert-title", "tec-alert-description"]
+---
+
+<ComponentPreview name="alert-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/alert"
+```
+
+```html
+<tec-alert>
+  <svg slot="icon" aria-hidden="true">…</svg>
+  <tec-alert-title>Heads up!</tec-alert-title>
+  <tec-alert-description>You can add components to your app with a single import.</tec-alert-description>
+  <tec-button slot="action" variant="outline" size="xs">Enable</tec-button>
+</tec-alert>
+```
+
+## Composition
+
+```text
+tec-alert
+├── [slot=icon]            an SVG or tec-icon
+├── tec-alert-title
+├── tec-alert-description
+└── [slot=action]          one or more tec-button
+```
+
+## Basic
+
+A basic alert with an icon, title and description.
+
+<ComponentPreview name="alert-basic" />
+
+## Destructive
+
+Use `variant="destructive"` for an error.
+
+<ComponentPreview name="alert-destructive" />
+
+## Action
+
+Put a button in the `action` slot. It sits in the top-end corner, and the alert keeps its text clear of it. Ghost and link buttons there take the alert's text colour.
+
+<ComponentPreview name="alert-action" />
+
+## Custom Colors
+
+Colour the alert box through its `base` part with [palette](/docs/theming#palette) steps, such as `[&::part(base)]:bg-yellow-120` (a step is a contrast level, so no `dark:` variant is needed). Prefer a severity `variant` whenever the colour means something.
+
+<ComponentPreview name="alert-colors" />
+
+## Severity
+
+The Tecton status alert: `variant="success" | "warning" | "info" | "destructive"`, with an icon in the `icon` slot. The icon takes the severity colour.
+
+<ComponentPreview name="alert-severities" />
+
+## Appearance
+
+`appearance="outline"` is a transparent alert with a coloured border and text; `appearance="filled"` is the Tecton filled status surface (`--tec-success-surface`, `--tec-warning-surface`, … with their `-foreground` text colours; note the pale yellow warning surface in light mode). The default appearance keeps the card background and colours the text with the status colour, which is readable on the page and card surfaces in both modes.
+
+<ComponentPreview name="alert-appearance" />
+
+## Dismissible
+
+Put the action and a dismiss button in the `action` slot and hide the alert (`hidden`) when it is pressed. The `dismissible` attribute does this for you: it adds a close button (named by `dismiss-label`, "Dismiss" by default) that fires the cancelable `tec-dismiss` event and then sets `hidden`. Move focus to a sensible place afterwards — the button that had it is gone.
+
+<ComponentPreview name="alert-dismissible" />
+
+## RTL
+
+The alert uses logical properties: the icon, the text and the action corner mirror with `dir="rtl"` on any ancestor.
+
+<ComponentPreview name="alert-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+An alert is not focusable. Buttons in its `action` slot, and the close button of a `dismissible` alert, are in the tab order like any button.
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus to the next / previous action button."],
+    ["Enter / Space", "Activates the focused action, or dismisses a `dismissible` alert from its close button."],
+  ]}
+/>
+
+## Accessibility
+
+- The element has `role="alert"` (default semantics through `ElementInternals`), so screen readers announce its content when it is added to the page or changes. For a message that is not urgent — info, success — set `role="status"` on the element: it is announced politely instead. An author `role` attribute always wins.
+- Say the severity in the title's words ("Pressure warning", "Export failed"); the colour and the icon are not enough on their own. Icons in the `icon` slot are decorative: mark them `aria-hidden="true"`.
+- The close button of a `dismissible` alert is a real button with the accessible name `dismiss-label`. An icon-only action button needs an `aria-label`.
+- A decision that blocks the user belongs in an [Alert Dialog](/docs/components/alert-dialog), which traps focus; an alert never takes focus.
+- Borders stay visible in forced-colours mode.
+
+## API Reference
+
+<ApiReference tags={["tec-alert", "tec-alert-title", "tec-alert-description"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A message must stay on the page until the user reads or resolves it: a failed run, unsaved changes, a stale model.
+- The message belongs to a region — above a form, inside a panel, at the top of a page — not to a single field.
+- The message needs a severity colour, and sometimes an action beside it.
+
+### Not for
+
+- a confirmation that should disappear on its own: use [Toast](/docs/components/sonner)
+- the state of a list or a page that has nothing in it: use [Empty](/docs/components/empty)
+- a one-word status label inside a row or a header: use [Badge](/docs/components/badge)
+- a message about a single form field: use the error of a [Field](/docs/components/field)
+
+### Do
+
+<DoList>
+
+<Do>
+
+`variant` is the severity (`default`, `info`, `success`, `warning`, `destructive`); `appearance` is the surface (`default` keeps the card background, `outline` is a coloured border, `filled` is the Tecton status surface).
+
+</Do>
+
+<Do>
+
+Compose `tec-alert > [slot=icon], tec-alert-title, tec-alert-description, [slot=action]`.
+
+</Do>
+
+<Do>
+
+Put every button, including the dismiss control, in the `action` slot — or use `dismissible`; a decision that blocks the user is an Alert Dialog, not an alert.
+
+</Do>
+
+<Do>
+
+Keep `class` on the element for width and placement (`max-w-md`, `mb-4`), never for the status colours.
+
+</Do>
+
+<Do>
+
+Info and success alerts can be dismissed; warning and destructive alerts stay until the problem is resolved.
+
+</Do>
+
+<Do>
+
+Keep an alert title to a few words naming what happened ("Simulation failed"); cause and fix go in the description.
+
+</Do>
+
+<Do>
+
+Show one alert per severity in a region, folding related messages of the same severity into a list inside it.
+
+</Do>
+
+<Do>
+
+Say the severity in the alert title's words ("Pressure warning", "Export failed"), not only through its icon or colour.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Hand-colouring the severity with stock classes">
+
+<Wrong>
+
+```html
+<tec-alert class="border-red-500 bg-red-500/10 text-red-700">
+  <tec-alert-title>Simulation failed</tec-alert-title>
+</tec-alert>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-alert variant="destructive" appearance="outline">
+  <tec-alert-title>Simulation failed</tec-alert-title>
+</tec-alert>
+```
+
+</Correct>
+
+`red-500` and `red-700` are not Tecton steps, so the reset palette emits nothing for them — and classes on the element would not reach the alert box inside it anyway. The variant owns the colours in both modes.
+
+</Dont>
+
+<Dont severity="HIGH" title="Putting the icon inside the title">
+
+<Wrong>
+
+```html
+<tec-alert variant="warning" appearance="filled">
+  <tec-alert-title><svg aria-hidden="true">…</svg> Unsaved changes</tec-alert-title>
+  <tec-alert-description>Three horizons have uncommitted edits.</tec-alert-description>
+</tec-alert>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-alert variant="warning" appearance="filled">
+  <svg slot="icon" aria-hidden="true">…</svg>
+  <tec-alert-title>Unsaved changes</tec-alert-title>
+  <tec-alert-description>Three horizons have uncommitted edits.</tec-alert-description>
+</tec-alert>
+```
+
+</Correct>
+
+Only the `icon` slot creates the icon column: an icon inside the title is an unsized inline glyph, and the description no longer aligns under the title.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="An action that is not in the action slot">
+
+<Wrong>
+
+```html
+<tec-alert variant="success">
+  <tec-alert-title>Three FDA alternatives ranked</tec-alert-title>
+  <tec-button variant="ghost" size="icon-sm" aria-label="Dismiss">…</tec-button>
+</tec-alert>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-alert variant="success">
+  <tec-alert-title>Three FDA alternatives ranked</tec-alert-title>
+  <tec-button slot="action" variant="ghost" size="icon-sm" aria-label="Dismiss">…</tec-button>
+</tec-alert>
+```
+
+</Correct>
+
+The alert reserves its top-end corner only for the `action` slot, so a bare button joins the text flow under the title and keeps the default ghost colour instead of the alert's.
+
+</Dont>

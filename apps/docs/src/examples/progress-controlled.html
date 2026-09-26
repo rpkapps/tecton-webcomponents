@@ -1,0 +1,11 @@
+<div id="progress-controlled" class="flex w-full max-w-sm flex-col gap-4">
+  <tec-progress aria-label="Loading" value="50" class="w-full"></tec-progress>
+  <tec-slider aria-label="Progress" value="50" min="0" max="100" step="1"></tec-slider>
+</div>
+<script type="module">
+  const root = document.getElementById("progress-controlled")
+  const progress = root.querySelector("tec-progress")
+  root.querySelector("tec-slider").addEventListener("input", (event) => {
+    progress.value = Number(event.target.value)
+  })
+</script>

@@ -1,0 +1,30 @@
+<tec-card class="w-full max-w-sm" lang="ar">
+  <tec-card-header>
+    <tec-card-title>تسجيل الدخول إلى حسابك</tec-card-title>
+    <tec-card-description>أدخل بريدك الإلكتروني أدناه لتسجيل الدخول إلى حسابك</tec-card-description>
+    <tec-card-action>
+      <tec-button variant="link">إنشاء حساب</tec-button>
+    </tec-card-action>
+  </tec-card-header>
+  <tec-card-content>
+    <form>
+      <div class="flex flex-col gap-6">
+        <div class="grid gap-2">
+          <tec-label for="card-rtl-email">البريد الإلكتروني</tec-label>
+          <tec-input id="card-rtl-email" type="email" placeholder="m@example.com" required></tec-input>
+        </div>
+        <div class="grid gap-2">
+          <div class="flex items-center">
+            <tec-label for="card-rtl-password">كلمة المرور</tec-label>
+            <a href="#" class="ms-auto inline-block text-sm underline-offset-4 hover:underline">نسيت كلمة المرور؟</a>
+          </div>
+          <tec-input id="card-rtl-password" type="password" required></tec-input>
+        </div>
+      </div>
+    </form>
+  </tec-card-content>
+  <tec-card-footer class="flex-col gap-2">
+    <tec-button type="submit" class="w-full">تسجيل الدخول</tec-button>
+    <tec-button variant="outline" class="w-full">تسجيل الدخول باستخدام Google</tec-button>
+  </tec-card-footer>
+</tec-card>

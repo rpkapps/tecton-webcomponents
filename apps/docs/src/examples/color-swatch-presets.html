@@ -1,0 +1,11 @@
+<tec-color-swatch id="color-swatch-presets" editable color="#d97706" label="Facies" value="#d97706" shape="circle" aria-label="Edit facies colour"></tec-color-swatch>
+<script type="module">
+  const swatch = document.getElementById("color-swatch-presets")
+  swatch.presets = [
+    { color: "#d97706", label: "Sandstone" },
+    { color: "#64748b", label: "Shale" },
+    { color: "#0ea5e9", label: "Limestone" },
+    { color: "#1e293b", label: "Coal" },
+  ]
+  swatch.addEventListener("input", () => (swatch.value = swatch.color))
+</script>

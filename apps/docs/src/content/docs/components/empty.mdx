@@ -1,0 +1,202 @@
+---
+title: Empty
+description: Use the Empty component to display an empty state.
+tags: ["tec-empty", "tec-empty-header", "tec-empty-media", "tec-empty-title", "tec-empty-description", "tec-empty-content"]
+---
+
+<ComponentPreview name="empty-demo" class="min-h-96" />
+
+## Usage
+
+```ts
+import "@tecton/wc/empty"
+```
+
+```html
+<tec-empty>
+  <tec-empty-header>
+    <tec-empty-media variant="icon">
+      <svg aria-hidden="true">…</svg>
+    </tec-empty-media>
+    <tec-empty-title>No data</tec-empty-title>
+    <tec-empty-description>No data found</tec-empty-description>
+  </tec-empty-header>
+  <tec-empty-content>
+    <tec-button>Add data</tec-button>
+  </tec-empty-content>
+</tec-empty>
+```
+
+## Composition
+
+```text
+tec-empty
+├── tec-empty-header
+│   ├── tec-empty-media
+│   ├── tec-empty-title
+│   └── tec-empty-description
+└── tec-empty-content
+```
+
+## Outline
+
+Use `variant="outline"` for a dashed outline around the empty state.
+
+<ComponentPreview name="empty-outline" class="min-h-96" />
+
+## Background
+
+Use `variant="muted"` for a faint muted background, or colour the `base` part yourself (`[&::part(base)]:bg-…`).
+
+<ComponentPreview name="empty-background" class="min-h-96" />
+
+## Avatar
+
+`tec-empty-media` with the default variant shows an avatar at its own size.
+
+<ComponentPreview name="empty-avatar" class="min-h-96" />
+
+## Avatar Group
+
+<ComponentPreview name="empty-avatar-group" class="min-h-96" />
+
+## InputGroup
+
+Put an [input group](/docs/components/input-group) in `tec-empty-content`, for example a search field on a "not found" page.
+
+<ComponentPreview name="empty-input-group" class="min-h-96" />
+
+## RTL
+
+<ComponentPreview name="empty-rtl" direction="rtl" class="min-h-96" />
+
+## Keyboard interactions
+
+The empty state itself is not focusable; its buttons, links and inputs are in the tab order in document order.
+
+## Accessibility
+
+- The parts are layout and type only; they add no roles. The title is text: when the empty state heads a region, put a heading element in it (`<tec-empty-title><h2>No projects yet</h2></tec-empty-title>`).
+- Media is decorative: mark icons `aria-hidden="true"` and give avatars an empty `alt` unless the picture adds information.
+- When an empty state replaces content after a user action (a search with no results), announce it — for example put the description in a `role="status"` region.
+- Links in `tec-empty-description` are underlined, so they are recognisable without colour.
+
+## API Reference
+
+<ApiReference tags={["tec-empty", "tec-empty-header", "tec-empty-media", "tec-empty-title", "tec-empty-description", "tec-empty-content"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A list, table, panel or search result has nothing to show, and the user needs to know why and what to do next.
+- A feature has not been used yet: no projects, no wells, no saved views.
+- One long operation owns the whole region and there is nothing else to show (`tec-empty-media` holding a [`tec-spinner`](/docs/components/spinner)).
+
+### Not for
+
+- a message about something that failed on a page that does have content: use [Alert](/docs/components/alert)
+- a placeholder while the content is still loading: use [Skeleton](/docs/components/skeleton)
+- a confirmation that disappears on its own: use [Toast](/docs/components/sonner)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose `tec-empty > tec-empty-header > (tec-empty-media, tec-empty-title, tec-empty-description)` and put the actions in `tec-empty-content`.
+
+</Do>
+
+<Do>
+
+Give an icon its tile with `tec-empty-media variant="icon"`; an avatar or an illustration uses the default variant.
+
+</Do>
+
+<Do>
+
+Add the dashed outline with `variant="outline"`.
+
+</Do>
+
+<Do>
+
+Name the next step: one primary button in `tec-empty-content`, at most one secondary beside it.
+
+</Do>
+
+<Do>
+
+`class` is for the box (`w-full`, `min-h-64`), not for the type or the colours.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Hand-building the empty state from divs">
+
+<Wrong>
+
+```html
+<div class="flex flex-col items-center gap-2 p-12 text-center">
+  <svg class="size-10 text-gray-400" aria-hidden="true">…</svg>
+  <h3 class="text-lg font-semibold">No projects yet</h3>
+  <p class="text-sm text-gray-500">Create your first project to get started.</p>
+  <tec-button>Create project</tec-button>
+</div>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-empty>
+  <tec-empty-header>
+    <tec-empty-media variant="icon"><svg aria-hidden="true">…</svg></tec-empty-media>
+    <tec-empty-title>No projects yet</tec-empty-title>
+    <tec-empty-description>Create your first project to get started.</tec-empty-description>
+  </tec-empty-header>
+  <tec-empty-content>
+    <tec-button>Create project</tec-button>
+  </tec-empty-content>
+</tec-empty>
+```
+
+</Correct>
+
+`gray-400` and `gray-500` are not Tecton steps, so both lines keep the default foreground colour, and the spacing, tile and type scale of the empty state are lost.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="An icon without its tile">
+
+<Wrong>
+
+```html
+<tec-empty-header>
+  <tec-empty-media><svg aria-hidden="true">…</svg></tec-empty-media>
+  <tec-empty-title>Cloud storage empty</tec-empty-title>
+</tec-empty-header>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-empty-header>
+  <tec-empty-media variant="icon"><svg aria-hidden="true">…</svg></tec-empty-media>
+  <tec-empty-title>Cloud storage empty</tec-empty-title>
+</tec-empty-header>
+```
+
+</Correct>
+
+The rounded muted tile and the 24px icon size come with the `icon` variant only; the default variant is a transparent box, so the icon renders at its own size with no surface behind it.
+
+</Dont>

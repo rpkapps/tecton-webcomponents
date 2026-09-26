@@ -1,0 +1,19 @@
+<form id="radio-group-form" class="flex w-full max-w-xs flex-col gap-4">
+  <tec-radio-group name="fluid" required aria-label="Fluid type">
+    <tec-radio-group-item value="oil">Oil</tec-radio-group-item>
+    <tec-radio-group-item value="gas">Gas</tec-radio-group-item>
+    <tec-radio-group-item value="water">Water</tec-radio-group-item>
+  </tec-radio-group>
+  <div class="flex gap-2">
+    <tec-button type="submit">Submit</tec-button>
+    <tec-button type="reset" variant="outline">Reset</tec-button>
+  </div>
+  <output class="text-sm text-muted-foreground">Submit without a choice to see the required error.</output>
+</form>
+<script type="module">
+  const form = document.getElementById("radio-group-form")
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    form.querySelector("output").textContent = `fluid=${new FormData(form).get("fluid")}`
+  })
+</script>

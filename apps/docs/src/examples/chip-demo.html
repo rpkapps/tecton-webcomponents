@@ -1,0 +1,22 @@
+<div id="chip-demo" class="flex flex-col items-center gap-3">
+  <tec-chip-group aria-label="Horizons" removable>
+    <tec-chip value="balder" variant="info">Top Balder</tec-chip>
+    <tec-chip value="sele" variant="info">Top Sele</tec-chip>
+    <tec-chip value="bcu" variant="info">Base Cretaceous</tec-chip>
+    <tec-chip value="brent" variant="info">Top Brent</tec-chip>
+    <span slot="empty">No horizons.</span>
+  </tec-chip-group>
+  <tec-button variant="ghost" size="xs" hidden>Reset</tec-button>
+</div>
+<script type="module">
+  const root = document.getElementById("chip-demo")
+  const group = root.querySelector("tec-chip-group")
+  const reset = root.querySelector("tec-button")
+  const initial = group.innerHTML
+  // Chips remove themselves; the app only keeps its own state in sync.
+  group.addEventListener("tec-remove", () => (reset.hidden = false))
+  reset.addEventListener("click", () => {
+    group.innerHTML = initial
+    reset.hidden = true
+  })
+</script>

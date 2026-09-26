@@ -1,0 +1,211 @@
+---
+title: Card
+description: Displays a card with header, content, and footer.
+tags: ["tec-card", "tec-card-header", "tec-card-title", "tec-card-description", "tec-card-action", "tec-card-content", "tec-card-footer"]
+---
+
+<ComponentPreview name="card-demo" class="min-h-[30rem]" />
+
+## Usage
+
+```ts
+import "@tecton/wc/card"
+```
+
+```html
+<tec-card>
+  <tec-card-header>
+    <tec-card-title>Card Title</tec-card-title>
+    <tec-card-description>Card Description</tec-card-description>
+    <tec-card-action>Card Action</tec-card-action>
+  </tec-card-header>
+  <tec-card-content>
+    <p>Card Content</p>
+  </tec-card-content>
+  <tec-card-footer>
+    <p>Card Footer</p>
+  </tec-card-footer>
+</tec-card>
+```
+
+## Composition
+
+```text
+tec-card
+├── tec-card-header
+│   ├── tec-card-title
+│   ├── tec-card-description
+│   └── tec-card-action
+├── tec-card-content
+└── tec-card-footer
+```
+
+The parts are the layout containers of their own children, so layout classes on them work as on a `div`: `<tec-card-footer class="flex-col gap-2">` stacks the footer's buttons. The header switches to two columns when it holds a `tec-card-action`, which spans the title and description rows at the end of the header.
+
+## Size
+
+Set `size="sm"` for a denser card: 16px spacing instead of 24px, and a smaller title.
+
+<ComponentPreview name="card-small" class="min-h-96" />
+
+## Spacing
+
+Besides `size`, the `--tec-card-spacing` custom property sets the gap between the parts, the card's top and bottom padding and the inline inset of every part. Set it on the card, with a `style` attribute, a stylesheet or a Tailwind class such as `[--tec-card-spacing:2rem]`.
+
+<ComponentPreview name="card-spacing" class="min-h-[34rem]" />
+
+Use negative margins with `-mx-(--tec-card-spacing)` to make content go edge to edge while it stays aligned with the card inset. When the edge-to-edge content sits above a footer, put `-mb-(--tec-card-spacing)` on `tec-card-content` to remove the gap. A header or footer with a border (`class="border-b border-border"` / `class="border-t border-border"`) gets the matching padding on that side.
+
+<ComponentPreview name="card-edge-to-edge" class="min-h-[24rem]" />
+
+## Image
+
+Put an `<img>` first in the card, before the header: the card drops its top padding and the image takes the card's top corners.
+
+<ComponentPreview name="card-image" class="min-h-[32rem]" />
+
+## RTL
+
+The parts use logical properties: the action moves to the left edge and the inset mirrors under `dir="rtl"` on any ancestor.
+
+<ComponentPreview name="card-rtl" direction="rtl" class="min-h-[30rem]" />
+
+## Keyboard interactions
+
+A card is a static container and takes no focus; keyboard interaction belongs to the controls inside it.
+
+## Accessibility
+
+- The card and its parts have no role: a card is a visual grouping. When the card should be a landmark, wrap it in a `<section aria-labelledby>` that points at the title.
+- `tec-card-title` is plain text by default. Set `level` (`<tec-card-title level="3">`) to expose it as a heading of that level, so cards in a list can be navigated by heading — or put a heading element inside it.
+- Do not make a whole card clickable with a `click` listener: it gets no role, no tab stop and no <Kbd>Enter</Kbd>. Put a link or a button inside it instead.
+- The ring around the card is a translucent box shadow; under forced colours it becomes a system-coloured outline.
+
+## API Reference
+
+<ApiReference tags={["tec-card", "tec-card-header", "tec-card-title", "tec-card-description", "tec-card-action", "tec-card-content", "tec-card-footer"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- A self-contained piece of content stands on its own: a summary, a sign-in form, a media tile.
+- The card is as tall as its content — it does not scroll and it is not part of the app chrome.
+- It sits in a grid or a stack of siblings that should all look the same.
+
+### Not for
+
+- a titled tool surface whose body scrolls and whose footer stays put: use [Panel](/docs/tecton/panel)
+- one row in a list of records: use [Item](/docs/components/item)
+- the title block at the top of a page: use [Page Header](/docs/tecton/page-header)
+- rows with sorting, paging and selection: use [Data Table](/docs/components/data-table)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `tec-card-header` with `tec-card-title`, `tec-card-description` and `tec-card-action`, then `tec-card-content`, then `tec-card-footer`.
+
+</Do>
+
+<Do>
+
+Set density with `size="sm"`, or with `--tec-card-spacing` on the card when a design needs another step.
+
+</Do>
+
+<Do>
+
+Divide sections with `class="border-b border-border"` on `tec-card-header` or `class="border-t border-border"` on `tec-card-footer`; the card adds the matching padding itself.
+
+</Do>
+
+<Do>
+
+Bleed content to the edges with `-mx-(--tec-card-spacing)`, so it still lines up with the card inset.
+
+</Do>
+
+<Do>
+
+Keep classes on `tec-card` to placement and width (`w-full max-w-sm`): the card owns the surface, ring, radius and padding.
+
+</Do>
+
+<Do>
+
+Never nest a card in a card; divide its content with a header border, a [Separator](/docs/components/separator) or a `tec-item-group` of rows.
+
+</Do>
+
+<Do>
+
+Group content with headings and spacing first; add a card, a panel or a separator only when whitespace leaves the grouping unclear.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="HIGH" title="Re-declaring the card's own padding and shape">
+
+<Wrong>
+
+```html
+<tec-card class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+  <tec-card-title>Reserves</tec-card-title>
+</tec-card>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-card size="sm" class="w-full max-w-sm">
+  <tec-card-header>
+    <tec-card-title>Reserves</tec-card-title>
+  </tec-card-header>
+</tec-card>
+```
+
+</Correct>
+
+The surface, ring, radius and padding are drawn inside the card, so `p-6` and `rounded-xl` on the element only add a second box around it, `border-gray-200` is stock Tailwind (the Tecton palette resets it, so it emits no CSS) and `bg-white` ignores the dark theme. Change the density with `size` or `--tec-card-spacing`.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Padding classes on a card part">
+
+<Wrong>
+
+```html
+<tec-card>
+  <tec-card-header class="border-b border-border pb-4">
+    <tec-card-title>Alternative B</tec-card-title>
+  </tec-card-header>
+  <tec-card-content class="px-8">4 wells, 1 template</tec-card-content>
+</tec-card>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-card>
+  <tec-card-header class="border-b border-border">
+    <tec-card-title>Alternative B</tec-card-title>
+  </tec-card-header>
+  <tec-card-content>4 wells, 1 template</tec-card-content>
+</tec-card>
+```
+
+</Correct>
+
+The parts take their inset from `--tec-card-spacing` and ignore padding classes, and a bordered header already gets the matching bottom padding; set `--tec-card-spacing` on the card when you need other spacing, so every part stays aligned.
+
+</Dont>

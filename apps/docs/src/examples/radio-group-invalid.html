@@ -1,0 +1,18 @@
+<tec-field-set class="w-full max-w-xs">
+  <tec-field-legend variant="label">Notification Preferences</tec-field-legend>
+  <tec-field-description>Choose how you want to receive notifications.</tec-field-description>
+  <tec-radio-group aria-label="Notification Preferences" value="email" invalid>
+    <tec-field orientation="horizontal" invalid>
+      <tec-radio-group-item value="email" id="radio-group-invalid-email"></tec-radio-group-item>
+      <tec-field-label for="radio-group-invalid-email" class="font-normal">Email only</tec-field-label>
+    </tec-field>
+    <tec-field orientation="horizontal" invalid>
+      <tec-radio-group-item value="sms" id="radio-group-invalid-sms"></tec-radio-group-item>
+      <tec-field-label for="radio-group-invalid-sms" class="font-normal">SMS only</tec-field-label>
+    </tec-field>
+    <tec-field orientation="horizontal" invalid>
+      <tec-radio-group-item value="both" id="radio-group-invalid-both"></tec-radio-group-item>
+      <tec-field-label for="radio-group-invalid-both" class="font-normal">Both Email &amp; SMS</tec-field-label>
+    </tec-field>
+  </tec-radio-group>
+</tec-field-set>

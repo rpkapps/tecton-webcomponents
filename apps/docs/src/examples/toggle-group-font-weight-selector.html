@@ -1,0 +1,40 @@
+<tec-field id="toggle-group-font-weight-selector" class="max-w-xs">
+  <tec-field-label id="toggle-group-font-weight-label">Font Weight</tec-field-label>
+  <tec-toggle-group value="normal" variant="outline" spacing="2" size="lg" disallow-empty aria-labelledby="toggle-group-font-weight-label">
+    <tec-toggle-group-item value="light" aria-label="Light" class="size-16" style="--tec-toggle-radius: var(--tec-radius-xl)">
+      <span class="flex flex-col items-center justify-center">
+        <span class="text-2xl leading-none font-light">Aa</span>
+        <span class="text-xs text-muted-foreground">Light</span>
+      </span>
+    </tec-toggle-group-item>
+    <tec-toggle-group-item value="normal" aria-label="Normal" class="size-16" style="--tec-toggle-radius: var(--tec-radius-xl)">
+      <span class="flex flex-col items-center justify-center">
+        <span class="text-2xl leading-none font-normal">Aa</span>
+        <span class="text-xs text-muted-foreground">Normal</span>
+      </span>
+    </tec-toggle-group-item>
+    <tec-toggle-group-item value="medium" aria-label="Medium" class="size-16" style="--tec-toggle-radius: var(--tec-radius-xl)">
+      <span class="flex flex-col items-center justify-center">
+        <span class="text-2xl leading-none font-medium">Aa</span>
+        <span class="text-xs text-muted-foreground">Medium</span>
+      </span>
+    </tec-toggle-group-item>
+    <tec-toggle-group-item value="bold" aria-label="Bold" class="size-16" style="--tec-toggle-radius: var(--tec-radius-xl)">
+      <span class="flex flex-col items-center justify-center">
+        <span class="text-2xl leading-none font-bold">Aa</span>
+        <span class="text-xs text-muted-foreground">Bold</span>
+      </span>
+    </tec-toggle-group-item>
+  </tec-toggle-group>
+  <tec-field-description>
+    Use <code class="rounded-md bg-muted px-1 py-0.5 font-mono">font-normal</code> to set the font weight.
+  </tec-field-description>
+</tec-field>
+<script type="module">
+  const root = document.getElementById("toggle-group-font-weight-selector")
+  const code = root.querySelector("code")
+
+  root.querySelector("tec-toggle-group").addEventListener("tec-value-change", (event) => {
+    code.textContent = `font-${event.detail.value}`
+  })
+</script>

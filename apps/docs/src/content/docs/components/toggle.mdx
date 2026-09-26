@@ -1,0 +1,202 @@
+---
+title: Toggle
+description: A two-state button that can be either on or off.
+tags: ["tec-toggle"]
+---
+
+<ComponentPreview name="toggle-demo" />
+
+## Usage
+
+```ts
+import "@tecton/wc/toggle"
+```
+
+```html
+<tec-toggle>Toggle</tec-toggle>
+```
+
+## Outline
+
+Use `variant="outline"` for an outline style.
+
+<ComponentPreview name="toggle-outline" />
+
+## With Text
+
+<ComponentPreview name="toggle-text" />
+
+## Size
+
+Use the `size` attribute to change the size of the toggle: `sm` (28px), `default` (32px) or `lg` (36px).
+
+<ComponentPreview name="toggle-sizes" />
+
+## Disabled
+
+<ComponentPreview name="toggle-disabled" />
+
+## Events
+
+The `pressed` attribute is reflected, so it is both the state and a styling hook (`class="[&[pressed]_svg]:fill-current"` fills the icon of a pressed toggle, as in the demo). When the user toggles it, the element fires `tec-pressed-change` with `detail.pressed`; call `preventDefault()` to keep the current state. Setting `pressed` from code fires nothing.
+
+<ComponentPreview name="toggle-events" />
+
+## RTL
+
+<ComponentPreview name="toggle-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+<KeyboardTable
+  rows={[
+    ["Space", "Toggles the button."],
+    ["Enter", "Toggles the button."],
+    ["Tab / Shift+Tab", "Moves focus to the next / previous focusable element. A disabled toggle is skipped."],
+  ]}
+/>
+
+## Accessibility
+
+- Renders a native `<button aria-pressed>` in its shadow root (with `delegatesFocus`), so it is announced as a toggle button with its pressed state.
+- The accessible name is the slotted text; give an icon-only toggle an `aria-label` on the element — it is forwarded to the inner button, as are `aria-describedby` and the other `aria-*` attributes. Slotted icons should be `aria-hidden="true"`.
+- `disabled` removes it from the tab order. The focus ring stays visible in forced-colours mode, where a pressed toggle uses the system highlight colours.
+
+## API Reference
+
+<ApiReference tags={["tec-toggle"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- One independent formatting or view option is on or off: bold, bookmark, show labels.
+- The control lives in a toolbar or beside content, not in a labelled form row.
+- Pressing it changes the surrounding view immediately, with no save step.
+
+### Not for
+
+- several related toggles in one segmented control: use [Toggle Group](/docs/components/toggle-group)
+- a control that performs an action rather than holding state: use [Button](/docs/components/button)
+- an on/off setting in a form: use [Switch](/docs/components/switch)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Hold state with the `pressed` attribute or property and react to `tec-pressed-change`, which carries the new state in `detail.pressed`.
+
+</Do>
+
+<Do>
+
+Pick `variant="default" | "outline"` and `size="default" | "sm" | "lg"`; they own colour, height and padding.
+
+</Do>
+
+<Do>
+
+Give an icon-only toggle an `aria-label`, and put a leading icon in `slot="start"` when you want the tighter icon padding.
+
+</Do>
+
+<Do>
+
+A pressed toggle shows a filled icon as well as its pressed background (`tec-icon variant="filled"`, or `[pressed] svg { fill: currentColor }`).
+
+</Do>
+
+<Do>
+
+Keep a toggle's label the same in both states ("Show labels", not "Show"/"Hide").
+
+</Do>
+
+<Do>
+
+Put related toggles in one [Toggle Group](/docs/components/toggle-group) labelled for the set ("Log tracks"), not a row of separate toggles.
+
+</Do>
+
+<Do>
+
+A toggle group holds only toggles; an action such as Reset is a separate button outside the group.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="Listening for change instead of tec-pressed-change">
+
+<Wrong>
+
+```js
+bold.addEventListener("change", () => setBold(bold.pressed))
+```
+
+</Wrong>
+
+<Correct>
+
+```js
+bold.addEventListener("tec-pressed-change", (event) => setBold(event.detail.pressed))
+```
+
+</Correct>
+
+A toggle is not a form control and fires no `change`; its state change is the `tec-pressed-change` event.
+
+</Dont>
+
+<Dont severity="HIGH" title="A toggle used as a labelled form setting">
+
+<Wrong>
+
+```html
+<tec-field orientation="horizontal">
+  <tec-toggle>Email notifications</tec-toggle>
+</tec-field>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-field orientation="horizontal">
+  <tec-switch id="notify" name="notify"></tec-switch>
+  <tec-field-label for="notify">Email notifications</tec-field-label>
+</tec-field>
+```
+
+</Correct>
+
+A toggle renders a button with `aria-pressed`, which announces a pressed control rather than an on/off setting, and submits no value with the form.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="An icon-only toggle with no accessible name">
+
+<Wrong>
+
+```html
+<tec-toggle variant="outline"><svg aria-hidden="true">…</svg></tec-toggle>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-toggle variant="outline" aria-label="Toggle bookmark"><svg aria-hidden="true">…</svg></tec-toggle>
+```
+
+</Correct>
+
+The button's only content is a hidden SVG, so its accessible name is empty and it is announced as an unlabelled toggle button.
+
+</Dont>

@@ -1,0 +1,285 @@
+---
+title: Item
+description: A versatile component for displaying content with media, title, description, and actions.
+tags: ["tec-item", "tec-item-group", "tec-item-separator", "tec-item-media", "tec-item-content", "tec-item-title", "tec-item-description", "tec-item-actions", "tec-item-header", "tec-item-footer"]
+---
+
+<ComponentPreview name="item-demo" />
+
+`tec-item` is a flex row that can hold nearly any content: media, a title and a description, and actions. Group items with `tec-item-group` to make a list.
+
+## Usage
+
+```ts
+import "@tecton/wc/item"
+```
+
+```html
+<tec-item>
+  <tec-item-media variant="icon">
+    <svg>…</svg>
+  </tec-item-media>
+  <tec-item-content>
+    <tec-item-title>Title</tec-item-title>
+    <tec-item-description>Description</tec-item-description>
+  </tec-item-content>
+  <tec-item-actions>
+    <tec-button>Action</tec-button>
+  </tec-item-actions>
+</tec-item>
+```
+
+## Composition
+
+```text
+tec-item-group
+└── tec-item
+    ├── tec-item-header
+    ├── tec-item-media
+    ├── tec-item-content
+    │   ├── tec-item-title
+    │   └── tec-item-description
+    ├── tec-item-actions
+    └── tec-item-footer
+```
+
+## Item vs Field
+
+Use [Field](/docs/components/field) to display a form control such as a checkbox, an input, a radio or a select with its label. Use `tec-item` to display content: a title, a description and actions.
+
+## Variant
+
+`variant="default"` is transparent, `outline` adds a border and `muted` a muted background.
+
+<ComponentPreview name="item-variant" class="min-h-96" />
+
+## Size
+
+`size` sets the gap and padding: `default`, `sm` or `xs`. Image media and the description text follow it, and a `tec-item-group` tightens its gap for small items.
+
+<ComponentPreview name="item-size" class="min-h-96" />
+
+## Icon
+
+`tec-item-media variant="icon"` sizes a slotted icon to 16px.
+
+<ComponentPreview name="item-icon" />
+
+## Avatar
+
+Put an [Avatar](/docs/components/avatar) in a default `tec-item-media`.
+
+<ComponentPreview name="item-avatar" />
+
+## Image
+
+`tec-item-media variant="image"` crops a slotted `<img>` into a square of 40px (32px in `sm` items, 24px in `xs`). A second `tec-item-content` right after the first takes only its own width, for a duration or an amount.
+
+<ComponentPreview name="item-image" />
+
+## Group
+
+`tec-item-group` is exposed as a list and each item as a list item. Name the list with `aria-label` or with `aria-labelledby` pointing at its visible heading. Separate rows with `tec-item-separator` when they have no border.
+
+<ComponentPreview name="item-group" class="min-h-96" />
+
+## Header
+
+`tec-item-header` and `tec-item-footer` take the full width of the item, above or below the other parts. Layout classes on `tec-item-group` (`class="grid grid-cols-3 gap-4"`) replace its column.
+
+<ComponentPreview name="item-header" class="min-h-96" />
+
+## Link
+
+With `href`, the whole item is a real link (an `<a>` in its shadow root): it takes focus, shows the hover background, and opens in a new tab with the usual modifier keys. It also accepts `target`, `rel` and `download`.
+
+<ComponentPreview name="item-link" />
+
+```html
+<tec-item href="/dashboard">
+  <tec-item-media variant="icon">
+    <svg>…</svg>
+  </tec-item-media>
+  <tec-item-content>
+    <tec-item-title>Dashboard</tec-item-title>
+    <tec-item-description>Overview of your account and activity.</tec-item-description>
+  </tec-item-content>
+</tec-item>
+```
+
+## Dropdown
+
+Items make rich rows inside a [Dropdown Menu](/docs/components/dropdown-menu).
+
+<ComponentPreview name="item-dropdown" />
+
+## RTL
+
+The item uses logical properties: media, content and actions mirror under `dir="rtl"`. Flip directional icons yourself (`class="rtl:rotate-180"`).
+
+<ComponentPreview name="item-rtl" direction="rtl" />
+
+## Keyboard interactions
+
+A static item takes no focus; the buttons and links inside it do. A linked item (`href`) is one tab stop.
+
+<KeyboardTable
+  rows={[
+    ["Tab / Shift+Tab", "Moves focus to the next / previous linked item or control inside an item."],
+    ["Enter", "Follows the link of a linked item."],
+  ]}
+/>
+
+## Accessibility
+
+- `tec-item-group` has the `list` role and its `tec-item` children the `listitem` role. Name the list with `aria-label` or `aria-labelledby`.
+- A linked item renders a native `<a>`: its accessible name is its whole text content (title, description and any trailing text), so keep that content short. Host `aria-*` attributes such as `aria-current="page"` or `aria-label` are forwarded to the link.
+- A linked item must not contain other links or buttons (interactive content inside a link is invalid). A row with its own actions stays static and links its title instead.
+- `tec-item-separator` is decorative inside a group (the list structure already separates the rows) and a `separator` elsewhere.
+- Icons in media and actions should be `aria-hidden="true"`; give icon-only buttons an `aria-label` that names the row ("Add alex").
+
+## API Reference
+
+<ApiReference tags={["tec-item", "tec-item-group", "tec-item-separator", "tec-item-media", "tec-item-content", "tec-item-title", "tec-item-description", "tec-item-actions", "tec-item-header", "tec-item-footer"]} />
+
+## Usage guidelines
+
+### Use it when
+
+- One row of a list: a file, a person, a well, a setting with a switch beside it.
+- The row has a shape — media, then title and description, then actions.
+- A stack of rows should look and space consistently: wrap them in `tec-item-group`.
+
+### Not for
+
+- a standalone block with its own title, body and footer: use [Card](/docs/components/card)
+- rows with columns, sorting, paging and selection: use [Data Table](/docs/components/data-table)
+- the trailing actions of a panel header: use [Panel](/docs/tecton/panel)
+
+### Do
+
+<DoList>
+
+<Do>
+
+Compose it: `tec-item-media`, then `tec-item-content` with `tec-item-title` and `tec-item-description`, then `tec-item-actions`.
+
+</Do>
+
+<Do>
+
+Make the whole row a link by giving `tec-item` an `href`; it then renders a real link with focus and hover states.
+
+</Do>
+
+<Do>
+
+Choose the look with `variant="default" | "outline" | "muted"` and the density with `size="default" | "sm" | "xs"`.
+
+</Do>
+
+<Do>
+
+Use `tec-item-media variant="icon"` for a glyph and `variant="image"` for a thumbnail; an avatar goes in the default media.
+
+</Do>
+
+<Do>
+
+Separate rows inside a `tec-item-group` with `tec-item-separator`, never with a border class on the row.
+
+</Do>
+
+<Do>
+
+Use compact rows in dense panels and inspectors (`size="sm"` or `size="xs"`), the default size for standalone lists with media.
+
+</Do>
+
+<Do>
+
+A linked item holds no buttons or links; a row with its own actions stays static, links its title and puts buttons in `tec-item-actions`.
+
+</Do>
+
+<Do>
+
+Name every `tec-item-group` for screen readers with its visible heading (`aria-labelledby`), or an `aria-label` when none is on screen.
+
+</Do>
+
+<Do>
+
+Use `tec-item-group` only for a collection of like records; a single item stands alone, and unrelated content is spaced, not listed.
+
+</Do>
+
+<Do>
+
+Rows in one group are all linked or all static; when they must mix, each linked row shows a chevron in `tec-item-actions`.
+
+</Do>
+
+</DoList>
+
+### Don't
+
+<Dont severity="CRITICAL" title="A row made clickable with a click listener">
+
+<Wrong>
+
+```html
+<tec-item variant="outline" onclick="location.href = '/wells/34-10-a-12'">
+  <tec-item-content>
+    <tec-item-title>34/10-A-12</tec-item-title>
+  </tec-item-content>
+</tec-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-item variant="outline" href="/wells/34-10-a-12">
+  <tec-item-content>
+    <tec-item-title>34/10-A-12</tec-item-title>
+  </tec-item-content>
+</tec-item>
+```
+
+</Correct>
+
+Without `href` the item is a plain container, so a click listener gives the row no role, no tab stop and no <Kbd>Enter</Kbd>: it is reachable with a mouse only.
+
+</Dont>
+
+<Dont severity="MEDIUM" title="Sizing and colouring the row by hand">
+
+<Wrong>
+
+```html
+<tec-item class="rounded-md border border-gray-200">
+  <tec-item-content>
+    <tec-item-title>Seismic survey 2024</tec-item-title>
+  </tec-item-content>
+</tec-item>
+```
+
+</Wrong>
+
+<Correct>
+
+```html
+<tec-item variant="outline" size="sm">
+  <tec-item-content>
+    <tec-item-title>Seismic survey 2024</tec-item-title>
+  </tec-item-content>
+</tec-item>
+```
+
+</Correct>
+
+The row's border, padding and radius are drawn inside the element: a border class adds a second box around it, and `border-gray-200` is stock Tailwind, which the Tecton palette resets to no CSS. `variant="outline"` is the themed border and `size="sm"` the compact padding, in step with the other rows.
+
+</Dont>
