@@ -4,7 +4,7 @@ description: A control that allows the user to toggle between checked and not ch
 tags: ["tec-checkbox"]
 ---
 
-<ComponentPreview name="checkbox-demo" class="min-h-80" />
+<ComponentPreview name="checkbox-demo" class="h-80" />
 
 ## Usage
 
@@ -87,7 +87,7 @@ Put a checkbox with an `aria-label` in the first cell of each row of a [Table](/
 
 The box sits at the inline start and the label follows it in right-to-left layouts.
 
-<ComponentPreview name="checkbox-rtl" direction="rtl" class="min-h-80" />
+<ComponentPreview name="checkbox-rtl" direction="rtl" class="h-80" />
 
 ## Keyboard interactions
 
@@ -105,10 +105,6 @@ The box sits at the inline start and the label follows it in right-to-left layou
 - `invalid` and a failed `required` constraint set `aria-invalid="true"` on the control.
 - `readonly` keeps the checkbox focusable and submitted but ignores toggles.
 - The check and the dash stay visible in forced-colours mode, and so does the focus ring.
-
-## API Reference
-
-<ApiReference tags={["tec-checkbox"]} />
 
 ## Usage guidelines
 
@@ -245,3 +241,7 @@ A `span` is not a label, so the checkbox has no accessible name and the text doe
 The checked fill comes from the theme, a class on the host does not reach the box inside the shadow root, and `bg-emerald-600` is outside the Tecton palette so it generates no CSS. Re-theme with the `--tec-*` variables or `::part(control)` when you really must.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-checkbox"]} />

@@ -23,6 +23,8 @@ export type { PopupAlign, PopupSide } from "../../internal/popup.js"
 export type SelectVariant = "outline" | "filled" | "text"
 /** Trigger height: `sm` 28px, `default` 32px. */
 export type SelectSize = "default" | "sm"
+/** What the trigger shows for the chosen option. */
+export type SelectValueDisplay = "content" | "text" | "value"
 
 /** Why the popup opened or closed. */
 export type SelectOpenChangeReason = "trigger" | "keyboard" | "select" | PopupCloseReason
@@ -99,6 +101,13 @@ export class TecSelect extends FormControlMixin(TectonElement) {
 
   /** Whether the popup is open. */
   @property({ type: Boolean, reflect: true }) open = false
+
+  /**
+   * What the trigger shows for the chosen option: `content` (a copy of the option's content, icons
+   * included), `text` (its text or `label`), or `value` (its `value`, e.g. a currency symbol `$`
+   * for an option reading "$ US Dollar"). With `multiple`, the texts or values are listed.
+   */
+  @property({ attribute: "value-display" }) valueDisplay: SelectValueDisplay = "content"
 
   /** Adds a search field at the top of the popup that filters the options. */
   @property({ type: Boolean, reflect: true }) searchable = false
@@ -430,9 +439,10 @@ export class TecSelect extends FormControlMixin(TectonElement) {
   protected override render() {
     const selected = this.selectedItems
     let value: unknown
+    const shown = (i: TecSelectItem) => (this.valueDisplay === "value" ? i.key : i.textValue)
     if (!selected.length) value = this.placeholder
-    else if (!this.multiple) value = cloneItemContent(selected[0]!)
-    else value = new Intl.ListFormat(localeOf(this), { type: "conjunction" }).format(selected.map((i) => i.textValue))
+    else if (!this.multiple) value = this.valueDisplay === "content" ? cloneItemContent(selected[0]!) : shown(selected[0]!)
+    else value = new Intl.ListFormat(localeOf(this), { type: "conjunction" }).format(selected.map(shown))
     return html`<button
         class="trigger"
         part="trigger"

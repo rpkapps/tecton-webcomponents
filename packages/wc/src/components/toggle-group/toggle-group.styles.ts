@@ -1,18 +1,15 @@
 import { css } from "lit"
 
+/* The host is the layout box (flex row / column); author layout classes on it win over these. */
 export const toggleGroupStyles = css`
   :host {
     display: flex;
-    width: fit-content;
-  }
-  .base {
-    display: flex;
     flex-direction: row;
     align-items: center;
-    width: 100%;
-    border-radius: var(--tec-radius-md);
+    width: fit-content;
+    gap: var(--tec-toggle-group-gap, calc(0.25rem * var(--_toggle-group-spacing, 2)));
   }
-  :host([orientation="vertical"]) .base {
+  :host([orientation="vertical"]) {
     flex-direction: column;
     align-items: stretch;
   }

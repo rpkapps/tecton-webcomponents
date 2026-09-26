@@ -37,12 +37,17 @@ function matches(el: Element, selector: string): boolean {
  *
  * @cssstate focused - The control has focus (the ring is shown).
  * @cssstate invalid - The control displays invalidity.
- * @cssstate disabled - Every control is disabled (addons dim).
  * @cssstate block - A `block-start` or `block-end` addon is present (the group stacks and grows).
  * @cssstate has-textarea - The control is a textarea (the group grows with it).
  */
 export class TecInputGroup extends TectonElement {
   static styles = [hostStyles, inputGroupStyles]
+
+  /**
+   * Dims the addons as disabled. It does not disable the control: set `disabled` on the control
+   * too (a disabled control alone leaves the addons at full strength).
+   */
+  @property({ type: Boolean, reflect: true }) disabled = false
 
   #controls: HTMLElement[] = []
   #observer = new MutationObserver(() => this.#sync())
@@ -97,7 +102,6 @@ export class TecInputGroup extends TectonElement {
       "invalid",
       controls.some((c) => matches(c, ":state(user-invalid)") || c.getAttribute("aria-invalid") === "true")
     )
-    this.toggleState("disabled", controls.length > 0 && controls.every((c) => matches(c, ":disabled")))
   }
 
   #syncFocus(): void {

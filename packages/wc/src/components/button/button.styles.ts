@@ -60,23 +60,24 @@ export const buttonStyles = css`
     min-width: 0;
     width: 100%;
     height: 100%;
-    padding-inline: var(--_pad);
+    padding-inline: var(--tec-button-padding-inline, var(--_pad));
     border: 1px solid var(--_border);
     border-radius: var(--tec-button-radius, var(--_radius));
-    background-color: var(--_bg);
+    background-color: var(--tec-button-background, var(--_bg));
     background-clip: padding-box;
-    color: var(--_fg);
+    color: var(--tec-button-foreground, var(--_fg));
     font: inherit;
     text-decoration: inherit;
     text-underline-offset: var(--_underline-offset, auto);
     cursor: inherit;
+    box-shadow: var(--tec-button-shadow, 0 0 #0000);
     outline: none;
   }
   :host(:state(has-start)) .base {
-    padding-inline-start: var(--_pad-icon);
+    padding-inline-start: var(--tec-button-padding-inline, var(--_pad-icon));
   }
   :host(:state(has-end)) .base {
-    padding-inline-end: var(--_pad-icon);
+    padding-inline-end: var(--tec-button-padding-inline, var(--_pad-icon));
   }
 
   ::slotted(svg),
@@ -217,7 +218,7 @@ export const buttonStyles = css`
     background-color: var(--_bg-focus);
     color: var(--_fg-focus);
     border-color: var(--_ring-border);
-    box-shadow: var(--_ring);
+    box-shadow: var(--_ring), var(--tec-button-shadow, 0 0 #0000);
   }
   :host(:active) .base {
     background-color: var(--_bg-pressed);
@@ -234,7 +235,7 @@ export const buttonStyles = css`
   }
   :host([aria-invalid="true"]) .base {
     border-color: light-dark(var(--tec-destructive), color-mix(in oklab, var(--tec-destructive) 50%, transparent));
-    box-shadow: var(--tec-focus-ring-invalid);
+    box-shadow: var(--tec-focus-ring-invalid), var(--tec-button-shadow, 0 0 #0000);
   }
   :host([disabled]),
   :host(:disabled) {

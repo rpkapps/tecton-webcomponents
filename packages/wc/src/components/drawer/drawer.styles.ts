@@ -270,20 +270,26 @@ export const drawerStyles = css`
 /* flex shrink-0 flex-col gap-0.5 p-4 pb-0; centred on a vertical drawer; md: gap-1.5 (text-start on a side drawer) */
 export const drawerHeaderStyles = css`
   :host {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
     flex-shrink: 0;
   }
   .base {
     display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
+    flex: 1 1 auto;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    gap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
     padding: 1rem 1rem 0;
   }
   :host(:state(axis-y)) .base {
     text-align: center;
   }
   @media (min-width: 48rem) {
-    .base {
+    :host {
       gap: 0.375rem;
     }
   }
@@ -292,15 +298,21 @@ export const drawerHeaderStyles = css`
 /* mt-auto flex shrink-0 flex-col gap-2 p-4 pt-0 (see the sheet footer about the !important). */
 export const drawerFooterStyles = css`
   :host {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     flex-shrink: 0;
     margin-block-start: var(--tec-drawer-footer-margin, auto) !important;
   }
   .base {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0 1rem 1rem;
+    flex: 1 1 auto;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    gap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    padding: var(--tec-drawer-footer-padding, 0 1rem 1rem);
   }
 `
 

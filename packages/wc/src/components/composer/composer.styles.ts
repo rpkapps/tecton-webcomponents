@@ -114,15 +114,21 @@ export const composerInputStyles = css`
 `
 
 export const composerToolbarStyles = css`
+  /* The host is the layout box (align, gap, wrap classes on it apply); the padding is the part's. */
   :host {
     display: flex;
+    align-items: center;
+    gap: 0.25rem;
     width: 100%;
     min-width: 0;
   }
   .base {
     display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    flex: 1 1 auto;
+    flex-wrap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    gap: inherit;
     width: 100%;
     min-width: 0;
     padding: 0.375rem 0.5rem 0.5rem;
@@ -274,14 +280,15 @@ export const composerHintStyles = css`
 export const composerStatusStyles = visuallyHiddenHost
 
 export const composerSuggestionsStyles = css`
+  /* The host is the layout box. */
   :host {
-    display: block;
-    min-width: 0;
-  }
-  .base {
     display: flex;
     flex-wrap: wrap;
     gap: 0.375rem;
+    min-width: 0;
+  }
+  .base {
+    display: contents;
   }
 `
 
@@ -305,8 +312,11 @@ export const composerSuggestionStyles = css`
 `
 
 export const composerAttachmentsStyles = css`
+  /* The host is the layout box (wrap, gap, align classes on it apply); the padding is the part's. */
   :host {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
     width: 100%;
     min-width: 0;
   }
@@ -315,8 +325,12 @@ export const composerAttachmentsStyles = css`
   }
   .base {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.375rem;
+    flex: 1 1 auto;
+    flex-wrap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    gap: inherit;
+    min-width: 0;
     padding: 0.5rem 0.5rem 0;
   }
 `

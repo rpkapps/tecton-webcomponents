@@ -12,6 +12,10 @@ export type ButtonVariant = "default" | "outline" | "secondary" | "ghost" | "des
 export type ButtonSize = "default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg"
 
 /**
+ * Visual overrides are custom properties (utility classes on the host only affect layout: `w-full`,
+ * `h-10`, `flex-1` work; `rounded-full`, `bg-*`, `text-*`, `shadow-*` don't reach the inner box):
+ * `style="--tec-button-radius: 9999px; --tec-button-shadow: var(--tec-shadow-md)"`, or `::part(base)`.
+ *
  * ARIA attributes set on the host (`aria-label`, `aria-expanded`, `aria-haspopup`, `aria-pressed`,
  * `aria-describedby` …) are delegated to the inner `<button>`/`<a>`; they stay on the host too, so
  * overlays can set them on a slotted `tec-button` trigger and styles can read them.
@@ -26,7 +30,11 @@ export type ButtonSize = "default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "
  *
  * @csspart base - The native `<button>` (or `<a>` with `href`) that fills the host.
  *
- * @cssprop --tec-button-radius - Corner radius (default `--tec-radius-md`; `xs`/`sm` sizes cap it at 8px/10px). Button groups set it.
+ * @cssprop --tec-button-radius - Corner radius (default `--tec-radius-md`; `xs`/`sm` sizes cap it at 8px/10px). `9999px` makes a pill / round icon button (`rounded-full`). Button groups set it.
+ * @cssprop --tec-button-background - Resting background colour (overrides the variant's; hover, pressed and expanded keep the variant colours) — the equivalent of a `bg-*` class.
+ * @cssprop --tec-button-foreground - Resting text/icon colour (overrides the variant's; hover, pressed and expanded keep the variant colours) — the equivalent of a `text-*` class.
+ * @cssprop --tec-button-shadow - Box shadow of the button (e.g. `var(--tec-shadow-md)` for a floating action button); combined with the focus ring.
+ * @cssprop --tec-button-padding-inline - Horizontal padding (default 0.5rem, 0.625rem for `lg`; `0` for an inline text-like button).
  * @cssprop --tec-button-border-color - Border colour of the filled variants (default transparent). Button groups set it for mixed groups.
  * @cssprop --tec-icon-size - Size of slotted icons (1rem; 0.75rem for `xs` and `icon-xs`).
  *

@@ -4,7 +4,7 @@ description: Displays a menu of actions triggered by a right click.
 tags: ["tec-context-menu", "tec-context-menu-item", "tec-context-menu-group", "tec-context-menu-label", "tec-context-menu-separator", "tec-context-menu-shortcut", "tec-context-menu-sub", "tec-context-menu-sub-trigger", "tec-context-menu-sub-content"]
 ---
 
-<ComponentPreview name="context-menu-demo" class="min-h-96" />
+<ComponentPreview name="context-menu-demo" />
 
 ## Usage
 
@@ -50,65 +50,65 @@ tec-context-menu
 
 A simple context menu with a few actions.
 
-<ComponentPreview name="context-menu-basic" class="min-h-80" />
+<ComponentPreview name="context-menu-basic" />
 
 ## Submenu
 
 Use `tec-context-menu-sub` to nest secondary actions.
 
-<ComponentPreview name="context-menu-submenu" class="min-h-80" />
+<ComponentPreview name="context-menu-submenu" />
 
 ## Shortcuts
 
 Add `tec-context-menu-shortcut` to show keyboard hints.
 
-<ComponentPreview name="context-menu-shortcuts" class="min-h-80" />
+<ComponentPreview name="context-menu-shortcuts" />
 
 ## Groups
 
 Group related actions and separate them with dividers.
 
-<ComponentPreview name="context-menu-groups" class="min-h-[28rem] items-start" />
+<ComponentPreview name="context-menu-groups" />
 
 ## Icons
 
 Put icons in `slot="start"`.
 
-<ComponentPreview name="context-menu-icons" class="min-h-80" />
+<ComponentPreview name="context-menu-icons" />
 
 ## Checkboxes
 
 Use `selection-mode="multiple"` on a group for toggles; `checked` sets the initial state.
 
-<ComponentPreview name="context-menu-checkboxes" class="min-h-80" />
+<ComponentPreview name="context-menu-checkboxes" />
 
 ## Radio
 
 Use `selection-mode="single"` for exclusive choices.
 
-<ComponentPreview name="context-menu-radio" class="min-h-80" />
+<ComponentPreview name="context-menu-radio" />
 
 ## Destructive
 
 Use `variant="destructive"` to style the item as destructive.
 
-<ComponentPreview name="context-menu-destructive" class="min-h-80" />
+<ComponentPreview name="context-menu-destructive" />
 
 ## Placement
 
 `side` and `align` place the menu against the pointer (default `bottom` / `start`); it flips when there is no room.
 
-<ComponentPreview name="context-menu-sides" class="min-h-96" />
+<ComponentPreview name="context-menu-sides" />
 
 ## Events
 
 `tec-select` bubbles from the activated item (`detail: { value, checked? }`); `tec-open-change` fires with `reason: "context-menu"` when the menu opens. `showAt(x, y)` opens the menu at a viewport position from code, without an event. `disabled` lets the browser's own context menu through.
 
-<ComponentPreview name="context-menu-events" class="min-h-80" />
+<ComponentPreview name="context-menu-events" />
 
 ## RTL
 
-<ComponentPreview name="context-menu-rtl" direction="rtl" class="min-h-96" />
+<ComponentPreview name="context-menu-rtl" direction="rtl" />
 
 ## Keyboard interactions
 
@@ -132,10 +132,6 @@ Use `variant="destructive"` to style the item as destructive.
 - The target gets no `aria-haspopup`: a context menu is not opened by activating the target, and announcing a popup would mislead. Make sure every action is also reachable another way.
 - Make the target focusable (`tabindex="0"`) so keyboard users can open the menu with <Kbd>Shift+F10</Kbd> or the <Kbd>ContextMenu</Kbd> key.
 - Opening with the pointer focuses the menu; opening from the keyboard focuses the first item. Closing returns focus to the element that had it.
-
-## API Reference
-
-<ApiReference tags={["tec-context-menu", "tec-context-menu-item", "tec-context-menu-group", "tec-context-menu-label", "tec-context-menu-separator", "tec-context-menu-shortcut", "tec-context-menu-sub", "tec-context-menu-sub-trigger", "tec-context-menu-sub-content"]} />
 
 ## Usage guidelines
 
@@ -241,3 +237,7 @@ Mark the dangerous entry with `variant="destructive"`; nest with `tec-context-me
 Nothing on screen says a context menu exists, and touch users need a long press they may never try; keep a visible route to every action and use the menu as a shortcut.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-context-menu", "tec-context-menu-item", "tec-context-menu-group", "tec-context-menu-label", "tec-context-menu-separator", "tec-context-menu-shortcut", "tec-context-menu-sub", "tec-context-menu-sub-trigger", "tec-context-menu-sub-content"]} />

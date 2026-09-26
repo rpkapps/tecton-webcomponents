@@ -159,4 +159,16 @@ describe("tec-toggle-group", () => {
     await z.updateComplete
     expect(z.matches(":state(pressed)")).toBe(true)
   })
+
+  it("the host is the flex container: author layout (flex-wrap, gap) applies to the items", async () => {
+    const g = await fixture<TecToggleGroup>(html`<tec-toggle-group style="flex-wrap: wrap; width: 120px; gap: 4px">
+      <tec-toggle-group-item value="a">Alpha</tec-toggle-group-item>
+      <tec-toggle-group-item value="b">Bravo</tec-toggle-group-item>
+      <tec-toggle-group-item value="c">Charlie</tec-toggle-group-item>
+    </tec-toggle-group>`)
+    const [a, b, c] = items(g).map((i) => i.getBoundingClientRect())
+    expect(c!.top).toBeGreaterThanOrEqual(a!.bottom)
+    expect(b!.left - a!.right).toBe(4)
+    expect(g.getBoundingClientRect().right).toBeGreaterThanOrEqual(Math.max(a!.right, b!.right, c!.right))
+  })
 })

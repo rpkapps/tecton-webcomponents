@@ -223,3 +223,19 @@ describe("tec-shortcut-keys", () => {
     await expectAccessible(root)
   })
 })
+
+describe("tec-shortcut-keys in context", () => {
+  it("keeps the key order left to right in RTL and inverts the caps inside a tooltip", async () => {
+    const root = await fixture<HTMLDivElement>(html`<div dir="rtl">
+      <tec-shortcut-keys keys="ctrl+k" platform="other"></tec-shortcut-keys>
+      <div role="tooltip"><tec-shortcut-keys keys="ctrl+k" platform="other"></tec-shortcut-keys></div>
+    </div>`)
+    const [plain, tip] = [...root.querySelectorAll<TecShortcutKeys>("tec-shortcut-keys")]
+    const [ctrl, k] = [...plain!.shadowRoot!.querySelectorAll("kbd")]
+    expect(ctrl!.getBoundingClientRect().left).toBeLessThan(k!.getBoundingClientRect().left)
+    expect(tip!.matches(":state(in-tooltip)")).toBe(true)
+    expect(plain!.matches(":state(in-tooltip)")).toBe(false)
+    const bg = (el: TecShortcutKeys) => getComputedStyle(el.shadowRoot!.querySelector("kbd")!).color
+    expect(bg(tip!)).not.toBe(bg(plain!))
+  })
+})

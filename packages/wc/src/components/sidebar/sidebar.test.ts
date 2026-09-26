@@ -257,6 +257,21 @@ describe("tec-sidebar (mobile)", () => {
   })
 })
 
+describe("tec-sidebar-inset / sections", () => {
+  it("embedded renders no main landmark", async () => {
+    const el = await fixture<HTMLElement>(html`<tec-sidebar-inset embedded><p>x</p></tec-sidebar-inset>`)
+    expect(el.shadowRoot!.querySelector("main")).toBeNull()
+    expect(el.shadowRoot!.querySelector("div.base")).not.toBeNull()
+  })
+
+  it("sections take layout classes on the host (forwarded to the padded part)", async () => {
+    const el = await fixture<HTMLElement>(html`<tec-sidebar-header style="flex-direction: row; gap: 12px"><span>a</span><span>b</span></tec-sidebar-header>`)
+    const [a, b] = [...el.querySelectorAll("span")]
+    expect(Math.round(b!.getBoundingClientRect().left - a!.getBoundingClientRect().right)).toBe(12)
+    expect(a!.getBoundingClientRect().top).toBe(b!.getBoundingClientRect().top)
+  })
+})
+
 describe("tec-sidebar-input", () => {
   it("is a form control", async () => {
     const form = await fixture<HTMLFormElement>(html`<form><tec-sidebar-input name="q" aria-label="Search"></tec-sidebar-input></form>`)

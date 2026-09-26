@@ -5,7 +5,7 @@ import { skeletonStyles } from "./skeleton.styles.js"
 
 /**
  * An empty block with no intrinsic size: give every skeleton a size from the spacing scale
- * (`class="h-4 w-full"`, `class="size-12 rounded-full"`, `class="aspect-video w-full"`) and mirror
+ * (`class="h-4 w-full"`, `class="size-12"` with `--tec-skeleton-radius: 9999px`, `class="aspect-video w-full"`) and mirror
  * the layout of the content it stands in for. The pulse stops for users who prefer reduced motion.
  *
  * The placeholder is decorative (hidden from assistive technology). Mark the region that is loading
@@ -17,7 +17,7 @@ import { skeletonStyles } from "./skeleton.styles.js"
  *
  * @csspart base - The pulsing muted block.
  *
- * @cssprop --tec-skeleton-radius - Corner radius (default `--tec-radius-md`). A `rounded-*` class on the element works too.
+ * @cssprop --tec-skeleton-radius - Corner radius (default `--tec-radius-md`; `9999px` for a circle).
  */
 export class TecSkeleton extends TectonElement {
   static styles = [hostStyles, skeletonStyles]

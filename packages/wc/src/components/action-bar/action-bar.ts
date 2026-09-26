@@ -4,8 +4,10 @@ import { X } from "lucide"
 import { DismissController } from "../../internal/dismiss.js"
 import { containsFlat } from "../../internal/focus.js"
 import { icon } from "../../internal/icons.js"
+import { localeOf } from "../../internal/locale.js"
 import { hostStyles, srOnly } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
+import { forwardLayout } from "../panel/layout.styles.js"
 import { TecToolbar } from "../overflow/overflow.js"
 
 /** Where the bar sits. */
@@ -13,7 +15,11 @@ export type ActionBarPlacement = "toolbar" | "floating"
 
 const barStyles = css`
   :host {
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.75rem;
+    row-gap: 0.375rem;
     min-width: 0;
   }
   :host([placement="floating"]) {
@@ -23,12 +29,6 @@ const barStyles = css`
   }
   .base {
     container-type: inline-size;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    column-gap: 0.75rem;
-    row-gap: 0.375rem;
-    min-width: 0;
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
     border-radius: var(--tec-radius-md);
@@ -85,7 +85,7 @@ const barStyles = css`
  * @fires tec-dismiss - Escape was pressed while focus was inside the bar.
  */
 export class TecActionBar extends TectonElement {
-  static styles = [hostStyles, barStyles]
+  static styles = [hostStyles, forwardLayout, barStyles]
 
   /** `toolbar` fills a row (a table's toolbar); `floating` is a sticky card at the bottom of its scroll container. */
   @property({ reflect: true }) placement: ActionBarPlacement = "toolbar"
@@ -218,16 +218,43 @@ export class TecActionBarSelection extends TectonElement {
   /** Show a Clear button (fires `tec-clear`). */
   @property({ type: Boolean }) clearable = false
 
+  /**
+   * Template of the full summary (also the live announcement). `{count}`, `{total}` and `{label}`
+   * are replaced; numbers are formatted for the element's language. Default:
+   * `"{count} of {total} {label} selected"`, or `"{count} {label} selected"` without `total`.
+   */
+  @property({ attribute: "selected-text" }) selectedText = ""
+
+  /** Template of the medium summary (below 32rem). Default `"{count} selected"`. */
+  @property({ attribute: "short-text" }) shortText = "{count} selected"
+
+  /** Visible text of the Clear button. */
+  @property({ attribute: "clear-text" }) clearText = "Clear"
+
   /** Accessible name of the icon-only Clear button. */
   @property({ attribute: "clear-label" }) clearLabel = "Clear selection"
 
   @state() private announced = ""
   #timer: ReturnType<typeof setTimeout> | undefined
 
-  get #full(): string {
-    const noun = this.label ? ` ${this.label}` : ""
-    return this.total !== undefined && this.total !== null && !Number.isNaN(this.total) ? `${this.count} of ${this.total}${noun} selected` : `${this.count}${noun} selected`
+  get #hasTotal(): boolean {
+    return this.total !== undefined && this.total !== null && !Number.isNaN(this.total)
   }
+
+  #format(template: string): string {
+    const numbers = new Intl.NumberFormat(localeOf(this))
+    return template
+      .replaceAll("{count}", numbers.format(this.count))
+      .replaceAll("{total}", this.#hasTotal ? numbers.format(this.total!) : "")
+      .replaceAll("{label}", this.label)
+      .replace(/\s+/g, " ")
+      .trim()
+  }
+
+  get #full(): string {
+    return this.#format(this.selectedText || (this.#hasTotal ? "{count} of {total} {label} selected" : "{count} {label} selected"))
+  }
+
 
   override disconnectedCallback(): void {
     super.disconnectedCallback()
@@ -248,7 +275,7 @@ export class TecActionBarSelection extends TectonElement {
 
   protected override updated(changed: PropertyValues): void {
     super.updated(changed)
-    if (changed.has("count") || changed.has("total") || changed.has("label")) this.#announce()
+    if (["count", "total", "label", "selectedText"].some((key) => changed.has(key))) this.#announce()
   }
 
   #clear = () => this.emit("tec-clear")
@@ -256,11 +283,11 @@ export class TecActionBarSelection extends TectonElement {
   protected override render() {
     return html`<span class="sr-only" aria-live="polite" aria-atomic="true">${this.announced}</span>
       <span class="summary" part="summary" aria-hidden="true">
-        <span class="full">${this.#full}</span><span class="medium">${this.count} selected</span
-        ><span class="compact"><span class="count" part="count">${this.count}</span></span>
+        <span class="full">${this.#full}</span><span class="medium">${this.#format(this.shortText)}</span
+        ><span class="compact"><span class="count" part="count">${this.#format("{count}")}</span></span>
       </span>
       ${this.clearable
-        ? html`<tec-button class="clear-text" part="clear" variant="ghost" size="sm" @click=${this.#clear}>Clear</tec-button>
+        ? html`<tec-button class="clear-text" part="clear" variant="ghost" size="sm" @click=${this.#clear}>${this.clearText}</tec-button>
             <tec-button class="clear-icon" part="clear-icon" variant="ghost" size="icon-sm" aria-label=${this.clearLabel} @click=${this.#clear}
               >${icon(X, { size: 16 })}</tec-button
             >`

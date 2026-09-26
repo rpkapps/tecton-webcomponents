@@ -308,8 +308,8 @@ For every component family `<name>`:
   `apps/docs/src/content/docs/tecton/<name>.mdx` (Tecton-specific components), with the sections:
   intro preview, Usage
   (import + minimal markup), one section per example, RTL, **Keyboard interactions**, **Accessibility**,
-  **API Reference** (`<ApiReference tags={["tec-x", "tec-x-part"]} />`, generated from the manifest),
-  **Usage guidelines** (when to use it, what not to use it for, do/don't).
+  **Usage guidelines** (when to use it, what not to use it for, do/don't), and last
+  **API Reference** (`<ApiReference tags={["tec-x", "tec-x-part"]} />`, generated from the manifest).
 - Examples: `apps/docs/src/examples/<name>-<example>.html` — an HTML fragment; the same file is the
   rendered preview and the displayed code. Layout uses Tailwind classes (the site loads the Tecton Tailwind preset). An example
   may include one `<script type="module">` for behaviour; scope queries to the example

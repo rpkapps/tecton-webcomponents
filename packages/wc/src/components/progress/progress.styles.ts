@@ -1,15 +1,16 @@
 import { css } from "lit"
 
 export const progressStyles = css`
+  /* The host is the layout box (\`flex flex-wrap gap-3\`): layout classes on the element apply to it. */
   :host {
-    display: block;
-    min-width: 0;
-  }
-  .base {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem;
+    min-width: 0;
+  }
+  .base {
+    display: contents;
   }
   .track {
     position: relative;

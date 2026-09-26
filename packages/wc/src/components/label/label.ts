@@ -17,7 +17,8 @@ import { labelStyles } from "./label.styles.js"
  * - **Activation**: clicking the label focuses the control and clicks it, so a checkbox, switch or
  *   radio toggles and a text field takes focus. Links and buttons inside the label keep their own
  *   behaviour.
- * - **State**: the label dims while its control is disabled (`:state(disabled)`).
+ * - **State**: the label dims while its control is disabled (`:state(disabled)`, and
+ *   `aria-disabled="true"` so accessibility checkers treat it like the label of a disabled control).
  *
  * A native `<label for>` also works with every Tecton form control; use `tec-label` for the Tecton
  * label style or when the association must follow the markup (containment, fields).
@@ -115,8 +116,15 @@ export class TecLabel extends TectonElement {
   /** Updates the states that mirror the control (`:state(disabled)`). */
   protected syncControlState(): void {
     const control = this.#control
-    this.toggleState("disabled", !!control && control.matches(":disabled"))
+    const disabled = !!control && control.matches(":disabled")
+    this.toggleState("disabled", disabled)
+    // Tell checkers (axe's contrast rule) that this text belongs to a disabled control, as a native
+    // <label for> of a disabled input is. ElementInternals ARIA is invisible to them, so it is an attribute.
+    if (disabled) this.setAttribute("aria-disabled", "true")
+    else if (this.getAttribute("aria-disabled") === "true" && this.#setDisabled) this.removeAttribute("aria-disabled")
+    this.#setDisabled = disabled
   }
+  #setDisabled = false
 
   #onClick = (event: MouseEvent) => {
     if (event.defaultPrevented) return

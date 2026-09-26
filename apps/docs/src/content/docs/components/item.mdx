@@ -51,13 +51,13 @@ Use [Field](/docs/components/field) to display a form control such as a checkbox
 
 `variant="default"` is transparent, `outline` adds a border and `muted` a muted background.
 
-<ComponentPreview name="item-variant" class="min-h-96" />
+<ComponentPreview name="item-variant" class="h-96" />
 
 ## Size
 
 `size` sets the gap and padding: `default`, `sm` or `xs`. Image media and the description text follow it, and a `tec-item-group` tightens its gap for small items.
 
-<ComponentPreview name="item-size" class="min-h-96" />
+<ComponentPreview name="item-size" class="h-96" />
 
 ## Icon
 
@@ -81,13 +81,13 @@ Put an [Avatar](/docs/components/avatar) in a default `tec-item-media`.
 
 `tec-item-group` is exposed as a list and each item as a list item. Name the list with `aria-label` or with `aria-labelledby` pointing at its visible heading. Separate rows with `tec-item-separator` when they have no border.
 
-<ComponentPreview name="item-group" class="min-h-96" />
+<ComponentPreview name="item-group" class="h-96" />
 
 ## Header
 
 `tec-item-header` and `tec-item-footer` take the full width of the item, above or below the other parts. Layout classes on `tec-item-group` (`class="grid grid-cols-3 gap-4"`) replace its column.
 
-<ComponentPreview name="item-header" class="min-h-96" />
+<ComponentPreview name="item-header" class="h-96" />
 
 ## Link
 
@@ -137,10 +137,6 @@ A static item takes no focus; the buttons and links inside it do. A linked item 
 - A linked item must not contain other links or buttons (interactive content inside a link is invalid). A row with its own actions stays static and links its title instead.
 - `tec-item-separator` is decorative inside a group (the list structure already separates the rows) and a `separator` elsewhere.
 - Icons in media and actions should be `aria-hidden="true"`; give icon-only buttons an `aria-label` that names the row ("Add alex").
-
-## API Reference
-
-<ApiReference tags={["tec-item", "tec-item-group", "tec-item-separator", "tec-item-media", "tec-item-content", "tec-item-title", "tec-item-description", "tec-item-actions", "tec-item-header", "tec-item-footer"]} />
 
 ## Usage guidelines
 
@@ -283,3 +279,7 @@ Without `href` the item is a plain container, so a click listener gives the row 
 The row's border, padding and radius are drawn inside the element: a border class adds a second box around it, and `border-gray-200` is stock Tailwind, which the Tecton palette resets to no CSS. `variant="outline"` is the themed border and `size="sm"` the compact padding, in step with the other rows.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-item", "tec-item-group", "tec-item-separator", "tec-item-media", "tec-item-content", "tec-item-title", "tec-item-description", "tec-item-actions", "tec-item-header", "tec-item-footer"]} />

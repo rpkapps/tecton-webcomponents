@@ -64,6 +64,9 @@ export class TecSheet extends TecModalElement {
 }
 
 /**
+ * The element is the flex column (layout classes such as `gap-*` or `items-*` work on it); the
+ * padding lives on `part="base"`.
+ *
  * @summary Groups the title and description at the top of a sheet (with 1rem padding).
  * @tag tec-sheet-header
  * @slot - `tec-sheet-title` and `tec-sheet-description`.
@@ -74,7 +77,8 @@ export class TecSheetHeader extends ModalSectionBase {
 }
 
 /**
- * Pushed to the bottom of the sheet (`margin-block-start: auto`).
+ * Pushed to the bottom of the sheet (`margin-block-start: auto`). The element is the flex column
+ * (layout classes work on it); the padding lives on `part="base"`.
  *
  * @summary The action column at the bottom of a sheet (with 1rem padding).
  * @tag tec-sheet-footer

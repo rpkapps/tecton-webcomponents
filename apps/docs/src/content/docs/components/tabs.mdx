@@ -4,7 +4,7 @@ description: A set of layered sections of content—known as tab panels—that a
 tags: ["tec-tabs", "tec-tabs-list", "tec-tabs-trigger", "tec-tabs-content"]
 ---
 
-<ComponentPreview name="tabs-demo" class="min-h-96" />
+<ComponentPreview name="tabs-demo" class="h-96" />
 
 ## Usage
 
@@ -72,7 +72,7 @@ When the user selects another tab, `tec-tabs` fires a cancelable `tec-value-chan
 
 The arrow keys and the strip are mirrored in right-to-left layouts: ArrowLeft moves to the next tab.
 
-<ComponentPreview name="tabs-rtl" direction="rtl" class="min-h-96" />
+<ComponentPreview name="tabs-rtl" direction="rtl" />
 
 ## Keyboard interactions
 
@@ -93,10 +93,6 @@ The arrow keys and the strip are mirrored in right-to-left layouts: ArrowLeft mo
 - A panel with nothing focusable inside is itself focusable, so keyboard users can reach and read it.
 - Give `tec-tabs-list` an `aria-label` when no nearby heading names the set.
 - The selected tab and the focus ring stay visible in forced-colours mode.
-
-## API Reference
-
-<ApiReference tags={["tec-tabs", "tec-tabs-list", "tec-tabs-trigger", "tec-tabs-content"]} />
 
 ## Usage guidelines
 
@@ -222,3 +218,7 @@ Only `tec-tabs-content` gets the `tabpanel` role, the label back to its tab and 
 The visual tab is inside the trigger's shadow root, so host classes paint around it and apply to every state, not just the selected one; the stock palette is reset so `bg-blue-600` emits no CSS. The selected colours belong to the list variant — style further with `:state(selected)` and `::part(base)` if you must.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-tabs", "tec-tabs-list", "tec-tabs-trigger", "tec-tabs-content"]} />

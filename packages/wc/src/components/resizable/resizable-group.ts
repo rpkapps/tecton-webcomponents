@@ -206,7 +206,7 @@ export class TecResizableGroup extends TectonElement {
     layout.forEach((size, i) => {
       const panel = this.#panels[i]!
       panel.style.flexGrow = String(Number(size.toFixed(4)))
-      if (typeof panel.applySize === "function") panel.applySize(size, this.#isCollapsed(i, size))
+      if (typeof panel.applySize === "function") panel.applySize(size, this.#isCollapsed(i, size), this.orientation === "vertical")
     })
     this.#syncHandles()
   }

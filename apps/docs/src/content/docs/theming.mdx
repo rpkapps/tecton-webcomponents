@@ -59,9 +59,13 @@ Set a `--tec-*` variable on any element to change it for every component below i
 .danger-zone {
   --tec-primary: var(--tecton-palette-red-560);
   --tec-primary-hover: var(--tecton-palette-red-460);
+  --tec-primary-foreground: var(--tecton-palette-red-50);
+  --tec-primary-hover-foreground: var(--tecton-palette-red-50);
   --tec-radius-md: 0;
 }
 ```
+
+Re-point the foreground with the background: step `50` on step `560` of the same family is the palette's "solid fill with light text" recipe, and passes 4.5:1 in both modes.
 
 <ComponentPreview name="theming-subtree" />
 
@@ -72,6 +76,23 @@ A component may also document its own custom properties (`--tec-sidebar-width`, 
 The complete list, generated from `theme.css`, with the Tecton token each variable points at, its value in both modes and the note of the token mapping.
 
 <TokenTable />
+
+## Tecton-only variables
+
+Most variables carry the familiar shadcn/ui names (`--tec-background`, `--tec-primary`, `--tec-border`…). Tecton has semantics that set does not express, so the theme adds these; the components' Tecton variants and the Tecton components use them, and so can your own markup:
+
+| Variables | Tailwind utilities | Used for |
+| --- | --- | --- |
+| `--tec-success`, `--tec-warning`, `--tec-info`, `--tec-neutral` | `text-success`, `border-warning`, `bg-info` | Status colour: text, borders and icons (readable on the page and card in both modes); with `--tec-<status>-foreground` also a solid surface |
+| `--tec-success-surface`, `--tec-warning-surface`, `--tec-info-surface`, `--tec-neutral-surface`, `--tec-destructive-surface` (+ `-foreground`) | `bg-warning-surface`, `text-warning-surface-foreground` | Tecton's filled status surfaces (filled alerts, solid status badges) |
+| `--tec-destructive-foreground` | `text-destructive-foreground` | Text on a `destructive` surface |
+| `--tec-primary-hover`, `-pressed`, `-active` (and the same for `secondary`, `ghost`, `outline`, `link`) | `bg-primary-hover`, `bg-secondary-active` | Tecton's action colours per interaction state |
+| `--tec-surface-alt`, `--tec-table-header`, `--tec-table-active` | `bg-surface-alt` | Striped, header and selected table rows |
+| `--tec-border-subtle`, `--tec-border-strong` | `border-border-subtle`, `bg-border-strong` | Separator emphasis levels |
+| `--tec-font-sans`, `--tec-font-mono` | `font-sans`, `font-mono` | Figtree / IBM Plex Mono |
+| `--tec-radius-sm` … `--tec-radius-2xl` | `rounded-sm` … `rounded-2xl` | Tecton radius scale (2/4/8/12/16px) |
+| `--tec-focus-ring`, `--tec-focus-ring-invalid` | — | The solid 2px focus ring of every control (a `box-shadow` value) |
+| `--tec-duration*`, `--tec-ease*` | — | Motion; components skip it under `prefers-reduced-motion` |
 
 ## Using the variables in your CSS
 

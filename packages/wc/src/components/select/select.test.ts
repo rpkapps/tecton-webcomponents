@@ -226,6 +226,23 @@ describe("tec-select", () => {
     expect(b!.open).toBe(false)
   })
 
+  it("value-display: the trigger shows the value or the text instead of the content", async () => {
+    const root = await fixture<HTMLElement>(html`<div>
+      <tec-select value-display="value" value="$" aria-label="Currency">
+        <tec-select-item value="$">$ <span>US Dollar</span></tec-select-item>
+        <tec-select-item value="€">€ <span>Euro</span></tec-select-item>
+      </tec-select>
+      <tec-select value-display="text" value="a" aria-label="Icon">
+        <tec-select-item value="a"><svg aria-hidden="true" width="16" height="16"></svg>Apple</tec-select-item>
+      </tec-select>
+    </div>`)
+    const [a, b] = root.querySelectorAll("tec-select")
+    expect(a!.shadowRoot!.querySelector(".value")!.textContent).toBe("$")
+    expect(await axNode(trigger(a!))).toMatchObject({ name: "$ Currency" })
+    expect(b!.shadowRoot!.querySelector(".value svg")).toBeNull()
+    expect(b!.shadowRoot!.querySelector(".value")!.textContent).toBe("Apple")
+  })
+
   it("variants and sizes", async () => {
     const root = await fixture<HTMLElement>(html`<div>
       <tec-select variant="filled" size="sm" aria-label="A">${fruits}</tec-select>

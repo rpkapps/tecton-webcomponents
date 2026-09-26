@@ -127,10 +127,6 @@ Triggers, chevrons and padding use logical properties and follow `dir="rtl"` on 
 - The chevron is decorative; do not add your own. Slotted icons in `slot="start"` should be `aria-hidden="true"`. Secondary text is part of the button's name.
 - The height animation is skipped under `prefers-reduced-motion: reduce`. Focus rings and the outline border stay visible in forced-colours mode.
 
-## API Reference
-
-<ApiReference tags={["tec-accordion", "tec-accordion-item", "tec-accordion-trigger", "tec-accordion-content"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -277,3 +273,7 @@ The trigger already draws a chevron that turns when the item expands; a hand-add
 Text in the default slot is inside the toggle button: a nested button is invalid HTML, is announced as part of the heading and toggles the item. The `actions` slot renders the buttons beside the toggle.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-accordion", "tec-accordion-item", "tec-accordion-trigger", "tec-accordion-content"]} />

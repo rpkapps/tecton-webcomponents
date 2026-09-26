@@ -53,7 +53,7 @@ Use the `size` attribute to scale the padding of header, content and footer (`--
 
 ## Footer
 
-Give the panel a height: `<tec-panel-content>` scrolls and `<tec-panel-footer>` stays pinned to the bottom. `justify="end"` (or `"between"`) distributes the footer's buttons. The content's own padding is its scroll area, so lay out what is inside it with a wrapper element.
+Give the panel a height: `<tec-panel-content>` scrolls and `<tec-panel-footer>` stays pinned to the bottom. Every part is the layout box of its children, so layout classes go on the part itself: `class="flex flex-col gap-4"` on the content, `class="justify-end"` on the footer (or its `justify` attribute).
 
 <ComponentPreview name="panel-footer" />
 
@@ -83,10 +83,6 @@ The panel is not interactive; focus and keys belong to the controls in it. An ov
 - `<tec-panel-description>` is a paragraph. Icon buttons in `<tec-panel-actions>` need an `aria-label`.
 - The panel renders a `section` without a name, so it is not a landmark. Put it in a named region (for example an `aside` with an `aria-label`) when it is one of the page's main areas.
 - Borders stay visible in forced-colours mode.
-
-## API Reference
-
-<ApiReference tags={["tec-panel", "tec-panel-header", "tec-panel-title", "tec-panel-description", "tec-panel-actions", "tec-panel-content", "tec-panel-footer"]} />
 
 ## Usage guidelines
 
@@ -192,3 +188,7 @@ Only `<tec-panel-content>` takes the remaining height and scrolls, so a plain `d
 The shadow is the `elevated` variant and the padding is the `size` scale, which the parts read through `--tec-panel-px` / `--tec-panel-py`. `border-gray-200` and `bg-white` are stock Tailwind colours and emit no CSS with the Tecton palette, and a border on the element draws a second edge outside the panel's own.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-panel", "tec-panel-header", "tec-panel-title", "tec-panel-description", "tec-panel-actions", "tec-panel-content", "tec-panel-footer"]} />

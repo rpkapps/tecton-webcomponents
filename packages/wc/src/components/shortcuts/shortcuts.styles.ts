@@ -18,24 +18,33 @@ export const shortcutKeysStyles = css`
     align-items: center;
     vertical-align: middle;
   }
+  /* Key chords read left to right in every script (Ctrl + K, G then W). */
+  .base {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
   .text {
     color: var(--tec-muted-foreground);
     font-size: var(--tec-text-xs);
     line-height: var(--tec-text-xs--line-height);
   }
+  :host(:state(in-tooltip)) .text {
+    color: inherit;
+    opacity: 0.7;
+  }
 `
 
 export const shortcutListStyles = css`
   :host {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     font-family: var(--tec-font-sans);
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
   }
   .base {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    display: contents;
   }
   .group {
     display: flex;

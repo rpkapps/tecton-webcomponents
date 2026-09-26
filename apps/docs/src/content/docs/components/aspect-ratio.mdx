@@ -30,13 +30,13 @@ A square box with `ratio="1"`, for thumbnails and avatars of things.
 
 A portrait box with `ratio="9/16"`, for phone screenshots and vertical video.
 
-<ComponentPreview name="aspect-ratio-portrait" class="min-h-96" />
+<ComponentPreview name="aspect-ratio-portrait" class="h-96" />
 
 ## RTL
 
 The box has no direction of its own; content and captions around it follow `dir="rtl"`.
 
-<ComponentPreview name="aspect-ratio-rtl" direction="rtl" class="min-h-96" />
+<ComponentPreview name="aspect-ratio-rtl" class="h-96" direction="rtl" />
 
 ## Keyboard interactions
 
@@ -46,10 +46,6 @@ The element is a layout box and takes no focus.
 
 - The element has no role. Give the media inside it its own text alternative (`alt` on an `<img>`, `title` on an `<iframe>`, captions on a `<video>`), or `alt=""` when it is decorative.
 - Wrap it in a `<figure>` with a `<figcaption>` when the media needs a visible caption.
-
-## API Reference
-
-<ApiReference tags={["tec-aspect-ratio"]} />
 
 ## Usage guidelines
 
@@ -176,3 +172,7 @@ The height always comes from the width and the ratio, so `h-48` gives the elemen
 Only fractions with `/` or `:` and plain numbers are understood; anything else falls back to a square without a warning.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-aspect-ratio"]} />

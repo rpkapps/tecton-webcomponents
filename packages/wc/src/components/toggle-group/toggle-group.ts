@@ -1,7 +1,6 @@
 import { ContextProvider } from "@lit/context"
 import { html, type PropertyValues } from "lit"
 import { property } from "lit/decorators.js"
-import { styleMap } from "lit/directives/style-map.js"
 import { RovingFocusController } from "../../internal/roving-focus.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
@@ -26,11 +25,12 @@ export type { ToggleGroupOrientation } from "./toggle-group-context.js"
  *
  * @tag tec-toggle-group
  *
+ * The element itself is the flex container (row, or column when vertical), so layout classes on it
+ * (`flex-wrap`, `gap-4`, `justify-center`) apply to the items as they would on any flex box.
+ *
  * @slot - `tec-toggle-group-item` elements (they may be wrapped in other elements).
  *
- * @csspart base - The flex container holding the items.
- *
- * @cssprop --tec-toggle-group-gap - Gap between items (default `calc(0.25rem * spacing)`).
+ * @cssprop --tec-toggle-group-gap - Gap between items (default `calc(0.25rem * spacing)`; a `gap-*` class on the element also wins).
  *
  * @fires tec-value-change - The user changed the selection. Cancelable (`preventDefault()` keeps the current selection). `detail: { value, values }` (`value` is the first selected value).
  */
@@ -140,6 +140,10 @@ export class TecToggleGroup extends TectonElement {
 
   protected override willUpdate(changed: PropertyValues): void {
     super.willUpdate(changed)
+    if (changed.has("spacing")) {
+      // The gap is `calc(0.25rem * spacing)` on the host (see the styles); only this private variable is written.
+      this.style.setProperty("--_toggle-group-spacing", String(Number.isFinite(this.spacing) ? this.spacing : 2))
+    }
     this.internals.role = this.multiple ? "toolbar" : "radiogroup"
     this.internals.ariaOrientation = this.orientation
     this.internals.ariaDisabled = this.disabled ? "true" : null
@@ -169,10 +173,7 @@ export class TecToggleGroup extends TectonElement {
   }
 
   protected override render() {
-    const gap = `calc(0.25rem * ${Number.isFinite(this.spacing) ? this.spacing : 2})`
-    return html`<div class="base" part="base" style=${styleMap({ gap: `var(--tec-toggle-group-gap, ${gap})` })}>
-      <slot @slotchange=${() => this.#roving.update()}></slot>
-    </div>`
+    return html`<slot @slotchange=${() => this.#roving.update()}></slot>`
   }
 }
 

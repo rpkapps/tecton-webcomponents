@@ -4,7 +4,7 @@ description: A popover that appears on hover, focus, or long press to preview co
 tags: ["tec-hover-card"]
 ---
 
-<ComponentPreview name="hover-card-demo" class="min-h-80" />
+<ComponentPreview name="hover-card-demo" class="h-80" />
 
 ## Usage
 
@@ -48,11 +48,11 @@ Use `side` to control the placement: `bottom` (default), `top`, `left`, `right`,
 
 ## Sides
 
-<ComponentPreview name="hover-card-sides" class="min-h-[22rem]" />
+<ComponentPreview name="hover-card-sides" class="h-[22rem]" />
 
 ## RTL
 
-<ComponentPreview name="hover-card-rtl" direction="rtl" class="min-h-80" />
+<ComponentPreview name="hover-card-rtl" direction="rtl" class="h-80" />
 
 ## Keyboard interactions
 
@@ -70,10 +70,6 @@ Use `side` to control the placement: `bottom` (default), `top`, `left`, `right`,
 - The card is a non-modal `role="dialog"` in the top layer, named after the trigger (or `label`). Focus stays on the trigger when it opens.
 - It stays open while the pointer travels between the trigger and the card, and while keyboard focus is in either. On touch screens a long press opens it and moves focus into it.
 - A hover card is a preview: everything in it must be reachable another way (usually by following the link).
-
-## API Reference
-
-<ApiReference tags={["tec-hover-card"]} />
 
 ## Usage guidelines
 
@@ -170,3 +166,7 @@ The hover card only describes the trigger while it is open, so the icon button s
 The open delay is named `delay`; an unknown `open-delay` attribute is ignored and the card keeps waiting the default 600 ms, which reads as the hover card being broken.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-hover-card"]} />

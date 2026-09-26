@@ -1,69 +1,71 @@
-<section
-  aria-label="Example: well overview"
-  class="flex w-full max-w-xl flex-col overflow-hidden rounded-xl border border-border bg-popover text-popover-foreground shadow-lg"
->
-  <header class="flex items-center gap-2 border-b border-border px-4 py-2.5">
-    <h2 class="text-sm font-medium">Well K70 — Spekk fm top</h2>
-    <div class="ms-auto flex items-center gap-1">
-      <tec-button variant="ghost" size="icon-sm" aria-label="Notifications (3)">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
-      </tec-button>
-      <tec-button variant="secondary" size="sm" class="rounded-full shadow-md">
+<tec-panel variant="elevated" class="w-full">
+  <tec-panel-header>
+    <tec-panel-title>Well K70 — Spekk fm top</tec-panel-title>
+    <tec-panel-actions>
+      <tec-count-badge count="3" color="destructive">
+        <tec-button variant="ghost" size="icon-sm" aria-label="Notifications">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+        </tec-button>
+      </tec-count-badge>
+      <tec-button variant="secondary" size="sm" class="[&::part(base)]:shadow-md" style="--tec-button-radius: 9999px">
         <svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
         Add
       </tec-button>
-    </div>
-  </header>
-  <div class="flex flex-col gap-5 p-4">
+    </tec-panel-actions>
+  </tec-panel-header>
+  <tec-panel-content class="flex flex-col gap-5">
     <div class="flex flex-wrap items-center gap-2">
-      <tec-badge variant="success">Active</tec-badge>
-      <tec-badge variant="info" appearance="outline">Reservoir interval</tec-badge>
-      <tec-badge variant="secondary" appearance="outline">Facies model</tec-badge>
+      <tec-badge variant="success" size="md">Active</tec-badge>
+      <tec-badge variant="info" appearance="outline" size="md">Reservoir interval</tec-badge>
+      <tec-button variant="outline" size="xs" style="--tec-button-radius: 9999px">Facies model</tec-button>
     </div>
-    <dl class="grid grid-cols-3 gap-4">
-      <div class="flex flex-col gap-0.5">
-        <dt class="text-xs text-muted-foreground">NPV</dt>
-        <dd class="font-mono text-xl tabular-nums">248.6 <span class="text-xs text-muted-foreground">MUSD</span></dd>
-        <dd class="font-mono text-xs text-success">+4.2%</dd>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <dt class="text-xs text-muted-foreground">CAPEX</dt>
-        <dd class="font-mono text-xl tabular-nums">91.3 <span class="text-xs text-muted-foreground">MUSD</span></dd>
-        <dd class="font-mono text-xs text-destructive">-1.1%</dd>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <dt class="text-xs text-muted-foreground">Confidence</dt>
-        <dd class="font-mono text-xl tabular-nums">72%</dd>
-      </div>
-    </dl>
+    <tec-stat-group>
+      <tec-stat>
+        <tec-stat-label>NPV</tec-stat-label>
+        <tec-stat-value unit="MUSD">248.6</tec-stat-value>
+        <tec-stat-delta trend="up">+4.2%</tec-stat-delta>
+      </tec-stat>
+      <tec-stat>
+        <tec-stat-label>CAPEX</tec-stat-label>
+        <tec-stat-value unit="MUSD">91.3</tec-stat-value>
+        <tec-stat-delta trend="down">-1.1%</tec-stat-delta>
+      </tec-stat>
+      <tec-stat>
+        <tec-stat-label>Confidence</tec-stat-label>
+        <div class="flex items-center gap-2">
+          <tec-circular-progress value="72" size="sm" color="success" aria-label="Confidence"></tec-circular-progress>
+          <tec-stat-value>72%</tec-stat-value>
+        </div>
+      </tec-stat>
+    </tec-stat-group>
     <tec-tabs value="design">
       <tec-tabs-list>
         <tec-tabs-trigger value="design">Design</tec-tabs-trigger>
         <tec-tabs-trigger value="risk">Risk</tec-tabs-trigger>
       </tec-tabs-list>
-      <tec-tabs-content value="design">
-        <div class="flex flex-col gap-4 pt-3">
-          <tec-slider value="64" min="0" max="100" aria-label="Variogram range"></tec-slider>
-          <div class="flex items-center gap-3">
-            <tec-input class="flex-1" placeholder="Search horizons…" aria-label="Search horizons"></tec-input>
-            <tec-button variant="outline" size="icon" aria-label="Search">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
-            </tec-button>
-          </div>
-          <div class="flex flex-wrap items-center gap-6 text-sm">
-            <tec-checkbox>Show hidden items</tec-checkbox>
-            <tec-switch checked>Auto-update</tec-switch>
-          </div>
+      <tec-tabs-content value="design" class="flex flex-col gap-4 pt-3">
+        <tec-slider value="64" min="0" max="100" aria-label="Variogram range"></tec-slider>
+        <div class="flex items-center gap-3">
+          <tec-input class="flex-1" placeholder="Search horizons…" aria-label="Search"></tec-input>
+          <tec-button variant="outline" size="icon" aria-label="Search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+          </tec-button>
+        </div>
+        <div class="flex items-center gap-6 text-sm">
+          <tec-checkbox>Show hidden items</tec-checkbox>
+          <tec-switch checked>Auto-update</tec-switch>
         </div>
       </tec-tabs-content>
-      <tec-tabs-content value="risk">
-        <p class="pt-3 text-sm text-muted-foreground">Risk 68 %, complexity 35 %.</p>
+      <tec-tabs-content value="risk" class="flex flex-col gap-3 pt-3">
+        <tec-meter label="Risk" value="68" color="auto" show-value></tec-meter>
+        <tec-meter label="Complexity" value="35" color="auto" show-value></tec-meter>
       </tec-tabs-content>
     </tec-tabs>
     <tec-alert variant="warning" appearance="outline">
       <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
       <tec-alert-title>Model out of date</tec-alert-title>
       <tec-alert-description>Horizon K70 changed after the last run.</tec-alert-description>
+      <tec-button slot="action" variant="ghost" size="xs">Re-run</tec-button>
     </tec-alert>
-  </div>
-</section>
+  </tec-panel-content>
+</tec-panel>

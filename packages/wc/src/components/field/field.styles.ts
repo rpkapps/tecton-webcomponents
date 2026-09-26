@@ -195,9 +195,6 @@ export const fieldDescriptionStyles = css`
     font-weight: var(--tec-font-weight-normal);
     text-align: start;
   }
-  :host(:state(horizontal)) {
-    text-wrap: balance;
-  }
   :host(:state(after-legend)) .base {
     margin-top: -0.375rem;
   }

@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it } from "vitest"
 import { cdp } from "vitest/browser"
 import { fixture } from "../internal/test-utils.js"
 import "./utilities.css"
+import scrollFadeCss from "./scroll-fade.css?raw"
+import tailwindCss from "./tailwind-utilities.css?raw"
 
 afterEach(async () => {
   await cdp().send("Emulation.setEmulatedMedia", { media: "", features: [] })
@@ -27,6 +29,13 @@ function resolve(el: HTMLElement, name: string): number {
 const items = Array.from({ length: 12 }, (_, i) => `<div style="height: 40px">Item ${i + 1}</div>`).join("")
 
 describe("scroll-fade", () => {
+  it("uses animation longhands only (minifiers fold a shorthand with animation-timeline into one Chromium drops)", () => {
+    for (const source of [scrollFadeCss, tailwindCss]) {
+      expect(source).not.toMatch(/animation:[^;]*scroll-fade-reveal/)
+      expect(source).toMatch(/animation-name: scroll-fade-reveal-t, scroll-fade-reveal-b;/)
+    }
+  })
+
   it("masks the scroll container and tracks the scroll position", async () => {
     const el = await fixture<HTMLDivElement>(`<div class="scroll-fade" style="height: 200px; overflow-y: auto">${items}</div>`)
     await frames()

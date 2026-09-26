@@ -81,14 +81,11 @@ export const chipStyles = css`
   }
 `
 
+/* The group is the layout box (a wrapping flex row), so layout classes on it apply. */
 export const chipGroupStyles = css`
   :host {
-    display: block;
-  }
-  .base {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: 0.375rem;
   }
   .empty {

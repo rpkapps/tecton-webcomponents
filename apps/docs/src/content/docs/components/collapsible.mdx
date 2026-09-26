@@ -69,7 +69,7 @@ Use a trigger button to reveal additional settings.
 
 Use nested collapsibles to build a file tree. Each folder is a collapsible whose `slot="trigger"` button rotates its chevron by the `open` attribute. For a real hierarchy with arrow-key navigation, use [Tree View](/docs/tecton/tree-view).
 
-<ComponentPreview name="collapsible-file-tree" class="h-[36rem] items-start" />
+<ComponentPreview name="collapsible-file-tree" class="h-[36rem]" />
 
 ## Animation
 
@@ -94,10 +94,6 @@ Use nested collapsibles to build a file tree. Each folder is a collapsible whose
 - Give an icon-only trigger an `aria-label` that says what it reveals ("Toggle details"), not the icon's name.
 - Collapsed content is hidden from assistive technology and from the tab order.
 - Keep the trigger where it is when the content opens, so focus and reading position stay put.
-
-## API Reference
-
-<ApiReference tags={["tec-collapsible", "tec-collapsible-trigger", "tec-collapsible-content"]} />
 
 ## Usage guidelines
 
@@ -237,3 +233,7 @@ A button that is not the trigger gets no `aria-expanded` or `aria-controls`, so 
 `slot="trigger"` only works on a direct child of `<tec-collapsible>`; deeper, it is an inert attribute and the button toggles nothing.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-collapsible", "tec-collapsible-trigger", "tec-collapsible-content"]} />

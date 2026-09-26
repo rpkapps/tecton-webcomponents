@@ -6,6 +6,17 @@ import { kbdStyles } from "./kbd.styles.js"
 import { formatShortcut, isMacPlatform } from "./registry.js"
 import { shortcutKeysStyles } from "./shortcuts.styles.js"
 
+/** Whether `el` is inside a tooltip, looking through shadow roots. */
+function inTooltip(el: Element): boolean {
+  let node: Element | null = el
+  while (node) {
+    if (node.closest("tec-tooltip, tec-tooltip-content, [role=tooltip]")) return true
+    const root = node.getRootNode()
+    node = root instanceof ShadowRoot ? root.host : null
+  }
+  return false
+}
+
 /** Which keyboard the caps are drawn for. */
 export type ShortcutPlatform = "auto" | "mac" | "other"
 
@@ -22,6 +33,11 @@ export type ShortcutPlatform = "auto" | "mac" | "other"
  * @csspart kbd - Each key cap.
  * @csspart separator - The "+" between the keys of a chord.
  * @csspart then - The "then" between the steps of a sequence.
+ *
+ * @cssprop --tec-kbd-background - Background of the caps (default `--tec-muted`; inverted inside a tooltip).
+ * @cssprop --tec-kbd-foreground - Text colour of the caps (default `--tec-muted-foreground`).
+ *
+ * @cssstate in-tooltip - Inside a tooltip: the caps are inverted, as `tec-kbd`'s are.
  */
 export class TecShortcutKeys extends TectonElement {
   static styles = [hostStyles, srOnly, kbdStyles, shortcutKeysStyles]
@@ -34,6 +50,11 @@ export class TecShortcutKeys extends TectonElement {
 
   /** The word between the steps of a sequence. */
   @property({ attribute: "then-label" }) thenLabel = "then"
+
+  override connectedCallback(): void {
+    super.connectedCallback()
+    this.toggleState("in-tooltip", inTooltip(this))
+  }
 
   protected override render() {
     const isMac = this.platform === "auto" ? isMacPlatform() : this.platform === "mac"

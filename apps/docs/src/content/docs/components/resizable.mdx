@@ -94,10 +94,6 @@ In a right-to-left context the first panel is on the right; dragging and the arr
 - Give each handle an `aria-label` naming what it resizes ("Resize well list"), especially when a group has several.
 - The focus ring is a 1px ring on the divider and stays visible in forced-colours mode; the grip has a larger invisible hit area (20px on touch screens).
 
-## API Reference
-
-<ApiReference tags={["tec-resizable-group", "tec-resizable-panel", "tec-resizable-handle"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -217,3 +213,7 @@ A bare number is a percentage: this panel asks for 250% and is clamped to the wh
 The group only reads its direct children: a wrapped handle has no panels to resize, does nothing when dragged and reports no value.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-resizable-group", "tec-resizable-panel", "tec-resizable-handle"]} />

@@ -17,7 +17,8 @@ const clamp = (n: number, min: number, max: number) => Math.min(Math.max(n, min)
  * `tec-progress-value` child prints the formatted value (`56%`), localised for the closest `lang`.
  *
  * The bar is always rendered after the children, across the full width; the label and the value
- * share the line above it. An indeterminate bar animates a sliding segment; with reduced motion it
+ * share the line above it. The element itself is the flex container (`flex-wrap`, `gap-3`), so layout
+ * classes on it (`flex-nowrap items-center`) rearrange the parts. An indeterminate bar animates a sliding segment; with reduced motion it
  * is a full, still bar.
  *
  * @summary Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.
@@ -26,7 +27,6 @@ const clamp = (n: number, min: number, max: number) => Math.min(Math.max(n, min)
  *
  * @slot - A `tec-progress-label` and a `tec-progress-value`.
  *
- * @csspart base - The flex box that holds the children and the track.
  * @csspart track - The track (4px, the progress colour at 38%).
  * @csspart indicator - The filled part of the track.
  *
@@ -104,7 +104,7 @@ export class TecProgress extends TectonElement {
 
   protected override render() {
     const width = this.indeterminate ? nothing : styleMap({ width: `${this.percentage * 100}%` })
-    return html`<div class="base" part="base">
+    return html`<div class="base">
       <slot></slot>
       <div class="track" part="track"><span class="indicator" part="indicator" style=${width}></span></div>
     </div>`

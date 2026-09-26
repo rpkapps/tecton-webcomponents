@@ -210,6 +210,12 @@ export const dataTableStyles = css`
     display: inline-flex;
     gap: 0.25rem;
   }
+  .pager-text {
+    gap: 0.5rem;
+  }
+  :host([pager="text"]) .footer {
+    gap: 0.5rem;
+  }
   .pager tec-button svg {
     width: var(--tec-icon-size, 1rem);
     height: var(--tec-icon-size, 1rem);
@@ -235,12 +241,9 @@ const S = "tec-data-table .tec-data-table-sort"
 
 export const dataTableLightStyles = unsafeCSS(`
 :where(${S}) {
-  margin: 0 -0.5rem;
-  padding: 0.25rem 0.5rem;
-  border: 0;
-}
-:where(tec-data-table th[data-align="center"] .tec-data-table-sort) {
   margin: 0;
+  padding: 0 calc(0.5rem - 1px);
+  border: 1px solid transparent;
 }
 .tec-data-table-sr-only {
   position: absolute;
@@ -257,9 +260,9 @@ export const dataTableLightStyles = unsafeCSS(`
   ${S} {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    max-width: calc(100% + 1rem);
-    border-radius: var(--tec-radius-sm);
+    gap: 0.25rem;
+    height: 2rem;
+    border-radius: var(--tec-radius-md);
     background: transparent;
     color: inherit;
     font: inherit;
@@ -278,10 +281,9 @@ export const dataTableLightStyles = unsafeCSS(`
     box-shadow: var(--tec-focus-ring);
   }
   ${S} svg {
-    width: 0.875rem;
-    height: 0.875rem;
+    width: 1rem;
+    height: 1rem;
     flex: none;
-    color: var(--tec-muted-foreground);
   }
   tec-data-table th[aria-sort] .tec-data-table-sort {
     color: var(--tec-foreground);

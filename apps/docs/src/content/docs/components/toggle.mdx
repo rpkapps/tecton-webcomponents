@@ -62,10 +62,6 @@ The `pressed` attribute is reflected, so it is both the state and a styling hook
 - The accessible name is the slotted text; give an icon-only toggle an `aria-label` on the element — it is forwarded to the inner button, as are `aria-describedby` and the other `aria-*` attributes. Slotted icons should be `aria-hidden="true"`.
 - `disabled` removes it from the tab order. The focus ring stays visible in forced-colours mode, where a pressed toggle uses the system highlight colours.
 
-## API Reference
-
-<ApiReference tags={["tec-toggle"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -200,3 +196,7 @@ A toggle renders a button with `aria-pressed`, which announces a pressed control
 The button's only content is a hidden SVG, so its accessible name is empty and it is announced as an unlabelled toggle button.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-toggle"]} />

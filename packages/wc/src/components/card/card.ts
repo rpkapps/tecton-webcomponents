@@ -56,13 +56,15 @@ export class TecCard extends TectonElement {
 /**
  * Lays out the title and description, with a `tec-card-action` in a second column when present.
  * It is a size container (`container: card-header / inline-size`), so content can use container
- * queries. With a bottom border (`class="border-b border-border"`) it adds the matching padding.
+ * queries. With a bottom border (`class="border-b"`) it adds the matching padding.
  *
  * @summary The header of a card: title, description and an optional action.
  *
  * @tag tec-card-header
  *
  * @slot - `tec-card-title`, `tec-card-description` and `tec-card-action`.
+ *
+ * @csspart base - The inset box (inline padding); it takes over the layout of the element.
  *
  * @cssstate has-action - A `tec-card-action` is present (two columns).
  * @cssstate has-description - A `tec-card-description` is present (two rows).
@@ -79,7 +81,7 @@ export class TecCardHeader extends TectonElement {
   }
 
   protected override render() {
-    return html`<slot></slot>`
+    return html`<div class="base" part="base"><slot></slot></div>`
   }
 }
 
@@ -151,30 +153,34 @@ export class TecCardAction extends TectonElement {
  * @tag tec-card-content
  *
  * @slot - The content.
+ *
+ * @csspart base - The inset box (inline padding); it takes over the layout of the element.
  */
 export class TecCardContent extends TectonElement {
   static styles = [hostStyles, cardContentStyles]
 
   protected override render() {
-    return html`<slot></slot>`
+    return html`<div class="base" part="base"><slot></slot></div>`
   }
 }
 
 /**
  * A flex row (items centred) inset by `--tec-card-spacing`; add `class="flex-col gap-2"` to stack
- * buttons. With a top border (`class="border-t border-border"`) it adds the matching padding.
+ * buttons. With a top border (`class="border-t"`) it adds the matching padding.
  *
  * @summary Actions and secondary content at the bottom of a card.
  *
  * @tag tec-card-footer
  *
  * @slot - The footer content.
+ *
+ * @csspart base - The inset box (inline padding); it takes over the layout of the element.
  */
 export class TecCardFooter extends TectonElement {
   static styles = [hostStyles, cardFooterStyles]
 
   protected override render() {
-    return html`<slot></slot>`
+    return html`<div class="base" part="base"><slot></slot></div>`
   }
 }
 

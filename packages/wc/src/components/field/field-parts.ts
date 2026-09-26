@@ -182,10 +182,15 @@ export class TecFieldDescription extends TectonElement {
     this.#siblings.disconnect()
   }
 
-  /** Spacing tweaks that depend on the neighbours (after a legend, before the last part, last). */
+  /**
+   * Spacing tweaks that depend on the neighbours (after a legend, before the last part, last). A
+   * `tec-field-error` that is not displayed does not count, as it renders nothing.
+   */
   #syncPosition(): void {
     const parent = this.parentElement
-    const siblings = parent ? [...parent.children] : []
+    const siblings = parent
+      ? [...parent.children].filter((c) => c.localName !== "tec-field-error" || (c as Element & { displayed?: boolean }).displayed)
+      : []
     const index = siblings.indexOf(this)
     const previous = siblings[index - 1]
     this.toggleState("after-legend", !!previous && previous.localName === "tec-field-legend" && previous.getAttribute("variant") !== "label")
@@ -195,7 +200,8 @@ export class TecFieldDescription extends TectonElement {
 
   protected override updated(changed: PropertyValues): void {
     super.updated(changed)
-    this.toggleState("horizontal", this.#field.value?.orientation === "horizontal")
+    // Re-evaluated whenever the field changes (an error appearing moves this description up).
+    this.#syncPosition()
   }
 
   protected override render() {

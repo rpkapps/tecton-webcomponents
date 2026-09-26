@@ -165,4 +165,10 @@ describe("tec-chip-group", () => {
     expect(style.borderTopColor).toBe(getComputedStyle(probe).color)
     expect(await axTree(group)).toEqual(["grid: x", "row: a", "gridcell: a", "row: b", "gridcell: b", "row: c", "gridcell: c", "row: d", "gridcell: d"])
   })
+
+  it("is the layout box, so layout styles on the element apply", async () => {
+    const group = await fixture<TecChipGroup>(html`<tec-chip-group aria-label="x" style="flex-direction:column;gap:12px"><tec-chip>A</tec-chip><tec-chip>B</tec-chip></tec-chip-group>`)
+    const [a, b] = chipsOf(group)
+    expect(b!.getBoundingClientRect().top - a!.getBoundingClientRect().bottom).toBe(12)
+  })
 })

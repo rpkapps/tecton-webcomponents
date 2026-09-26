@@ -15,12 +15,22 @@ export const groupStyles = css`
 `
 
 export const panelStyles = css`
+  /* Like the reference layout engine: the panel cannot shrink below its content's minimum size
+     (min-size: auto), and the content box scrolls when it is larger than the panel. */
   :host {
-    display: block;
+    display: flex;
     flex: 1 1 0px;
-    min-width: 0;
-    min-height: 0;
-    overflow: hidden;
+    overflow: visible;
+  }
+  .content {
+    flex-grow: 1;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+    touch-action: pan-y;
+  }
+  :host(:state(vertical)) .content {
+    touch-action: pan-x;
   }
 `
 

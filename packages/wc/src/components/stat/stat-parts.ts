@@ -39,7 +39,6 @@ export class TecStatLabel extends TectonElement {
  * @slot - The number.
  * @slot unit - A rich unit (instead of the `unit` attribute).
  *
- * @csspart base - The baseline-aligned row of value and unit.
  * @csspart unit - The unit (sans, 0.6em, muted).
  *
  * @cssprop --tec-stat-value-size - Font size of the value (set by the parent `tec-stat`'s `size`).
@@ -54,9 +53,7 @@ export class TecStatValue extends TectonElement {
 
   protected override render() {
     const hasUnit = !!this.unit || this.#slots.test("unit")
-    return html`<span class="base" part="base"
-      ><slot></slot>${hasUnit ? html`<span class="unit" part="unit"><slot name="unit">${this.unit}</slot></span>` : nothing}</span
-    >`
+    return html`<slot></slot>${hasUnit ? html`<span class="unit" part="unit"><slot name="unit">${this.unit}</slot></span>` : nothing}`
   }
 }
 
@@ -71,7 +68,6 @@ export class TecStatValue extends TectonElement {
  *
  * @slot - The change ("+3.4%", "-6 d vs. plan").
  *
- * @csspart base - The row of icon and text.
  * @csspart icon - The trend icon.
  *
  * @cssstate positive - The resolved tone is positive (success colour).
@@ -100,7 +96,7 @@ export class TecStatDelta extends TectonElement {
 
   protected override render() {
     const node = this.trend === "up" ? TrendingUp : this.trend === "down" ? TrendingDown : Minus
-    return html`<span class="base" part="base">${icon(node, { size: 12, part: "icon" })}<slot></slot></span>`
+    return html`${icon(node, { size: 12, part: "icon" })}<slot></slot>`
   }
 }
 

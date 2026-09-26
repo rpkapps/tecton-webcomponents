@@ -502,6 +502,9 @@ export class TecDrawer extends TecModalElement {
 /**
  * Centred on a vertical drawer, start-aligned on a side drawer.
  *
+ * The element is the flex column (layout classes such as `gap-*` or `items-*` work on it); the
+ * padding lives on `part="base"`.
+ *
  * @summary Groups the title and description at the top of a drawer.
  * @tag tec-drawer-header
  * @slot - `tec-drawer-title` and `tec-drawer-description`.
@@ -531,6 +534,7 @@ export class TecDrawerHeader extends ModalSectionBase {
  * @slot - The actions.
  * @csspart base - The padded column.
  * @cssprop --tec-drawer-footer-margin - Top margin (default `auto`, which pushes the footer to the bottom).
+ * @cssprop --tec-drawer-footer-padding - Padding (default `0 1rem 1rem`).
  */
 export class TecDrawerFooter extends ModalSectionBase {
   static override styles = [hostStyles, drawerFooterStyles]

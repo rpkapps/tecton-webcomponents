@@ -6,28 +6,39 @@ import { css } from "lit"
  * gets rounded corners.
  */
 export const emptyStyles = css`
+  /*
+   * The host is the layout box (flex column, centred, gap-4), so layout classes on the element
+   * (\`flex-row\`, \`gap-2\`, \`justify-start\`) work; the padded, bordered base inherits the layout
+   * and fills the host.
+   */
   :host {
     display: flex;
     flex: 1 1 0%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
     min-width: 0;
     width: 100%;
     border-radius: var(--tec-empty-radius, var(--tec-radius-lg));
     font-family: var(--tec-font-sans);
+    text-align: center;
     text-wrap: balance;
   }
   .base {
     box-sizing: border-box;
     display: flex;
     flex: 1 1 auto;
+    align-self: stretch;
     min-width: 0;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    gap: inherit;
     padding: var(--tec-empty-padding, 3rem);
     border: 1px dashed transparent;
     border-radius: inherit;
-    text-align: center;
   }
   :host([variant="outline"]) .base {
     border-color: var(--tec-border);

@@ -28,11 +28,12 @@ export type RadioGroupOrientation = "horizontal" | "vertical"
  *
  * @tag tec-radio-group
  *
+ * The element itself is the layout box (a grid, or a wrapping flex row when horizontal), so layout
+ * classes on it (`gap-6`, `grid-cols-2`, `flex`) apply to the options directly.
+ *
  * @slot - `tec-radio-group-item` elements, directly or inside layout wrappers (fields, labels, divs).
  *
- * @csspart base - The grid that lays out the items.
- *
- * @cssprop --tec-radio-group-gap - Gap between the options (default 0.75rem).
+ * @cssprop --tec-radio-group-gap - Gap between the options (default 0.75rem; a `gap-*` class on the element also wins).
  *
  * @cssstate invalid - The value fails validation.
  * @cssstate user-invalid - Invalidity is displayed (`invalid`, or a failed `required` after interaction/submit).
@@ -147,7 +148,7 @@ export class TecRadioGroup extends FormControlMixin(TectonElement) {
   }
 
   protected override render() {
-    return html`<div class="base" part="base"><slot @slotchange=${() => this.#roving.update()}></slot></div>`
+    return html`<slot @slotchange=${() => this.#roving.update()}></slot>`
   }
 }
 

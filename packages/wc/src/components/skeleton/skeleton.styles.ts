@@ -1,9 +1,8 @@
 import { css } from "lit"
 
 /*
- * The host carries the size (`class="h-4 w-full"`) and the corner radius — radius is not touched by
- * CSS resets, so `class="rounded-full"` on the element works — and the base fills it, inheriting
- * the radius.
+ * The host carries the size (`class="h-4 w-full"`) and the corner radius (`--tec-skeleton-radius`;
+ * CSS resets leave radius alone); the base fills it and inherits the radius.
  */
 export const skeletonStyles = css`
   :host {

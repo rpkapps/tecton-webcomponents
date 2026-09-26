@@ -91,11 +91,12 @@ export const dialogDescriptionStyles = css`
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
   }
+  /* Document resets (a { text-decoration: inherit; color: inherit }) beat ::slotted rules. */
   ::slotted(a) {
-    text-decoration-line: underline;
+    text-decoration-line: underline !important;
     text-underline-offset: 3px;
   }
   ::slotted(a:hover) {
-    color: var(--tec-foreground);
+    color: var(--tec-foreground) !important;
   }
 `

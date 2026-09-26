@@ -194,34 +194,52 @@ export const sidebarStyles = css`
 `
 
 /* ------------------------------------------------------------------ sections */
-export const sidebarSectionStyles = css`
-  :host {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
+/* Layout lives on the host (so layout classes on the element work); the padded part inherits it. */
+const forwardLayout = css`
   .base {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    min-width: 0;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    gap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
   }
 `
+
+export const sidebarSectionStyles = [
+  css`
+    :host {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+    .base {
+      display: flex;
+      flex: 1 1 auto;
+      padding: 0.5rem;
+      min-width: 0;
+    }
+  `,
+  forwardLayout,
+]
 
 export const sidebarContentStyles = css`
   :host {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
     flex: 1 1 0%;
     min-height: 0;
     min-width: 0;
   }
   .base {
     display: flex;
-    flex-direction: column;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
     flex: 1 1 0%;
-    gap: 0.5rem;
+    gap: inherit;
     min-height: 0;
     overflow: auto;
     scrollbar-width: none;
@@ -234,22 +252,25 @@ export const sidebarContentStyles = css`
   }
 `
 
-export const sidebarGroupStyles = css`
-  :host {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    min-width: 0;
-  }
-  .base {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    min-width: 0;
-    padding: 0.5rem;
-  }
-`
+export const sidebarGroupStyles = [
+  css`
+    :host {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-width: 0;
+    }
+    .base {
+      position: relative;
+      display: flex;
+      flex: 1 1 auto;
+      width: 100%;
+      min-width: 0;
+      padding: 0.5rem;
+    }
+  `,
+  forwardLayout,
+]
 
 export const sidebarGroupLabelStyles = css`
   :host {
@@ -658,13 +679,16 @@ export const sidebarMenuSkeletonStyles = css`
 
 export const sidebarMenuSubStyles = css`
   :host {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
     min-width: 0;
   }
   .base {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    flex: 1 1 auto;
+    flex-direction: inherit;
+    gap: inherit;
     min-width: 0;
     margin-inline: 0.875rem;
     padding-inline: 0.625rem;

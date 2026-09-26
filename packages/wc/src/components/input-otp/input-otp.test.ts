@@ -47,21 +47,30 @@ describe("tec-input-otp", () => {
     expect(complete.events[0]!.detail).toEqual({ value: "123456" })
   })
 
-  it("clicking a filled slot selects it so typing replaces it; arrows move", async () => {
+  it("a click goes to the end like the input-otp library; Backspace deletes backwards", async () => {
     const el = await fixture<TecInputOtp>(html`<tec-input-otp value="123456" aria-label="Code">${six}</tec-input-otp>`)
-    await userEvent.click(slots(el)[2]!, { force: true })
-    await waitUntil(() => slots(el)[2]!.matches(":state(active)"))
-    expect([input(el).selectionStart, input(el).selectionEnd]).toEqual([2, 3])
-    await userEvent.keyboard("9")
-    expect(el.value).toBe("129456")
-    await userEvent.keyboard("{ArrowLeft}")
-    await waitUntil(() => input(el).selectionStart === 2)
-    await userEvent.keyboard("{ArrowLeft}")
-    await waitUntil(() => input(el).selectionStart === 1)
-    expect(input(el).selectionEnd).toBe(2)
+    await userEvent.click(slots(el)[0]!, { force: true })
+    await waitUntil(() => slots(el)[5]!.matches(":state(active)"))
+    expect([input(el).selectionStart, input(el).selectionEnd]).toEqual([5, 6])
+    await userEvent.keyboard("{Backspace}{Backspace}")
+    expect(el.value).toBe("1234")
+    await userEvent.keyboard("98")
+    expect(el.value).toBe("123498")
   })
 
-  it("clicking past the value puts the caret in the next empty slot", async () => {
+  it("arrows select a character, which typing replaces", async () => {
+    const el = await fixture<TecInputOtp>(html`<tec-input-otp value="123456" aria-label="Code">${six}</tec-input-otp>`)
+    input(el).focus()
+    await waitUntil(() => input(el).selectionStart === 5)
+    await userEvent.keyboard("{ArrowLeft}")
+    await waitUntil(() => input(el).selectionStart === 4 && input(el).selectionEnd === 5)
+    await userEvent.keyboard("{ArrowLeft}")
+    await waitUntil(() => input(el).selectionStart === 3)
+    await userEvent.keyboard("9")
+    expect(el.value).toBe("123956")
+  })
+
+  it("clicking an empty code puts the caret in the first slot", async () => {
     const el = await fixture<TecInputOtp>(html`<tec-input-otp value="12" aria-label="Code">${six}</tec-input-otp>`)
     await userEvent.click(slots(el)[5]!, { force: true })
     await waitUntil(() => slots(el)[2]!.matches(":state(active)"))

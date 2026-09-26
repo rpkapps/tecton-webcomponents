@@ -4,7 +4,7 @@ description: A carousel with swipe, scroll snapping and previous / next controls
 tags: ["tec-carousel", "tec-carousel-content", "tec-carousel-item", "tec-carousel-previous", "tec-carousel-next", "tec-carousel-autoplay-toggle"]
 ---
 
-<ComponentPreview name="carousel-demo" class="min-h-80 sm:min-h-[32rem]" />
+<ComponentPreview name="carousel-demo" class="h-80 sm:h-[32rem]" />
 
 ## About
 
@@ -51,7 +51,7 @@ shadcn/ui carousel: leave room for them, or place them elsewhere with a class (`
 To set the size of the slides, use a `basis` utility class on `<tec-carousel-item>` (the default is the full
 width).
 
-<ComponentPreview name="carousel-size" class="min-h-80" />
+<ComponentPreview name="carousel-size" />
 
 ```html
 <!-- 33% of the carousel width. -->
@@ -72,7 +72,7 @@ matters when slides are narrower than the viewport; the size example uses `start
 
 The space between slides is the `--tec-carousel-spacing` custom property (default `1rem`) on `<tec-carousel>`.
 
-<ComponentPreview name="carousel-spacing" class="min-h-80" />
+<ComponentPreview name="carousel-spacing" />
 
 ```html
 <tec-carousel class="[--tec-carousel-spacing:0.5rem] md:[--tec-carousel-spacing:1rem]">...</tec-carousel>
@@ -83,7 +83,7 @@ The space between slides is the `--tec-carousel-spacing` custom property (defaul
 `orientation="vertical"` scrolls up and down; give `<tec-carousel-content>` a height. The buttons move above
 and below the slides.
 
-<ComponentPreview name="carousel-orientation" class="min-h-[32rem]" />
+<ComponentPreview name="carousel-orientation" class="h-[32rem]" />
 
 ## Loop
 
@@ -99,7 +99,7 @@ first, and the buttons never disable.
 The element is the API: `selectedIndex` and `snapCount` read the position, `scrollPrev()`, `scrollNext()`
 and `goTo(index)` move it, and `tec-slide-change` fires whenever the selected position changes.
 
-<ComponentPreview name="carousel-api" class="min-h-80 sm:min-h-[32rem]" />
+<ComponentPreview name="carousel-api" class="sm:h-[32rem]" />
 
 ```js
 const carousel = document.querySelector("tec-carousel")
@@ -121,7 +121,7 @@ it wraps around. To meet WCAG 2.2.2 (Pause, Stop, Hide):
 
 `play()` and `pause()` do the same from code; `:state(playing)` styles a running carousel.
 
-<ComponentPreview name="carousel-plugin" class="min-h-80 sm:min-h-[32rem]" />
+<ComponentPreview name="carousel-plugin" class="sm:h-[32rem]" />
 
 ## RTL
 
@@ -130,7 +130,7 @@ slide is on the right, previous sits on the right edge and <Kbd>ArrowLeft</Kbd> 
 chevrons mirror automatically. Localise the slide names with `slide-label` and `announcement-label`, and
 the buttons with `label`; numbers are formatted for the nearest `lang`.
 
-<ComponentPreview name="carousel-rtl" direction="rtl" class="min-h-80 sm:min-h-[32rem]" />
+<ComponentPreview name="carousel-rtl" direction="rtl" class="h-80 sm:h-[32rem]" />
 
 ## Keyboard interactions
 
@@ -156,10 +156,6 @@ Follows the [WAI-ARIA APG carousel pattern](https://www.w3.org/WAI/ARIA/apg/patt
 - After a button press or an arrow key, the new position is announced through a polite live region ("Slide 2 of 5", `announcement-label`). Autoplay does not announce.
 - Autoplay pauses on hover and focus, stops on interaction, respects reduced motion and has a visible pause control (see [Autoplay](#autoplay)).
 - Programmatic scrolling is instant when the user prefers reduced motion.
-
-## API Reference
-
-<ApiReference tags={["tec-carousel", "tec-carousel-content", "tec-carousel-item", "tec-carousel-previous", "tec-carousel-next", "tec-carousel-autoplay-toggle"]} />
 
 ## Usage guidelines
 
@@ -290,3 +286,7 @@ Moving content that starts automatically and lasts more than five seconds needs 
 Vertical slides size themselves against the content's height; without one there is nothing to scroll and `basis-1/2` has no reference.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-carousel", "tec-carousel-content", "tec-carousel-item", "tec-carousel-previous", "tec-carousel-next", "tec-carousel-autoplay-toggle"]} />

@@ -96,7 +96,7 @@ Set `--tec-sidebar-width` (16rem), `--tec-sidebar-width-icon` (3rem) and `--tec-
 | `variant` | `sidebar` (default), `floating`, `inset` | The surface. |
 | `collapsible` | `offcanvas` (default), `icon`, `none` | How it collapses. |
 
-On desktop the sidebar keeps a gap in the page flow and draws itself as a full-height fixed panel. The nearest ancestor with a `transform` or `contain: layout` bounds it instead of the viewport — the previews on this page use `[contain:layout]`.
+On desktop the sidebar keeps a gap in the page flow and draws itself as a full-height fixed panel. The nearest ancestor with a `transform` or `contain: layout` bounds it instead of the viewport — the previews on this page use `[contain:layout]`, and `embedded` on their `tec-sidebar-inset` so they do not add a second `<main>` to the page.
 
 ### Off-canvas
 
@@ -197,12 +197,8 @@ The sidebar follows `dir="rtl"` on any ancestor: `left` becomes the right edge, 
 - `tec-sidebar-trigger` is a button named "Toggle Sidebar" (`label`) with `aria-expanded`. The rail is a second, pointer-only handle (`tabindex="-1"`).
 - On mobile the sidebar is a modal `<dialog>` named "Sidebar" (`label`): the page is inert, focus moves into the sheet and returns to the trigger when it closes.
 - While collapsed to icons, labels stay in the accessibility tree; the `tooltip` also describes the button.
-- `tec-sidebar-inset` renders a `<main>` landmark. Wrap the sidebar content in a `<nav aria-label="…">` if it is the page's primary navigation.
+- `tec-sidebar-inset` renders a `<main>` landmark. A layout shown inside a page that already has its `<main>` (like the previews on this page) sets `embedded`, which renders a plain `<div>` instead. Wrap the sidebar content in a `<nav aria-label="…">` if it is the page's primary navigation.
 - Group actions and menu actions are icon buttons: give them an `aria-label`.
-
-## API Reference
-
-<ApiReference tags={["tec-sidebar-provider", "tec-sidebar", "tec-sidebar-header", "tec-sidebar-content", "tec-sidebar-footer", "tec-sidebar-group", "tec-sidebar-group-label", "tec-sidebar-group-action", "tec-sidebar-group-content", "tec-sidebar-menu", "tec-sidebar-menu-item", "tec-sidebar-menu-button", "tec-sidebar-menu-action", "tec-sidebar-menu-badge", "tec-sidebar-menu-skeleton", "tec-sidebar-menu-sub", "tec-sidebar-menu-sub-item", "tec-sidebar-menu-sub-button", "tec-sidebar-separator", "tec-sidebar-input", "tec-sidebar-trigger", "tec-sidebar-rail", "tec-sidebar-inset"]} />
 
 ## Usage guidelines
 
@@ -334,3 +330,7 @@ Every provider writes the `sidebar_state` cookie and adds a `window` keydown lis
 `tec-sidebar` already turns into a sheet bound to the provider's `open-mobile` state below the mobile breakpoint, so a hand-built sheet is a second one that `tec-sidebar-trigger` never opens.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-sidebar-provider", "tec-sidebar", "tec-sidebar-header", "tec-sidebar-content", "tec-sidebar-footer", "tec-sidebar-group", "tec-sidebar-group-label", "tec-sidebar-group-action", "tec-sidebar-group-content", "tec-sidebar-menu", "tec-sidebar-menu-item", "tec-sidebar-menu-button", "tec-sidebar-menu-action", "tec-sidebar-menu-badge", "tec-sidebar-menu-skeleton", "tec-sidebar-menu-sub", "tec-sidebar-menu-sub-item", "tec-sidebar-menu-sub-button", "tec-sidebar-separator", "tec-sidebar-input", "tec-sidebar-trigger", "tec-sidebar-rail", "tec-sidebar-inset"]} />

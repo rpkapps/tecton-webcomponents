@@ -205,6 +205,22 @@ export function segmentPlaceholder(type: string, locale: string): string {
   return (type === "year" ? year : type === "month" ? month : day)!
 }
 
+/* Localized "Previous" / "Next" / "Calendar" button names (the strings React Aria ships, Apache-2.0). */
+const NAV_STRINGS: Record<string, string> = {"ar":"السابق|التالي|التقويم","bg":"Назад|Напред|Календар","cs":"Předchozí|Další|Kalendář","da":"Forrige|Næste|Kalender","de":"Zurück|Weiter|Kalender","el":"Προηγούμενο|Επόμενο|Ημερολόγιο","en":"Previous|Next|Calendar","es":"Anterior|Siguiente|Calendario","et":"Eelmine|Järgmine|Kalender","fi":"Edellinen|Seuraava|Kalenteri","fr":"Précédent|Suivant|Calendrier","he":"הקודם|הבא|לוח שנה","hr":"Prethodni|Sljedeći|Kalendar","hu":"Előző|Következő|Naptár","it":"Precedente|Successivo|Calendario","ja":"前へ|次へ|カレンダー","ko":"이전|다음|달력","lt":"Ankstesnis|Paskesnis|Kalendorius","lv":"Atpakaļ|Tālāk|Kalendārs","nb":"Forrige|Neste|Kalender","nl":"Vorige|Volgende|Kalender","pl":"Wstecz|Dalej|Kalendarz","pt":"Anterior|Próximo|Calendário","ro":"Înainte|Următorul|Calendar","ru":"Назад|Далее|Календарь","sk":"Predchádzajúce|Nasledujúce|Kalendár","sl":"Nazaj|Naprej|Koledar","sr":"Prethodni|Sledeći|Kalendar","sv":"Föregående|Nästa|Kalender","tr":"Önceki|Sonraki|Takvim","uk":"Попередній|Наступний|Календар","zh":"上一页|下一页|日历","zh-TW":"上一頁|下一頁|日曆"}
+
+/** Localized accessible name of the calendar's previous / next buttons and the date picker's calendar button. */
+export function navLabel(locale: string, which: "previous" | "next" | "calendar"): string {
+  let entry: string | undefined
+  try {
+    const l = new Intl.Locale(locale)
+    entry = NAV_STRINGS[`${l.language}-${l.region ?? ""}`] ?? (l.language === "zh" && (l.script === "Hant" || l.region === "HK") ? NAV_STRINGS["zh-TW"] : NAV_STRINGS[l.language])
+  } catch {
+    entry = undefined
+  }
+  const [previous, next, calendar] = (entry ?? NAV_STRINGS.en!).split("|")
+  return (which === "previous" ? previous : which === "next" ? next : calendar)!
+}
+
 /** Messages of the built-in date validation (English defaults, the date formatted for the locale). */
 export const validationMessages = {
   rangeUnderflow: (date: string) => `Value must be ${date} or later.`,

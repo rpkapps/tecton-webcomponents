@@ -86,7 +86,7 @@ export const alertDialogMediaStyles = css`
     height: 4rem;
     border-radius: var(--tec-radius-md);
     background-color: var(--tec-alert-dialog-media-background, var(--tec-muted));
-    color: inherit;
+    color: var(--tec-alert-dialog-media-foreground, inherit);
   }
   ::slotted(svg),
   ::slotted(tec-icon) {
@@ -125,11 +125,12 @@ export const alertDialogDescriptionStyles = css`
       text-wrap: pretty;
     }
   }
+  /* Document resets (a { text-decoration: inherit; color: inherit }) beat ::slotted rules. */
   ::slotted(a) {
-    text-decoration-line: underline;
+    text-decoration-line: underline !important;
     text-underline-offset: 3px;
   }
   ::slotted(a:hover) {
-    color: var(--tec-foreground);
+    color: var(--tec-foreground) !important;
   }
 `

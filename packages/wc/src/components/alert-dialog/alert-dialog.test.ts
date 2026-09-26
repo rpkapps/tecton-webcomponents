@@ -31,16 +31,36 @@ async function open(el: TecAlertDialog) {
 }
 
 describe("tec-alert-dialog", () => {
-  it("is an alertdialog named and described by its parts, with focus on Cancel", async () => {
+  it("is an alertdialog named and described by its parts; pointer open focuses the dialog (no ring)", async () => {
     const root = await fixture<HTMLElement>(basic())
     const el = root.querySelector("tec-alert-dialog")!
     await open(el)
     expect(await axNode(dlg(el))).toMatchObject({ role: "alertdialog", name: "Are you absolutely sure?", description: "This action cannot be undone." })
+    expect(deepActiveElement()).toBe(dlg(el))
+    expect(el.querySelector("tec-alert-dialog-cancel")!.matches(":state(focus-visible)")).toBe(false)
+    await userEvent.keyboard("{Tab}")
     expect(deepActiveElement()).toBe(innerButton(el.querySelector("tec-alert-dialog-cancel")!))
     expect(el.querySelector("tec-alert-dialog-cancel")!.getAttribute("variant")).toBe("outline")
     expect(el.querySelector("tec-alert-dialog-action")!.getAttribute("variant")).toBe("default")
     expect(el.shadowRoot!.querySelector(".close")).toBeNull()
     await expectAccessible(root)
+  })
+
+  it("keyboard open focuses Cancel", async () => {
+    const root = await fixture<HTMLElement>(basic())
+    const el = root.querySelector("tec-alert-dialog")!
+    innerButton(el.querySelector("[slot=trigger]")!).focus()
+    await userEvent.keyboard("{Enter}")
+    await waitUntil(() => dlg(el).open, "open")
+    expect(deepActiveElement()).toBe(innerButton(el.querySelector("tec-alert-dialog-cancel")!))
+  })
+
+  it("underlines description links despite document resets", async () => {
+    const root = await fixture<HTMLElement>(html`<div>
+      <style>a { color: inherit; text-decoration: inherit }</style>
+      <tec-alert-dialog-description>View <a href="#">Settings</a></tec-alert-dialog-description>
+    </div>`)
+    expect(getComputedStyle(root.querySelector("a")!).textDecorationLine).toBe("underline")
   })
 
   it("ignores overlay presses unless dismissable; Escape closes", async () => {
@@ -68,7 +88,9 @@ describe("tec-alert-dialog", () => {
     await userEvent.click(el.querySelector("tec-alert-dialog-action")!)
     expect((await change).detail).toEqual({ open: false, reason: "action" })
     await waitUntil(() => !dlg(el).open, "closed")
-    await open(el)
+    innerButton(el.querySelector("[slot=trigger]")!).focus()
+    await userEvent.keyboard("{Enter}")
+    await waitUntil(() => dlg(el).open, "open")
     change = oneEvent<CustomEvent>(el, "tec-open-change")
     await userEvent.keyboard("{Enter}")
     expect((await change).detail).toEqual({ open: false, reason: "cancel" })

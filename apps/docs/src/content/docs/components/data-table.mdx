@@ -4,7 +4,7 @@ description: Powerful tables and datagrids built on TanStack Table.
 tags: ["tec-data-table"]
 ---
 
-<ComponentPreview name="data-table-demo" align="start" class="items-start" />
+<ComponentPreview name="data-table-demo" align="start" class="items-start h-auto px-4 md:px-8" />
 
 ## Usage
 
@@ -155,7 +155,7 @@ Localise every label with its attribute (`filter-placeholder`, `columns-label`, 
 `page-label`, `previous-label`, `next-label`, `select-all-label`, `select-row-label`, `empty-label`); the
 numbers in them are formatted for the nearest `lang`.
 
-<ComponentPreview name="data-table-rtl" direction="rtl" align="start" />
+<ComponentPreview name="data-table-rtl" direction="rtl" align="start" class="items-start h-auto px-4 md:px-8" />
 
 ## Keyboard interactions
 
@@ -177,10 +177,6 @@ numbers in them are formatted for the nearest `lang`.
 - The column menu follows the APG menu button pattern: `aria-haspopup="menu"` and `aria-expanded` on the button, `menuitemcheckbox` items with `aria-checked`, roving focus, typeahead, focus return on close.
 - Previous / next page buttons are named by `previous-label` / `next-label`; the rows-per-page select by `rows-per-page-label`; the filter input by `filter-label` (or its placeholder).
 - Give a row-actions column a `label`, and name each action button after its row when possible.
-
-## API Reference
-
-<ApiReference tags={["tec-data-table"]} />
 
 ## Usage guidelines
 
@@ -269,3 +265,7 @@ table.columns = [{ accessor: "email", header: "Email", sortable: true }]
 A sortable column renders a real button and sets `aria-sort`; a click listener on a header cell is invisible to keyboard and screen reader users.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-data-table"]} />

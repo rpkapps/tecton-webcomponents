@@ -76,10 +76,6 @@ The arrow keys follow the reading direction and the remove button sits at the in
 - The remove button is named "Remove" followed by the chip's text ("Remove Top Balder") and is not a tab stop: <kbd>Delete</kbd> does the same from the keyboard, and removable chips describe that with `remove-hint`.
 - While focus is inside, the group is a polite live region for added chips. When the last chip is removed, focus moves to the group itself.
 
-## API Reference
-
-<ApiReference tags={["tec-chip-group", "tec-chip"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -220,3 +216,7 @@ A chip is a grid row: outside a group it has no grid to belong to, no keyboard h
 The chip's colour lives on its inner box, so a class on the host does not reach it — and `orange` is not a Tecton family, so the reset palette emits no CSS for it anyway.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-chip-group", "tec-chip"]} />

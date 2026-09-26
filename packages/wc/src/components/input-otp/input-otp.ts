@@ -22,9 +22,9 @@ const PATTERNS: Record<string, string> = {
  * arrow keys, paste, the virtual keyboard and one-time-code autofill (`autocomplete="one-time-code"`,
  * the default) work as in any text field; the `tec-input-otp-slot` children only display it.
  *
- * - Clicking a slot selects that character (or the next empty slot); typing replaces the selected
- *   character and moves on; <kbd>Backspace</kbd> deletes; <kbd>←</kbd>/<kbd>→</kbd> move between
- *   characters.
+ * - Focusing or clicking puts the caret in the next empty slot (or selects the last character of a
+ *   full code); typing fills the code, <kbd>Backspace</kbd> deletes backwards, <kbd>←</kbd>/<kbd>→</kbd>
+ *   select the previous/next character (typing then replaces it).
  * - `pattern` restricts the characters: `digits` (also opens the numeric keypad), `letters`,
  *   `alphanumeric`, or a regular expression the whole value must match (like the native attribute).
  *   Every partial value must match too, so write patterns such as `[0-9A-F]*`. Input that does not
@@ -86,7 +86,6 @@ export class TecInputOtp extends FormControlMixin(TectonElement) {
 
   #provider = new ContextProvider(this, { context: inputOtpContext, initialValue: undefined })
   #previousValue = ""
-  #pointer = false
   #previousSelection: [number, number] | null = null
   #observer = new MutationObserver(() => this.#collectSlots())
 
@@ -170,38 +169,23 @@ export class TecInputOtp extends FormControlMixin(TectonElement) {
     input.setSelectionRange(caret, next.length)
   }
 
-  /** Maps a click to the slot under the pointer (clamped to the next empty slot). */
-  #onClick(event: MouseEvent) {
-    this.#pointer = false
-    const slots = this._slots
-    if (!slots.length) return
-    let best = slots[0]!
-    let distance = Infinity
-    for (const slot of slots) {
-      const rect = slot.getBoundingClientRect()
-      const d = event.clientX < rect.left ? rect.left - event.clientX : event.clientX > rect.right ? event.clientX - rect.right : 0
-      if (d < distance) {
-        distance = d
-        best = slot
-      }
-    }
-    this.#setSelection(Math.min(this.#slotIndex(best), this.input.value.length))
-  }
-
-  #onFocus() {
-    // Keyboard focus: select the last character of a full code, else put the caret after the text.
-    if (this.#pointer) return
-    const length = this.input.value.length
-    if (length >= this.length) this.input.setSelectionRange(this.length - 1, length)
-    else this.input.setSelectionRange(length, length)
+  /**
+   * Focus and every click put the caret at the end of the code, like the input-otp library: the
+   * next empty slot, or the last character of a full code (selected, so typing replaces it).
+   * Clicking a slot never jumps into the middle; the arrow keys do.
+   */
+  #toEnd = () => {
+    const input = this.input
+    if (!input) return
+    const length = input.value.length
+    const start = Math.min(length, this.length - 1)
+    input.setSelectionRange(start, length)
     this.#previousSelection = null
     this.#syncSelection()
   }
 
-  #slotIndex(slot: Element): number {
-    const explicit = (slot as TecInputOtpSlot).index
-    return explicit ?? this._slots.indexOf(slot)
-  }
+  /** A mouse up after a pointer press would move the native caret: re-apply the end position. */
+  #onPointerUp = () => requestAnimationFrame(this.#toEnd)
 
   /** Selects the character at `index` (or places the caret there when it is the next empty slot). */
   #setSelection(index: number) {
@@ -305,10 +289,10 @@ export class TecInputOtp extends FormControlMixin(TectonElement) {
         @input=${this.#onInput}
         @change=${this.redispatchChange}
         @paste=${this.#onPaste}
-        @click=${this.#onClick}
+        @click=${this.#toEnd}
+        @mouseup=${this.#onPointerUp}
         @keydown=${this.#onKeyDown}
-        @pointerdown=${() => (this.#pointer = true)}
-        @focus=${this.#onFocus}
+        @focus=${this.#toEnd}
         @blur=${this.#syncSelection}
         @select=${this.#syncSelection}
         @selectionchange=${this.#syncSelection}

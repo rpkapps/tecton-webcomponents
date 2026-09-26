@@ -76,4 +76,20 @@ describe("tec-panel", () => {
     expect(toolbar.matches(":state(overflowing)")).toBe(true)
     expect(toolbar.getBoundingClientRect().right).toBeLessThanOrEqual(headerBox.right + 1)
   })
+
+  it("parts are layout boxes: classes on the element lay out its children", async () => {
+    const root = await fixture(html`<tec-panel style="width: 400px" variant="flat">
+      <tec-panel-content class="flex gap-6"><span>TD</span><span>Picks</span></tec-panel-content>
+      <tec-panel-footer class="justify-end"><tec-button size="sm">Open</tec-button></tec-panel-footer>
+    </tec-panel>`)
+    const [a, b] = [...root.querySelectorAll("tec-panel-content span")].map((el) => el.getBoundingClientRect())
+    expect(Math.round(a!.top)).toBe(Math.round(b!.top))
+    expect(Math.round(b!.left - a!.right)).toBe(24)
+    const footer = root.querySelector("tec-panel-footer")!.getBoundingClientRect()
+    const button = root.querySelector("tec-panel-footer tec-button")!.getBoundingClientRect()
+    expect(footer.right - button.right).toBeGreaterThan(10)
+    expect(footer.right - button.right).toBeLessThan(20)
+    // variant="flat" has no border at all, so the content starts at the panel's edge.
+    expect(getComputedStyle(root.shadowRoot!.querySelector(".base")!).borderTopWidth).toBe("0px")
+  })
 })

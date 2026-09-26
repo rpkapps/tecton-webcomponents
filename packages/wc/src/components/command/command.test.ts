@@ -51,16 +51,28 @@ describe("tec-command", () => {
     await expectAccessible(el)
   })
 
-  it("filters as you type: groups without matches and separators hide; arrows move into the results", async () => {
+  it("filters as you type: groups without matches and separators hide; the first match is highlighted", async () => {
     const el = await fixture<TecCommand>(palette)
     inputOf(el).focus()
     await userEvent.keyboard("se")
     await el.updateComplete
     expect(visible(el)).toEqual(["emoji", "Settings"])
     expect(el.querySelector("tec-command-separator")!.filtered).toBe(true)
+    expect(active(el)?.key).toBe("emoji") // the first match is highlighted, so Enter runs it
+    expect(await axActiveDescendant(inputOf(el), items(el))).toBe(items(el)[1])
+    await userEvent.keyboard("t")
+    await el.updateComplete
+    expect(active(el)?.key).toBe("Settings")
+    const selects = recordEvents<CustomEvent>(el, "tec-select")
+    await userEvent.keyboard("{Enter}")
+    expect(selects.events[0]!.detail).toEqual({ value: "Settings" })
+    const field = el.querySelector("tec-command-input")!.shadowRoot!.querySelector(".base")!
+    expect(getComputedStyle(field).borderColor).not.toBe("rgba(0, 0, 0, 0)")
+    await userEvent.keyboard("{Backspace}{Backspace}{Backspace}")
+    await el.updateComplete
     expect(active(el)).toBeNull()
-    await userEvent.keyboard("{ArrowDown}")
-    expect(active(el)?.key).toBe("emoji")
+    await userEvent.keyboard("se")
+    await el.updateComplete
     expect(await axActiveDescendant(inputOf(el), items(el))).toBe(items(el)[1])
     await userEvent.keyboard("{Control>}a{/Control}smiley")
     await el.updateComplete

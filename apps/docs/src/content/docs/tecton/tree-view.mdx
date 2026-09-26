@@ -58,7 +58,7 @@ Rows have slots for a `color-tag` (a [Color Swatch](/docs/tecton/color-swatch)),
 
 Put a `tec-dropdown-menu` in the `end` slot with a `tec-tree-view-action` as its trigger for a per-row menu.
 
-<ComponentPreview name="tree-view-menu" class="min-h-80" />
+<ComponentPreview name="tree-view-menu" />
 
 ## Events
 
@@ -95,10 +95,6 @@ Indentation, chevrons and the <Kbd>←</Kbd> / <Kbd>→</Kbd> keys follow the di
 - A row's accessible name is its label text (or `text-value`) only: colour tags, suffixes and controls don't leak into it.
 - The tree is one Tab stop (roving tabindex); the focused row's `end` controls follow it in the Tab order.
 - Name every `tec-tree-view-action` with `aria-label`; the visibility toggle names itself.
-
-## API Reference
-
-<ApiReference tags={["tec-tree-view", "tec-tree-view-item", "tec-tree-view-action", "tec-tree-view-visibility-toggle"]} />
 
 ## Usage guidelines
 
@@ -235,3 +231,7 @@ The indent comes from the row's level in the tree, so a padding class only shift
 The label text is the row's accessible name and its type-ahead key; counts and decorations belong in `suffix`, and `text-value` gives a clean name when the label is not plain text.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-tree-view", "tec-tree-view-item", "tec-tree-view-action", "tec-tree-view-visibility-toggle"]} />

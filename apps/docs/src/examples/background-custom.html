@@ -1,4 +1,4 @@
-<div class="relative isolate flex h-48 w-full max-w-md flex-col justify-end overflow-hidden rounded-lg border border-border bg-background p-4">
+<div id="background-custom" data-tile class="relative isolate flex h-48 w-full max-w-md flex-col justify-end overflow-hidden rounded-lg border border-border bg-background p-4 [&:fullscreen]:rounded-none [&:fullscreen]:border-0 [&:fullscreen]:p-10">
   <tec-background tone="primary" intensity="high">
     <svg class="absolute inset-0 size-full" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
@@ -10,6 +10,25 @@
       <line x1="0" y1="70%" x2="100%" y2="30%" stroke="var(--tec-background-ink)" stroke-width="2" />
     </svg>
   </tec-background>
+    <tec-button variant="ghost" size="icon-sm" aria-label="View fullscreen" data-fullscreen class="absolute end-2 top-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/><path d="M9 21H3v-6"/></svg>
+    </tec-button>
   <span class="text-sm font-medium">Custom drawing</span>
   <span class="text-xs text-muted-foreground">Painted with the layer's ink variables</span>
 </div>
+<script type="module">
+  // "View fullscreen" shows a tile's effect and content full screen; the same button (or Escape) leaves.
+  const root = document.getElementById("background-custom")
+  root.addEventListener("click", (event) => {
+    const tile = event.target.closest("[data-fullscreen]")?.closest("[data-tile]")
+    if (!tile) return
+    if (document.fullscreenElement === tile) document.exitFullscreen()
+    else tile.requestFullscreen?.()
+  })
+  document.addEventListener("fullscreenchange", () => {
+    for (const button of root.querySelectorAll("[data-fullscreen]")) {
+      const open = document.fullscreenElement === button.closest("[data-tile]")
+      button.setAttribute("aria-label", open ? "Exit fullscreen" : "View fullscreen")
+    }
+  })
+</script>

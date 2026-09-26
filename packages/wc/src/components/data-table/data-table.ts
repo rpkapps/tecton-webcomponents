@@ -186,6 +186,18 @@ export class TecDataTable<T extends DataTableRow = DataTableRow> extends TectonE
   /** Paginates the rows and shows the pagination controls. */
   @property({ type: Boolean, reflect: true }) pagination = false
 
+  /**
+   * Pagination controls: `icons` — "Page x of y" and icon previous / next buttons; `text` — "Previous" /
+   * "Next" text buttons only (the shadcn/ui data table).
+   */
+  @property({ reflect: true }) pager: "icons" | "text" = "icons"
+
+  /** Visible text of the previous-page button with `pager="text"`. */
+  @property({ attribute: "previous-text" }) previousText = "Previous"
+
+  /** Visible text of the next-page button with `pager="text"`. */
+  @property({ attribute: "next-text" }) nextText = "Next"
+
   /** Page size choices, space- or comma-separated (`"5 10 25"`). With two or more a rows-per-page select appears. */
   @property({ attribute: "page-sizes" }) pageSizes = ""
 
@@ -207,10 +219,10 @@ export class TecDataTable<T extends DataTableRow = DataTableRow> extends TectonE
   /** Label of the rows-per-page select. */
   @property({ attribute: "rows-per-page-label" }) rowsPerPageLabel = "Rows per page"
 
-  /** Accessible name of the previous-page button. */
+  /** Accessible name of the icon previous-page button. */
   @property({ attribute: "previous-label" }) previousLabel = "Previous page"
 
-  /** Accessible name of the next-page button. */
+  /** Accessible name of the icon next-page button. */
   @property({ attribute: "next-label" }) nextLabel = "Next page"
 
   /** Accessible name of the select-all checkbox. */
@@ -743,25 +755,34 @@ export class TecDataTable<T extends DataTableRow = DataTableRow> extends TectonE
                   </span>
                 </label>`
               : nothing}
-            <span class="page">${fill(this.pageLabel, { page: format.format(pageIndex + 1), count: format.format(pageCount) })}</span>
-            <span class="pager">
-              <tec-button
-                variant="outline"
-                size="icon-sm"
-                aria-label=${this.previousLabel}
-                ?disabled=${!table.getCanPreviousPage()}
-                @click=${() => this.#setPage(pageIndex - 1)}
-                >${svgIcon(ChevronLeft)}</tec-button
-              >
-              <tec-button
-                variant="outline"
-                size="icon-sm"
-                aria-label=${this.nextLabel}
-                ?disabled=${!table.getCanNextPage()}
-                @click=${() => this.#setPage(pageIndex + 1)}
-                >${svgIcon(ChevronRight)}</tec-button
-              >
-            </span>
+            ${this.pager === "text"
+              ? html`<span class="pager pager-text">
+                  <tec-button variant="outline" size="sm" ?disabled=${!table.getCanPreviousPage()} @click=${() => this.#setPage(pageIndex - 1)}
+                    >${this.previousText}</tec-button
+                  >
+                  <tec-button variant="outline" size="sm" ?disabled=${!table.getCanNextPage()} @click=${() => this.#setPage(pageIndex + 1)}
+                    >${this.nextText}</tec-button
+                  >
+                </span>`
+              : html`<span class="page">${fill(this.pageLabel, { page: format.format(pageIndex + 1), count: format.format(pageCount) })}</span>
+                  <span class="pager">
+                    <tec-button
+                      variant="outline"
+                      size="icon-sm"
+                      aria-label=${this.previousLabel}
+                      ?disabled=${!table.getCanPreviousPage()}
+                      @click=${() => this.#setPage(pageIndex - 1)}
+                      >${svgIcon(ChevronLeft)}</tec-button
+                    >
+                    <tec-button
+                      variant="outline"
+                      size="icon-sm"
+                      aria-label=${this.nextLabel}
+                      ?disabled=${!table.getCanNextPage()}
+                      @click=${() => this.#setPage(pageIndex + 1)}
+                      >${svgIcon(ChevronRight)}</tec-button
+                    >
+                  </span>`}
           </div>`
         : nothing}
     </div>`

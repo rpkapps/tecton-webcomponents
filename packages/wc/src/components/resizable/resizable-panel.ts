@@ -16,7 +16,10 @@ import { panelStyles } from "./resizable.styles.js"
  *
  * @slot - The panel content. Give it `h-full` / `w-full` to fill the panel.
  *
+ * @csspart content - The box around the content; it scrolls when the content is larger than the panel.
+ *
  * @cssstate collapsed - The panel is collapsed (`collapsible` panels only).
+ * @cssstate vertical - The group is vertical.
  */
 export class TecResizablePanel extends TectonElement {
   static styles = [hostStyles, panelStyles]
@@ -70,9 +73,10 @@ export class TecResizablePanel extends TectonElement {
    * Applied by the group.
    * @internal
    */
-  applySize(size: number, collapsed: boolean): void {
+  applySize(size: number, collapsed: boolean, vertical = false): void {
     this.style.flexGrow = String(Number(size.toFixed(4)))
     this.toggleState("collapsed", collapsed)
+    this.toggleState("vertical", vertical)
   }
 
   protected override updated(changed: PropertyValues): void {
@@ -83,7 +87,7 @@ export class TecResizablePanel extends TectonElement {
   }
 
   protected override render() {
-    return html`<slot></slot>`
+    return html`<div class="content" part="content"><slot></slot></div>`
   }
 }
 

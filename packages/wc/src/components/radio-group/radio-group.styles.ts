@@ -1,15 +1,13 @@
 import { css } from "lit"
 
+/* The host is the layout box; author layout classes on it win over these. */
 export const radioGroupStyles = css`
   :host {
-    display: block;
-    width: 100%;
-  }
-  .base {
     display: grid;
+    width: 100%;
     gap: var(--tec-radio-group-gap, 0.75rem);
   }
-  :host([orientation="horizontal"]) .base {
+  :host([orientation="horizontal"]) {
     display: flex;
     flex-wrap: wrap;
     align-items: center;

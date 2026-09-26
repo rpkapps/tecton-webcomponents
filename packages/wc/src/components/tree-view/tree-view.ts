@@ -34,8 +34,6 @@ export interface TreeViewValueChangeDetail {
  *
  * @slot - The top-level `tec-tree-view-item` rows.
  *
- * @csspart base - The scroll container of the rows.
- *
  * @fires tec-value-change - The user changed the selection. Bubbles. Cancelable. `detail: { value, values }`.
  */
 export class TecTreeView extends TectonElement {
@@ -287,7 +285,7 @@ export class TecTreeView extends TectonElement {
   }
 
   protected override render() {
-    return html`<div class="base" part="base"><slot @slotchange=${() => this.requestUpdate()}></slot></div>`
+    return html`<div class="base"><slot @slotchange=${() => this.requestUpdate()}></slot></div>`
   }
 }
 

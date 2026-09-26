@@ -112,10 +112,6 @@ The list scrolls past 18rem (`--tec-command-list-max-height`); the highlighted i
 - `tec-command-dialog` is a native modal `<dialog>` (the page is inert, scrolling is locked) named "Command Palette" and described "Search for a command to run..." by visually hidden text (`label`, `description`). Closing returns focus to the element that had it.
 - Give items whose content is not plain text a `label`, so filtering and the accessible name use a clean string.
 
-## API Reference
-
-<ApiReference tags={["tec-command", "tec-command-input", "tec-command-list", "tec-command-group", "tec-command-item", "tec-command-shortcut", "tec-command-separator", "tec-command-empty", "tec-command-dialog"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -241,3 +237,7 @@ Without a `label` the item's text is all of its text ("Billing 3 due"), so searc
 With no empty element, a search without matches leaves a blank palette and the user cannot tell a typo from a missing command.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-command", "tec-command-input", "tec-command-list", "tec-command-group", "tec-command-item", "tec-command-shortcut", "tec-command-separator", "tec-command-empty", "tec-command-dialog"]} />

@@ -13,10 +13,10 @@ import "@tecton/wc/skeleton"
 ```
 
 ```html
-<tec-skeleton class="h-5 w-24 rounded-full"></tec-skeleton>
+<tec-skeleton class="h-5 w-24" style="--tec-skeleton-radius: 9999px"></tec-skeleton>
 ```
 
-The element has no size of its own: set it with classes (or CSS) on the element. A `rounded-*` class rounds it.
+The element has no size of its own: set it with classes (or CSS) on the element. Round it with the `--tec-skeleton-radius` custom property.
 
 ## Avatar
 
@@ -24,7 +24,7 @@ The element has no size of its own: set it with classes (or CSS) on the element.
 
 ## Card
 
-<ComponentPreview name="skeleton-card" class="min-h-80" />
+<ComponentPreview name="skeleton-card" class="h-80" />
 
 ## Text
 
@@ -52,10 +52,6 @@ A skeleton is not focusable and has no keyboard interaction.
 - Mark the region that is loading with `aria-busy="true"` and remove it when the content arrives; announce the result through the content itself or a [status](/docs/components/spinner) if the wait was long.
 - The pulse stops under `prefers-reduced-motion: reduce`. In forced-colours mode the blocks keep a dashed outline.
 
-## API Reference
-
-<ApiReference tags={["tec-skeleton"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -76,7 +72,7 @@ A skeleton is not focusable and has no keyboard interaction.
 
 <Do>
 
-Give every skeleton a size from the spacing scale: `h-4 w-full`, `size-12 rounded-full`, `aspect-video w-full`.
+Give every skeleton a size from the spacing scale: `h-4 w-full`, `size-12` with `--tec-skeleton-radius: 9999px`, `aspect-video w-full`.
 
 </Do>
 
@@ -173,3 +169,7 @@ A skeleton is empty, so without `h-*`, an aspect ratio or a fixed size it has ze
 An off-scale pixel size stops matching the line height of the text it stands in for and the spacing scale everything else uses.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-skeleton"]} />

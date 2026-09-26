@@ -73,6 +73,18 @@ describe("tec-input-group", () => {
     expect(document.activeElement).toBe(button)
   })
 
+  it("addons dim only when the group itself is disabled", async () => {
+    const group = await fixture<TecInputGroup>(html`<tec-input-group>
+      <tec-input-group-input aria-label="x" disabled></tec-input-group-input>
+      <tec-input-group-addon align="inline-end"><tec-input-group-text>USD</tec-input-group-text></tec-input-group-addon>
+    </tec-input-group>`)
+    const addon = group.querySelector("tec-input-group-addon")!
+    expect(getComputedStyle(addon).opacity).toBe("1")
+    group.disabled = true
+    await group.updateComplete
+    expect(getComputedStyle(addon).opacity).toBe("0.5")
+  })
+
   it("the input submits with its form", async () => {
     const form = await fixture<HTMLFormElement>(html`<form><tec-input-group><tec-input-group-input name="q" value="well" aria-label="q"></tec-input-group-input></tec-input-group></form>`)
     expect(new FormData(form).get("q")).toBe("well")

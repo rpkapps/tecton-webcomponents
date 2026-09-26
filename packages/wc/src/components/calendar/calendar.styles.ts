@@ -12,9 +12,9 @@ export const calendarStyles = css`
     display: inline-block;
     vertical-align: top;
     width: fit-content;
+    /* Font size and line height are inherited (the weekday row takes the surrounding line height);
+       days, captions and selects set their own. */
     font-family: var(--tec-font-sans);
-    font-size: var(--tec-text-sm);
-    line-height: var(--tec-text-sm--line-height);
     color: var(--tec-foreground);
   }
   /* Inside a card or a popover the calendar takes the surface colour of its container. */
@@ -63,9 +63,6 @@ export const calendarStyles = css`
   }
   .nav tec-button::part(base) {
     padding: 0;
-  }
-  :host(:dir(rtl)) .nav svg {
-    transform: scaleX(-1);
   }
 
   .month {
@@ -248,6 +245,13 @@ export const calendarStyles = css`
     font-size: var(--tec-text-xs);
     line-height: var(--tec-text-xs--line-height);
     opacity: 0.7;
+  }
+  /* On the primary fill the dimmed line would fall below 4.5:1. */
+  .cell[data-selection="single"] .day > span,
+  .cell[data-selection="start"] .day > span,
+  .cell[data-selection="end"] .day > span,
+  .cell[data-selection="both"] .day > span {
+    opacity: 0.9;
   }
   .cell:not([data-disabled], [data-unavailable]):hover .day {
     background-color: var(--tec-ghost-hover);

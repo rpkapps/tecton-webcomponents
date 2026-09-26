@@ -15,15 +15,14 @@ export type StatAlign = "start" | "center" | "end"
 /**
  * Compose `tec-stat-label`, `tec-stat-value` (with its `unit`), `tec-stat-delta` and
  * `tec-stat-help` inside it. The value is set in the mono face with tabular numbers, so a row of
- * stats lines up.
+ * stats lines up. The element itself is the flex column, so layout classes on it (`gap-1`,
+ * `items-center`) apply.
  *
  * @summary A KPI readout: label, value with unit, trend delta and helper text.
  *
  * @tag tec-stat
  *
  * @slot - The parts: `tec-stat-label`, `tec-stat-value`, `tec-stat-delta`, `tec-stat-help`.
- *
- * @csspart base - The column holding the parts.
  *
  * @cssstate align-center - `align="center"`.
  * @cssstate align-end - `align="end"`.
@@ -44,18 +43,18 @@ export class TecStat extends TectonElement {
   }
 
   protected override render() {
-    return html`<div class="base" part="base"><slot></slot></div>`
+    return html`<slot></slot>`
   }
 }
 
 /**
+ * The element itself is the grid, so layout classes on it (`gap-8`, `grid-cols-2`) apply.
+ *
  * @summary Lays out several `tec-stat`s in a responsive grid (as many columns of at least 7rem as fit).
  *
  * @tag tec-stat-group
  *
  * @slot - `tec-stat` elements.
- *
- * @csspart base - The grid.
  *
  * @cssprop --tec-stat-group-min-width - Minimum column width (default 7rem).
  */
@@ -63,7 +62,7 @@ export class TecStatGroup extends TectonElement {
   static styles = [hostStyles, statGroupStyles]
 
   protected override render() {
-    return html`<div class="base" part="base"><slot></slot></div>`
+    return html`<slot></slot>`
   }
 }
 

@@ -182,4 +182,14 @@ describe("tec-radio-group", () => {
     expect(deepActiveElement()).toBe(items(g)[1])
     expect(getComputedStyle(items(g)[1]!.shadowRoot!.querySelector(".control")!).boxShadow).not.toBe("none")
   })
+
+  it("the host is the layout box: author grid/gap styles apply to the options", async () => {
+    const g = await fixture<TecRadioGroup>(html`<tec-radio-group aria-label="x" style="grid-template-columns: 1fr 1fr; gap: 20px; width: 300px">
+      <tec-radio-group-item value="a">A</tec-radio-group-item>
+      <tec-radio-group-item value="b">B</tec-radio-group-item>
+    </tec-radio-group>`)
+    const [a, b] = items(g).map((i) => i.getBoundingClientRect())
+    expect(Math.round(b!.top)).toBe(Math.round(a!.top))
+    expect(Math.round(b!.left - a!.left)).toBe(160)
+  })
 })

@@ -129,10 +129,6 @@ The button centres itself in either direction and the transcript follows the rea
 - `tec-message-scroller-content` is a live region (`role="log"`, `aria-relevant="additions"`): new rows are announced politely, streamed text inside a row is not announced token by token. Set `aria-busy="true"` on it while a turn streams if the announcement should wait for the completed row.
 - `tec-message-scroller-button` is a real button named "Scroll to end" / "Scroll to start" (set `label` to localise). While there is nothing to scroll toward it is inert, out of the tab order and faded out, so it creates no extra focus stop.
 
-## API Reference
-
-<ApiReference tags={["tec-message-scroller", "tec-message-scroller-viewport", "tec-message-scroller-content", "tec-message-scroller-item", "tec-message-scroller-button"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -231,3 +227,7 @@ The div never follows a streamed reply and loses what the parts give for free: a
 The id and the anchor live on the item: unwrapped rows never anchor a new turn, are skipped by visibility tracking and make `scrollToMessage` return `false`.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-message-scroller", "tec-message-scroller-viewport", "tec-message-scroller-content", "tec-message-scroller-item", "tec-message-scroller-button"]} />

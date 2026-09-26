@@ -75,9 +75,9 @@ describe("tec-avatar", () => {
     expect([badge.right, badge.bottom]).toEqual([avatar.right, avatar.bottom])
   })
 
-  it("puts the badge on the inline end in RTL and lets classes recolour it", async () => {
+  it("puts the badge on the inline end in RTL and takes its colour from --tec-avatar-badge-color", async () => {
     const avatar = await fixture<TecAvatar>(
-      html`<tec-avatar><tec-avatar-fallback>A</tec-avatar-fallback><tec-avatar-badge style="background-color: rgb(1, 2, 3)"></tec-avatar-badge></tec-avatar>`,
+      html`<tec-avatar><tec-avatar-fallback>A</tec-avatar-fallback><tec-avatar-badge style="--tec-avatar-badge-color: rgb(1, 2, 3)"></tec-avatar-badge></tec-avatar>`,
       { dir: "rtl" }
     )
     const badge = avatar.querySelector("tec-avatar-badge")!

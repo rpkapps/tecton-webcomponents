@@ -169,30 +169,6 @@ The shell uses logical properties: the sidebar moves to the right, borders follo
 - The menu triggers forward the `aria-haspopup` and `aria-expanded` that `tec-dropdown-menu` sets on them to their inner button.
 - `tec-app-shell-divider` is a vertical `separator`. A split handle is a focusable window splitter (`role="separator"`) whose `aria-valuenow` / `aria-valuemin` / `aria-valuemax` give the size of the panel before it, which it controls (`aria-controls`).
 
-## API Reference
-
-<ApiReference
-  tags={[
-    "tec-app-shell",
-    "tec-app-shell-header",
-    "tec-app-shell-brand",
-    "tec-app-shell-nav",
-    "tec-app-shell-body",
-    "tec-app-shell-sidebar",
-    "tec-app-shell-main",
-    "tec-app-shell-aside",
-    "tec-app-shell-actions",
-    "tec-app-shell-action",
-    "tec-app-shell-command-trigger",
-    "tec-app-shell-divider",
-    "tec-app-shell-overflow-trigger",
-    "tec-app-shell-user-menu-trigger",
-    "tec-app-shell-split",
-    "tec-app-shell-split-panel",
-    "tec-app-shell-split-handle",
-  ]}
-/>
-
 ## Usage guidelines
 
 ### Use it when
@@ -328,3 +304,27 @@ The body is the clipped row that holds the regions side by side: content dropped
 The hint binds nothing: declare the key with a `tec-shortcut` so it works and appears in `tec-shortcut-list`, the list the shell's help dialog is built from.
 
 </Dont>
+
+## API Reference
+
+<ApiReference
+  tags={[
+    "tec-app-shell",
+    "tec-app-shell-header",
+    "tec-app-shell-brand",
+    "tec-app-shell-nav",
+    "tec-app-shell-body",
+    "tec-app-shell-sidebar",
+    "tec-app-shell-main",
+    "tec-app-shell-aside",
+    "tec-app-shell-actions",
+    "tec-app-shell-action",
+    "tec-app-shell-command-trigger",
+    "tec-app-shell-divider",
+    "tec-app-shell-overflow-trigger",
+    "tec-app-shell-user-menu-trigger",
+    "tec-app-shell-split",
+    "tec-app-shell-split-panel",
+    "tec-app-shell-split-handle",
+  ]}
+/>

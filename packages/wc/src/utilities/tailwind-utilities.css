@@ -89,9 +89,9 @@
   mask-repeat: no-repeat;
 
   @supports (animation-timeline: scroll()) {
-    animation:
-      scroll-fade-reveal-t 1ms ease-in-out,
-      scroll-fade-reveal-b 1ms ease-in-out;
+    animation-name: scroll-fade-reveal-t, scroll-fade-reveal-b;
+    animation-duration: 1ms, 1ms;
+    animation-timing-function: ease-in-out, ease-in-out;
     animation-timeline: scroll(self y), scroll(self y);
     animation-range:
       0 var(--scroll-fade-reveal, calc(var(--spacing) * 24)),
@@ -123,9 +123,9 @@
   mask-repeat: no-repeat;
 
   @supports (animation-timeline: scroll()) {
-    animation:
-      scroll-fade-reveal-t 1ms ease-in-out,
-      scroll-fade-reveal-b 1ms ease-in-out;
+    animation-name: scroll-fade-reveal-t, scroll-fade-reveal-b;
+    animation-duration: 1ms, 1ms;
+    animation-timing-function: ease-in-out, ease-in-out;
     animation-timeline: scroll(self y), scroll(self y);
     animation-range:
       0 var(--scroll-fade-reveal, calc(var(--spacing) * 24)),
@@ -166,9 +166,9 @@
   mask-repeat: no-repeat;
 
   @supports (animation-timeline: scroll()) {
-    animation:
-      scroll-fade-reveal-s 1ms ease-in-out,
-      scroll-fade-reveal-e 1ms ease-in-out;
+    animation-name: scroll-fade-reveal-s, scroll-fade-reveal-e;
+    animation-duration: 1ms, 1ms;
+    animation-timing-function: ease-in-out, ease-in-out;
     animation-timeline: scroll(self inline), scroll(self inline);
     animation-range:
       0 var(--scroll-fade-reveal, calc(var(--spacing) * 24)),
@@ -193,7 +193,9 @@
   mask-repeat: no-repeat;
 
   @supports (animation-timeline: scroll()) {
-    animation: scroll-fade-reveal-t 1ms ease-in-out;
+    animation-name: scroll-fade-reveal-t;
+    animation-duration: 1ms;
+    animation-timing-function: ease-in-out;
     animation-timeline: scroll(self y);
     animation-range: 0 var(--scroll-fade-reveal, calc(var(--spacing) * 24));
     animation-fill-mode: both;
@@ -215,7 +217,9 @@
   mask-repeat: no-repeat;
 
   @supports (animation-timeline: scroll()) {
-    animation: scroll-fade-reveal-b 1ms ease-in-out;
+    animation-name: scroll-fade-reveal-b;
+    animation-duration: 1ms;
+    animation-timing-function: ease-in-out;
     animation-timeline: scroll(self y);
     animation-range: calc(100% - var(--scroll-fade-reveal, calc(var(--spacing) * 24))) 100%;
     animation-fill-mode: both;
@@ -237,7 +241,9 @@
   mask-repeat: no-repeat;
 
   @supports (animation-timeline: scroll()) {
-    animation: scroll-fade-reveal-s 1ms ease-in-out;
+    animation-name: scroll-fade-reveal-s;
+    animation-duration: 1ms;
+    animation-timing-function: ease-in-out;
     animation-timeline: scroll(self x);
     animation-range: 0 var(--scroll-fade-reveal, calc(var(--spacing) * 24));
     animation-fill-mode: both;
@@ -259,7 +265,9 @@
   mask-repeat: no-repeat;
 
   @supports (animation-timeline: scroll()) {
-    animation: scroll-fade-reveal-e 1ms ease-in-out;
+    animation-name: scroll-fade-reveal-e;
+    animation-duration: 1ms;
+    animation-timing-function: ease-in-out;
     animation-timeline: scroll(self x);
     animation-range: calc(100% - var(--scroll-fade-reveal, calc(var(--spacing) * 24))) 100%;
     animation-fill-mode: both;
@@ -284,7 +292,9 @@
   mask-repeat: no-repeat;
 
   @supports (animation-timeline: scroll()) {
-    animation: scroll-fade-reveal-s 1ms ease-in-out;
+    animation-name: scroll-fade-reveal-s;
+    animation-duration: 1ms;
+    animation-timing-function: ease-in-out;
     animation-timeline: scroll(self inline);
     animation-range: 0 var(--scroll-fade-reveal, calc(var(--spacing) * 24));
     animation-fill-mode: both;
@@ -309,7 +319,9 @@
   mask-repeat: no-repeat;
 
   @supports (animation-timeline: scroll()) {
-    animation: scroll-fade-reveal-e 1ms ease-in-out;
+    animation-name: scroll-fade-reveal-e;
+    animation-duration: 1ms;
+    animation-timing-function: ease-in-out;
     animation-timeline: scroll(self inline);
     animation-range: calc(100% - var(--scroll-fade-reveal, calc(var(--spacing) * 24))) 100%;
     animation-fill-mode: both;

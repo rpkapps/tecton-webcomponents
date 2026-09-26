@@ -289,6 +289,14 @@ describe("tec-chart-tooltip", () => {
       html`<tec-chart-tooltip standalone label="Page Views" indicator="line" .payload=${payload.slice(0, 1)}></tec-chart-tooltip>`
     )
     expect(el.shadowRoot!.querySelector(".names .label")!.textContent).toBe("Page Views")
+    // The line indicator is a bar as tall as the row, beside the text (also in a narrow tooltip).
+    el.style.width = "9rem"
+    await el.updateComplete
+    const line = el.shadowRoot!.querySelector(".indicator")!.getBoundingClientRect()
+    const text = el.shadowRoot!.querySelector(".text")!.getBoundingClientRect()
+    expect(line.width).toBe(4)
+    expect(line.height).toBeCloseTo(text.height, 0)
+    expect(line.top).toBeCloseTo(text.top, 0)
     el.indicator = "dashed"
     el.hideLabel = true
     el.payload = payload

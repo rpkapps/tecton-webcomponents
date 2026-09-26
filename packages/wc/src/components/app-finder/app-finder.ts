@@ -2,7 +2,7 @@ import { html, LitElement, nothing, type PropertyValues } from "lit"
 import { property, query, state } from "lit/decorators.js"
 import { live } from "lit/directives/live.js"
 import { Check, ChevronDown, Search, SearchX } from "lucide"
-import { AriaDelegateController, setAriaElements } from "../../internal/aria.js"
+import { AriaDelegateController } from "../../internal/aria.js"
 import { animationStyles, popupMotion } from "../../internal/animations.js"
 import { icon } from "../../internal/icons.js"
 import { ListNavigationController } from "../../internal/list-navigation.js"
@@ -96,7 +96,7 @@ export class TecAppFinderTrigger extends TectonElement {
   static shadowRootOptions: ShadowRootInit = { ...LitElement.shadowRootOptions, delegatesFocus: true }
 
   /** Name of the current app; shown next to the tile on wider screens and used in the accessible name. */
-  @property() name = ""
+  @property({ reflect: true }) name = ""
 
   /** Colour of the tile; use the app's category tone. */
   @property({ reflect: true }) tone: AppFinderTone = "neutral"
@@ -469,7 +469,6 @@ export class TecAppFinder extends TectonElement {
 
   protected override updated(changed: PropertyValues): void {
     super.updated(changed)
-    if (this.input && this.list) setAriaElements(this.input, "ariaControlsElements", [this.list])
     if (changed.has("open")) {
       if (!this.open) this.#nav.clear()
       void this.#popup.setOpen(this.open)
@@ -491,6 +490,7 @@ export class TecAppFinder extends TectonElement {
               spellcheck="false"
               enterkeyhint="go"
               aria-autocomplete="list"
+              aria-controls="list"
               aria-label=${this.placeholder}
               placeholder=${this.placeholder}
               .value=${live(this.query)}
@@ -499,7 +499,7 @@ export class TecAppFinder extends TectonElement {
             />
           </div>
         </div>
-        <div class="list" part="list" role="menu" aria-label="Suggestions" ?hidden=${this.empty}>
+        <div class="list" id="list" part="list" role="menu" aria-label="Suggestions" ?hidden=${this.empty}>
           <slot @slotchange=${() => this.#filter()}></slot>
         </div>
         ${this.empty

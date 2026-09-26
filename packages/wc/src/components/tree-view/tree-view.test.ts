@@ -130,6 +130,9 @@ describe("tec-tree-view", () => {
     const selects = recordEvents<CustomEvent>(tree, "tec-select").events
     await userEvent.click(row(tree, "a12").shadowRoot!.querySelector(".label")!)
     expect(tree.value).toBe("a12")
+    // Pointer focus shows no focus ring.
+    expect(deepActiveElement()).toBe(row(tree, "a12"))
+    expect(row(tree, "a12").matches(":focus-visible")).toBe(false)
     await settle(tree)
     expect(await axNode(row(tree, "a12"))).toMatchObject({ selected: "true" })
     expect(row(tree, "a12").matches(":state(selected)")).toBe(true)
@@ -144,6 +147,11 @@ describe("tec-tree-view", () => {
       { value: "", values: [] },
     ])
     expect(selects.map((e) => e.detail.value)).toEqual(["a12", "c7", "c7"])
+    // A programmatic click on the host presses the row like a pointer click.
+    row(tree, "a12").click()
+    expect(tree.values).toEqual(["a12"])
+    row(tree, "a12").click()
+    expect(tree.values).toEqual([])
     // Disabled rows cannot be selected.
     row(tree, "b3").click()
     expect(tree.values).toEqual([])

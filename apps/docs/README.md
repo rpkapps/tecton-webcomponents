@@ -50,8 +50,8 @@ sidebarTitle: Button                           # optional: shorter sidebar label
 4. `## RTL` — `<ComponentPreview name="<name>-rtl" direction="rtl" />`.
 5. `## Keyboard interactions` — `<KeyboardTable rows={[…]} />`.
 6. `## Accessibility` — roles, labelling, focus, what the author must provide.
-7. `## API Reference` — `<ApiReference tags={["tec-x", "tec-x-part"]} />`.
-8. `## Usage guidelines` — `### Use it when`, `### Not for`, `### Do` (`<DoList>`), `### Don't` (`<Dont>`).
+7. `## Usage guidelines` — `### Use it when`, `### Not for`, `### Do` (`<DoList>`), `### Don't` (`<Dont>`).
+8. `## API Reference` — `<ApiReference tags={["tec-x", "tec-x-part"]} />`, last on the page.
 
 ### Components available in every page
 

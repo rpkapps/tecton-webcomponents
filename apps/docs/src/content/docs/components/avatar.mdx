@@ -4,7 +4,7 @@ description: An image element with a fallback for representing the user.
 tags: ["tec-avatar", "tec-avatar-image", "tec-avatar-fallback", "tec-avatar-badge", "tec-avatar-group", "tec-avatar-group-count"]
 ---
 
-<ComponentPreview name="avatar-demo" />
+<ComponentPreview name="avatar-demo" class="h-72" />
 
 ## Usage
 
@@ -46,7 +46,7 @@ An avatar with a picture and a fallback. While the picture loads or is shown, th
 
 ## Badge
 
-`tec-avatar-badge` puts a status dot on the bottom end corner of the avatar. Recolour it with a Tecton colour class, and give it a `label` when the status matters to screen reader users.
+`tec-avatar-badge` puts a status dot on the bottom end corner of the avatar. Recolour it with the `--tec-avatar-badge-color` custom property, set to a Tecton colour, and give it a `label` when the status matters to screen reader users.
 
 <ComponentPreview name="avatar-badge" />
 
@@ -54,7 +54,7 @@ An avatar with a picture and a fallback. While the picture loads or is shown, th
 <tec-avatar>
   <tec-avatar-image src="/avatars/01.png" alt="@shadcn"></tec-avatar-image>
   <tec-avatar-fallback>CN</tec-avatar-fallback>
-  <tec-avatar-badge class="bg-green-560" label="Online"></tec-avatar-badge>
+  <tec-avatar-badge style="--tec-avatar-badge-color: var(--tecton-palette-green-560)" label="Online"></tec-avatar-badge>
 </tec-avatar>
 ```
 
@@ -98,7 +98,7 @@ An avatar inside a ghost icon [Button](/docs/components/button) makes the trigge
 
 The badge sits on the inline end (bottom left in right-to-left) and a group overlaps towards the start.
 
-<ComponentPreview name="avatar-rtl" direction="rtl" />
+<ComponentPreview name="avatar-rtl" class="h-72" direction="rtl" />
 
 ## Keyboard interactions
 
@@ -111,10 +111,6 @@ An avatar is not interactive and takes no focus. To make it act, put it in a but
 - The badge is visual only unless it has a `label`, which exposes it as an image with that name ("Online").
 - An avatar used as a button's content needs the button's `aria-label` ("Account").
 - The hairline ring over the picture stays visible in forced-colours mode.
-
-## API Reference
-
-<ApiReference tags={["tec-avatar", "tec-avatar-image", "tec-avatar-fallback", "tec-avatar-badge", "tec-avatar-group", "tec-avatar-group-count"]} />
 
 ## Usage guidelines
 
@@ -155,7 +151,7 @@ Overlap a row with `tec-avatar-group` and close it with `tec-avatar-group-count`
 
 <Do>
 
-Recolour `tec-avatar-badge` only, and only with a Tecton step: `class="bg-green-560"`.
+Recolour `tec-avatar-badge` only, through `--tec-avatar-badge-color` and a Tecton step: `style="--tec-avatar-badge-color: var(--tecton-palette-green-560)"`.
 
 </Do>
 
@@ -230,7 +226,7 @@ The badge, the fallback text and the group's count size themselves from the `siz
 
 </Dont>
 
-<Dont severity="HIGH" title="A stock colour on the status dot">
+<Dont severity="HIGH" title="A colour class or a stock colour on the status dot">
 
 <Wrong>
 
@@ -243,11 +239,15 @@ The badge, the fallback text and the group's count size themselves from the `siz
 <Correct>
 
 ```html
-<tec-avatar-badge class="bg-green-560" label="Online"></tec-avatar-badge>
+<tec-avatar-badge style="--tec-avatar-badge-color: var(--tecton-palette-green-560)" label="Online"></tec-avatar-badge>
 ```
 
 </Correct>
 
-The Tecton palette replaces the stock Tailwind colours, so `green-500` is not a step: the class emits no CSS and the dot silently stays the primary colour.
+Colours of Tecton elements are custom properties, not utility classes; and the Tecton palette replaces the stock Tailwind colours, so `green-500` is not a step and emits no CSS at all.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-avatar", "tec-avatar-image", "tec-avatar-fallback", "tec-avatar-badge", "tec-avatar-group", "tec-avatar-group-count"]} />

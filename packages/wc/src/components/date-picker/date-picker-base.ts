@@ -12,7 +12,7 @@ import { HasSlotController } from "../../internal/slot.js"
 import { hostStyles, srOnly } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
 import type { CalendarButtonVariant, CalendarCaptionLayout, CalendarDay } from "../calendar/calendar-base.js"
-import { resolveLocale, type DateGranularity, type DayOfWeek } from "../calendar/date-utils.js"
+import { navLabel, resolveLocale, type DateGranularity, type DayOfWeek } from "../calendar/date-utils.js"
 import { dateFieldStyles } from "../date-field/date-field.styles.js"
 import { focusSibling, hostLabels, segmentToFocus, syncSegmentAria } from "../date-field/field-helpers.js"
 import { SegmentedField, type SegmentValue } from "../date-field/segments.js"
@@ -46,8 +46,8 @@ export abstract class DatePickerBase extends FormControlMixin(TectonElement) {
   /** `Intl` date style of the button appearance. */
   @property({ attribute: "date-style" }) dateStyle: "full" | "long" | "medium" | "short" = "long"
 
-  /** Accessible name of the calendar button of the field appearance. */
-  @property({ attribute: "button-label" }) buttonLabel = "Calendar"
+  /** Accessible name of the calendar button of the field appearance. Default: "Calendar" in the picker's locale. */
+  @property({ attribute: "button-label" }) buttonLabel = ""
 
   /** Locale (BCP 47). Default: the `lang` of the closest ancestor, else the browser language. */
   @property() locale = ""
@@ -133,7 +133,8 @@ export abstract class DatePickerBase extends FormControlMixin(TectonElement) {
     anchor: () => this.renderRoot.querySelector<HTMLElement>(".field, .button"),
     haspopup: "dialog",
     placement: () => ({ side: this.side, align: this.align, sideOffset: this.sideOffset }),
-    focus: { initial: () => this.renderRoot.querySelector<HTMLElement>(".calendar"), trap: true, restore: true },
+    // Like React Aria: a pointer open focuses the dialog (no focus ring); a keyboard open focuses the day.
+    focus: { initial: () => (this.#openedBy === "pointer" ? this.panel : this.renderRoot.querySelector<HTMLElement>(".calendar")), trap: true, restore: true },
     onRequestClose: (reason) => this.requestOpen(false, reason),
   })
 
@@ -189,12 +190,27 @@ export abstract class DatePickerBase extends FormControlMixin(TectonElement) {
   /** Keeps the inner calendar's own `input`/`change` events inside the picker. */
   protected stopInner = (event: Event) => event.stopPropagation()
 
-  #onTriggerClick = () => this.requestOpen(!this.open, "trigger")
+  #openedBy: "pointer" | "keyboard" = "keyboard"
+
+  #onTriggerClick = (event: MouseEvent) => {
+    this.#openedBy = event.detail > 0 ? "pointer" : "keyboard"
+    this.requestOpen(!this.open, "trigger")
+  }
+
+  /** Keys pressed while the dialog itself has focus (after a pointer open) move focus into the calendar. */
+  #onPanelKeyDown = (event: KeyboardEvent) => {
+    if (event.composedPath()[0] !== this.panel) return
+    if (/^(Arrow|Page)|^(Home|End|Enter| )$/.test(event.key)) {
+      event.preventDefault()
+      this.renderRoot.querySelector<HTMLElement>(".calendar")?.focus()
+    }
+  }
 
   #onFieldKeyDown = (event: KeyboardEvent) => {
     if (event.altKey && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
       event.preventDefault()
       event.stopPropagation()
+      this.#openedBy = "keyboard"
       this.requestOpen(true, "keyboard")
     }
   }
@@ -309,7 +325,7 @@ export abstract class DatePickerBase extends FormControlMixin(TectonElement) {
               class="icon-trigger trigger"
               part="trigger"
               type="button"
-              aria-label=${this.buttonLabel}
+              aria-label=${this.buttonLabel || navLabel(this.resolvedLocale, "calendar")}
               aria-haspopup="dialog"
               aria-expanded=${expanded}
               ?disabled=${this.isDisabled || this.readonly}
@@ -319,7 +335,7 @@ export abstract class DatePickerBase extends FormControlMixin(TectonElement) {
             </button>
           </div>`
     return html`${trigger}
-      <div class="content" part="content" popover="manual" role="dialog" tabindex="-1">
+      <div class="content" part="content" popover="manual" role="dialog" tabindex="-1" @keydown=${this.#onPanelKeyDown}>
         ${this.renderCalendar()}
         <slot name="footer"></slot>
       </div>`

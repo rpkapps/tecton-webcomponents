@@ -62,6 +62,31 @@ export const MODAL_CLOSE_REQUEST = "tec-modal-close-request"
 /** Tags of every modal family (to find the modal a part belongs to). */
 export const MODAL_TAGS = "tec-dialog, tec-alert-dialog, tec-sheet, tec-drawer"
 
+let lastModality: "pointer" | "keyboard" = "keyboard"
+let trackingModality = false
+
+/** Starts tracking whether the last user interaction was a pointer press or a key press (once per page). */
+function trackModality(): void {
+  if (trackingModality) return
+  trackingModality = true
+  document.addEventListener("pointerdown", () => (lastModality = "pointer"), true)
+  document.addEventListener(
+    "keydown",
+    (e) => {
+      if (!e.metaKey && !e.ctrlKey && !e.altKey) lastModality = "keyboard"
+    },
+    true
+  )
+}
+
+/**
+ * Whether the last user interaction was a pointer press. After a pointer-initiated open, focus goes to
+ * the dialog itself (no focus ring), like React Aria; after a keyboard open it may go to a control.
+ */
+export function lastInteractionWasPointer(): boolean {
+  return lastModality === "pointer"
+}
+
 /** Asks the nearest modal around `from` to close. Returns `false` if nothing handled it. */
 export function requestModalClose(from: Element, reason: ModalOpenChangeReason): boolean {
   const event = new CustomEvent(MODAL_CLOSE_REQUEST, { detail: { reason }, bubbles: true, composed: true, cancelable: true })
@@ -187,6 +212,7 @@ export class TecModalElement extends TectonElement {
 
   override connectedCallback(): void {
     super.connectedCallback()
+    trackModality()
     this.addEventListener(MODAL_CLOSE_REQUEST, this.#onCloseRequest as EventListener)
     this.#bodyObserver ??= new MutationObserver(() => this.syncLabelling())
     this.#bodyObserver.observe(this, { childList: true, subtree: true })

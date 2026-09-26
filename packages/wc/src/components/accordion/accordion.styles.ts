@@ -21,6 +21,8 @@ export const accordionStyles = css`
   .base {
     display: flex;
     flex-direction: column;
+    /* Layout classes on the host (gap-2) reach the item column. */
+    gap: inherit;
     width: 100%;
     border-radius: var(--_tec-acc-radius);
   }
@@ -152,6 +154,12 @@ export const accordionTriggerStyles = css`
   }
   :host(:state(has-secondary)) .secondary {
     padding-inline-start: 0.5rem;
+  }
+  /* On the hover / active backgrounds the muted colour lacks contrast: use the row colour. */
+  .base:hover .secondary,
+  .base:focus-visible .secondary,
+  :host(:state(expanded)) .secondary {
+    color: inherit;
   }
   .icon {
     grid-column: 5;

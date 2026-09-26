@@ -17,8 +17,8 @@ export const kbdStyles = css`
     margin: 0;
     padding-inline: 0.25rem;
     border-radius: var(--tec-radius-sm);
-    background-color: var(--tec-muted);
-    color: var(--tec-muted-foreground);
+    background-color: var(--tec-kbd-background, var(--tec-muted));
+    color: var(--tec-kbd-foreground, var(--tec-muted-foreground));
     font-family: var(--tec-font-sans);
     font-size: var(--tec-text-xs);
     line-height: var(--tec-text-xs--line-height);
@@ -28,6 +28,17 @@ export const kbdStyles = css`
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
+  }
+  /* Inverted inside a tooltip (the host sets the in-tooltip state). */
+  :host(:state(in-tooltip)) .kbd {
+    background-color: var(
+      --tec-kbd-background,
+      light-dark(
+        color-mix(in oklab, var(--tec-background) 20%, transparent),
+        color-mix(in oklab, var(--tec-background) 10%, transparent)
+      )
+    );
+    color: var(--tec-kbd-foreground, var(--tec-background));
   }
   .kbd-group {
     display: inline-flex;

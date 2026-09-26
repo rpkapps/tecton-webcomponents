@@ -179,10 +179,6 @@ The keys are the ones you register. The registry itself:
 - List every shortcut where the user can find it (a "Keyboard shortcuts" dialog opened with `?`),
   and show a command's shortcut next to it in menus and the command palette.
 
-## API Reference
-
-<ApiReference tags={["tec-shortcuts", "tec-shortcut", "tec-shortcut-keys", "tec-shortcut-list"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -303,3 +299,7 @@ A registry of its own adds a second `document` listener with a list the host can
 `tec-shortcut-keys` resolves `mod` to ⌘ or Ctrl for the reader's platform, splits a chord or a sequence into caps (a chord's keys joined by "+", a sequence's steps by "then") and reads the whole to screen readers as text ("G, then W"); hand-typed caps freeze the author's platform and are read out letter by letter.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-shortcuts", "tec-shortcut", "tec-shortcut-keys", "tec-shortcut-list"]} />

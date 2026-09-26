@@ -4,7 +4,7 @@ description: "Pins a subtree — or the whole application — to light, dark or 
 tags: ["tec-theme-root"]
 ---
 
-<ComponentPreview name="theme-root-demo" class="min-h-80 items-start" />
+<ComponentPreview name="theme-root-demo" />
 
 ## Usage
 
@@ -79,10 +79,6 @@ To avoid a flash of the wrong mode on load, apply the stored value before the fi
 - `tec-theme-root` has no role and renders nothing but its content; it does not affect the accessibility tree.
 - `system` respects the user's operating system preference; offer it (and make it the default) in a theme toggle.
 - Contrast is guaranteed by the Tecton tokens in both modes; overriding `--tec-primary` on a root is your responsibility — keep the primary text contrast at 4.5:1.
-
-## API Reference
-
-<ApiReference tags={["tec-theme-root"]} />
 
 ## Usage guidelines
 
@@ -168,3 +164,7 @@ document.body.append(dialog) // so it picks up the page theme
 Overlays use the top layer and inherit from where they are declared; moving them out of the root is what loses its mode and overrides.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-theme-root"]} />

@@ -81,10 +81,6 @@ The header itself is not interactive. The actions row is a plain [Overflow](/doc
 - `<tec-page-header-description>` is a paragraph; the eyebrow is plain text — use a breadcrumb inside it for navigation.
 - The actions row has no role, so tabs inside it keep their own `tablist` keyboard model. In the More menu the tabs become a `group` of `menuitemradio`s named by the item's `label`.
 
-## API Reference
-
-<ApiReference tags={["tec-page-header", "tec-page-header-content", "tec-page-header-eyebrow", "tec-page-header-title", "tec-page-header-description", "tec-page-header-nav", "tec-page-header-actions"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -190,3 +186,7 @@ Let `<tec-page-header-title>` be the page's level-1 heading: one per page.
 `text-zinc-900` is a stock Tailwind colour and emits no CSS with the Tecton palette, and a hand-built row has neither the title truncation nor the collapsing action row, so it overflows as soon as the window narrows.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-page-header", "tec-page-header-content", "tec-page-header-eyebrow", "tec-page-header-title", "tec-page-header-description", "tec-page-header-nav", "tec-page-header-actions"]} />

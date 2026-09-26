@@ -92,4 +92,17 @@ describe("tec-action-bar", () => {
     expect(getComputedStyle(root.querySelector("tec-action-bar")!).position).toBe("sticky")
     expect(await axNode(root.querySelector("tec-action-bar-message")!)).toMatchObject({ role: "paragraph" })
   })
+
+  it("localises the summary with templates and the element's language", async () => {
+    const root = await fixture(html`<div style="width: 700px" lang="ar">
+      <tec-action-bar aria-label="x">
+        <tec-action-bar-selection count="2" total="5" clearable selected-text="تم تحديد {count} من {total}" clear-text="مسح"></tec-action-bar-selection>
+      </tec-action-bar>
+    </div>`)
+    const sel = root.querySelector<TecActionBarSelection>("tec-action-bar-selection")!
+    const expected = `تم تحديد ${new Intl.NumberFormat("ar").format(2)} من ${new Intl.NumberFormat("ar").format(5)}`
+    expect(visibleText(sel)).toEqual([expected])
+    expect(sel.shadowRoot!.querySelector(".clear-text")!.textContent!.trim()).toBe("مسح")
+    await waitUntil(() => sel.shadowRoot!.querySelector("[aria-live]")!.textContent === expected)
+  })
 })

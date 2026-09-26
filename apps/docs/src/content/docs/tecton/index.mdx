@@ -6,3 +6,16 @@ description: Components that exist only in the Tecton design system and have no 
 The Tecton theme and the Tecton variants of the standard components cover most of the design system. What remains here are the patterns shadcn/ui does not have at all — a selectable chip group, a segmented meter, a tree view, KPI stats, panels and the application shell. They follow the same conventions as every other element: attributes and slots, `::part()` hooks, `--tec-*` variables and the WAI-ARIA pattern that fits.
 
 <SectionCards section="tecton" />
+
+## Former Tecton components
+
+Some components of the earlier Tecton libraries have no page here: they became variants or parts of the standard elements.
+
+| Former Tecton component | Now |
+| --- | --- |
+| ShellActions | [`tec-app-shell-actions`](/docs/tecton/app-shell#actions) with the `tec-app-shell-action`, `tec-app-shell-command-trigger`, `tec-app-shell-divider`, `tec-app-shell-overflow-trigger` and `tec-app-shell-user-menu-trigger` parts of [App Shell](/docs/tecton/app-shell) |
+| StatusAlert | [`tec-alert`](/docs/components/alert) with `variant` (severity) and `appearance` |
+| Chip (static label) | [`tec-badge`](/docs/components/badge) with `variant`, `appearance` and `size` |
+| Divider | [`tec-separator`](/docs/components/separator) with `emphasis` |
+| FAB | [`tec-button`](/docs/components/button#floating-action-button) with the floating action button recipe |
+| TextField / SelectField | [`tec-input`](/docs/components/input), [`tec-textarea`](/docs/components/textarea) and [`tec-select`](/docs/components/select) with `variant`, inside a [`tec-field`](/docs/components/field) |

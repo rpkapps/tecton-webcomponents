@@ -45,7 +45,7 @@ export const inputGroupStyles = css`
     border-color: var(--tec-destructive);
     box-shadow: var(--tec-focus-ring-invalid);
   }
-  :host(:state(disabled)) ::slotted(tec-input-group-addon) {
+  :host([disabled]) ::slotted(tec-input-group-addon) {
     opacity: 0.5;
   }
 

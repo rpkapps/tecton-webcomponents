@@ -63,6 +63,11 @@ describe("tec-app-finder", () => {
     expect(Math.round(p.left)).toBe(Math.round(t.left))
     expect(await axNode(panel(el))).toMatchObject({ role: "dialog", name: "Applications" })
     expect(await axNode(input(el))).toMatchObject({ name: "Search applications…", autocomplete: "list" })
+    expect(input(el).getAttribute("aria-controls")).toBe("list")
+    const trigger = el.querySelector("tec-app-finder-trigger")!
+    trigger.name = "Well Planning"
+    await trigger.updateComplete
+    expect(trigger.getAttribute("name")).toBe("Well Planning")
     expect(await axTree(el.shadowRoot!.querySelector(".list")!)).toEqual([
       "menu: Suggestions",
       "group: Recent",

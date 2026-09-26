@@ -118,6 +118,8 @@ describe("tec-field", () => {
     const label = field.querySelector("tec-field-label")!
     await label.updateComplete
     expect(getComputedStyle(label).opacity).toBe("0.5")
+    // The dimmed label belongs to a disabled control: exempt from contrast, like a native label.
+    await expectAccessible(field)
   })
 
   it("responsive fields turn horizontal in a wide field group", async () => {

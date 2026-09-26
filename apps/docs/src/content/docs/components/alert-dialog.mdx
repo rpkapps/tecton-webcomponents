@@ -4,7 +4,7 @@ description: A modal dialog that interrupts the user with important content and 
 tags: ["tec-alert-dialog", "tec-alert-dialog-header", "tec-alert-dialog-media", "tec-alert-dialog-title", "tec-alert-dialog-description", "tec-alert-dialog-footer", "tec-alert-dialog-cancel", "tec-alert-dialog-action"]
 ---
 
-<ComponentPreview name="alert-dialog-demo" />
+<ComponentPreview name="alert-dialog-demo" class="h-56" />
 
 ## Usage
 
@@ -54,33 +54,33 @@ dialog.querySelector("tec-alert-dialog-action").addEventListener("click", () => 
 
 A basic alert dialog with a title, description, and cancel and continue buttons.
 
-<ComponentPreview name="alert-dialog-basic" />
+<ComponentPreview name="alert-dialog-basic" class="h-56" />
 
 ## Small
 
 Use `size="sm"` for a narrow, centred prompt with a two-column footer.
 
-<ComponentPreview name="alert-dialog-small" />
+<ComponentPreview name="alert-dialog-small" class="h-56" />
 
 ## Media
 
 Use `tec-alert-dialog-media` to add an icon or image. From the `sm` breakpoint it sits beside the title and description.
 
-<ComponentPreview name="alert-dialog-media" />
+<ComponentPreview name="alert-dialog-media" class="h-56" />
 
 ## Small with Media
 
-<ComponentPreview name="alert-dialog-small-media" />
+<ComponentPreview name="alert-dialog-small-media" class="h-56" />
 
 ## Destructive
 
-Use `variant="destructive"` on the action. Tint the media tile with `--tec-alert-dialog-media-background` and the icon with `color`.
+Use `variant="destructive"` on the action. Tint the media tile with `--tec-alert-dialog-media-background` and the icon with `--tec-alert-dialog-media-foreground`.
 
-<ComponentPreview name="alert-dialog-destructive" />
+<ComponentPreview name="alert-dialog-destructive" class="h-56" />
 
 ## RTL
 
-<ComponentPreview name="alert-dialog-rtl" direction="rtl" />
+<ComponentPreview name="alert-dialog-rtl" direction="rtl" class="h-56" />
 
 ## Keyboard interactions
 
@@ -97,12 +97,8 @@ Use `variant="destructive"` on the action. Tint the media tile with `--tec-alert
 
 - A native `<dialog>` with `role="alertdialog"`, opened with `showModal()`: top layer, the rest of the page inert, scrolling locked.
 - Named by `tec-alert-dialog-title` and described by `tec-alert-dialog-description` (ARIA element reflection), so screen readers read the question and its consequence when it opens.
-- On open, focus moves to `tec-alert-dialog-cancel` — the least destructive choice, as the WAI-ARIA alert dialog pattern recommends (an element with `autofocus` wins). <Kbd>Tab</Kbd> stays inside; on close focus returns to the trigger.
+- Opened with the keyboard, focus moves to `tec-alert-dialog-cancel` — the least destructive choice, as the WAI-ARIA alert dialog pattern recommends. Opened with a pointer, focus moves to the alert dialog itself (no focus ring), and <Kbd>Tab</Kbd> reaches Cancel first. An element with `autofocus` always wins. <Kbd>Tab</Kbd> stays inside; on close focus returns to the trigger.
 - A press on the overlay does nothing (add `dismissable` to change that) and there is no ✕ button: the user answers.
-
-## API Reference
-
-<ApiReference tags={["tec-alert-dialog", "tec-alert-dialog-header", "tec-alert-dialog-media", "tec-alert-dialog-title", "tec-alert-dialog-description", "tec-alert-dialog-footer", "tec-alert-dialog-cancel", "tec-alert-dialog-action"]} />
 
 ## Usage guidelines
 
@@ -154,7 +150,7 @@ Name the confirm button for its action and object ("Delete well"), never "OK", "
 
 <Do>
 
-Put `tec-alert-dialog-cancel` before `tec-alert-dialog-action` in the footer: it takes focus when the dialog opens and comes first for keyboard users.
+Put `tec-alert-dialog-cancel` before `tec-alert-dialog-action` in the footer: it takes focus when the dialog opens from the keyboard and comes first in the Tab order.
 
 </Do>
 
@@ -215,3 +211,7 @@ A plain button runs the action and leaves the prompt on screen over the deleted 
 Ignoring overlay presses is what separates an alert dialog from a dialog; with `dismissable` a stray click answers the question.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-alert-dialog", "tec-alert-dialog-header", "tec-alert-dialog-media", "tec-alert-dialog-title", "tec-alert-dialog-description", "tec-alert-dialog-footer", "tec-alert-dialog-cancel", "tec-alert-dialog-action"]} />

@@ -91,14 +91,18 @@ export const canvasOverlayStyles = css`
 `
 
 export const canvasToolbarStyles = css`
+  /* Layout classes on the element (gap-1, flex-wrap) are forwarded to the rail. */
   :host {
     display: inline-flex;
     pointer-events: auto;
+    gap: 0;
   }
   .base {
     ${floating}
     display: flex;
     flex-direction: column;
+    flex-wrap: inherit;
+    gap: inherit;
     padding: 0.125rem;
   }
   :host([orientation="horizontal"]) .base {
@@ -117,15 +121,18 @@ export const canvasToolbarStyles = css`
 `
 
 export const canvasLegendStyles = css`
+  /* Layout classes on the element (gap-2, grid-cols-2) are forwarded to the list surface. */
   :host {
     display: block;
+    gap: 0.375rem;
     font-size: var(--tec-text-xs);
     line-height: var(--tec-text-xs--line-height);
   }
   .base {
     ${floating}
     display: grid;
-    gap: 0.375rem;
+    gap: inherit;
+    grid-template-columns: inherit;
     padding: 0.5rem 0.625rem;
   }
   @supports (backdrop-filter: blur(4px)) {

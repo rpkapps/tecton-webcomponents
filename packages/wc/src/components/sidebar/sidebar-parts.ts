@@ -259,19 +259,23 @@ export class TecSidebarRail extends SidebarPart {
 }
 
 /**
- * The main content next to the sidebar (a `<main>` landmark in its shadow root, so a slotted `<header>` is
- * not a page banner). With a `variant="inset"` sidebar it becomes
+ * The main content next to the sidebar: a `<main>` landmark in its shadow root (so a slotted `<header>`
+ * is not a page banner). Set `embedded` when the layout is shown inside a page that already has its
+ * `<main>` (a preview, a dashboard tile): it then renders a plain region-less `<div>`. With a `variant="inset"` sidebar it becomes
  * a rounded, raised card inset from the edges.
  *
  * @summary The main content area beside the sidebar.
  * @tag tec-sidebar-inset
  * @slot - The page: header, content.
- * @csspart base - The `<main>` content surface (background, radius, shadow).
+ * @csspart base - The `<main>` (or `<div>` when `embedded`) content surface (background, radius, shadow).
  * @cssstate inset - The provider has a `variant="inset"` sidebar (desktop).
  * @cssstate collapsed - The sidebar is collapsed.
  */
 export class TecSidebarInset extends TectonElement {
   static styles = [hostStyles, sidebarInsetStyles]
+
+  /** Render a plain `<div>` instead of the `<main>` landmark (for layouts embedded in a page that has its own `<main>`). */
+  @property({ type: Boolean, reflect: true }) embedded = false
 
   #provider = new ContextConsumer(this, { context: sidebarProviderContext, subscribe: true })
 
@@ -283,7 +287,9 @@ export class TecSidebarInset extends TectonElement {
   }
 
   protected override render() {
-    return html`<main class="base" part="base"><slot></slot></main>`
+    return this.embedded
+      ? html`<div class="base" part="base"><slot></slot></div>`
+      : html`<main class="base" part="base"><slot></slot></main>`
   }
 }
 

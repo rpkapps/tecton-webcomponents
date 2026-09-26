@@ -4,7 +4,7 @@ description: Augments native scroll functionality for custom, cross-browser styl
 tags: ["tec-scroll-area"]
 ---
 
-<ComponentPreview name="scroll-area-demo" class="min-h-96" />
+<ComponentPreview name="scroll-area-demo" class="h-96" />
 
 ## Usage
 
@@ -13,7 +13,7 @@ import "@tecton/wc/scroll-area"
 ```
 
 ```html
-<tec-scroll-area class="h-[200px] w-[350px] rounded-md border border-border">
+<tec-scroll-area class="h-[200px] w-[350px] rounded-md border">
   <div class="p-4">Your scrollable content here.</div>
 </tec-scroll-area>
 ```
@@ -30,7 +30,7 @@ Content wider than the box scrolls sideways: use `whitespace-nowrap` or an inner
 
 In a right-to-left context the vertical scrollbar moves to the left edge and horizontal scrolling starts at the right, as the browser does for any scroll container.
 
-<ComponentPreview name="scroll-area-rtl" direction="rtl" class="min-h-96" />
+<ComponentPreview name="scroll-area-rtl" class="h-auto" direction="rtl" />
 
 ## Keyboard interactions
 
@@ -53,10 +53,6 @@ While the content overflows and contains nothing focusable, the scroll area is a
 - When the content overflows and has no focusable element, the element sets `tabindex="0"` on itself (and removes it when that is no longer true), so keyboard users can scroll it; label it in that case. A `tabindex` you set is left alone.
 - The focus ring is the Tecton ring on the element's edge, and it stays visible in forced-colours mode.
 - The scrollbar is the native one: it keeps its platform behaviour, contrast settings and assistive technology support.
-
-## API Reference
-
-<ApiReference tags={["tec-scroll-area"]} />
 
 ## Usage guidelines
 
@@ -131,7 +127,7 @@ One element owns each scroll: never put a scroll area inside a box that already 
 <Correct>
 
 ```html
-<tec-scroll-area class="h-72 w-48 rounded-md border border-border">
+<tec-scroll-area class="h-72 w-48 rounded-md border">
   <div class="p-4">…</div>
 </tec-scroll-area>
 ```
@@ -147,7 +143,7 @@ The scroll area styles the real scrollbar with the standard `scrollbar-width` an
 <Wrong>
 
 ```html
-<tec-scroll-area class="w-full rounded-md border border-border">
+<tec-scroll-area class="w-full rounded-md border">
   <tec-table>…</tec-table>
 </tec-scroll-area>
 ```
@@ -157,7 +153,7 @@ The scroll area styles the real scrollbar with the standard `scrollbar-width` an
 <Correct>
 
 ```html
-<tec-scroll-area class="h-96 w-full rounded-md border border-border">
+<tec-scroll-area class="h-96 w-full rounded-md border">
   <tec-table>…</tec-table>
 </tec-scroll-area>
 ```
@@ -173,7 +169,7 @@ With no height the element grows with its content, never overflows, and the whol
 <Wrong>
 
 ```html
-<tec-scroll-area class="h-72 w-full rounded-md border border-border">
+<tec-scroll-area class="h-72 w-full rounded-md border">
   <pre class="p-4 text-xs">…</pre>
 </tec-scroll-area>
 ```
@@ -183,7 +179,7 @@ With no height the element grows with its content, never overflows, and the whol
 <Correct>
 
 ```html
-<tec-scroll-area aria-label="Job log" class="h-72 w-full rounded-md border border-border">
+<tec-scroll-area aria-label="Job log" class="h-72 w-full rounded-md border">
   <pre class="p-4 text-xs">…</pre>
 </tec-scroll-area>
 ```
@@ -193,3 +189,7 @@ With no height the element grows with its content, never overflows, and the whol
 A log has nothing focusable, so the scroll area becomes the tab stop; without a label a screen reader announces an anonymous focusable group, with one it announces the "Job log" region.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-scroll-area"]} />

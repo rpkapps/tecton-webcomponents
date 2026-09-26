@@ -27,7 +27,7 @@ describe("tec-card", () => {
     expect(cs.borderTopLeftRadius).not.toBe("0px")
     expect(cs.boxShadow).toContain("1px")
     for (const tag of ["tec-card-header", "tec-card-content", "tec-card-footer"]) {
-      const part = card.querySelector(tag)!
+      const part = base(card.querySelector(tag)!)
       expect(getComputedStyle(part).paddingInlineStart, tag).toBe("24px")
       expect(getComputedStyle(part).paddingInlineEnd, tag).toBe("24px")
     }
@@ -55,18 +55,28 @@ describe("tec-card", () => {
     </div>`)
     const [small, custom] = [...root.querySelectorAll("tec-card")]
     expect(getComputedStyle(base(small!)).paddingTop).toBe("16px")
-    expect(getComputedStyle(small!.querySelector("tec-card-header")!).paddingInlineStart).toBe("16px")
+    expect(getComputedStyle(base(small!.querySelector("tec-card-header")!)).paddingInlineStart).toBe("16px")
     expect(getComputedStyle(small!.querySelector("tec-card-title")!).fontSize).toBe("14px")
     expect(getComputedStyle(base(custom!)).paddingTop).toBe("32px")
-    expect(getComputedStyle(custom!.querySelector("tec-card-content")!).paddingInlineStart).toBe("32px")
+    expect(getComputedStyle(base(custom!.querySelector("tec-card-content")!)).paddingInlineStart).toBe("32px")
   })
 
-  it("lets layout utilities on the footer arrange its children", async () => {
-    const card = await fixture<TecCard>(html`<tec-card>
-      <tec-card-footer style="flex-direction: column; gap: 8px"><button>A</button><button>B</button></tec-card-footer>
+  it("makes the host the layout box: layout styles on the parts arrange their children", async () => {
+    const card = await fixture<TecCard>(html`<tec-card style="width: 300px">
+      <tec-card-content style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px"><i>A</i><i>B</i></tec-card-content>
+      <tec-card-footer style="flex-direction: column; align-items: flex-start; gap: 8px"><button>A</button><button>B</button></tec-card-footer>
+      <tec-card-footer style="justify-content: flex-end"><button>C</button></tec-card-footer>
     </tec-card>`)
-    const [a, b] = [...card.querySelectorAll("button")].map((x) => x.getBoundingClientRect())
+    expect(getComputedStyle(card.querySelector("tec-card-footer")!).flexDirection).toBe("column")
+    const [a, b] = [...card.querySelectorAll("tec-card-footer:first-of-type button")].map((x) => x.getBoundingClientRect())
     expect(b!.top - a!.bottom).toBe(8)
+    expect(a!.left).toBe(card.getBoundingClientRect().left + 24)
+    const [x, y] = [...card.querySelectorAll("i")].map((i) => i.getBoundingClientRect())
+    expect(y!.top).toBe(x!.top)
+    expect(y!.left - x!.right).toBe(10)
+    expect(Math.round(x!.width)).toBe(Math.round((300 - 48 - 10) / 2))
+    const c = card.querySelector("tec-card-footer:last-of-type button")!.getBoundingClientRect()
+    expect(Math.round(c.right)).toBe(Math.round(card.getBoundingClientRect().right - 24))
   })
 
   it("removes the top padding when an image comes first and pads bordered sections", async () => {
@@ -77,8 +87,8 @@ describe("tec-card", () => {
     </tec-card>`)
     expect(card.matches(":state(image-first)")).toBe(true)
     expect(getComputedStyle(base(card)).paddingTop).toBe("0px")
-    expect(px(getComputedStyle(card.querySelector("tec-card-header")!).paddingBottom)).toBe(24)
-    expect(px(getComputedStyle(card.querySelector("tec-card-footer")!).paddingTop)).toBe(24)
+    expect(px(getComputedStyle(base(card.querySelector("tec-card-header")!)).paddingBottom)).toBe(24)
+    expect(px(getComputedStyle(base(card.querySelector("tec-card-footer")!)).paddingTop)).toBe(24)
     expect(getComputedStyle(card.querySelector("img")!).borderTopLeftRadius).not.toBe("0px")
   })
 

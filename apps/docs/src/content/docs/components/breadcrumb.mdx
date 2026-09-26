@@ -101,10 +101,6 @@ The list follows `dir="rtl"` on any ancestor and the chevrons mirror. Translate 
 - `<tec-breadcrumb-page>` is exposed as a disabled link with `aria-current="page"` — the pattern announced as "current page". A `<tec-breadcrumb-link>` in the last item gets the same treatment automatically (`aria-current="page"`, not followed).
 - Separators and the ellipsis are hidden from assistive technology. When the ellipsis is a menu trigger, the trigger needs an `aria-label`.
 
-## API Reference
-
-<ApiReference tags={["tec-breadcrumb", "tec-breadcrumb-list", "tec-breadcrumb-item", "tec-breadcrumb-link", "tec-breadcrumb-page", "tec-breadcrumb-separator", "tec-breadcrumb-ellipsis"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -228,3 +224,7 @@ Leave breadcrumbs off top-level pages; a trail with no parent only repeats the p
 A disabled button is announced as an unavailable action, not as the current location; `tec-breadcrumb-page` carries `aria-current="page"` and the breadcrumb's text colour.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-breadcrumb", "tec-breadcrumb-list", "tec-breadcrumb-item", "tec-breadcrumb-link", "tec-breadcrumb-page", "tec-breadcrumb-separator", "tec-breadcrumb-ellipsis"]} />

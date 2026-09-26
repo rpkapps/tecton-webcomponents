@@ -86,10 +86,6 @@ tec-canvas
 - `tec-canvas-legend` is a `list` of `listitem`s, so assistive technology reads the symbol names in order; the swatches are hidden from it. Name the list with `aria-label` ("Legend").
 - The surface is yours: give an interactive map or view its own accessible name and keyboard support, and offer the essential information in text as well.
 
-## API Reference
-
-<ApiReference tags={["tec-canvas", "tec-canvas-surface", "tec-canvas-overlay", "tec-canvas-toolbar", "tec-canvas-legend", "tec-canvas-legend-item"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -196,3 +192,7 @@ A hand-placed box swallows every drag that starts in its padding, has no `toolba
 The surface is absolutely positioned, so the canvas has no content height of its own: in a wrapper without a definite height it collapses to zero. Put it in a flex column or a region of definite height, or give it a height.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-canvas", "tec-canvas-surface", "tec-canvas-overlay", "tec-canvas-toolbar", "tec-canvas-legend", "tec-canvas-legend-item"]} />

@@ -102,6 +102,13 @@
 }
 
 @layer components {
+  /* Scrollable table wrappers are focusable while they overflow (site.ts). */
+  .typeset-scroll:focus-visible {
+    outline: 2px solid var(--tec-ring);
+    outline-offset: 2px;
+    border-radius: var(--tec-radius-sm);
+  }
+
   /* Tecton typography: headings are weight 500 (Figtree Medium), not 600. */
   .typeset :where(h1, h2, h3, h4) {
     font-weight: 500;

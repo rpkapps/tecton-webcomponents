@@ -4,7 +4,7 @@ description: Use the Empty component to display an empty state.
 tags: ["tec-empty", "tec-empty-header", "tec-empty-media", "tec-empty-title", "tec-empty-description", "tec-empty-content"]
 ---
 
-<ComponentPreview name="empty-demo" class="min-h-96" />
+<ComponentPreview name="empty-demo" class="h-96 p-0!" />
 
 ## Usage
 
@@ -42,33 +42,33 @@ tec-empty
 
 Use `variant="outline"` for a dashed outline around the empty state.
 
-<ComponentPreview name="empty-outline" class="min-h-96" />
+<ComponentPreview name="empty-outline" class="h-96 p-6! md:p-10!" />
 
 ## Background
 
 Use `variant="muted"` for a faint muted background, or colour the `base` part yourself (`[&::part(base)]:bg-…`).
 
-<ComponentPreview name="empty-background" class="min-h-96" />
+<ComponentPreview name="empty-background" class="h-96 p-0!" />
 
 ## Avatar
 
 `tec-empty-media` with the default variant shows an avatar at its own size.
 
-<ComponentPreview name="empty-avatar" class="min-h-96" />
+<ComponentPreview name="empty-avatar" class="h-96 p-0!" />
 
 ## Avatar Group
 
-<ComponentPreview name="empty-avatar-group" class="min-h-96" />
+<ComponentPreview name="empty-avatar-group" class="h-96 p-0!" />
 
 ## InputGroup
 
 Put an [input group](/docs/components/input-group) in `tec-empty-content`, for example a search field on a "not found" page.
 
-<ComponentPreview name="empty-input-group" class="min-h-96" />
+<ComponentPreview name="empty-input-group" class="h-96 p-0!" />
 
 ## RTL
 
-<ComponentPreview name="empty-rtl" direction="rtl" class="min-h-96" />
+<ComponentPreview name="empty-rtl" direction="rtl" class="min-h-72" />
 
 ## Keyboard interactions
 
@@ -80,10 +80,6 @@ The empty state itself is not focusable; its buttons, links and inputs are in th
 - Media is decorative: mark icons `aria-hidden="true"` and give avatars an empty `alt` unless the picture adds information.
 - When an empty state replaces content after a user action (a search with no results), announce it — for example put the description in a `role="status"` region.
 - Links in `tec-empty-description` are underlined, so they are recognisable without colour.
-
-## API Reference
-
-<ApiReference tags={["tec-empty", "tec-empty-header", "tec-empty-media", "tec-empty-title", "tec-empty-description", "tec-empty-content"]} />
 
 ## Usage guidelines
 
@@ -200,3 +196,7 @@ Name the next step: one primary button in `tec-empty-content`, at most one secon
 The rounded muted tile and the 24px icon size come with the `icon` variant only; the default variant is a transparent box, so the icon renders at its own size with no surface behind it.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-empty", "tec-empty-header", "tec-empty-media", "tec-empty-title", "tec-empty-description", "tec-empty-content"]} />

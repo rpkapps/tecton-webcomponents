@@ -195,3 +195,26 @@ describe("tec-button under a document reset", () => {
     expect(inner(el).getBoundingClientRect().width).toBe(200)
   })
 })
+
+describe("tec-button custom properties", () => {
+  it("--tec-button-radius / -background / -foreground / -shadow / -padding-inline style the box", async () => {
+    const el = await fixture<TecButton>(html`<tec-button
+      style="--tec-button-radius: 9999px; --tec-button-background: rgb(1, 2, 3); --tec-button-foreground: rgb(4, 5, 6); --tec-button-shadow: 0 1px 2px rgb(0, 0, 0); --tec-button-padding-inline: 0px"
+      >Pill</tec-button
+    >`)
+    const cs = getComputedStyle(inner(el))
+    expect(cs.borderTopLeftRadius).toBe("9999px")
+    expect(cs.backgroundColor).toBe("rgb(1, 2, 3)")
+    expect(cs.color).toBe("rgb(4, 5, 6)")
+    expect(cs.boxShadow).toContain("rgb(0, 0, 0) 0px 1px 2px")
+    expect(cs.paddingInlineStart).toBe("0px")
+  })
+
+  it("keeps the focus ring together with --tec-button-shadow", async () => {
+    const el = await fixture<HTMLElement>(html`<div><input /><tec-button style="--tec-button-shadow: 0 1px 2px rgb(0, 0, 0)">Go</tec-button></div>`)
+    el.querySelector("input")!.focus()
+    await userEvent.keyboard("{Tab}")
+    const shadow = getComputedStyle(inner(el.querySelector("tec-button")!)).boxShadow
+    expect(shadow.split("px, ").length).toBeGreaterThan(1)
+  })
+})

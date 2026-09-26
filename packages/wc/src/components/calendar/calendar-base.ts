@@ -32,6 +32,7 @@ import {
   formatIsoDate,
   localeCalendar,
   localTimeZone,
+  navLabel,
   parseIsoDate,
   resolveLocale,
   toGregorian,
@@ -127,11 +128,11 @@ export abstract class CalendarBase extends FormControlMixin(TectonElement) {
   /** Accessible name of the calendar (the visible month is appended). */
   @property() label = ""
 
-  /** Accessible name of the previous button. */
-  @property({ attribute: "previous-label" }) previousLabel = "Previous"
+  /** Accessible name of the previous button. Default: "Previous" in the calendar's locale. */
+  @property({ attribute: "previous-label" }) previousLabel = ""
 
-  /** Accessible name of the next button. */
-  @property({ attribute: "next-label" }) nextLabel = "Next"
+  /** Accessible name of the next button. Default: "Next" in the calendar's locale. */
+  @property({ attribute: "next-label" }) nextLabel = ""
 
   /** Focused day inside the grid (in the display calendar). */
   @state() protected focused!: CalendarDate
@@ -730,7 +731,7 @@ export abstract class CalendarBase extends FormControlMixin(TectonElement) {
             exportparts="base: previous-base"
             variant=${this.buttonVariant}
             size="icon"
-            aria-label=${this.previousLabel}
+            aria-label=${this.previousLabel || navLabel(this.resolvedLocale, "previous")}
             ?disabled=${this.#isPreviousDisabled()}
             @click=${(e: Event) => this.#onNavClick(-1, e)}
             >${icon(ChevronLeft, { size: 16 })}</tec-button
@@ -741,7 +742,7 @@ export abstract class CalendarBase extends FormControlMixin(TectonElement) {
             exportparts="base: next-base"
             variant=${this.buttonVariant}
             size="icon"
-            aria-label=${this.nextLabel}
+            aria-label=${this.nextLabel || navLabel(this.resolvedLocale, "next")}
             ?disabled=${this.#isNextDisabled()}
             @click=${(e: Event) => this.#onNavClick(1, e)}
             >${icon(ChevronRight, { size: 16 })}</tec-button

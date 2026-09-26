@@ -179,3 +179,19 @@ describe("tec-tabs", () => {
     expect(shown(el)).toEqual(["settings"])
   })
 })
+
+describe("tec-tabs-list layout", () => {
+  it("forwards layout classes set on the host (w-full / grid columns) to the track", async () => {
+    const el = await fixture<HTMLElement>(html`<div style="width: 400px">
+      <tec-tabs>
+        <tec-tabs-list style="display: grid; width: 100%; grid-template-columns: 1fr 1fr">
+          <tec-tabs-trigger value="a">A</tec-tabs-trigger><tec-tabs-trigger value="b">B</tec-tabs-trigger>
+        </tec-tabs-list>
+      </tec-tabs>
+    </div>`)
+    const [a, b] = [...el.querySelectorAll("tec-tabs-trigger")].map((t) => t.getBoundingClientRect())
+    expect(el.querySelector("tec-tabs-list")!.getBoundingClientRect().width).toBe(400)
+    expect(Math.round(a!.width)).toBe(Math.round(b!.width))
+    expect(Math.round(a!.width)).toBeGreaterThan(180)
+  })
+})

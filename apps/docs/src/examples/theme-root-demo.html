@@ -1,13 +1,34 @@
-<tec-theme-root id="theme-root-demo" class="block rounded-lg border border-border p-6" style="--tec-primary: var(--tecton-palette-green-560); --tec-primary-hover: var(--tecton-palette-green-660); --tec-ring: var(--tecton-palette-green-560)">
+<tec-theme-root id="theme-root-demo" class="block rounded-lg border p-6" style="--tec-primary: var(--tecton-palette-green-560); --tec-primary-hover: var(--tecton-palette-green-680); --tec-primary-pressed: var(--tecton-palette-green-680)">
   <div class="flex flex-col items-start gap-4 text-sm">
     <p class="text-muted-foreground">Everything inside this root uses its own <code>--tec-primary</code>.</p>
-    <tec-popover side="bottom" align="start" label="Inside the top layer">
-      <tec-button slot="trigger">Open popover</tec-button>
-      <tec-popover-header>
-        <tec-popover-title>Inside the top layer</tec-popover-title>
-        <tec-popover-description>This panel is shown in the browser's top layer, yet it inherits the root's variables: no portal container is involved.</tec-popover-description>
-      </tec-popover-header>
-      <tec-button size="sm">Primary action</tec-button>
-    </tec-popover>
+    <tec-dialog style="--tec-dialog-max-width: 24rem">
+      <tec-button slot="trigger">Open dialog</tec-button>
+      <tec-dialog-header>
+        <tec-dialog-title>Inside the top layer</tec-dialog-title>
+        <tec-dialog-description>
+          This dialog is painted above the page, yet it stays in the subtree above: it inherits the root's <code>--tec-primary</code> without an overlay container.
+        </tec-dialog-description>
+      </tec-dialog-header>
+      <tec-dialog-footer>
+        <tec-dialog-close>Close</tec-dialog-close>
+        <tec-button>Primary action</tec-button>
+      </tec-dialog-footer>
+    </tec-dialog>
+    <p class="text-muted-foreground" aria-live="polite" data-status>Open the dialog to see where it lands.</p>
   </div>
 </tec-theme-root>
+<script type="module">
+  const root = document.getElementById("theme-root-demo")
+  const dialog = root.querySelector("tec-dialog")
+  const status = root.querySelector("[data-status]")
+  dialog.addEventListener("tec-open-change", (event) => {
+    if (!event.detail.open) {
+      status.textContent = "Open the dialog to see where it lands."
+      return
+    }
+    const owner = dialog.closest("tec-theme-root")
+    status.textContent = owner
+      ? "In the top layer, still inside tec-theme-root: no overlay container needed."
+      : "Outside the theme root."
+  })
+</script>

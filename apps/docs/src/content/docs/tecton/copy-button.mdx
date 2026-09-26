@@ -59,10 +59,6 @@ The icon precedes the label in the reading direction. Translate the names with `
 - Without a label the button names itself "Copy", then "Copied" or "Copy failed" while the feedback lasts. An `aria-label` on the element wins over that (name the object when several buttons sit side by side: "Copy Top Balder").
 - The outcome is announced through one polite live region at the end of the document, shared by every copy button, so button groups and toolbars get no extra nodes.
 
-## API Reference
-
-<ApiReference tags={["tec-copy-button"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -179,3 +175,7 @@ copyButton.addEventListener("tec-copy", () => track("copy"))
 The element already draws the copy / check / cross icon, so a slotted icon is drawn twice, switches the size default from `icon-sm` to `sm`, and suppresses the automatic accessible name because the button now has content.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-copy-button"]} />

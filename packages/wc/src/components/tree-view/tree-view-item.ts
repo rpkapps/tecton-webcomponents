@@ -171,7 +171,14 @@ export class TecTreeViewItem extends TectonElement {
 
   #onClick = (event: MouseEvent) => {
     const path = event.composedPath()
-    // Only presses on this row (not on a nested row, not on the end controls).
+    if (this.disabled) return
+    // A click dispatched on the host itself (`item.click()`, assistive technology) presses the row.
+    if (path[0] === this) {
+      this.tree?.focusItem(this)
+      this.tree?.pressItem(this, "pointer")
+      return
+    }
+    // Otherwise only presses on this row (not on a nested row, not on the end controls).
     const row = this.renderRoot.querySelector(".row")
     if (!row || !path.includes(row)) return
     const end = this.renderRoot.querySelector(".end")

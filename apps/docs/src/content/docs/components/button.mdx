@@ -62,7 +62,7 @@ Put icons in the `start` or `end` slot so the padding adjusts to them. Any SVG w
 
 ## Rounded
 
-The element itself is the button's box — background, border, radius and focus ring — so a `rounded-full` class on it rounds the button. The `--tec-button-radius` custom property does the same from a stylesheet, and the inner `<button>` is exposed as the `base` part. See [Styling](/docs/styling).
+Round the button with the `--tec-button-radius` custom property (`9999px` for a pill or a circular icon button). The button's box — background, border, radius and focus ring — is the inner `<button>`, exposed as the `base` part, so utility classes on the element only change its layout (`w-full`, `h-10`, `flex-1`); `rounded-full`, `bg-*`, `text-*` and `shadow-*` have no effect. Use `--tec-button-radius`, `--tec-button-background`, `--tec-button-foreground`, `--tec-button-shadow` and `--tec-button-padding-inline` (see the API reference), or `::part(base)`. See [Styling](/docs/styling).
 
 <ComponentPreview name="button-rounded" />
 
@@ -98,7 +98,7 @@ A button fires the native `click` event for mouse, touch, <Kbd>Enter</Kbd> and <
 
 ## Floating action button
 
-A Tecton FAB is a button recipe: `class="h-10 rounded-full shadow-md"` for the extended form and `size="icon" class="rounded-full shadow-md"` (with an `aria-label`) for the round one. Any `variant` works; `default`, `secondary`, `ghost` and `outline` correspond to the design system's primary, secondary, tertiary and outlined FABs.
+A Tecton FAB is a button recipe: `class="h-10" style="--tec-button-radius: 9999px; --tec-button-shadow: var(--tec-shadow-md)"` for the extended form, and `size="icon"` with the same two custom properties (and an `aria-label`) for the round one. Any `variant` works; `default`, `secondary`, `ghost` and `outline` correspond to the design system's primary, secondary, tertiary and outlined FABs.
 
 <ComponentPreview name="button-fab" />
 
@@ -126,10 +126,6 @@ Buttons use logical properties, so slotted icons and padding follow `dir="rtl"` 
 - `aria-expanded`, `aria-haspopup`, `aria-pressed` and `aria-controls` set on the host are forwarded to the inner control, which is how [overlays](/docs/components/dropdown-menu) wire a slotted trigger.
 - The focus ring is the Tecton 2px ring and stays visible in forced-colours mode.
 
-## API Reference
-
-<ApiReference tags={["tec-button"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -155,7 +151,7 @@ Handle presses with the `click` event, which covers pointer, <Kbd>Enter</Kbd> an
 
 <Do>
 
-Pick the weight with `variant` and the box with `size`; keep `class` on the element for layout (`w-full`, `ms-auto`) and documented recipes (`rounded-full shadow-md`).
+Pick the weight with `variant` and the box with `size`; keep `class` on the element for layout (`w-full`, `ms-auto`, `h-10`) and use the `--tec-button-*` custom properties for its look (radius, colours, shadow).
 
 </Do>
 
@@ -294,3 +290,7 @@ The variant owns colour and the size owns height, padding and icon size: a hand-
 A `div` is not focusable, has no role and does not react to <Kbd>Enter</Kbd> or <Kbd>Space</Kbd>, so keyboard and screen reader users cannot use it.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-button"]} />

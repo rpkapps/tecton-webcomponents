@@ -1,16 +1,20 @@
 import { css } from "lit"
 import { motionSafe } from "../../internal/styles.js"
+import { forwardLayout } from "../card/card.styles.js"
 
 /*
- * `tec-item` draws its box (border, padding, radius, background, focus ring) on the inner
- * `part="base"` — a `<div>`, or an `<a>` with `href`. The base is the flex row that lays out the
- * slotted parts.
+ * `tec-item` is the layout box: its flex row (wrap, alignment, gap) is declared on `:host`, so layout
+ * utilities on the element work as on a `div`. The box (border, padding, radius, background, focus
+ * ring) is the inner `part="base"` — a `<div>`, or an `<a>` with `href` — which fills the host and
+ * inherits the host's layout properties to lay out the slotted parts.
  *
  * The item publishes private custom properties on its host for its parts (media size, content gap,
  * description size, media alignment when a description is present); they inherit into the light DOM.
  * The parts are the layout containers of their own light DOM, so layout utilities on them work.
  */
-export const itemStyles = css`
+export const itemStyles = [
+  forwardLayout,
+  css`
   :host {
     --_tec-item-gap: 0.875rem;
     --_tec-item-padding-inline: 1rem;
@@ -21,6 +25,9 @@ export const itemStyles = css`
     --_tec-item-media-align: auto;
     --_tec-item-media-shift: 0;
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--_tec-item-gap);
     min-width: 0;
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
@@ -44,12 +51,6 @@ export const itemStyles = css`
     --_tec-item-media-shift: 0.125rem;
   }
   .base {
-    display: flex;
-    flex: 1 1 auto;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--_tec-item-gap);
-    min-width: 0;
     padding: var(--_tec-item-padding-block) var(--_tec-item-padding-inline);
     border: 1px solid transparent;
     border-radius: var(--tec-radius-md);
@@ -75,7 +76,8 @@ export const itemStyles = css`
       border-color: CanvasText;
     }
   }
-`
+`,
+]
 
 export const itemTransitionStyles = motionSafe(css`
   .base {

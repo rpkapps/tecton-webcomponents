@@ -12,16 +12,34 @@ export const tabsStyles = css`
 `
 
 export const tabsListStyles = css`
+  /* The host is the layout box (display, direction, gap, justify, grid columns set by the app on the
+     element apply); the track part inherits them and carries the box styles. */
   :host {
     display: inline-flex;
     width: fit-content;
     vertical-align: middle;
-  }
-  .base {
-    display: flex;
-    flex: 1 1 auto;
     align-items: center;
     justify-content: center;
+    gap: 0;
+  }
+  :host(:state(vertical)) {
+    flex-direction: column;
+  }
+  :host([variant="line"]) {
+    gap: 0.25rem;
+  }
+  .base {
+    display: inherit;
+    flex: 1 1 auto;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    grid-template-columns: inherit;
+    grid-auto-flow: inherit;
+    grid-column: 1 / -1;
+    align-items: center;
+    justify-content: inherit;
+    gap: inherit;
+    width: 100%;
     height: 2.75rem;
     padding: 0.375rem;
     border-radius: var(--tec-radius-md);
@@ -29,11 +47,9 @@ export const tabsListStyles = css`
     color: var(--tec-muted-foreground);
   }
   :host(:state(vertical)) .base {
-    flex-direction: column;
     height: fit-content;
   }
   :host([variant="line"]) .base {
-    gap: 0.25rem;
     padding: 0;
     border-radius: 0;
     background-color: transparent;

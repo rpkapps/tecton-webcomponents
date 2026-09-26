@@ -4,7 +4,7 @@ description: Displays a callout for user attention.
 tags: ["tec-alert", "tec-alert-title", "tec-alert-description"]
 ---
 
-<ComponentPreview name="alert-demo" />
+<ComponentPreview name="alert-demo" class="sm:h-72 p-6!" />
 
 ## Usage
 
@@ -35,25 +35,25 @@ tec-alert
 
 A basic alert with an icon, title and description.
 
-<ComponentPreview name="alert-basic" />
+<ComponentPreview name="alert-basic" class="sm:h-72 p-6!" />
 
 ## Destructive
 
 Use `variant="destructive"` for an error.
 
-<ComponentPreview name="alert-destructive" />
+<ComponentPreview name="alert-destructive" class="sm:h-72 p-6!" />
 
 ## Action
 
 Put a button in the `action` slot. It sits in the top-end corner, and the alert keeps its text clear of it. Ghost and link buttons there take the alert's text colour.
 
-<ComponentPreview name="alert-action" />
+<ComponentPreview name="alert-action" class="sm:h-72 p-6!" />
 
 ## Custom Colors
 
 Colour the alert box through its `base` part with [palette](/docs/theming#palette) steps, such as `[&::part(base)]:bg-yellow-120` (a step is a contrast level, so no `dark:` variant is needed). Prefer a severity `variant` whenever the colour means something.
 
-<ComponentPreview name="alert-colors" />
+<ComponentPreview name="alert-colors" class="sm:h-72 p-6!" />
 
 ## Severity
 
@@ -77,7 +77,7 @@ Put the action and a dismiss button in the `action` slot and hide the alert (`hi
 
 The alert uses logical properties: the icon, the text and the action corner mirror with `dir="rtl"` on any ancestor.
 
-<ComponentPreview name="alert-rtl" direction="rtl" />
+<ComponentPreview name="alert-rtl" direction="rtl" class="sm:h-72 p-6!" />
 
 ## Keyboard interactions
 
@@ -97,10 +97,6 @@ An alert is not focusable. Buttons in its `action` slot, and the close button of
 - The close button of a `dismissible` alert is a real button with the accessible name `dismiss-label`. An icon-only action button needs an `aria-label`.
 - A decision that blocks the user belongs in an [Alert Dialog](/docs/components/alert-dialog), which traps focus; an alert never takes focus.
 - Borders stay visible in forced-colours mode.
-
-## API Reference
-
-<ApiReference tags={["tec-alert", "tec-alert-title", "tec-alert-description"]} />
 
 ## Usage guidelines
 
@@ -255,3 +251,7 @@ Only the `icon` slot creates the icon column: an icon inside the title is an uns
 The alert reserves its top-end corner only for the `action` slot, so a bare button joins the text flow under the title and keeps the default ghost colour instead of the alert's.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-alert", "tec-alert-title", "tec-alert-description"]} />

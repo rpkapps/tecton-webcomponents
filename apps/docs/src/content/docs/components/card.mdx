@@ -4,7 +4,7 @@ description: Displays a card with header, content, and footer.
 tags: ["tec-card", "tec-card-header", "tec-card-title", "tec-card-description", "tec-card-action", "tec-card-content", "tec-card-footer"]
 ---
 
-<ComponentPreview name="card-demo" class="min-h-[30rem]" />
+<ComponentPreview name="card-demo" class="h-[30rem]" />
 
 ## Usage
 
@@ -40,35 +40,35 @@ tec-card
 └── tec-card-footer
 ```
 
-The parts are the layout containers of their own children, so layout classes on them work as on a `div`: `<tec-card-footer class="flex-col gap-2">` stacks the footer's buttons. The header switches to two columns when it holds a `tec-card-action`, which spans the title and description rows at the end of the header.
+Each part is the layout box of its own children, so layout classes on it work as on a `div`: `<tec-card-footer class="flex-col gap-2">` stacks the footer's buttons, `<tec-card-content class="grid grid-cols-2">` makes a grid. The inset comes from `--tec-card-spacing`; don't add padding classes. The header switches to two columns when it holds a `tec-card-action`, which spans the title and description rows at the end of the header.
 
 ## Size
 
 Set `size="sm"` for a denser card: 16px spacing instead of 24px, and a smaller title.
 
-<ComponentPreview name="card-small" class="min-h-96" />
+<ComponentPreview name="card-small" class="h-96" />
 
 ## Spacing
 
 Besides `size`, the `--tec-card-spacing` custom property sets the gap between the parts, the card's top and bottom padding and the inline inset of every part. Set it on the card, with a `style` attribute, a stylesheet or a Tailwind class such as `[--tec-card-spacing:2rem]`.
 
-<ComponentPreview name="card-spacing" class="min-h-[34rem]" />
+<ComponentPreview name="card-spacing" class="h-[34rem]" />
 
-Use negative margins with `-mx-(--tec-card-spacing)` to make content go edge to edge while it stays aligned with the card inset. When the edge-to-edge content sits above a footer, put `-mb-(--tec-card-spacing)` on `tec-card-content` to remove the gap. A header or footer with a border (`class="border-b border-border"` / `class="border-t border-border"`) gets the matching padding on that side.
+Use negative margins with `-mx-(--tec-card-spacing)` to make content go edge to edge while it stays aligned with the card inset. When the edge-to-edge content sits above a footer, put `-mb-(--tec-card-spacing)` on `tec-card-content` to remove the gap. A header or footer with a border (`class="border-b"` / `class="border-t"`) gets the matching padding on that side.
 
-<ComponentPreview name="card-edge-to-edge" class="min-h-[24rem]" />
+<ComponentPreview name="card-edge-to-edge" class="h-[24rem]" />
 
 ## Image
 
 Put an `<img>` first in the card, before the header: the card drops its top padding and the image takes the card's top corners.
 
-<ComponentPreview name="card-image" class="min-h-[32rem]" />
+<ComponentPreview name="card-image" class="h-[32rem]" />
 
 ## RTL
 
 The parts use logical properties: the action moves to the left edge and the inset mirrors under `dir="rtl"` on any ancestor.
 
-<ComponentPreview name="card-rtl" direction="rtl" class="min-h-[30rem]" />
+<ComponentPreview name="card-rtl" class="h-[30rem]" direction="rtl" />
 
 ## Keyboard interactions
 
@@ -80,10 +80,6 @@ A card is a static container and takes no focus; keyboard interaction belongs to
 - `tec-card-title` is plain text by default. Set `level` (`<tec-card-title level="3">`) to expose it as a heading of that level, so cards in a list can be navigated by heading — or put a heading element inside it.
 - Do not make a whole card clickable with a `click` listener: it gets no role, no tab stop and no <Kbd>Enter</Kbd>. Put a link or a button inside it instead.
 - The ring around the card is a translucent box shadow; under forced colours it becomes a system-coloured outline.
-
-## API Reference
-
-<ApiReference tags={["tec-card", "tec-card-header", "tec-card-title", "tec-card-description", "tec-card-action", "tec-card-content", "tec-card-footer"]} />
 
 ## Usage guidelines
 
@@ -118,7 +114,7 @@ Set density with `size="sm"`, or with `--tec-card-spacing` on the card when a de
 
 <Do>
 
-Divide sections with `class="border-b border-border"` on `tec-card-header` or `class="border-t border-border"` on `tec-card-footer`; the card adds the matching padding itself.
+Divide sections with `class="border-b"` on `tec-card-header` or `class="border-t"` on `tec-card-footer`; the card adds the matching padding itself.
 
 </Do>
 
@@ -184,7 +180,7 @@ The surface, ring, radius and padding are drawn inside the card, so `p-6` and `r
 
 ```html
 <tec-card>
-  <tec-card-header class="border-b border-border pb-4">
+  <tec-card-header class="border-b pb-4">
     <tec-card-title>Alternative B</tec-card-title>
   </tec-card-header>
   <tec-card-content class="px-8">4 wells, 1 template</tec-card-content>
@@ -197,7 +193,7 @@ The surface, ring, radius and padding are drawn inside the card, so `p-6` and `r
 
 ```html
 <tec-card>
-  <tec-card-header class="border-b border-border">
+  <tec-card-header class="border-b">
     <tec-card-title>Alternative B</tec-card-title>
   </tec-card-header>
   <tec-card-content>4 wells, 1 template</tec-card-content>
@@ -206,6 +202,10 @@ The surface, ring, radius and padding are drawn inside the card, so `p-6` and `r
 
 </Correct>
 
-The parts take their inset from `--tec-card-spacing` and ignore padding classes, and a bordered header already gets the matching bottom padding; set `--tec-card-spacing` on the card when you need other spacing, so every part stays aligned.
+The parts draw their inset from `--tec-card-spacing` inside the element, so a padding class adds a second inset on top of it, and a bordered header already gets the matching bottom padding; set `--tec-card-spacing` on the card when you need other spacing, so every part stays aligned.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-card", "tec-card-header", "tec-card-title", "tec-card-description", "tec-card-action", "tec-card-content", "tec-card-footer"]} />

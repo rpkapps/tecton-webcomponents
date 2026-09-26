@@ -54,6 +54,7 @@ export class TecCommand extends TectonElement {
         display: flex;
         flex-direction: column;
         width: 100%;
+        height: 100%;
         min-width: 0;
         border-radius: var(--tec-command-radius, var(--tec-radius-xl));
         overflow: hidden;
@@ -185,9 +186,11 @@ export class TecCommand extends TectonElement {
     const input = this.inputElement
     if (!input || !this.#fromInput(event)) return
     this.search = input.input?.value ?? input.value
-    // Like React Aria's Autocomplete: typing filters; the arrow keys move into the results.
+    // Like React Aria's Autocomplete around a menu: typing highlights the first match, so Enter runs it;
+    // clearing the search clears the highlight.
     await this.updateComplete
-    this.#nav.update()
+    if (this.search) this.#nav.first()
+    else this.#nav.clear()
   }
 
   #onKeyDown = (event: KeyboardEvent) => {

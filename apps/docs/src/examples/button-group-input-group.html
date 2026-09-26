@@ -21,8 +21,7 @@
   voice.addEventListener("click", () => {
     const on = voice.getAttribute("aria-pressed") !== "true"
     voice.setAttribute("aria-pressed", String(on))
-    voice.classList.toggle("bg-saffron-120", on)
-    voice.classList.toggle("text-saffron-830", on)
+    voice.variant = on ? "secondary" : "ghost"
     input.disabled = on
     input.placeholder = on ? "Record and send audio..." : "Send a message..."
   })

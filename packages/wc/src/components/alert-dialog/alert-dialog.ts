@@ -3,7 +3,7 @@ import { property } from "lit/decorators.js"
 import { animationStyles } from "../../internal/animations.js"
 import { hostStyles } from "../../internal/styles.js"
 import { dialogPanelStyles } from "../dialog/dialog.styles.js"
-import { MODAL_TAGS, TecModalElement } from "../dialog/modal.js"
+import { lastInteractionWasPointer, MODAL_TAGS, TecModalElement } from "../dialog/modal.js"
 import { ModalCloseBase, ModalSectionBase, ModalTextBase, ModalTitleBase } from "../dialog/modal-parts.js"
 import { modalStyles } from "../dialog/modal.styles.js"
 import {
@@ -30,7 +30,8 @@ interface SizedPart extends HTMLElement {
  * A modal dialog with `role="alertdialog"` that interrupts the user and expects an answer. Unlike
  * `tec-dialog` it has no ✕ button and a press on the overlay does not close it; Escape, the cancel
  * part and the action part do. Opening moves focus to the cancel part (the least destructive
- * choice), Tab stays inside, and closing returns focus to the trigger.
+ * choice) when it was opened with the keyboard, and to the dialog itself after a pointer press (no
+ * focus ring; Tab then reaches Cancel first). Tab stays inside, and closing returns focus to the trigger.
  *
  * @summary A modal dialog that interrupts the user with important content and expects a response.
  *
@@ -69,7 +70,9 @@ export class TecAlertDialog extends TecModalElement {
 
   protected override initialFocus(): HTMLElement | null {
     const own = (sel: string) => [...this.querySelectorAll<HTMLElement>(sel)].find((el) => el.closest(MODAL_TAGS) === this) ?? null
-    return own("[autofocus]") ?? own("tec-alert-dialog-cancel") ?? this.dialog
+    // Keyboard open: the least destructive choice. Pointer open: the dialog itself (no focus ring),
+    // like React Aria; Tab then reaches Cancel first.
+    return own("[autofocus]") ?? (lastInteractionWasPointer() ? null : own("tec-alert-dialog-cancel")) ?? this.dialog
   }
 
   protected override syncLabelling(): void {
@@ -135,7 +138,8 @@ export class TecAlertDialogFooter extends AlertDialogSizedSection {
  * @tag tec-alert-dialog-media
  * @slot - An icon (sized to 2rem) or an image.
  * @csspart base - The 4rem tile.
- * @cssprop --tec-alert-dialog-media-background - Background of the tile (default `--tec-muted`). The icon uses the element's `color`.
+ * @cssprop --tec-alert-dialog-media-background - Background of the tile (default `--tec-muted`).
+ * @cssprop --tec-alert-dialog-media-foreground - Colour of the icon (default: the inherited text colour).
  * @cssstate size-sm - The alert dialog has `size="sm"`.
  */
 export class TecAlertDialogMedia extends AlertDialogSizedSection {

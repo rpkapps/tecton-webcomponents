@@ -120,6 +120,20 @@ describe("tec-item", () => {
     expect(errors).toEqual([])
   })
 
+  it("is the layout box: layout styles on the element arrange its parts", async () => {
+    const item = await fixture<TecItem>(html`<tec-item href="#" style="width: 300px; flex-direction: column; align-items: flex-start; gap: 4px">
+      <tec-item-media>M</tec-item-media>
+      <tec-item-content><tec-item-title>T</tec-item-title></tec-item-content>
+    </tec-item>`)
+    expect(getComputedStyle(base(item)).flexDirection).toBe("column")
+    const media = item.querySelector("tec-item-media")!.getBoundingClientRect()
+    const content = item.querySelector("tec-item-content")!.getBoundingClientRect()
+    expect(content.top - media.bottom).toBe(4)
+    expect(media.left).toBe(content.left)
+    expect(item.getBoundingClientRect().width).toBe(300)
+    expect(base(item).getBoundingClientRect().width).toBe(300)
+  })
+
   it("puts header and footer on full-width rows", async () => {
     const item = await fixture<TecItem>(html`<tec-item style="width: 400px">
       <tec-item-header>H</tec-item-header>

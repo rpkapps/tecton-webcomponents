@@ -73,6 +73,20 @@ The actions overflow by the [Overflow](/docs/tecton/overflow) rules first, then 
 
 A visually hidden polite live region always announces the full text ("12 of 340 wells selected"). It is filled a moment after the bar appears and after each change, so the first selection is announced too (a screen reader ignores a live region that appears with its content already in it) and a burst of selection changes is announced once.
 
+## Localisation
+
+The summary texts are templates: `selected-text` (the full summary and the live announcement), `short-text` (below 32rem), `clear-text` (the Clear button) and `clear-label` (the icon-only Clear button). `{count}`, `{total}` and `{label}` are replaced, and numbers are formatted for the element's language (the closest `lang`).
+
+```html
+<tec-action-bar-selection
+  count="2" total="5" clearable
+  selected-text="تم تحديد {count} من {total}"
+  short-text="تم تحديد {count}"
+  clear-text="مسح"
+  clear-label="مسح التحديد"
+></tec-action-bar-selection>
+```
+
 ## RTL
 
 <ComponentPreview name="action-bar-rtl" direction="rtl" align="start" />
@@ -95,10 +109,6 @@ A visually hidden polite live region always announces the full text ("12 of 340 
 - The visible summary is hidden from assistive technology; the live region speaks the full text at every width. The compact Clear button is named by `clear-label` ("Clear selection").
 - The bar is a dismiss layer only while focus is inside it: menus opened from it take Escape first, and Escape elsewhere on the page is not the bar's.
 - When the bar is hidden while it holds focus, move focus back to the table or form it acts on.
-
-## API Reference
-
-<ApiReference tags={["tec-action-bar", "tec-action-bar-selection", "tec-action-bar-message", "tec-action-bar-actions"]} />
 
 ## Usage guidelines
 
@@ -230,3 +240,7 @@ Only a `<tec-overflow-item>` can be measured and moved into the More menu, so un
 The bar is its own size container, so a fit-content inline size resolves from its padding alone: the toolbar measures no room and collapses every action into the More menu.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-action-bar", "tec-action-bar-selection", "tec-action-bar-message", "tec-action-bar-actions"]} />

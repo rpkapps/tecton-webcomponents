@@ -42,9 +42,15 @@ Use `emphasis` for the three Tecton divider levels: `subtle`, `default` and `str
 
 ## With label
 
-Text inside the separator renders a labelled divider: a rule on each side of the label (`align-label="start"` or `"end"` shortens the rule before or after it). A separator's content is presentational for assistive technology, so a labelled divider drops the `separator` role: the rules are decorative and the label is read as ordinary text.
+Text inside the separator renders a labelled divider: a rule on each side of the label. A separator's content is presentational for assistive technology, so a labelled divider drops the `separator` role: the rules are decorative and the label is read as ordinary text.
 
 <ComponentPreview name="separator-label" />
+
+### Label position
+
+`align-label="start"` or `"end"` shortens the rule before or after the label.
+
+<ComponentPreview name="separator-label-align" />
 
 ## RTL
 
@@ -60,10 +66,6 @@ A separator is not focusable and has no keyboard interaction.
 - `decorative` removes the role for a rule that is only visual — for example between items that a list, a toolbar or a menu already structures.
 - A labelled divider has no role; its label is read as text in place.
 - The rule stays visible in forced-colours mode.
-
-## API Reference
-
-<ApiReference tags={["tec-separator"]} />
 
 ## Usage guidelines
 
@@ -216,3 +218,7 @@ A vertical separator stretches to the height of its flex row; `h-4` freezes it a
 The children of a separator are presentational, so assistive technology drops the label of a `role="separator"` row; the labelled divider keeps the label readable.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-separator"]} />

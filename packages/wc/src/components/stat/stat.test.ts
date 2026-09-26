@@ -57,4 +57,15 @@ describe("tec-stat", () => {
     expect(a!.getBoundingClientRect().top).toBe(b!.getBoundingClientRect().top)
     expect(b!.getBoundingClientRect().left - a!.getBoundingClientRect().right).toBe(24)
   })
+
+  it("is the layout box, so layout styles on the element apply", async () => {
+    const group = await fixture<HTMLElement>(html`<tec-stat-group style="width:400px;grid-template-columns:1fr;row-gap:40px">
+      <tec-stat style="gap:10px"><tec-stat-label>a</tec-stat-label><tec-stat-value>1</tec-stat-value></tec-stat><tec-stat><tec-stat-value>2</tec-stat-value></tec-stat>
+    </tec-stat-group>`)
+    const [a, b] = [...group.querySelectorAll("tec-stat")]
+    expect(b!.getBoundingClientRect().top - a!.getBoundingClientRect().bottom).toBe(40)
+    const label = a!.querySelector("tec-stat-label")!
+    const value = a!.querySelector("tec-stat-value")!
+    expect(Math.round(value.getBoundingClientRect().top - label.getBoundingClientRect().bottom)).toBe(10)
+  })
 })

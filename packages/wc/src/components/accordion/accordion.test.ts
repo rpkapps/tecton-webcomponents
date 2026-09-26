@@ -212,6 +212,9 @@ describe("tec-accordion", () => {
     expect(item.open).toBe(true)
     expect(await axNode(item.content!)).toMatchObject({ name: "Accordion Label" })
     await expectAccessible(el)
+    const dark = await fixture<HTMLElement>(html`<div style="background: var(--tec-background); padding: 8px">${el.cloneNode(true)}</div>`, { theme: "dark" })
+    await settle(dark.querySelector("tec-accordion")!)
+    await expectAccessible(dark)
   })
 
   it("programmatic open in single mode closes the other items", async () => {

@@ -110,10 +110,6 @@ The row, the avatar and the end alignment use logical directions, so they mirror
 - For an in-progress turn, add a [`<tec-marker role="status">`](/docs/components/marker) so assistive technology announces it as it appears.
 - The `align` attribute is read, not reflected, and its legacy `text-align` hint is neutralised: text inside an end-aligned message keeps the reading direction's alignment.
 
-## API Reference
-
-<ApiReference tags={["tec-message", "tec-message-group", "tec-message-avatar", "tec-message-content", "tec-message-header", "tec-message-footer"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -226,3 +222,7 @@ The reversed row is only half of the side: `align="end"` also moves the bubbles,
 The avatar lifts itself only above a `tec-message-footer`, and only the footer follows the message side and drops its padding next to a ghost bubble, so a plain `div` leaves the avatar and the actions misaligned.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-message", "tec-message-group", "tec-message-avatar", "tec-message-content", "tec-message-header", "tec-message-footer"]} />

@@ -141,7 +141,7 @@ keys to choose."; set `countMessage` to a function to say it in the page's langu
 opens in the top layer, so no `overflow` around the chat clips it, and flips below the field when
 there is no room above.
 
-<ComponentPreview name="composer-commands" class="min-h-[28rem]" />
+<ComponentPreview name="composer-commands" />
 
 ## RTL
 
@@ -187,10 +187,6 @@ Nothing sends while an IME composes: the <Kbd>Enter</Kbd> that confirms a conver
 - Pair the composer with a transcript that is a `role="log"` with `aria-busy` while a reply
   streams, and keep `tec-composer-status-message` for sent, stopped and failed.
 - The focus ring of the field, the buttons and the chips stays visible in forced-colours mode.
-
-## API Reference
-
-<ApiReference tags={["tec-composer", "tec-composer-field", "tec-composer-input", "tec-composer-toolbar", "tec-composer-submit", "tec-composer-hint", "tec-composer-status-message", "tec-composer-attachments", "tec-composer-attachment", "tec-composer-suggestions", "tec-composer-suggestion", "tec-composer-commands", "tec-composer-command"]} />
 
 ## Usage guidelines
 
@@ -318,3 +314,7 @@ button.setAttribute("aria-label", busy ? "Stop" : "Send")
 Screen readers do not reliably announce a name that changes under focus, and a click landing as the state flips stops a reply the user meant to send after; `tec-composer-submit` renders two named buttons and moves focus between them.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-composer", "tec-composer-field", "tec-composer-input", "tec-composer-toolbar", "tec-composer-submit", "tec-composer-hint", "tec-composer-status-message", "tec-composer-attachments", "tec-composer-attachment", "tec-composer-suggestions", "tec-composer-suggestion", "tec-composer-commands", "tec-composer-command"]} />

@@ -81,14 +81,21 @@ export const sheetStyles = css`
   }
 `
 
+/* The host is the layout box (flex column, gap); the padded part inherits the layout. */
 export const sheetHeaderStyles = css`
   :host {
-    display: block;
-  }
-  .base {
     display: flex;
     flex-direction: column;
     gap: 0.375rem;
+  }
+  .base {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    gap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
     padding: 1rem;
   }
 `
@@ -97,13 +104,19 @@ export const sheetHeaderStyles = css`
    preflight zeroes margins and beats :host rules), hence !important behind a custom property. */
 export const sheetFooterStyles = css`
   :host {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     margin-block-start: var(--tec-sheet-footer-margin, auto) !important;
   }
   .base {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    flex: 1 1 auto;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    gap: inherit;
+    align-items: inherit;
+    justify-content: inherit;
     padding: 1rem;
   }
 `

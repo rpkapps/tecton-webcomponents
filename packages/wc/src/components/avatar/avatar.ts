@@ -155,14 +155,18 @@ export class TecAvatarFallback extends TectonElement {
 
 /**
  * Sits on the bottom end corner of the avatar and scales with its size (the icon is hidden in `sm`
- * avatars). Recolour it with a Tecton colour class (`class="bg-green-560"`). The dot is visual only:
- * set `label` (e.g. "Online") to have it announced.
+ * avatars). Recolour it with `--tec-avatar-badge-color`, using a Tecton colour
+ * (`style="--tec-avatar-badge-color: var(--tecton-palette-green-560)"`). The dot is visual only: set
+ * `label` (e.g. "Online") to have it announced.
  *
  * @summary A status dot on an avatar, optionally with a small icon.
  *
  * @tag tec-avatar-badge
  *
  * @slot - An optional icon.
+ *
+ * @cssprop --tec-avatar-badge-color - Background of the dot (default `--tec-primary`).
+ * @cssprop --tec-avatar-badge-foreground - Colour of the icon (default `--tec-primary-foreground`).
  */
 export class TecAvatarBadge extends TectonElement {
   static styles = [hostStyles, avatarBadgeStyles]

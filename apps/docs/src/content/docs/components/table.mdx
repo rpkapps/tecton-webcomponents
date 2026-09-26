@@ -4,7 +4,7 @@ description: A responsive table component.
 tags: ["tec-table"]
 ---
 
-<ComponentPreview name="table-demo" />
+<ComponentPreview name="table-demo" class="h-[30rem]" />
 
 ## Usage
 
@@ -111,7 +111,7 @@ Sorting, filtering, row selection, column visibility and pagination are built in
 The table uses logical alignment (`text-align: start`), so header and cell text follow `dir="rtl"`. Use
 `text-end` rather than `text-right` for numeric columns so they flip too.
 
-<ComponentPreview name="table-rtl" direction="rtl" />
+<ComponentPreview name="table-rtl" direction="rtl" class="h-auto" />
 
 ## Keyboard interactions
 
@@ -134,10 +134,6 @@ commands (for example <Kbd>Ctrl</Kbd>+<Kbd>Alt</Kbd>+arrow keys in NVDA and JAWS
   table with `role="grid"` you can use `aria-selected="true"` instead, which is styled the same way.
 - Row actions: one control per row named after the row (`aria-label="Open menu for Wireless Mouse"`).
 - In forced-colours mode row dividers use `CanvasText` and selected rows `Highlight`.
-
-## API Reference
-
-<ApiReference tags={["tec-table"]} />
 
 ## Usage guidelines
 
@@ -269,3 +265,7 @@ A row is not focusable and does not react to <Kbd>Enter</Kbd>; put a link or but
 A clickable `th` answers a mouse and nothing else and announces no sort state. Data Table renders a button in the header and sets `aria-sort` on the sorted column.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-table"]} />

@@ -35,6 +35,12 @@ An icon is 1.5rem (24px) square by default and draws with `currentColor`, so it 
 <tec-icon name="seismic" style="--tec-icon-size: 2rem"></tec-icon>
 ```
 
+## Optical sizing
+
+The Tecton export draws every glyph on a 16-unit grid with the glyph's own margin baked in, so an unmodified Tecton icon looks noticeably smaller than a Lucide icon rendered at the same width and height. The icon data compensates: each icon's `viewBox` is cropped by up to one unit on each side — `0 0 16 16` becomes `1 1 14 14`, about 1.14&times; larger — which puts a Tecton glyph level with its Lucide counterpart at the same size.
+
+The crop is clamped per icon by how much margin that glyph actually has, so nothing is ever clipped: glyphs that come close to the edge of the box get a smaller crop (`strata` is trimmed by 0.35 units, `surface` by 0.863), and both variants of an icon share one crop, so switching `variant` never shifts or rescales the glyph. The path data itself is unchanged. Icons you add with `registerIcon()` use the `viewBox` you give them.
+
 ## Accessibility
 
 Icons are decorative by default (`aria-hidden`): the text next to them, or the `aria-label` of an icon-only button, names the action. For a meaningful standalone icon, give it a `label`, which makes it an image with that name:

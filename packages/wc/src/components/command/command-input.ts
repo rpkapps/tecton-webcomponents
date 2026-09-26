@@ -41,6 +41,16 @@ export class TecCommandInput extends TectonElement {
         border-radius: var(--tec-radius-lg);
         background-color: var(--tec-muted);
       }
+      /* Visible focus: the field border takes the input colour (hover shows it too). */
+      .base:hover,
+      .base:has(input:focus-visible) {
+        border-color: var(--tec-input-hover);
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .base {
+          transition: border-color var(--tec-duration-fast) var(--tec-ease);
+        }
+      }
       .base svg {
         order: -1;
         width: 1rem;
@@ -61,7 +71,7 @@ export class TecCommandInput extends TectonElement {
         color: var(--tec-foreground);
       }
       input::placeholder {
-        color: var(--tec-muted-foreground);
+        color: color-mix(in oklab, currentColor 50%, transparent);
       }
       input::-webkit-search-cancel-button {
         display: none;

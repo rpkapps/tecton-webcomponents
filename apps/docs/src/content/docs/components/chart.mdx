@@ -16,7 +16,7 @@ tags:
   ]
 ---
 
-<ComponentPreview name="chart-demo" class="p-0! lg:min-h-[404px]" hideCode />
+<ComponentPreview name="chart-demo" class="h-auto p-0! lg:min-h-[404px]" hideCode />
 
 Charts are designed to look great out of the box, work with the other components and stay fully themeable. A chart is a `<tec-chart>` holding the parts you need — series, axes, grid, tooltip, legend — so you only bring in what the chart shows.
 
@@ -91,7 +91,7 @@ Add one `<tec-chart-bar>` per series.
 
 </Callout>
 
-<ComponentPreview name="chart-example" />
+<ComponentPreview name="chart-example" class="h-80" />
 
 </Steps>
 
@@ -99,25 +99,25 @@ Add one `<tec-chart-bar>` per series.
 
 Add a `<tec-chart-grid>`. Without attributes it draws lines at the value ticks; `horizontal` and `vertical` choose the lines, `dashed` dashes them.
 
-<ComponentPreview name="chart-example-grid" />
+<ComponentPreview name="chart-example-grid" class="h-80" />
 
 ## Add an axis
 
 Add a `<tec-chart-x-axis>` with the `key` of the categories. Its `tickFormatter` property formats the labels; labels that would overlap are skipped (`min-tick-gap`).
 
-<ComponentPreview name="chart-example-axis" />
+<ComponentPreview name="chart-example-axis" class="h-80" />
 
 ## Add a tooltip
 
 Add a `<tec-chart-tooltip>`. It follows the pointer and the keyboard, and highlights the active category with a cursor.
 
-<ComponentPreview name="chart-example-tooltip" />
+<ComponentPreview name="chart-example-tooltip" class="h-80" />
 
 ## Add a legend
 
 Add a `<tec-chart-legend>`. Like the tooltip, it takes its labels and swatches from the config.
 
-<ComponentPreview name="chart-example-legend" />
+<ComponentPreview name="chart-example-legend" class="h-80" />
 
 ## Chart config
 
@@ -240,7 +240,7 @@ For a simple chart, `type` draws one series per config key with a colour, withou
 
 The chart mirrors itself in a right-to-left context: the categories run from the right, the value axis sits on the right, and the tooltip opens towards the start. The arrow keys follow the reading direction.
 
-<ComponentPreview name="chart-rtl" direction="rtl" />
+<ComponentPreview name="chart-rtl" direction="rtl" class="h-92" />
 
 ## Keyboard interactions
 
@@ -262,23 +262,6 @@ The chart mirrors itself in a right-to-left context: the categories run from the
 - The SVG is decorative (`aria-hidden`); the tooltip is too, since the live region announces it. The legend is plain text.
 - The focus ring is the Tecton ring and turns into a system outline in forced-colours mode, where series keep their colours.
 - Bars grow, lines and areas reveal and value changes animate only without `prefers-reduced-motion: reduce`.
-
-## API Reference
-
-<ApiReference
-  tags={[
-    "tec-chart",
-    "tec-chart-bar",
-    "tec-chart-line",
-    "tec-chart-area",
-    "tec-chart-pie",
-    "tec-chart-x-axis",
-    "tec-chart-y-axis",
-    "tec-chart-grid",
-    "tec-chart-tooltip",
-    "tec-chart-legend",
-  ]}
-/>
 
 ## Usage guidelines
 
@@ -430,3 +413,20 @@ chart.data = [...chart.data, { month: "July", desktop: 190 }]
 The chart re-renders when the `data` property is assigned; changing the array it already holds is not noticed.
 
 </Dont>
+
+## API Reference
+
+<ApiReference
+  tags={[
+    "tec-chart",
+    "tec-chart-bar",
+    "tec-chart-line",
+    "tec-chart-area",
+    "tec-chart-pie",
+    "tec-chart-x-axis",
+    "tec-chart-y-axis",
+    "tec-chart-grid",
+    "tec-chart-tooltip",
+    "tec-chart-legend",
+  ]}
+/>

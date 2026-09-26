@@ -4,7 +4,7 @@ description: "Application switcher for the shell header: a compact badge for the
 tags: ["tec-app-finder", "tec-app-finder-trigger", "tec-app-finder-group", "tec-app-finder-item", "tec-app-finder-icon"]
 ---
 
-<ComponentPreview name="app-finder-demo" class="min-h-[30rem] items-start" />
+<ComponentPreview name="app-finder-demo" />
 
 ## Usage
 
@@ -50,13 +50,13 @@ The search field, the list and the empty state are part of `tec-app-finder`; set
 
 Put the finder in `tec-app-shell-brand`, where the product name would be.
 
-<ComponentPreview name="app-finder-shell" class="min-h-80 items-start" />
+<ComponentPreview name="app-finder-shell" />
 
 ## Large catalogues
 
 Keep item values unique across groups: an app listed under both "Recent" and its category needs two values (`recent-dwp` and `dwp`). Mark the "Recent" group `hide-while-searching` so a search lists each app once, and leave the current app out of it. Put the short code and the category name in `keywords` so a search for either finds the app. The list is capped at 24rem or 60% of the viewport and scrolls (`--tec-app-finder-list-height`); the filter runs in the browser, which is fine for a few hundred entries.
 
-<ComponentPreview name="app-finder-recent" class="min-h-[28rem] items-start" />
+<ComponentPreview name="app-finder-recent" />
 
 ## Tones
 
@@ -70,7 +70,7 @@ Choosing an item fires `tec-select` on it (bubbling, `detail: { value }`) and cl
 
 ## RTL
 
-<ComponentPreview name="app-finder-rtl" direction="rtl" class="min-h-96 items-start" />
+<ComponentPreview name="app-finder-rtl" direction="rtl" />
 
 ## Keyboard interactions
 
@@ -92,10 +92,6 @@ Choosing an item fires `tec-select` on it (bubbling, `detail: { value }`) and cl
 - The finder is a non-modal `dialog` named by `label` ("Applications"). Focus goes to the search field and stays there: the highlighted application is its `aria-activedescendant` in a `menu` of `menuitem`s grouped by category (`group`, named by the heading).
 - Matches are marked with `<mark>`; the empty state is a `status` that is announced when nothing matches.
 - Pressing outside or Escape closes the finder; focus returns to the trigger.
-
-## API Reference
-
-<ApiReference tags={["tec-app-finder", "tec-app-finder-trigger", "tec-app-finder-group", "tec-app-finder-item", "tec-app-finder-icon"]} />
 
 ## Usage guidelines
 
@@ -217,3 +213,7 @@ The finder owns its search field: a second input neither filters nor highlights,
 The filter runs across every group at once, so without `hide-while-searching` a search lists the same application twice under two values.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-app-finder", "tec-app-finder-trigger", "tec-app-finder-group", "tec-app-finder-item", "tec-app-finder-icon"]} />

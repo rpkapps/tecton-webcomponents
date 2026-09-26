@@ -98,10 +98,6 @@ Physical sides (`left`, `right`) stay put in right-to-left layouts; `inline-star
 - Opening moves focus to the panel; closing (Escape, a press outside, the trigger) returns it to the trigger.
 - A visually hidden "Dismiss" button (`close-label`) at the end of the panel lets screen reader users close it without Escape.
 
-## API Reference
-
-<ApiReference tags={["tec-popover", "tec-popover-header", "tec-popover-title", "tec-popover-description"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -210,3 +206,7 @@ Never open a popover from inside another; a [Select](/docs/components/select), [
 The panel lives in the shadow root, so classes on the host never reach it; `border-gray-200` is outside the Tecton palette and emits no CSS at all, and the padding and radius duplicate what the component already owns.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-popover", "tec-popover-header", "tec-popover-title", "tec-popover-description"]} />

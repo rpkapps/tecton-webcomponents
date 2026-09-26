@@ -110,10 +110,6 @@ The ✕ button sits at the inline end and the footer follows the text direction.
 - On open, focus moves to the dialog itself (so screen readers announce its name and description first), or to an element with `autofocus`. <Kbd>Tab</Kbd> stays inside. On close, focus returns to the element that opened it.
 - The trigger gets `aria-expanded`. The ✕ button is labelled "Close"; translate it with `close-label`.
 
-## API Reference
-
-<ApiReference tags={["tec-dialog", "tec-dialog-header", "tec-dialog-title", "tec-dialog-description", "tec-dialog-footer", "tec-dialog-close"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -232,3 +228,7 @@ A button outside the dialog opens nothing by itself, gets no `aria-expanded`, an
 Hiding the element leaves the native dialog modal: the page stays inert, scrolling stays locked and focus never returns to the trigger. Close through `tec-dialog-close`, `hide()` or `open = false`.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-dialog", "tec-dialog-header", "tec-dialog-title", "tec-dialog-description", "tec-dialog-footer", "tec-dialog-close"]} />

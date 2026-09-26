@@ -29,9 +29,12 @@ describe("tec-date-picker", () => {
     await openPicker(el)
     expect(el.open).toBe(true)
     expect(opens.events[0]!.detail).toEqual({ open: true, reason: "trigger" })
-    expect((deepActiveElement() as HTMLElement).getAttribute("data-date")).toBe("2026-09-10")
+    // A pointer open focuses the dialog itself (no focus ring); the first arrow key enters the grid.
+    expect(deepActiveElement()).toBe(panel(el))
     expect(await axNode(panel(el))).toMatchObject({ role: "dialog", name: "Due date" })
     await expectAccessible(root)
+    await userEvent.keyboard("{ArrowRight}")
+    expect((deepActiveElement() as HTMLElement).getAttribute("data-date")).toBe("2026-09-10")
     await userEvent.keyboard("{ArrowRight}{Enter}")
     expect(el.value).toBe("2026-09-11")
     expect(changes.events).toHaveLength(1)
@@ -39,6 +42,19 @@ describe("tec-date-picker", () => {
     expect(el.open).toBe(false)
     expect(deepActiveElement()).toBe(trigger(el))
     expect(segments(el).map((s) => s.textContent)).toEqual(["9", "11", "2026"])
+  })
+
+  it("a keyboard open focuses the selected day", async () => {
+    const el = await fixture<TecDatePicker>(html`<tec-date-picker locale="en-US" value="2026-09-10" aria-label="D"></tec-date-picker>`)
+    trigger(el).focus()
+    await userEvent.keyboard("{Enter}")
+    await waitUntil(() => panel(el).matches(":popover-open"))
+    await waitUntil(() => (deepActiveElement() as HTMLElement | null)?.getAttribute("data-date") === "2026-09-10")
+  })
+
+  it("names the calendar button in the locale", async () => {
+    const el = await fixture<TecDatePicker>(html`<tec-date-picker locale="de-DE" aria-label="Datum"></tec-date-picker>`)
+    expect(trigger(el).getAttribute("aria-label")).toBe("Kalender")
   })
 
   it("keeps the inner calendar's events inside", async () => {

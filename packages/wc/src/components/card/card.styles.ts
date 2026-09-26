@@ -4,12 +4,12 @@ import { css } from "lit"
  * `tec-card` draws its surface (background, ring, radius, block padding) on the inner `part="base"`,
  * which lays its slotted parts out as a column spaced by `--tec-card-spacing`.
  *
- * The parts (`tec-card-header`, `-content`, `-footer` …) are the layout containers of their own light
- * DOM, like the elements they stand for, so layout utilities on them work as expected
- * (`<tec-card-footer class="flex-col gap-2">`). Their inline inset is the card's spacing: it is
- * declared `!important` in `:host` because document resets (`* { padding: 0 }`) would otherwise win
- * over it — important declarations of a shadow tree beat the document's. Change the inset with
- * `--tec-card-spacing`, never with padding classes.
+ * The layout parts (`tec-card-header`, `-content`, `-footer`) follow the library rule "the host is
+ * the layout box": their flex/grid layout is declared on `:host`, so layout utilities on the element
+ * (`<tec-card-footer class="flex-col gap-2">`) change it exactly as on a `div`. Their inset is a box
+ * style, so it lives on the inner `part="base"`, which fills the host and inherits the host's layout
+ * properties (see `forwardLayout`): the slotted children are laid out by the base with the layout the
+ * host computed.
  *
  * The card publishes `--tec-card-spacing` (and a private title size) on its host; every part
  * inherits them, so a size or spacing change reaches all of them.
@@ -60,28 +60,62 @@ export const cardStyles = css`
   }
 `
 
-export const cardHeaderStyles = css`
-  :host {
-    display: grid;
-    grid-auto-rows: min-content;
-    align-items: start;
-    gap: 0.25rem;
-    container: card-header / inline-size;
-    padding-inline: var(--tec-card-spacing) !important;
-    border-start-start-radius: var(--tec-radius-xl);
-    border-start-end-radius: var(--tec-radius-xl);
-  }
-  :host(:state(has-action)) {
-    grid-template-columns: 1fr auto;
-  }
-  :host(:state(has-description)) {
-    grid-template-rows: auto auto;
-  }
-  /* A bottom border (\`class="border-b border-border"\`) gets the matching padding. */
-  :host(.border-b) {
-    padding-block-end: var(--tec-card-spacing) !important;
+/**
+ * The inner part of a layout part: fills the host (in a flex or grid host) and takes over the layout
+ * the host computed from its own styles and the author's classes.
+ */
+export const forwardLayout = css`
+  .base {
+    box-sizing: border-box;
+    display: inherit;
+    flex: 1 1 auto;
+    align-self: stretch;
+    grid-column: 1 / -1;
+    min-width: 0;
+    flex-direction: inherit;
+    flex-wrap: inherit;
+    align-items: inherit;
+    align-content: inherit;
+    justify-content: inherit;
+    justify-items: inherit;
+    row-gap: inherit;
+    column-gap: inherit;
+    grid-template-columns: inherit;
+    grid-template-rows: inherit;
+    grid-auto-flow: inherit;
+    grid-auto-rows: inherit;
+    grid-auto-columns: inherit;
+    border-radius: inherit;
   }
 `
+
+export const cardHeaderStyles = [
+  forwardLayout,
+  css`
+    :host {
+      display: grid;
+      grid-auto-rows: min-content;
+      align-items: start;
+      gap: 0.25rem;
+      container: card-header / inline-size;
+      border-start-start-radius: var(--tec-radius-xl);
+      border-start-end-radius: var(--tec-radius-xl);
+    }
+    :host(:state(has-action)) {
+      grid-template-columns: 1fr auto;
+    }
+    :host(:state(has-description)) {
+      grid-template-rows: auto auto;
+    }
+    .base {
+      padding-inline: var(--tec-card-spacing);
+    }
+    /* A bottom border (\`class="border-b"\`) gets the matching padding. */
+    :host(.border-b) .base {
+      padding-block-end: var(--tec-card-spacing);
+    }
+  `,
+]
 
 export const cardTitleStyles = css`
   :host {
@@ -111,25 +145,35 @@ export const cardActionStyles = css`
   }
 `
 
-export const cardContentStyles = css`
-  :host {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding-inline: var(--tec-card-spacing) !important;
-  }
-`
+export const cardContentStyles = [
+  forwardLayout,
+  css`
+    :host {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .base {
+      padding-inline: var(--tec-card-spacing);
+    }
+  `,
+]
 
-export const cardFooterStyles = css`
-  :host {
-    display: flex;
-    align-items: center;
-    padding-inline: var(--tec-card-spacing) !important;
-    border-end-start-radius: var(--tec-radius-xl);
-    border-end-end-radius: var(--tec-radius-xl);
-  }
-  /* A top border (\`class="border-t border-border"\`) gets the matching padding. */
-  :host(.border-t) {
-    padding-block-start: var(--tec-card-spacing) !important;
-  }
-`
+export const cardFooterStyles = [
+  forwardLayout,
+  css`
+    :host {
+      display: flex;
+      align-items: center;
+      border-end-start-radius: var(--tec-radius-xl);
+      border-end-end-radius: var(--tec-radius-xl);
+    }
+    .base {
+      padding-inline: var(--tec-card-spacing);
+    }
+    /* A top border (\`class="border-t"\`) gets the matching padding. */
+    :host(.border-t) .base {
+      padding-block-start: var(--tec-card-spacing);
+    }
+  `,
+]

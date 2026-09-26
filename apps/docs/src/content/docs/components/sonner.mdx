@@ -85,10 +85,6 @@ Options: `id`, `description`, `duration` (ms; `Infinity` keeps it), `action` / `
 - Keep a toast to one sentence and at most one action, and never make the action the only way to do something: the toast disappears.
 - The close button is named "Close toast" (`close-label`).
 
-## API Reference
-
-<ApiReference tags={["tec-toaster"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -223,3 +219,7 @@ toast.error("Simulation failed", { description: "12 cells have negative volume."
 Toasts render in the toaster's shadow root, so page classes do not reach them, and `red-600` is not a Tecton step anyway: the toast shows no severity at all. The typed helpers apply the status colours.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-toaster"]} />

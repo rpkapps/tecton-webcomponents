@@ -2,6 +2,7 @@ import { css, html, type PropertyValues } from "lit"
 import { property } from "lit/decorators.js"
 import { hostStyles } from "../../internal/styles.js"
 import { TectonElement } from "../../internal/tecton-element.js"
+import { forwardLayout } from "./layout.styles.js"
 
 /** Surface style of a panel. */
 export type PanelVariant = "default" | "elevated" | "flat" | "outline"
@@ -40,10 +41,6 @@ const panelStyles = css`
     --tec-panel-py: 1rem;
   }
   .base {
-    display: flex;
-    flex: 1 1 auto;
-    flex-direction: column;
-    min-height: 0;
     overflow: hidden;
     border: 1px solid color-mix(in oklab, var(--tec-foreground) 10%, transparent);
     border-radius: var(--tec-panel-radius, var(--tec-radius-xl));
@@ -53,7 +50,7 @@ const panelStyles = css`
     box-shadow: var(--tec-shadow-md);
   }
   :host([variant="flat"]) .base {
-    border-color: transparent;
+    border-width: 0;
   }
   :host([variant="outline"]) .base {
     border-color: var(--tec-border);
@@ -84,7 +81,7 @@ const panelStyles = css`
  * @cssprop --tec-panel-radius - Corner radius (default `--tec-radius-xl`).
  */
 export class TecPanel extends TectonElement {
-  static styles = [hostStyles, panelStyles]
+  static styles = [hostStyles, forwardLayout, panelStyles]
 
   /** `default` with a hairline edge, `elevated` with a shadow, `flat` without an edge, `outline` with a visible border on a transparent background. */
   @property({ reflect: true }) variant: PanelVariant = "default"
@@ -99,19 +96,18 @@ export class TecPanel extends TectonElement {
 
 const headerStyles = css`
   :host {
-    display: block;
-    flex-shrink: 0;
-  }
-  .base {
     display: flex;
+    flex-shrink: 0;
     flex-wrap: wrap;
     align-items: flex-start;
     column-gap: 0.5rem;
     row-gap: 0.25rem;
+  }
+  .base {
     padding: var(--tec-panel-py, 0.75rem) var(--tec-panel-px, 1rem);
     border-bottom: 1px solid var(--tec-border);
   }
-  :host(:state(has-actions)) .base {
+  :host(:state(has-actions)) {
     align-items: center;
   }
   /* Beside an overflow row the title keeps its natural width up to 60% of the header. */
@@ -141,7 +137,7 @@ const headerStyles = css`
  * @cssstate has-overflow - The actions hold an overflow row.
  */
 export class TecPanelHeader extends TectonElement {
-  static styles = [hostStyles, headerStyles]
+  static styles = [hostStyles, forwardLayout, headerStyles]
 
   /** Re-reads what the header holds. @internal */
   sync = () => {
@@ -236,21 +232,15 @@ const actionsStyles = css`
     display: flex;
     flex-shrink: 0;
     align-items: center;
+    gap: 0.25rem;
   }
   .base {
-    display: flex;
-    flex: 1 1 auto;
-    align-items: center;
-    gap: 0.25rem;
-    min-width: 0;
     margin-block: -0.25rem;
     margin-inline-end: -0.5rem;
   }
   :host(:state(has-overflow)) {
     flex: 1 1 0%;
     min-width: 0;
-  }
-  :host(:state(has-overflow)) .base {
     justify-content: flex-end;
   }
   :host(:state(has-overflow)) ::slotted(*) {
@@ -275,7 +265,7 @@ const actionsStyles = css`
  * @cssstate has-overflow - Holds an overflow row.
  */
 export class TecPanelActions extends TectonElement {
-  static styles = [hostStyles, actionsStyles]
+  static styles = [hostStyles, forwardLayout, actionsStyles]
 
   #sync = () => {
     this.toggleState("has-overflow", [...this.children].some(isOverflowRow))
@@ -297,22 +287,20 @@ export class TecPanelActions extends TectonElement {
 
 const contentStyles = css`
   :host {
-    display: flex;
+    display: block;
     flex: 1 1 0%;
-    flex-direction: column;
     min-height: 0;
   }
   .base {
-    flex: 1 1 auto;
-    min-height: 0;
+    height: 100%;
     overflow: auto;
     padding: var(--tec-panel-py, 0.75rem) var(--tec-panel-px, 1rem);
   }
 `
 
 /**
- * The flex child that takes the panel's remaining height and scrolls. Lay out its content with a
- * wrapper element inside it.
+ * The flex child that takes the panel's remaining height and scrolls. It is a block by default;
+ * layout classes on it (`flex flex-col gap-4`, `grid`) lay out its children.
  *
  * @summary The scrolling body of a panel.
  *
@@ -323,7 +311,7 @@ const contentStyles = css`
  * @csspart base - The scroll container (padding).
  */
 export class TecPanelContent extends TectonElement {
-  static styles = [hostStyles, contentStyles]
+  static styles = [hostStyles, forwardLayout, contentStyles]
 
   protected override render() {
     return html`<div class="base" part="base"><slot></slot></div>`
@@ -332,21 +320,19 @@ export class TecPanelContent extends TectonElement {
 
 const footerStyles = css`
   :host {
-    display: block;
+    display: flex;
     flex-shrink: 0;
+    align-items: center;
+    gap: 0.5rem;
   }
   .base {
-    display: flex;
-    align-items: center;
-    justify-content: var(--tec-panel-footer-justify, flex-start);
-    gap: 0.5rem;
     padding: var(--tec-panel-py, 0.75rem) var(--tec-panel-px, 1rem);
     border-top: 1px solid var(--tec-border);
   }
-  :host([justify="end"]) .base {
+  :host([justify="end"]) {
     justify-content: flex-end;
   }
-  :host([justify="between"]) .base {
+  :host([justify="between"]) {
     justify-content: space-between;
   }
 `
@@ -361,7 +347,7 @@ const footerStyles = css`
  * @csspart base - The footer row (padding and top border).
  */
 export class TecPanelFooter extends TectonElement {
-  static styles = [hostStyles, footerStyles]
+  static styles = [hostStyles, forwardLayout, footerStyles]
 
   /** Distribution of the footer's content: `start`, `end` or `between`. */
   @property({ reflect: true }) justify: "start" | "end" | "between" = "start"

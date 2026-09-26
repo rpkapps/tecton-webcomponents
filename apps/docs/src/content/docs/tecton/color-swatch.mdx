@@ -88,10 +88,6 @@ With `editable`:
 - An editable swatch is a button named "Edit colour" (or its `aria-label`) with `aria-haspopup="dialog"` and `aria-expanded`. The picker is a non-modal dialog; the presets are a `listbox` named "Presets" whose options are named by their label (the accent name for Tecton tokens).
 - The swatch border keeps white, pale and transparent colours visible; in forced-colours mode the colour is kept and the border uses the system text colour.
 
-## API Reference
-
-<ApiReference tags={["tec-color-swatch"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -207,3 +203,7 @@ A plain swatch is an image, not a control: it is not focusable and does not reac
 With `label` and `value` the element renders the row itself — name over value, the value in the mono face and muted — and makes the swatch decorative, while `text-zinc-500` is stock Tailwind that emits no CSS at all.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-color-swatch"]} />

@@ -1,10 +1,15 @@
 import { css } from "lit"
 
 export const statStyles = css`
+  /* The host is the layout box (flex column), so layout classes on the element apply. */
   :host {
     --_stat-value: 1.25rem;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
     min-width: 0;
+    text-align: start;
     font-family: var(--tec-font-sans);
   }
   :host([size="sm"]) {
@@ -14,18 +19,13 @@ export const statStyles = css`
     --_stat-value: 1.75rem;
   }
   .base {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.125rem;
-    min-width: 0;
-    text-align: start;
+    display: contents;
   }
-  :host(:state(align-center)) .base {
+  :host(:state(align-center)) {
     align-items: center;
     text-align: center;
   }
-  :host(:state(align-end)) .base {
+  :host(:state(align-end)) {
     align-items: flex-end;
     text-align: end;
   }
@@ -54,6 +54,8 @@ export const statLabelStyles = css`
 export const statValueStyles = css`
   :host {
     display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
     font-family: var(--tec-font-mono);
     font-size: var(--tec-stat-value-size, var(--_stat-value, 1.25rem));
     line-height: 1;
@@ -61,9 +63,7 @@ export const statValueStyles = css`
     font-variant-numeric: tabular-nums;
   }
   .base {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.25rem;
+    display: contents;
   }
   .unit {
     font-family: var(--tec-font-sans);
@@ -76,6 +76,8 @@ export const statValueStyles = css`
 export const statDeltaStyles = css`
   :host {
     display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
     font-size: var(--tec-text-xs);
     line-height: var(--tec-text-xs--line-height);
     font-weight: var(--tec-font-weight-medium);
@@ -89,9 +91,7 @@ export const statDeltaStyles = css`
     color: var(--tec-destructive);
   }
   .base {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.125rem;
+    display: contents;
   }
   svg {
     width: 0.75rem;
@@ -109,10 +109,8 @@ export const statHelpStyles = css`
 `
 
 export const statGroupStyles = css`
+  /* The host is the grid, so layout classes on the element (gap-*, grid-cols-*) apply. */
   :host {
-    display: block;
-  }
-  .base {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--tec-stat-group-min-width, 7rem), 1fr));
     column-gap: 1.5rem;

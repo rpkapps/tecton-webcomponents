@@ -127,6 +127,7 @@ describe("tec-calendar", () => {
     const el = await fixture<TecCalendar>(html`<div lang="de"><tec-calendar value="2026-03-10"></tec-calendar></div>`)
     const cal = el.querySelector("tec-calendar")!
     expect(headings(cal)).toEqual(["März 2026"])
+    expect(cal.shadowRoot!.querySelector(".previous")!.getAttribute("aria-label")).toBe("Zurück")
     expect(cal.shadowRoot!.querySelector(".weekday")!.textContent).toBe("M")
     cal.firstDayOfWeek = "sun"
     await cal.updateComplete

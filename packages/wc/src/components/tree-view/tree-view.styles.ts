@@ -1,21 +1,20 @@
 import { css } from "lit"
 
 export const treeViewStyles = css`
+  /* The host is the layout box of the rows (layout classes on the element apply to them). */
   :host {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
     width: 100%;
+    overflow: auto;
     font-family: var(--tec-font-sans);
     font-size: var(--tec-text-sm);
     line-height: var(--tec-text-sm--line-height);
     color: var(--tec-foreground);
   }
   .base {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    width: 100%;
-    max-height: inherit;
-    overflow: auto;
+    display: contents;
   }
 `
 

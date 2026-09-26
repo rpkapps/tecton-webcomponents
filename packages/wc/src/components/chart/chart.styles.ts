@@ -233,6 +233,10 @@ export const tooltipStyles = [
     .item[data-indicator="dot"] {
       align-items: center;
     }
+    /* Indicator + text never wrap apart: a line/dashed indicator stretches to the row's height. */
+    .item:not([data-formatted]) {
+      flex-wrap: nowrap;
+    }
     .icon {
       display: flex;
       color: var(--tec-muted-foreground);

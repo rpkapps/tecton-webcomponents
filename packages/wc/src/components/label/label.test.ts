@@ -52,8 +52,11 @@ describe("tec-label", () => {
     const label = root.querySelector<TecLabel>("tec-label")!
     await waitUntil(() => label.matches(":state(disabled)"))
     expect(getComputedStyle(label).opacity).toBe("0.5")
+    expect(label.getAttribute("aria-disabled")).toBe("true")
+    await expectAccessible(root)
     root.querySelector("tec-input")!.disabled = false
     await waitUntil(() => !label.matches(":state(disabled)"))
+    expect(label.hasAttribute("aria-disabled")).toBe(false)
   })
 
   it("is small medium text", async () => {

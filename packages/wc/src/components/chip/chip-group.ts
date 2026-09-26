@@ -34,14 +34,15 @@ export interface ChipRemoveDetail {
  *   cancelable `tec-remove`; unless a listener calls `preventDefault()` the chip element is removed
  *   and focus moves to the next chip.
  *
+ * The element itself is the wrapping flex row (gap 0.375rem), so layout classes on it
+ * (`items-center`, `gap-2`, `flex-col`) apply.
+ *
  * @summary A set of selectable and/or removable chips (tags).
  *
  * @tag tec-chip-group
  *
  * @slot - `tec-chip` elements.
  * @slot empty - Shown when the group has no chips (e.g. "No filters.").
- *
- * @csspart base - The wrapping row of chips.
  *
  * @cssstate has-chips - The group contains at least one chip.
  *
@@ -236,7 +237,7 @@ export class TecChipGroup extends TectonElement {
   }
 
   protected override render() {
-    return html`<div class="base" part="base"><slot @slotchange=${() => this.#syncChips()}></slot><span class="empty"><slot name="empty"></slot></span></div>`
+    return html`<slot @slotchange=${() => this.#syncChips()}></slot><span class="empty"><slot name="empty"></slot></span>`
   }
 }
 

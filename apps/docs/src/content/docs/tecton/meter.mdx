@@ -70,10 +70,6 @@ The meter is not interactive and takes no focus.
 - It is named by `label` (or a rich label in the `label` slot, referenced by element); without a visible label, set `aria-label`.
 - The segments are presentational. In forced-colours mode they are outlined and the fill uses the system highlight colour.
 
-## API Reference
-
-<ApiReference tags={["tec-meter"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -213,3 +209,7 @@ meter.color = risk >= 67 ? "error" : risk >= 34 ? "warning" : "success"
 A class lands on the element's box, not on the segment fills, which take their colour from `color` — and `green-600` is not a Tecton step, so nothing is emitted for it either.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-meter"]} />

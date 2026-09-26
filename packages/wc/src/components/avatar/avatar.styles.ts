@@ -3,8 +3,8 @@ import { css } from "lit"
 /*
  * Avatar parts have no padding, margin or border, so their round box (size, radius, background,
  * ring) is the host itself: document resets (`* { padding: 0; margin: 0; border: 0 }`) do not touch
- * those properties, and colour/size utilities on the element (`class="bg-green-560"` on a badge,
- * `class="size-10"` on an avatar) apply directly. The one border — the hairline ring over the
+ * those properties, and size utilities on the element (`class="size-10"`) apply directly. Colours are
+ * custom properties (`--tec-avatar-badge-color`). The one border — the hairline ring over the
  * picture — is drawn inside the shadow root.
  *
  * `tec-avatar` publishes private custom properties for its badge and fallback (sizes per avatar
@@ -120,8 +120,8 @@ export const avatarBadgeStyles = css`
     width: var(--_tec-avatar-badge-size, 0.625rem);
     height: var(--_tec-avatar-badge-size, 0.625rem);
     border-radius: 9999px;
-    background-color: var(--tec-primary);
-    color: var(--tec-primary-foreground);
+    background-color: var(--tec-avatar-badge-color, var(--tec-primary));
+    color: var(--tec-avatar-badge-foreground, var(--tec-primary-foreground));
     box-shadow: 0 0 0 2px var(--tec-background);
     user-select: none;
     -webkit-user-select: none;

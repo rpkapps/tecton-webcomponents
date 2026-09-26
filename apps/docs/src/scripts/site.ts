@@ -319,3 +319,31 @@ if (sidebar && current) {
     }
   })
 }
+
+/* Scrollable tables: keyboard-reachable only while they overflow ---------------------- */
+
+// A wrapper that scrolls must be focusable (and then named) so keyboard users can scroll it;
+// one that fits stays out of the tab order.
+const scrollers = [...document.querySelectorAll<HTMLElement>(".typeset-scroll")]
+if (scrollers.length) {
+  const labelOf = (el: HTMLElement) => {
+    let node: Element | null = el.previousElementSibling
+    while (node && !/^H[1-6]$/.test(node.tagName)) node = node.previousElementSibling
+    const heading = node?.textContent?.replace(/#$/, "").trim()
+    const caption = el.querySelector("caption")?.textContent?.trim()
+    return `${caption || heading || "Table"} (scrollable)`
+  }
+  const sync = (el: HTMLElement) => {
+    if (el.scrollWidth > el.clientWidth + 1) {
+      el.tabIndex = 0
+      el.setAttribute("role", "region")
+      el.setAttribute("aria-label", labelOf(el))
+    } else if (el.hasAttribute("tabindex")) {
+      el.removeAttribute("tabindex")
+      el.removeAttribute("role")
+      el.removeAttribute("aria-label")
+    }
+  }
+  const observer = new ResizeObserver((entries) => entries.forEach((entry) => sync(entry.target as HTMLElement)))
+  for (const el of scrollers) observer.observe(el)
+}

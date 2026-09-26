@@ -186,7 +186,7 @@ export class TecChartTooltip extends TectonElement {
           ${items.map(({ item, entry, name }, index) => {
             const color = this.color ?? (item.row?.fill as string | undefined) ?? item.color
             return html`
-              <div part="item" class="item" data-indicator=${this.indicator}>
+              <div part="item" class="item" data-indicator=${this.indicator} ?data-formatted=${!!(this.formatter && item.value !== undefined && item.name)}>
                 ${this.formatter && item.value !== undefined && item.name
                   ? this.formatter(item.value, item.name, item, index, item.row)
                   : html`

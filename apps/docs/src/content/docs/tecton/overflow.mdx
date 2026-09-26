@@ -135,10 +135,6 @@ The row, its dividers, the More button and the menus use logical positions: item
 - The overflow dialog of a text field is a modal `dialog` named by the item's label; closing it returns focus to the More button.
 - Give a `<tec-overflow-group>` a `label`: it names the group in the row and heads its section in the menu.
 
-## API Reference
-
-<ApiReference tags={["tec-overflow", "tec-toolbar", "tec-overflow-item", "tec-overflow-label", "tec-overflow-group", "tec-overflow-divider", "tec-overflow-spacer"]} />
-
 ## Usage guidelines
 
 ### Use it when
@@ -272,3 +268,7 @@ deleteButton.addEventListener("click", removeSelection)
 The More menu is built from the items and acts through their controls. A menu of your own next to the row duplicates every action and drifts out of sync with the row; the rules forbid more than one menu per row.
 
 </Dont>
+
+## API Reference
+
+<ApiReference tags={["tec-overflow", "tec-toolbar", "tec-overflow-item", "tec-overflow-label", "tec-overflow-group", "tec-overflow-divider", "tec-overflow-spacer"]} />
