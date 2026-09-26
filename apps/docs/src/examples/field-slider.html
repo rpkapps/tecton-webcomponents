@@ -1,0 +1,15 @@
+<tec-field id="field-slider" class="w-full max-w-xs">
+  <tec-field-title>Price Range</tec-field-title>
+  <tec-field-description>
+    Set your budget range ($<span class="font-medium tabular-nums">200</span> - <span class="font-medium tabular-nums">800</span>).
+  </tec-field-description>
+  <tec-slider aria-label="Price Range" min="0" max="1000" step="10" value="200, 800" thumb-labels="Minimum price, Maximum price" class="mt-2 w-full"></tec-slider>
+</tec-field>
+<script type="module">
+  const field = document.getElementById("field-slider")
+  const slider = field.querySelector("tec-slider")
+  const [low, high] = field.querySelectorAll("tec-field-description span")
+  slider.addEventListener("input", () => {
+    ;[low.textContent, high.textContent] = slider.values
+  })
+</script>

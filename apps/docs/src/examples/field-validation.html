@@ -1,0 +1,22 @@
+<form id="field-validation" class="flex w-full max-w-xs flex-col gap-6" novalidate>
+  <tec-field>
+    <tec-field-label>Well name</tec-field-label>
+    <tec-input name="well" required placeholder="34/10-A-12" pattern="\d+/\d+-[A-Z]-\d+"></tec-input>
+    <tec-field-description>Licence block, platform and slot.</tec-field-description>
+    <tec-field-error></tec-field-error>
+  </tec-field>
+  <tec-field id="field-validation-username">
+    <tec-field-label>Operator code</tec-field-label>
+    <tec-input name="operator" required minlength="3"></tec-input>
+    <tec-field-error>Enter the three-letter operator code.</tec-field-error>
+  </tec-field>
+  <tec-button type="submit" class="self-start">Save well</tec-button>
+</form>
+<script type="module">
+  const form = document.getElementById("field-validation")
+  form.addEventListener("submit", (event) => {
+    event.preventDefault()
+    // Displays every field's error and focuses the first invalid control.
+    form.reportValidity()
+  })
+</script>

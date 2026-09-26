@@ -1,0 +1,13 @@
+<tec-field id="field-errors" class="w-full max-w-xs" invalid>
+  <tec-field-label>Password</tec-field-label>
+  <tec-input type="password" value="well"></tec-input>
+  <tec-field-error></tec-field-error>
+</tec-field>
+<script type="module">
+  // `errors` takes a validator's issue list (strings or { message } objects); duplicates are removed.
+  document.querySelector("#field-errors tec-field-error").errors = [
+    { message: "Use at least 8 characters." },
+    { message: "Include a number." },
+    { message: "Use at least 8 characters." },
+  ]
+</script>

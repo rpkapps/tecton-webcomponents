@@ -1,0 +1,76 @@
+<form class="w-full max-w-md py-6" lang="ar">
+  <tec-field-group>
+    <tec-field-set>
+      <tec-field-legend>طريقة الدفع</tec-field-legend>
+      <tec-field-description>جميع المعاملات آمنة ومشفرة</tec-field-description>
+      <tec-field-group>
+        <tec-field>
+          <tec-field-label>الاسم على البطاقة</tec-field-label>
+          <tec-input name="card-name" placeholder="Evil Rabbit" required></tec-input>
+        </tec-field>
+        <tec-field>
+          <tec-field-label>رقم البطاقة</tec-field-label>
+          <tec-input name="card-number" placeholder="1234 5678 9012 3456" required></tec-input>
+          <tec-field-description>أدخل رقم البطاقة المكون من 16 رقمًا</tec-field-description>
+        </tec-field>
+        <div class="grid grid-cols-3 gap-4">
+          <tec-field>
+            <tec-field-label>الشهر</tec-field-label>
+            <tec-select name="month" placeholder="ش.ش">
+              <tec-select-item value="01">٠١</tec-select-item>
+              <tec-select-item value="02">٠٢</tec-select-item>
+              <tec-select-item value="03">٠٣</tec-select-item>
+              <tec-select-item value="04">٠٤</tec-select-item>
+              <tec-select-item value="05">٠٥</tec-select-item>
+              <tec-select-item value="06">٠٦</tec-select-item>
+              <tec-select-item value="07">٠٧</tec-select-item>
+              <tec-select-item value="08">٠٨</tec-select-item>
+              <tec-select-item value="09">٠٩</tec-select-item>
+              <tec-select-item value="10">١٠</tec-select-item>
+              <tec-select-item value="11">١١</tec-select-item>
+              <tec-select-item value="12">١٢</tec-select-item>
+            </tec-select>
+          </tec-field>
+          <tec-field>
+            <tec-field-label>السنة</tec-field-label>
+            <tec-select name="year" placeholder="YYYY">
+              <tec-select-item value="2024">2024</tec-select-item>
+              <tec-select-item value="2025">2025</tec-select-item>
+              <tec-select-item value="2026">2026</tec-select-item>
+              <tec-select-item value="2027">2027</tec-select-item>
+              <tec-select-item value="2028">2028</tec-select-item>
+              <tec-select-item value="2029">2029</tec-select-item>
+            </tec-select>
+          </tec-field>
+          <tec-field>
+            <tec-field-label>CVV</tec-field-label>
+            <tec-input name="cvv" placeholder="123" required></tec-input>
+          </tec-field>
+        </div>
+      </tec-field-group>
+    </tec-field-set>
+    <tec-field-separator></tec-field-separator>
+    <tec-field-set>
+      <tec-field-legend>عنوان الفوترة</tec-field-legend>
+      <tec-field-description>عنوان الفوترة المرتبط بطريقة الدفع الخاصة بك</tec-field-description>
+      <tec-field-group>
+        <tec-field orientation="horizontal">
+          <tec-checkbox name="same-as-shipping" checked></tec-checkbox>
+          <tec-field-label class="font-normal">نفس عنوان الشحن</tec-field-label>
+        </tec-field>
+      </tec-field-group>
+    </tec-field-set>
+    <tec-field-set>
+      <tec-field-group>
+        <tec-field>
+          <tec-field-label>تعليقات</tec-field-label>
+          <tec-textarea name="comments" placeholder="أضف أي تعليقات إضافية" resize="none"></tec-textarea>
+        </tec-field>
+      </tec-field-group>
+    </tec-field-set>
+    <tec-field orientation="horizontal">
+      <tec-button type="submit">إرسال</tec-button>
+      <tec-button variant="outline">إلغاء</tec-button>
+    </tec-field>
+  </tec-field-group>
+</form>

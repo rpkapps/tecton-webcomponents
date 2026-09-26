@@ -1,0 +1,26 @@
+<tec-field-group class="w-full max-w-xs">
+  <tec-field-set>
+    <tec-field-legend variant="label">Compute Environment</tec-field-legend>
+    <tec-field-description>Select the compute environment for your cluster.</tec-field-description>
+    <tec-radio-group name="compute" value="kubernetes" aria-label="Compute Environment">
+      <tec-field-label>
+        <tec-field orientation="horizontal">
+          <tec-field-content>
+            <tec-field-title>Kubernetes</tec-field-title>
+            <tec-field-description>Run GPU workloads on a K8s cluster.</tec-field-description>
+          </tec-field-content>
+          <tec-radio-group-item value="kubernetes"></tec-radio-group-item>
+        </tec-field>
+      </tec-field-label>
+      <tec-field-label>
+        <tec-field orientation="horizontal">
+          <tec-field-content>
+            <tec-field-title>Virtual Machine</tec-field-title>
+            <tec-field-description>Access a cluster to run GPU workloads.</tec-field-description>
+          </tec-field-content>
+          <tec-radio-group-item value="vm"></tec-radio-group-item>
+        </tec-field>
+      </tec-field-label>
+    </tec-radio-group>
+  </tec-field-set>
+</tec-field-group>

@@ -1,0 +1,34 @@
+<tec-field-group class="w-full max-w-xs">
+  <tec-field-set>
+    <tec-field-legend variant="label">Show these items on the desktop</tec-field-legend>
+    <tec-field-description>Select the items you want to show on the desktop.</tec-field-description>
+    <tec-field-group class="gap-3">
+      <tec-field orientation="horizontal">
+        <tec-checkbox name="hard-disks"></tec-checkbox>
+        <tec-field-label class="font-normal">Hard disks</tec-field-label>
+      </tec-field>
+      <tec-field orientation="horizontal">
+        <tec-checkbox name="external-disks"></tec-checkbox>
+        <tec-field-label class="font-normal">External disks</tec-field-label>
+      </tec-field>
+      <tec-field orientation="horizontal">
+        <tec-checkbox name="cds"></tec-checkbox>
+        <tec-field-label class="font-normal">CDs, DVDs, and iPods</tec-field-label>
+      </tec-field>
+      <tec-field orientation="horizontal">
+        <tec-checkbox name="servers"></tec-checkbox>
+        <tec-field-label class="font-normal">Connected servers</tec-field-label>
+      </tec-field>
+    </tec-field-group>
+  </tec-field-set>
+  <tec-field-separator></tec-field-separator>
+  <tec-field orientation="horizontal">
+    <tec-checkbox name="sync" checked></tec-checkbox>
+    <tec-field-content>
+      <tec-field-label>Sync Desktop &amp; Documents folders</tec-field-label>
+      <tec-field-description>
+        Your Desktop &amp; Documents folders are being synced with iCloud Drive. You can access them from other devices.
+      </tec-field-description>
+    </tec-field-content>
+  </tec-field>
+</tec-field-group>
