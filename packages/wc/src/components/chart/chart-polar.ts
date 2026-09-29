@@ -619,7 +619,7 @@ export interface RadialBarModel extends ChartModelBase {
   /** One series: rows are coloured and named individually (like pie slices). */
   perRow: boolean
   series: RadialSeries[]
-  labels: { text: string; x: number; y: number; rotate: number; anchor: string; inside: boolean; color: string }[]
+  labels: { text: string; row: number; path: string; inside: boolean; color: string }[]
   center: SVGTemplateResult | typeof nothing
 }
 
@@ -721,8 +721,8 @@ function computeRadial(ctx: ChartContext): RadialBarModel | undefined {
       const row = rows[bar.row]
       const text = labelText(ctx, list, row?.[list.key ?? s.spec.key], row, bar.row)
       if (!text) return
-      const label = radialBarLabel(list, bar, text, ctx.measure(text), lineHeight, { cx, cy, start, end, dir })
-      if (label) labels.push({ ...label, color: bar.fill, anchor: anchorFor(label.side, rtl) })
+      const label = radialBarLabel(list, bar, ctx.measure(text), lineHeight, { cx, cy, end, dir })
+      if (label) labels.push({ ...label, text, row: bar.row, color: bar.fill })
     })
   })
 
@@ -746,52 +746,61 @@ function computeRadial(ctx: ChartContext): RadialBarModel | undefined {
   return { kind: "radial-bar", plot, cx, cy, inner, outer, band, start, end, nameKey, perRow, series, labels, center, count: rows.length }
 }
 
-/** A label along a radial bar: inside its start or end (when it fits), or past its end. */
+/**
+ * The path a label follows along a ring: a half circle centred on the label's middle angle `mid`,
+ * running left to right (clockwise over the top half, counter-clockwise under it) so the text reads
+ * upright, at the radius that centres the glyphs (cap height `0.7em`) on `r`.
+ */
+export function arcTextPath(cx: number, cy: number, r: number, mid: number, fontSize: number): string {
+  const top = Math.sin((mid * Math.PI) / 180) >= 0
+  // Glyphs stand outside the baseline over the top half, inside it under the bottom half.
+  const baseline = top ? r - fontSize * 0.35 : r + fontSize * 0.35
+  const from = polarPoint(cx, cy, baseline, top ? mid + 89 : mid - 89)
+  const to = polarPoint(cx, cy, baseline, top ? mid - 89 : mid + 89)
+  const n = (v: number) => Math.round(v * 1000) / 1000
+  return `M${n(from.x)},${n(from.y)}A${n(baseline)},${n(baseline)},0,0,${top ? 1 : 0},${n(to.x)},${n(to.y)}`
+}
+
+/**
+ * A label written along a radial bar (following the ring, so it stays inside its own band): inside
+ * the bar's start or end, or past its end. `undefined` when the text does not fit: the glyphs
+ * (~0.8em) across the bar, and the text plus padding along the bar (or the rest of the track) at
+ * the bar's middle radius.
+ */
 function radialBarLabel(
   list: TecChartLabelList,
   bar: RadialBarDraw,
-  text: string,
   width: number,
-  height: number,
-  frame: { cx: number; cy: number; start: number; end: number; dir: number }
-): { text: string; x: number; y: number; rotate: number; side: -1 | 1; inside: boolean } | undefined {
+  fontSize: number,
+  frame: { cx: number; cy: number; end: number; dir: number }
+): { path: string; inside: boolean } | undefined {
   const r = (bar.r0 + bar.r1) / 2
   const thickness = bar.r1 - bar.r0
-  // The glyphs (cap height and descenders, ~0.8em) must fit across the bar.
-  if (r <= 0 || thickness < height * 0.8 + 2 || width > r) return undefined
+  if (r <= 0 || thickness < fontSize * 0.8 + 2) return undefined
   const pad = Math.max(4, list.offset)
   const deg = (px: number) => (px / r) * (180 / Math.PI)
-  const length = (Math.abs(bar.end - bar.start) * Math.PI * r) / 180
+  const arc = (from: number, to: number) => (Math.abs(to - from) * Math.PI * r) / 180
   const { dir } = frame
-  let angle: number
-  let forwards: boolean
+  let mid: number
   let inside = true
   switch (list.position) {
     case "inside-end":
     case "inside":
-      if (length < width + 2 * pad) return undefined
-      angle = bar.end - dir * deg(pad)
-      forwards = false
+      if (arc(bar.start, bar.end) < width + 2 * pad) return undefined
+      mid = bar.end - dir * deg(pad + width / 2)
       break
     case "end":
-    case "outside": {
-      const rest = (Math.abs(frame.end - bar.end) * Math.PI * r) / 180
-      if (rest < width + 2 * pad) return undefined
-      angle = bar.end + dir * deg(pad)
-      forwards = true
+    case "outside":
+      if (arc(bar.end, frame.end) < width + 2 * pad) return undefined
+      mid = bar.end + dir * deg(pad + width / 2)
       inside = false
       break
-    }
     default:
       // `inside-start` (and positions that do not apply to a ring).
-      if (length < width + 2 * pad) return undefined
-      angle = bar.start + dir * deg(pad)
-      forwards = true
+      if (arc(bar.start, bar.end) < width + 2 * pad) return undefined
+      mid = bar.start + dir * deg(pad + width / 2)
   }
-  const { rotate, forward } = tangentText(angle, angle + dir * 90)
-  const point = polarPoint(frame.cx, frame.cy, r, angle)
-  const side = forward === forwards ? 1 : -1
-  return { text, x: point.x, y: point.y, rotate, side, inside }
+  return { path: arcTextPath(frame.cx, frame.cy, r, mid, fontSize), inside }
 }
 
 function renderRadial(model: RadialBarModel, ctx: ChartContext): SVGTemplateResult {
@@ -815,10 +824,15 @@ function renderRadial(model: RadialBarModel, ctx: ChartContext): SVGTemplateResu
       )}
     </g>
     ${model.labels.length
-      ? svg`<g class="inside-labels">${model.labels.map(
-          (l) => svg`<text class=${l.inside ? "inside-label" : "value-label"} x=${l.x} y=${l.y} dy="0.355em" text-anchor=${l.anchor}
-            transform=${`rotate(${Math.round(l.rotate * 100) / 100} ${l.x} ${l.y})`} style=${`--tec-chart-label-on: ${l.color}`}>${l.text}</text>`
-        )}</g>`
+      ? // After every bar, so no ring paints over a label.
+        svg`<g class="inside-labels radial-labels">
+          <defs>${model.labels.map((l, i) => svg`<path id=${`radial-label-${i}`} d=${l.path}></path>`)}</defs>
+          ${model.labels.map(
+            (l, i) => svg`<text class=${l.inside ? "inside-label" : "value-label"} data-row=${l.row} style=${`--tec-chart-label-on: ${l.color}`}>
+              <textPath href=${`#radial-label-${i}`} startOffset="50%" text-anchor="middle">${l.text}</textPath>
+            </text>`
+          )}
+        </g>`
       : nothing}
     ${model.center}
   `
@@ -933,6 +947,11 @@ export const polarStyles = css`
   }
   .radial-bar {
     cursor: default;
+  }
+  /* A label on a ring is centred on its path; the base direction stays LTR so the layout never
+     flips (right-to-left text is still ordered by the bidi algorithm). */
+  .radial-labels text {
+    direction: ltr;
   }
   /* The active row stands out: the other rows recede. */
   .radial[data-has-active] .radial-bar:not([data-active]) {

@@ -269,16 +269,76 @@ describe("tec-chart-radial-bar", () => {
     await expectAccessible(el)
   })
 
-  it("labels bars inside their start only when the label fits", async () => {
-    const el = await radial(html`<tec-chart-label-list key="browser" position="inside-start"></tec-chart-label-list>`)
-    const labels = all(el, ".inside-label")
-    expect(labels.length).toBeGreaterThan(0)
+  /**
+   * Every glyph of every ring label sits inside its own bar: the centre of its body and points
+   * 0.35em above and below it (the body of the letters), and both ends of the label.
+   */
+  function expectLabelsInsideTheirBars(el: TecChart) {
+    const labels = all<SVGTextElement>(el, ".radial-labels text")
+    const fontSize = Number.parseFloat(getComputedStyle(labels[0]!).fontSize)
     for (const label of labels) {
-      // Upright text, rotated along the ring, never in the bar's colour.
-      expect(label.getAttribute("transform")).toMatch(/^rotate\(/)
-      expect(getComputedStyle(label).fill).not.toBe(getComputedStyle(all(el, ".radial-bar")[0]!).fill)
+      const bar = shadow(el).querySelector<SVGPathElement>(`.radial-bar[data-index="${label.dataset.row}"]`)!
+      const chars = label.getNumberOfChars()
+      expect(chars).toBe(label.textContent!.trim().length)
+      for (let i = 0; i < chars; i++) {
+        const a = label.getStartPositionOfChar(i)
+        const b = label.getEndPositionOfChar(i)
+        const angle = (label.getRotationOfChar(i) * Math.PI) / 180
+        // "Up" for the glyph: its advance direction turned a quarter counter-clockwise on screen.
+        const up = { x: Math.sin(angle), y: -Math.cos(angle) }
+        const points = [
+          { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, lift: 0.35 },
+          { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, lift: 0.7 },
+          { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, lift: 0 },
+          { x: a.x, y: a.y, lift: 0.35 },
+          { x: b.x, y: b.y, lift: 0.35 },
+        ]
+        for (const p of points) {
+          const point = new DOMPoint(p.x + up.x * p.lift * fontSize, p.y + up.y * p.lift * fontSize)
+          expect(bar.isPointInFill(point), `${label.textContent} [${i}] +${p.lift}em`).toBe(true)
+        }
+      }
     }
-    expectTextInside(el)
+  }
+
+  it("labels bars along their ring, inside their start, only where the label fits", async () => {
+    for (const dir of ["ltr", "rtl"] as const) {
+      const el = await radial(html`<tec-chart-label-list key="browser" position="inside-start"></tec-chart-label-list>`, { dir })
+      const labels = all(el, ".inside-label")
+      // Chrome (innermost, full ring) … Other: the labels that fit.
+      expect(labels.length).toBeGreaterThanOrEqual(4)
+      // Drawn after every bar, so no ring covers them.
+      const last = all(el, ".radial-bar").at(-1)!
+      for (const label of labels) {
+        expect(last.compareDocumentPosition(label) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+        // Never in the bar's colour.
+        expect(getComputedStyle(label).fill).not.toBe(getComputedStyle(all(el, ".radial-bar")[0]!).fill)
+      }
+      expectLabelsInsideTheirBars(el)
+      expectTextInside(el)
+    }
+  })
+
+  it("keeps labels inside their ring on thin rings and in the docs layout, and drops those that do not fit", async () => {
+    for (const size of [250, 390, 560]) {
+      const el = await fixture<TecChart>(
+        html`<tec-chart style="width: ${size}px; height: ${size}px" .data=${browsers} .config=${browserConfig}>
+          <tec-chart-radial-bar key="visitors" name-key="browser" start-angle="90" end-angle="-180" inner-radius="30" outer-radius="110" background>
+            <tec-chart-label-list key="browser" position="inside-start"></tec-chart-label-list>
+          </tec-chart-radial-bar>
+        </tec-chart>`
+      )
+      await drawn(el, ".radial-bar")
+      if (all(el, ".radial-labels text").length) expectLabelsInsideTheirBars(el)
+    }
+    // A label longer than its bar is left out (the value stays in the tooltip and the table).
+    const el = await radial(html`<tec-chart-label-list position="inside-start" .formatter=${() => "A label far too long for any of these bars ".repeat(6)}></tec-chart-label-list>`)
+    expect(all(el, ".radial-labels text")).toHaveLength(0)
+    // Past the end of the bar, on the rest of the track: in text colour.
+    const end = await radial(html`<tec-chart-label-list position="end"></tec-chart-label-list>`)
+    const values = all(end, ".radial-labels .value-label")
+    expect(values.length).toBeGreaterThan(0)
+    for (const v of values) expect(getComputedStyle(v).fill).toBe(getComputedStyle(shadow(end).querySelector(".value-label")!).fill)
   })
 
   it("mirrors the sweep in RTL", async () => {
