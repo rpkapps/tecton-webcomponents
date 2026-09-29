@@ -1,0 +1,24 @@
+<tec-chart id="chart-pie-label-list" class="mx-auto aspect-square w-full max-w-[250px]" label="Visitors by browser, pie with names">
+  <tec-chart-tooltip hide-label></tec-chart-tooltip>
+  <tec-chart-pie key="visitors" name-key="browser">
+    <tec-chart-label-list key="browser"></tec-chart-label-list>
+  </tec-chart-pie>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-pie-label-list")
+  chart.config = {
+    visitors: { label: "Visitors" },
+    chrome: { label: "Chrome", color: "var(--tec-chart-1)" },
+    safari: { label: "Safari", color: "var(--tec-chart-2)" },
+    firefox: { label: "Firefox", color: "var(--tec-chart-3)" },
+    edge: { label: "Edge", color: "var(--tec-chart-4)" },
+    other: { label: "Other", color: "var(--tec-chart-5)" },
+  }
+  chart.data = [
+    { browser: "chrome", visitors: 275 },
+    { browser: "safari", visitors: 200 },
+    { browser: "firefox", visitors: 187 },
+    { browser: "edge", visitors: 173 },
+    { browser: "other", visitors: 90 },
+  ]
+</script>

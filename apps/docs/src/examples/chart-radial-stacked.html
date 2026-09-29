@@ -1,0 +1,18 @@
+<tec-chart id="chart-radial-stacked" class="mx-auto aspect-[2/1] w-full max-w-[300px]" label="Visitors in January by device">
+  <tec-chart-tooltip hide-label></tec-chart-tooltip>
+  <tec-chart-radial-bar key="desktop" stack="visitors" start-angle="180" end-angle="0" inner-radius="70%" outer-radius="100%" corner-radius="5">
+    <tec-chart-label-list key="visitors" position="center"></tec-chart-label-list>
+  </tec-chart-radial-bar>
+  <tec-chart-radial-bar key="mobile" stack="visitors" corner-radius="5"></tec-chart-radial-bar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-radial-stacked")
+  // The centre label shows the total of both series (the formatter receives the single row).
+  chart.querySelector("tec-chart-label-list").formatter = (value, row) => (row.desktop + row.mobile).toLocaleString()
+  chart.config = {
+    visitors: { label: "Visitors" },
+    desktop: { label: "Desktop", color: "var(--tec-chart-1)" },
+    mobile: { label: "Mobile", color: "var(--tec-chart-2)" },
+  }
+  chart.data = [{ month: "January", desktop: 1260, mobile: 570 }]
+</script>

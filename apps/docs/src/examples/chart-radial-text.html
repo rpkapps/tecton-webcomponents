@@ -1,0 +1,24 @@
+<tec-chart id="chart-radial-text" class="mx-auto aspect-square w-full max-w-[250px]" label="Safari visitors against a target of 300">
+  <tec-chart-tooltip hide-label></tec-chart-tooltip>
+  <tec-chart-radial-bar
+    key="visitors"
+    name-key="browser"
+    start-angle="90"
+    end-angle="-270"
+    inner-radius="80"
+    outer-radius="110"
+    max-value="300"
+    corner-radius="10"
+    background
+  >
+    <tec-chart-label-list position="center"></tec-chart-label-list>
+  </tec-chart-radial-bar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-radial-text")
+  chart.config = {
+    visitors: { label: "Visitors" },
+    safari: { label: "Safari", color: "var(--tec-chart-2)" },
+  }
+  chart.data = [{ browser: "safari", visitors: 200 }]
+</script>

@@ -1,0 +1,20 @@
+<tec-chart id="chart-radar" class="mx-auto aspect-square w-full max-w-[280px]" label="Desktop visitors by month, radar chart">
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-polar-grid></tec-chart-polar-grid>
+  <tec-chart-polar-angle-axis key="month"></tec-chart-polar-angle-axis>
+  <tec-chart-radar key="desktop" dots></tec-chart-radar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-radar")
+  chart.config = {
+    desktop: { label: "Desktop", color: "var(--tec-chart-1)" },
+  }
+  chart.data = [
+    { month: "January", desktop: 186 },
+    { month: "February", desktop: 305 },
+    { month: "March", desktop: 237 },
+    { month: "April", desktop: 273 },
+    { month: "May", desktop: 209 },
+    { month: "June", desktop: 214 },
+  ]
+</script>

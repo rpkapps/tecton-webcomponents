@@ -1,0 +1,23 @@
+<tec-chart id="chart-radar-grid-filled" class="mx-auto aspect-square w-full max-w-[280px]" label="Desktop visitors by month, radar chart with value labels">
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-polar-grid grid-type="circle" filled></tec-chart-polar-grid>
+  <tec-chart-polar-angle-axis key="month"></tec-chart-polar-angle-axis>
+  <tec-chart-radar key="desktop" fill-opacity="0.5" stroke-width="2" dots>
+    <tec-chart-label-list></tec-chart-label-list>
+  </tec-chart-radar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-radar-grid-filled")
+  chart.querySelector("tec-chart-polar-angle-axis").tickFormatter = (value) => value.slice(0, 3)
+  chart.config = {
+    desktop: { label: "Desktop", color: "var(--tec-chart-1)" },
+  }
+  chart.data = [
+    { month: "January", desktop: 186 },
+    { month: "February", desktop: 285 },
+    { month: "March", desktop: 237 },
+    { month: "April", desktop: 203 },
+    { month: "May", desktop: 209 },
+    { month: "June", desktop: 264 },
+  ]
+</script>
