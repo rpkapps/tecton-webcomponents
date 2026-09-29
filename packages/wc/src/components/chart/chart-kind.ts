@@ -133,6 +133,13 @@ export interface ChartKind<M extends ChartModelBase = ChartModelBase> {
   overlay?(model: M, ctx: ChartContext): TemplateResult | typeof nothing
   /** A pointer press on the plot; return `true` when handled (no item activation). */
   pointerDown?(model: M, point: Point, event: PointerEvent, ctx: ChartContext): boolean
+  /**
+   * A key press on the plot, before the element's own arrow/Home/End/Escape handling. Return the
+   * item to make active (-1 for none) when the kind handled the key — it is looked up in the model
+   * rendered next, so a kind that changes what it draws (e.g. zooms) returns an index in its new
+   * model — or `undefined` to let the element handle the key.
+   */
+  keyDown?(model: M, event: KeyboardEvent, ctx: ChartContext): number | undefined
 }
 
 /** Parses a number from a data value (`null` for missing or non-numeric values). */

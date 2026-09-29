@@ -1,0 +1,44 @@
+<tec-chart
+  id="chart-treemap-nest"
+  class="aspect-auto h-80 w-full"
+  label="Production by product and basin, zoomable treemap"
+  description="Use the arrow keys to move between cells, Enter to zoom into a group and Escape to zoom out."
+>
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-treemap key="production" nest></tec-chart-treemap>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-treemap-nest")
+  chart.config = {
+    production: { label: "Production (kboe/d)" },
+    oil: { label: "Oil", color: "var(--tec-chart-1)" },
+    gas: { label: "Natural gas", color: "var(--tec-chart-2)" },
+    ngl: { label: "NGL", color: "var(--tec-chart-3)" },
+  }
+  chart.data = [
+    {
+      name: "oil",
+      children: [
+        { name: "Permian", children: [{ name: "Delaware", production: 320 }, { name: "Midland", production: 220 }] },
+        { name: "Gulf of Mexico", production: 180 },
+        { name: "Bakken", production: 120 },
+        { name: "Eagle Ford", production: 110 },
+      ],
+    },
+    {
+      name: "gas",
+      children: [
+        { name: "Appalachia", children: [{ name: "Marcellus", production: 260 }, { name: "Utica", production: 90 }] },
+        { name: "Haynesville", production: 160 },
+        { name: "Other", production: 70 },
+      ],
+    },
+    {
+      name: "ngl",
+      children: [
+        { name: "Permian", production: 260 },
+        { name: "Other", production: 140 },
+      ],
+    },
+  ]
+</script>

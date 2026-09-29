@@ -1,0 +1,40 @@
+<tec-chart id="chart-sunburst" class="mx-auto aspect-square w-full max-w-[320px]" label="Production by product and basin, sunburst">
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-legend></tec-chart-legend>
+  <tec-chart-sunburst key="production" inner-radius="30%" start-angle="90" end-angle="-270"></tec-chart-sunburst>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-sunburst")
+  chart.config = {
+    production: { label: "Production (kboe/d)" },
+    oil: { label: "Oil", color: "var(--tec-chart-1)" },
+    gas: { label: "Gas", color: "var(--tec-chart-2)" },
+    ngl: { label: "NGL", color: "var(--tec-chart-3)" },
+  }
+  chart.data = [
+    {
+      name: "oil",
+      children: [
+        { name: "Permian", production: 540 },
+        { name: "Gulf", production: 180 },
+        { name: "Bakken", production: 120 },
+        { name: "Other", production: 200 },
+      ],
+    },
+    {
+      name: "gas",
+      children: [
+        { name: "Appalachia", production: 350 },
+        { name: "Permian", production: 210 },
+        { name: "Other", production: 230 },
+      ],
+    },
+    {
+      name: "ngl",
+      children: [
+        { name: "Permian", production: 260 },
+        { name: "Other", production: 140 },
+      ],
+    },
+  ]
+</script>

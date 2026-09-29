@@ -1,0 +1,42 @@
+<tec-chart id="chart-treemap" class="aspect-auto h-80 w-full" label="Production by product and basin, treemap">
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-legend></tec-chart-legend>
+  <tec-chart-treemap key="production" padding="4"></tec-chart-treemap>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-treemap")
+  chart.config = {
+    production: { label: "Production (kboe/d)" },
+    oil: { label: "Oil", color: "var(--tec-chart-1)" },
+    gas: { label: "Natural gas", color: "var(--tec-chart-2)" },
+    ngl: { label: "NGL", color: "var(--tec-chart-3)" },
+  }
+  chart.data = [
+    {
+      name: "oil",
+      children: [
+        { name: "Permian", production: 540 },
+        { name: "Gulf of Mexico", production: 180 },
+        { name: "Bakken", production: 120 },
+        { name: "Eagle Ford", production: 110 },
+        { name: "Other", production: 90 },
+      ],
+    },
+    {
+      name: "gas",
+      children: [
+        { name: "Appalachia", production: 350 },
+        { name: "Permian", production: 210 },
+        { name: "Haynesville", production: 160 },
+        { name: "Other", production: 70 },
+      ],
+    },
+    {
+      name: "ngl",
+      children: [
+        { name: "Permian", production: 260 },
+        { name: "Other", production: 140 },
+      ],
+    },
+  ]
+</script>

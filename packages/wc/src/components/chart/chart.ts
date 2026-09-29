@@ -473,6 +473,17 @@ export class TecChart extends TectonElement {
   #onKeyDown = (event: KeyboardEvent) => {
     const count = this.#model?.count ?? 0
     if (!count) return
+    const handled = this.#model && this.#context ? this.#kind?.keyDown?.(this.#model, event, this.#context) : undefined
+    if (handled !== undefined) {
+      // The kind handled the key (and may draw something else now): activate in the next render.
+      event.preventDefault()
+      this.#pointer = null
+      this.#keyboard = true
+      this._active = handled
+      this.requestUpdate()
+      if (!this.#tooltip) void this.updateComplete.then(() => this._active >= 0 && (this._announcement = this.#describe(this._active)))
+      return
+    }
     const current = this._active
     let next: number
     switch (event.key) {
