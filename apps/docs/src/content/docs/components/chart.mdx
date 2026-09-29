@@ -1,16 +1,33 @@
 ---
 title: Chart
-description: Bar, line, area and pie charts built from composable elements, themed with the Tecton chart palette.
+description: Bar, line, area, scatter, pie, radar, radial bar, funnel, treemap, sunburst and sankey charts built from composable elements, themed with the Tecton chart palette.
 tags:
   [
     "tec-chart",
     "tec-chart-bar",
     "tec-chart-line",
     "tec-chart-area",
+    "tec-chart-scatter",
     "tec-chart-pie",
+    "tec-chart-radar",
+    "tec-chart-radial-bar",
+    "tec-chart-funnel",
+    "tec-chart-treemap",
+    "tec-chart-sunburst",
+    "tec-chart-sankey",
     "tec-chart-x-axis",
     "tec-chart-y-axis",
+    "tec-chart-z-axis",
     "tec-chart-grid",
+    "tec-chart-polar-grid",
+    "tec-chart-polar-angle-axis",
+    "tec-chart-polar-radius-axis",
+    "tec-chart-reference-line",
+    "tec-chart-reference-area",
+    "tec-chart-reference-dot",
+    "tec-chart-label-list",
+    "tec-chart-error-bar",
+    "tec-chart-brush",
     "tec-chart-tooltip",
     "tec-chart-legend",
   ]
@@ -43,11 +60,11 @@ import "@tecton/wc/chart"
 </script>
 ```
 
-The import registers `<tec-chart>` and all its parts. `data` and `config` are properties (they hold arrays and objects); assign a new array to update the chart.
+The import registers `<tec-chart>` and all its parts. A chart is made of the elements inside it: the first series element decides the chart type (bars, lines, areas and scatter series mix on one pair of axes; a pie, radar, radial bar, funnel, treemap, sunburst or sankey element draws its own kind of chart). `data` and `config` are properties (they hold arrays and objects); assign a new array to update the chart.
 
 ### The engine
 
-`<tec-chart>` draws its SVG itself with a small built-in engine — nice ticks, band and point scales, linear, monotone, natural and step curves, stacking, pie sectors — instead of wrapping a charting library. The chart libraries this design is based on are bound to one framework; a dependency-free renderer of the chart types below keeps the element small, works in any framework (or none) and is themed entirely with CSS.
+`<tec-chart>` draws its SVG itself with a small built-in engine — nice ticks, band, point and number scales, linear, monotone, natural and step curves, stacking, pie and polar geometry, squarified treemaps, sunburst rings and a sankey layout — instead of wrapping a charting library. The chart libraries this design is based on are bound to one framework; a dependency-free renderer of the chart types below keeps the element small, works in any framework (or none) and is themed entirely with CSS.
 
 ## Your first chart
 
@@ -222,15 +239,248 @@ Series with the same `stack` id are stacked. Round only the outer corners with f
 
 <ComponentPreview name="chart-area" />
 
+## Composed chart
+
+Bars, lines and areas mix freely on one category axis: add one series element per series. Areas are drawn first, then bars, then lines, so a line stays readable over the bars; lines and areas put their points at the centre of each bar band.
+
+<ComponentPreview name="chart-composed" />
+
+## Number axis
+
+`type="number"` on the category axis places the rows on a linear scale by the value of its `key`, with nice round ticks, instead of one evenly spaced slot per row — samples taken at irregular intervals keep their true spacing. `domain` sets the range: `"0,36"`, `"auto"` (a nice value around the data), `"dataMin,dataMax"`, or a mix such as `"0,auto"`. A domain that does not cover the data is widened to include it. `domain` works on the value axis too, which starts at zero by default.
+
+Sort the rows by the number: lines join them in data order, and the arrow keys move through them in that order.
+
+## Axis labels
+
+`label` on `<tec-chart-x-axis>` or `<tec-chart-y-axis>` adds an axis title. The chart reserves room for it beside the tick labels — the y title is rotated and placed past the widest tick label, so the two never overlap.
+
+<ComponentPreview name="chart-axis-label" />
+
+## Scatter chart
+
+`<tec-chart-scatter>` draws one mark per row: the x value comes from the `key` of the x axis (a scatter chart's axes are always number axes), the y value from the series' own `key`. Rows without a value for a series have no point in it, so several series can share one `data` array. `shape` picks the mark (`circle`, `square`, `triangle`, `diamond`, `cross` or `star`) — pair a second shape with the second colour so the series stay apart without relying on colour — and `line` connects the points.
+
+<ComponentPreview name="chart-scatter" />
+
+The arrow keys move from point to point in x order (series by series at equal x); the tooltip and the announcement give the x and y values, and a crosshair marks the point. The pointer picks the nearest point within 24px, so small marks are easy to hit. The data table lists every point.
+
+### Bubble chart
+
+Add a `<tec-chart-z-axis>` to size the points by a third field. `range="6,26"` is the smallest and largest radius in pixels; the area of a bubble grows with its value, so a bubble twice the value covers twice the area. Lower `fill-opacity` where bubbles overlap, and use `name-key` to name each point in the tooltip and the table.
+
+<ComponentPreview name="chart-scatter-bubble" />
+
+## Reference lines, areas and dots
+
+Mark targets, thresholds and periods with `<tec-chart-reference-line>` (`y` for a value, `x` for a category or a number), `<tec-chart-reference-area>` (`x1`, `x2`, `y1`, `y2` — leave a side out to reach the edge of the plot) and `<tec-chart-reference-dot>` (`x`, `y`, `r`). Each takes a `label`, drawn in the text colour. Areas are drawn under the series, lines and dots over them.
+
+<ComponentPreview name="chart-reference" />
+
+A reference outside the data widens the value axis to show it. `if-overflow="discard"` leaves it out instead, and `if-overflow="hidden"` draws it clipped to the plot.
+
+## Label list
+
+A `<tec-chart-label-list>` inside a series draws its values next to the marks: `position` is `top`, `bottom`, `start`, `end`, `outside` (past the end of a bar), `inside`, `center`, `inside-start`, `inside-end`, `inside-top` or `inside-bottom`, and `start` and `end` follow the reading direction. `key` shows another field and `formatter` formats the text.
+
+<ComponentPreview name="chart-label-list" />
+
+Labels are always in the text colour. A label goes inside a bar only when it fits there (with a halo in the surface colour so it stays legible on any fill); otherwise it moves outside, past the bar's value end, or is left out when there is no room there either. Two labels never overlap. The value always remains in the tooltip and the data table.
+
+<ComponentPreview name="chart-label-list-horizontal" />
+
+Label sparingly: a label on every mark of a dense chart is noise. Prefer the tooltip, and label only the values the reader must see at a glance.
+
+## Error bars
+
+A `<tec-chart-error-bar>` inside a bar, line or scatter series draws the uncertainty of each value. Its `key` names the field holding the error: a number draws value ± error, a `[below, above]` pair an asymmetric bar. `direction` is `y` or `x` (for a scatter series, both can be drawn) and `width` sets the caps. The value axis grows to include every error bar, and the data table adds a column with the errors.
+
+<ComponentPreview name="chart-error-bar" />
+
+## Brush
+
+A `<tec-chart-brush>` under the plot selects a window of the rows to show — for long series such as daily data. `start-index` and `end-index` set the window, `preview` draws the first series inside the brush, and every change fires `tec-range-change` with `{ startIndex, endIndex }`.
+
+<ComponentPreview name="chart-brush" class="h-96" />
+
+The series, axes, tooltip and keyboard navigation cover only the window: the active index counts from its first row. The visually hidden data table keeps listing every row, so screen reader users can still browse all the data.
+
+The brush is keyboard accessible: its two handles and the band between them are sliders, named `Start`, `End` and `Window` (translate them with `start-label`, `end-label` and `window-label`), whose values read as the category names.
+
+<KeyboardTable
+  rows={[
+    ["Tab", "Moves to the start handle, the window, then the end handle."],
+    ["ArrowRight / ArrowLeft", "Moves the handle (or the whole window) by one category, in the reading direction."],
+    ["ArrowUp / ArrowDown", "Moves the handle (or the window) to the next / previous category."],
+    ["PageUp / PageDown", "Moves by a tenth of the rows."],
+    ["Home / End", "Moves the handle as far as it goes (the window to the first / last rows)."],
+  ]}
+/>
+
+With a pointer, drag a handle to resize the window, drag the band to pan it, or press the track to move the nearest handle there.
+
 ## Pie and donut
 
 `<tec-chart-pie>` draws one slice per data row: `key` holds the values and `name-key` the names, which are also the config keys of the slices. `inner-radius` makes a donut and `padding-angle` separates the slices.
 
 <ComponentPreview name="chart-pie" />
 
+## Donut with text
+
+The same centre label works in a donut: `position="center"` shows the total of the pie's `key`.
+
+<ComponentPreview name="chart-pie-donut-text" />
+
+## Pie labels
+
+A `<tec-chart-label-list>` inside a pie labels its slices. By default a label goes inside its slice — only when it fits, in white or ink depending on the slice's colour; `key` picks the field (a name is shown with its config label).
+
+<ComponentPreview name="chart-pie-label-list" />
+
+`position="outside"` puts the labels outside the pie with leader lines. The pie shrinks so the labels fit the chart, and labels that would collide are moved apart (or left out; the value stays in the tooltip and the data table).
+
+<ComponentPreview name="chart-pie-label" />
+
+## Active slice
+
+The hovered or keyboard-selected slice grows by 4px. `active-index` emphasises a slice while no other one is active — the slice the text next to the chart is about.
+
+<ComponentPreview name="chart-pie-active" />
+
+## Several rings
+
+Several `<tec-chart-pie>` elements draw concentric rings: here an inner pie of desktop visitors and an outer ring of mobile visitors, each with its own radii. A ring can also show its own rows (`pie.data = […]`, e.g. browser versions around the browsers). The arrow keys go through every slice, ring by ring, and the tooltip names the ring.
+
+<ComponentPreview name="chart-pie-stacked" />
+
+## Radar chart
+
+`<tec-chart-radar>` draws a closed shape through a series' values, with one axis per data row. Add `<tec-chart-polar-grid>` for the web and `<tec-chart-polar-angle-axis>` with the `key` of the categories for their labels: the labels sit outside the web, and the chart shrinks the web so they never leave the chart (on a very narrow chart, long labels are shortened with an ellipsis; the tooltip and the data table keep the full names). `dots` marks every vertex.
+
+<ComponentPreview name="chart-radar" />
+
+### Several series
+
+Radars overlap in document order; each takes its colour from the config, and `fill-opacity` keeps the ones behind visible. The tooltip shows every series of the active category.
+
+<ComponentPreview name="chart-radar-multiple" />
+
+### Lines only
+
+`fill="none"` draws the outline only (give it a `stroke-width`); `radial-lines="false"` on the grid hides the spokes.
+
+<ComponentPreview name="chart-radar-lines" />
+
+### Grid and value scale
+
+`grid-type="circle"` draws round rings. `<tec-chart-polar-radius-axis>` labels the rings along one spoke: `angle` picks the spoke (degrees counter-clockwise from 3 o'clock), `tick-count` the number of rings and `domain` the range (`"0 400"`, `"0 auto"`). Tick labels that would cover a category label are left out.
+
+<ComponentPreview name="chart-radar-radius-axis" />
+
+`filled` shades the inside of the web. A `<tec-chart-label-list>` inside a radar labels the values at the vertices — outside the shape, or inside it where a category label is in the way.
+
+<ComponentPreview name="chart-radar-grid-filled" />
+
+For a quick radar, `type="radar"` draws one radar per config key with a colour, like the other `type` shortcuts.
+
+## Radial bar chart
+
+`<tec-chart-radial-bar>` bends bars into rings, one ring per data row (the first row innermost); the sweep of a bar shows its value. With one radial bar the rows are coloured like pie slices — the row's `fill`, then the config entry named by the row's `name-key` value. `background` draws the full track behind each bar.
+
+The layout attributes — `inner-radius`, `outer-radius` (pixels or percentages), `start-angle`, `end-angle`, `bar-size` and `max-value` — apply to the whole chart and are read from the first radial bar that sets them. Pixel radii larger than the chart are scaled down together, so the chart keeps its shape in a small box.
+
+<ComponentPreview name="chart-radial" />
+
+### Labels
+
+A `<tec-chart-label-list>` inside the radial bar writes a label along each bar: `inside-start`, `inside-end` or `end` (after the bar). A label is drawn only where it fits in the bar (or in the rest of the track), in white or ink depending on the bar's colour.
+
+<ComponentPreview name="chart-radial-label" />
+
+### Grid
+
+`<tec-chart-polar-grid grid-type="circle">` draws a ring through every row; `corner-radius` rounds the ends of the bars.
+
+<ComponentPreview name="chart-radial-grid" />
+
+### Centre label
+
+A `<tec-chart-label-list position="center">` shows the total of its `key` in the middle of the chart, with that key's config label as the caption. It is sized to fit the hole and left out when it cannot fit. With `max-value`, a single ring becomes a progress ring: here 200 of 300 visitors, clockwise from 12 o'clock.
+
+<ComponentPreview name="chart-radial-text" />
+
+### Stacked
+
+Radial bars with the same `stack` continue each other along the ring. A half ring (`start-angle="180" end-angle="0"`) fills the width of the chart, and the centre label sits above the centre. The label's `formatter` receives the row of a one-row chart, so it can add up the series.
+
+<ComponentPreview name="chart-radial-stacked" />
+
+## Funnel
+
+`<tec-chart-funnel>` draws one stage per data row, top to bottom: each stage is as wide as its value where it starts and narrows to the next row's value, so the drop-off between steps reads at a glance. `key` holds the values and `name-key` the stage names, which are also the config keys of the stages (their colours and labels). A 2px gap separates the stages.
+
+Place `<tec-chart-label-list>` elements inside to label the stages. With `position="center"` a label sits inside its stage when it fits and beside it otherwise; `start` and `end` put it beside the stage, and the funnel narrows to leave room. A label list shows the value by default; `key` picks another field (here the stage names, through the config labels) and `formatter` formats it. With `conversion`, the tooltip and the data table add each stage's conversion rate from the previous stage.
+
+<ComponentPreview name="chart-funnel" />
+
+`last-shape="rectangle"` keeps the last stage at its own width instead of narrowing it to a point, `reversed` turns the funnel upside down (a pyramid), and `orientation="horizontal"` on the chart lays the stages out from the inline start — where label lists take `top` and `bottom`. For a quick funnel, `type="funnel"` on the chart draws the first numeric field without a series element.
+
+<ComponentPreview name="chart-funnel-horizontal" />
+
+To show the conversion rate in a label instead, compute it in a formatter:
+
+```js
+chart.querySelector("tec-chart-label-list").formatter = (value, row, index) =>
+  index === 0 ? "" : `${Math.round((value / chart.data[index - 1].visitors) * 100)}%`
+```
+
+## Sankey
+
+`<tec-chart-sankey>` shows how quantities flow between nodes: each link is a ribbon as thick as its value, and each node is as tall as the larger of its incoming and outgoing totals. The chart's `data` holds the nodes (named by `name-key`, `name` by default, with their colours and labels in the config) and the sankey's `links` property holds the flows — `{ source, target, value }`, with `source` and `target` given as node names or node indexes.
+
+```js
+chart.data = [{ name: "north" }, { name: "refinery" }, { name: "gasoline" }]
+chart.querySelector("tec-chart-sankey").links = [
+  { source: "north", target: "refinery", value: 120 },
+  { source: "refinery", target: "gasoline", value: 120 },
+]
+```
+
+Nodes are placed in columns by their longest path from a source, with the final destinations in the last column (`align` changes this), then shifted over a few relaxation passes (`iterations`) so that connected nodes line up and links cross as little as possible. `node-width` and `node-padding` size the nodes and the gaps between them. A link takes its source node's colour; a node's label sits beside it, towards the next column, and is shortened with an ellipsis when the columns are close. Hovering or focusing a node highlights its links.
+
+<ComponentPreview name="chart-sankey" />
+
+`link-color="gradient"` blends each link from its source's colour to its target's (`target` and `neutral` are also available), and `link-curvature` flattens or straightens the curves.
+
+<ComponentPreview name="chart-sankey-gradient" />
+
+The links must not form a cycle: a link that would close one (and a link to a node that doesn't exist, to its own node, or with a value of 0 or less) is left out of the drawing and the data table, with a warning in the console. In right-to-left, the diagram flows from the right.
+
+The keyboard visits the nodes column by column, then the links. The tooltip shows a node's incoming and outgoing totals, and "Source → Target" with the value for a link; the data table lists every link and, in a second table, the totals of every node. Name the rows of the tooltip and the columns of the tables with the `incoming`, `outgoing`, `source`, `target`, `node` and `totals` config entries (they default to English).
+
+## Treemap
+
+`<tec-chart-treemap>` draws a hierarchy as nested rectangles whose areas follow the values. The data is an array of nodes, each with a name and either a value or `children`: `{ name: "oil", children: [{ name: "Permian", production: 540 }, …] }`. `key` names the value field (`size` by default), `name-key` the name field and `children-key` the children field; a parent's value is the sum of its children.
+
+Siblings are laid out largest first with the squarified algorithm, which keeps the cells close to `aspect-ratio` (the golden ratio by default). The top-level nodes take their colour from their `fill`, their config entry or the palette, and their descendants keep it. `padding` draws the parent groups as tinted frames with their name in a header band. A cell shows its name and value only when they fit; the tooltip shows the node's path and value.
+
+<ComponentPreview name="chart-treemap" />
+
+### Zoomable treemap
+
+With `nest`, the treemap shows one level at a time, each node sized by its total. Click a cell — or press Enter on it — to zoom into its children; the breadcrumb below the chart, Escape and Backspace go back up, and the new level is announced. Mention Enter and Escape in the chart's `description`.
+
+<ComponentPreview name="chart-treemap-nest" />
+
+## Sunburst
+
+`<tec-chart-sunburst>` draws the same data as concentric rings: the top-level nodes form the inner ring and each level of children the next ring out, every node spanning an angle proportional to its value. `inner-radius` and `outer-radius` size the rings, `start-angle` and `end-angle` set the sweep (`start-angle="90" end-angle="-270"` starts at 12 o'clock and runs clockwise), and `padding-angle` and `ring-padding` add gaps. Colours follow the top-level nodes, like the treemap. A sector is labelled only when its name fits — horizontally, or along the arc — and the centre shows the total, or the path and value of the active node.
+
+<ComponentPreview name="chart-sunburst" />
+
 ## Quick charts
 
-For a simple chart, `type` draws one series per config key with a colour, without series elements (`stacked` stacks them):
+For a simple chart, `type` draws one series per config key with a colour, without series elements (`stacked` stacks them). It takes `bar`, `line`, `area`, `pie`, `radar`, `radial-bar` and `funnel`:
 
 ```html
 <tec-chart type="bar" category-key="month" class="h-64 w-full" label="Visitors by month"></tec-chart>
@@ -242,6 +492,8 @@ The chart mirrors itself in a right-to-left context: the categories run from the
 
 <ComponentPreview name="chart-rtl" direction="rtl" class="h-92" />
 
+In a right-to-left context, pie, radar and radial bar charts are mirrored: a radar that runs clockwise from 12 o'clock runs counter-clockwise, and a pie that starts at 3 o'clock starts at 9 o'clock. The items keep following the reading direction, as the arrow keys do. Text is never mirrored. In a right-to-left context the treemap is mirrored — the largest cell starts at the right, the start edge — while a sunburst keeps its angles. Funnels and sankey diagrams flow from the right, and scatter charts mirror their x axis. Text is never mirrored.
+
 ## Keyboard interactions
 
 <KeyboardTable
@@ -251,8 +503,12 @@ The chart mirrors itself in a right-to-left context: the categories run from the
     ["ArrowDown / ArrowUp", "Moves to the next / previous data point."],
     ["Home / End", "Moves to the first / last data point."],
     ["Escape", "Hides the tooltip; an arrow key shows it again."],
+    ["Enter", "In a zoomable treemap (`nest`): zooms into the active cell's children."],
+    ["Escape / Backspace", "In a zoomed-in treemap: goes back up one level (at the top level, Escape hides the tooltip)."],
   ]}
 />
+
+What a data point is depends on the chart: a category (every series at once) in bar, line, area and radar charts, a point in a scatter chart, a slice in a pie (ring by ring), a ring in a radial bar chart, a stage in a funnel, a node in a treemap or sunburst (depth-first: a group, then its members), and in a sankey diagram the nodes column by column, then the links.
 
 ## Accessibility
 
@@ -262,6 +518,13 @@ The chart mirrors itself in a right-to-left context: the categories run from the
 - The SVG is decorative (`aria-hidden`); the tooltip is too, since the live region announces it. The legend is plain text.
 - The focus ring is the Tecton ring and turns into a system outline in forced-colours mode, where series keep their colours.
 - Bars grow, lines and areas reveal and value changes animate only without `prefers-reduced-motion: reduce`.
+- Every chart type has its data table: a radar's has a row per category and a column per series, a scatter chart's a row per point, a treemap's or sunburst's a row per node with its path and share, a sankey's a row per link plus a table of node totals.
+- Pointer targets are at least 24px: scatter points, thin rings and thin slices answer to the nearest mark within reach.
+- Reference, axis and value labels use the text tokens, never a series colour, and keep their contrast in dark mode and in forced-colours mode.
+- In a right-to-left context the geometry mirrors (the x axis runs from the right) while text keeps its reading order and stays on its logical side.
+- Scatter marks, labels and annotations fade or pop in only without `prefers-reduced-motion: reduce`.
+- In a treemap or a sunburst the arrow keys move over every node in depth-first order — a group, then its members — and the tooltip and announcement give the node's path ("Oil › Permian"). The data table lists every node with its path, its value and its share of its parent.
+- Labels on filled cells and sectors are black or white, whichever contrasts most with the fill (`contrast-color()`, with a relative-colour fallback).
 
 ## Usage guidelines
 
@@ -275,6 +538,7 @@ The chart mirrors itself in a right-to-left context: the categories run from the
 
 - one measured number with a unit and a change: use [Stat](/docs/tecton/stat)
 - a value read against a fixed scale with named bands: use [Meter](/docs/tecton/meter)
+- two measures with different units on one plot: a second value axis is deliberately not available — draw two charts, or index both series to a common base
 
 ### Do
 
@@ -422,10 +686,27 @@ The chart re-renders when the `data` property is assigned; changing the array it
     "tec-chart-bar",
     "tec-chart-line",
     "tec-chart-area",
+    "tec-chart-scatter",
     "tec-chart-pie",
+    "tec-chart-radar",
+    "tec-chart-radial-bar",
+    "tec-chart-funnel",
+    "tec-chart-treemap",
+    "tec-chart-sunburst",
+    "tec-chart-sankey",
     "tec-chart-x-axis",
     "tec-chart-y-axis",
+    "tec-chart-z-axis",
     "tec-chart-grid",
+    "tec-chart-polar-grid",
+    "tec-chart-polar-angle-axis",
+    "tec-chart-polar-radius-axis",
+    "tec-chart-reference-line",
+    "tec-chart-reference-area",
+    "tec-chart-reference-dot",
+    "tec-chart-label-list",
+    "tec-chart-error-bar",
+    "tec-chart-brush",
     "tec-chart-tooltip",
     "tec-chart-legend",
   ]}

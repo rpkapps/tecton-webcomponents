@@ -57,14 +57,19 @@ const PALETTE = ["var(--tec-chart-1)", "var(--tec-chart-2)", "var(--tec-chart-3)
  * data table lists every value for screen reader users who browse the page. Motion (bars growing,
  * lines revealing, value changes) only runs without `prefers-reduced-motion: reduce`.
  *
- * @summary Beautiful, accessible charts: bar (grouped, stacked, horizontal), line, area (stacked,
- * gradient) and pie/donut, drawn as SVG and themed with the Tecton chart palette.
+ * @summary Beautiful, accessible charts: bar (grouped, stacked, horizontal), line, area, composed,
+ * scatter/bubble, pie/donut, radar, radial bar, funnel, treemap, sunburst and sankey, drawn as SVG
+ * and themed with the Tecton chart palette.
  *
  * @tag tec-chart
  *
  * @slot - The chart parts: series (`tec-chart-bar`, `tec-chart-line`, `tec-chart-area`,
- *   `tec-chart-pie`), axes (`tec-chart-x-axis`, `tec-chart-y-axis`), `tec-chart-grid`,
- *   `tec-chart-tooltip` and `tec-chart-legend`.
+ *   `tec-chart-scatter`, `tec-chart-pie`, `tec-chart-radar`, `tec-chart-radial-bar`,
+ *   `tec-chart-funnel`, `tec-chart-treemap`, `tec-chart-sunburst`, `tec-chart-sankey`), axes and
+ *   grids (`tec-chart-x-axis`, `tec-chart-y-axis`, `tec-chart-z-axis`, `tec-chart-grid`,
+ *   `tec-chart-polar-grid`, `tec-chart-polar-angle-axis`, `tec-chart-polar-radius-axis`),
+ *   annotations (`tec-chart-reference-line`, `tec-chart-reference-area`, `tec-chart-reference-dot`),
+ *   `tec-chart-brush`, `tec-chart-tooltip` and `tec-chart-legend`.
  *
  * @csspart base - The container of the plot, the legend and the tooltip.
  * @csspart plot - The focusable plot area (`role="application"`, `aria-roledescription="chart"`).
