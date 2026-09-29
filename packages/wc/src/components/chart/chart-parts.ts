@@ -1,7 +1,7 @@
 /**
  * @module chart-parts
- * The declarative parts of a `<tec-chart>`: series (`tec-chart-bar`, `tec-chart-line`,
- * `tec-chart-area`, `tec-chart-pie`), axes (`tec-chart-x-axis`, `tec-chart-y-axis`) and the grid
+ * The declarative parts of a cartesian `<tec-chart>`: series (`tec-chart-bar`, `tec-chart-line`,
+ * `tec-chart-area`), axes (`tec-chart-x-axis`, `tec-chart-y-axis`) and the grid
  * (`tec-chart-grid`). They render nothing themselves: the parent chart reads their properties and
  * draws them in its own SVG, and re-draws whenever one of them changes.
  */
@@ -31,7 +31,10 @@ export class TecChartPart extends TectonElement {
   }
 
   protected updated(): void {
-    ;(this.parentElement as PartHost | null)?.partChanged?.()
+    // The nearest ancestor that draws parts: the chart, also for parts nested in a series.
+    let el = this.parentElement as (HTMLElement & PartHost) | null
+    while (el && !el.partChanged) el = el.parentElement
+    el?.partChanged?.()
   }
 }
 
@@ -116,37 +119,6 @@ export class TecChartArea extends TecChartSeries {
   @property({ type: Boolean }) dots = false
 }
 
-/**
- * Slice colours come from the row's `fill` field, then from the config entry named by the row's
- * `name-key` value, then from the chart palette.
- *
- * @summary A pie (or, with `inner-radius`, donut) series of a `tec-chart`: one slice per data row.
- *
- * @tag tec-chart-pie
- */
-export class TecChartPie extends TecChartPart {
-  /** The data field holding the slice values. */
-  @property({ reflect: true }) key = ""
-
-  /** The data field holding the slice names (also the config keys of the slices). */
-  @property({ attribute: "name-key", reflect: true }) nameKey = "name"
-
-  /** Inner radius: pixels (`60`) or a percentage of the available radius (`"50%"`). 0 = pie. */
-  @property({ attribute: "inner-radius" }) innerRadius = "0"
-
-  /** Outer radius: pixels or a percentage of the available radius. */
-  @property({ attribute: "outer-radius" }) outerRadius = "80%"
-
-  /** Gap between slices in degrees. */
-  @property({ type: Number, attribute: "padding-angle" }) paddingAngle = 0
-
-  /** Angle of the first slice's start, in degrees counter-clockwise from 3 o'clock. */
-  @property({ type: Number, attribute: "start-angle" }) startAngle = 0
-
-  /** Angle of the last slice's end. `start-angle` + 360 is a full circle. */
-  @property({ type: Number, attribute: "end-angle" }) endAngle = 360
-}
-
 // ------------------------------------------------------------------------------------------ axes
 
 /**
@@ -215,14 +187,104 @@ export class TecChartGrid extends TecChartPart {
   @property({ type: Boolean }) dashed = false
 }
 
+
+// ------------------------------------------------------------------------------------------ cartesian extensions
+
+/**
+ * @summary TODO
+ *
+ * @tag tec-chart-scatter
+ */
+export class TecChartScatter extends TecChartPart {}
+
+/**
+ * @summary TODO
+ *
+ * @tag tec-chart-z-axis
+ */
+export class TecChartZAxis extends TecChartPart {}
+
+/**
+ * @summary TODO
+ *
+ * @tag tec-chart-reference-line
+ */
+export class TecChartReferenceLine extends TecChartPart {}
+
+/**
+ * @summary TODO
+ *
+ * @tag tec-chart-reference-area
+ */
+export class TecChartReferenceArea extends TecChartPart {}
+
+/**
+ * @summary TODO
+ *
+ * @tag tec-chart-reference-dot
+ */
+export class TecChartReferenceDot extends TecChartPart {}
+
+/**
+ * @summary TODO
+ *
+ * @tag tec-chart-error-bar
+ */
+export class TecChartErrorBar extends TecChartPart {}
+
+/**
+ * @summary TODO
+ *
+ * @tag tec-chart-brush
+ */
+export class TecChartBrush extends TecChartPart {}
+
+// ------------------------------------------------------------------------------------------ labels
+
+/** Formats a label: `(value, row, index) => string`. */
+export type ChartLabelListFormatter = (value: unknown, row: Record<string, unknown> | undefined, index: number) => string
+
+/**
+ * Place it inside a series element (`tec-chart-bar`, `tec-chart-line`, `tec-chart-area`,
+ * `tec-chart-scatter`, `tec-chart-pie`, `tec-chart-radar`, `tec-chart-radial-bar`, `tec-chart-funnel`…).
+ * Label sparingly: the axes, the tooltip and the data table carry the values that are not labelled.
+ *
+ * @summary Value labels drawn next to (or inside) the marks of the series it is placed in.
+ *
+ * @tag tec-chart-label-list
+ */
+export class TecChartLabelList extends TecChartPart {
+  /** The data field to show. Defaults to the series' own value. */
+  @property({ reflect: true }) key?: string
+
+  /**
+   * Where the label sits relative to its mark: `top`, `bottom`, `start`, `end`, `inside`, `outside`,
+   * `center`, `inside-start`, `inside-end` (not every position applies to every mark).
+   */
+  @property({ reflect: true }) position = "top"
+
+  /** Distance between the label and its mark, in pixels. */
+  @property({ type: Number }) offset = 5
+
+  /** Formats each label. */
+  @property({ attribute: false }) formatter?: ChartLabelListFormatter
+}
+
 declare global {
   interface HTMLElementTagNameMap {
     "tec-chart-bar": TecChartBar
     "tec-chart-line": TecChartLine
     "tec-chart-area": TecChartArea
-    "tec-chart-pie": TecChartPie
     "tec-chart-x-axis": TecChartXAxis
     "tec-chart-y-axis": TecChartYAxis
     "tec-chart-grid": TecChartGrid
+    "tec-chart-scatter": TecChartScatter
+    "tec-chart-z-axis": TecChartZAxis
+    "tec-chart-reference-line": TecChartReferenceLine
+    "tec-chart-reference-area": TecChartReferenceArea
+    "tec-chart-reference-dot": TecChartReferenceDot
+    "tec-chart-error-bar": TecChartErrorBar
+    "tec-chart-brush": TecChartBrush
+    "tec-chart-label-list": TecChartLabelList
   }
 }
