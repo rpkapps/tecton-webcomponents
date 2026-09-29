@@ -2,7 +2,7 @@
  * @module chart-polar
  * The polar kinds: radar (`tec-chart-radar`) and radial bar (`tec-chart-radial-bar`) charts, with the polar grid and axes.
  */
-import { nothing, svg } from "lit"
+import { css, nothing, svg } from "lit"
 import type { ChartKind } from "./chart-kind.js"
 import { TecChartPart } from "./chart-parts.js"
 
@@ -66,3 +66,6 @@ export const radialBarKind: ChartKind = {
   table: () => nothing,
   legend: () => [],
 }
+
+/** Styles of the marks of this module, added to `<tec-chart>`'s shadow root. */
+export const polarStyles = css``

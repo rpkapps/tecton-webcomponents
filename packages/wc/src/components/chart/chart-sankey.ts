@@ -2,7 +2,7 @@
  * @module chart-sankey
  * The sankey kind (`tec-chart-sankey`).
  */
-import { nothing, svg } from "lit"
+import { css, nothing, svg } from "lit"
 import type { ChartKind } from "./chart-kind.js"
 import { TecChartPart } from "./chart-parts.js"
 
@@ -25,3 +25,6 @@ export const sankeyKind: ChartKind = {
   table: () => nothing,
   legend: () => [],
 }
+
+/** Styles of the marks of this module, added to `<tec-chart>`'s shadow root. */
+export const sankeyStyles = css``

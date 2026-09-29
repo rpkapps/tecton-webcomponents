@@ -7,7 +7,7 @@ import { TectonElement } from "../../internal/tecton-element.js"
 import { colorProperty, configStyles, entryColor, formatValue, localeOf, type ChartConfig, type ChartRow } from "./chart-config.js"
 import type { Point } from "./chart-engine.js"
 import type { ChartContext, ChartKind, ChartModelBase, PartClass } from "./chart-kind.js"
-import { KINDS } from "./chart-kinds.js"
+import { KIND_STYLES, KINDS } from "./chart-kinds.js"
 import { TecChartLegend } from "./chart-legend.js"
 import { TecChartTooltip, resolveTooltip } from "./chart-tooltip.js"
 import { chartStyles } from "./chart.styles.js"
@@ -76,7 +76,7 @@ const PALETTE = ["var(--tec-chart-1)", "var(--tec-chart-2)", "var(--tec-chart-3)
  * @cssprop --tec-chart-1 - Chart palette (theme), `--tec-chart-1` … `--tec-chart-5`.
  */
 export class TecChart extends TectonElement {
-  static styles = [hostStyles, srOnly, chartStyles]
+  static styles = [hostStyles, srOnly, chartStyles, ...KIND_STYLES]
 
   /** The data: one object per category (per slice for a pie). Assign a new array to update the chart. */
   @property({ attribute: false }) data: ChartRow[] = []

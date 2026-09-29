@@ -2,7 +2,7 @@
  * @module chart-pie
  * The pie kind (`tec-chart-pie`): pie and donut charts, one slice per data row.
  */
-import { html, nothing, svg } from "lit"
+import { css, html, nothing, svg } from "lit"
 import { property } from "lit/decorators.js"
 import { formatValue } from "./chart-config.js"
 import { pieLayout, polarPoint, resolveRadius, sectorPath } from "./chart-engine.js"
@@ -151,6 +151,9 @@ export const pieKind: ChartKind<PieModel> = {
     return model.slices.map((s) => ({ dataKey: s.name, color: s.color, row: ctx.rows[s.index] }))
   },
 }
+
+/** Styles of the marks of this module, added to `<tec-chart>`'s shadow root. */
+export const pieStyles = css``
 
 declare global {
   interface HTMLElementTagNameMap {
