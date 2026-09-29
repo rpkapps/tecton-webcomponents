@@ -1,0 +1,23 @@
+<tec-chart id="chart-funnel-horizontal" class="aspect-[2/1] w-full" orientation="horizontal" label="Well pipeline">
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-legend></tec-chart-legend>
+  <tec-chart-funnel key="wells" name-key="phase" last-shape="rectangle">
+    <tec-chart-label-list position="center"></tec-chart-label-list>
+  </tec-chart-funnel>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-funnel-horizontal")
+  chart.config = {
+    wells: { label: "Wells" },
+    prospects: { label: "Prospects", color: "var(--tec-chart-1)" },
+    drilled: { label: "Drilled", color: "var(--tec-chart-2)" },
+    completed: { label: "Completed", color: "var(--tec-chart-3)" },
+    producing: { label: "Producing", color: "var(--tec-chart-4)" },
+  }
+  chart.data = [
+    { phase: "prospects", wells: 184 },
+    { phase: "drilled", wells: 121 },
+    { phase: "completed", wells: 96 },
+    { phase: "producing", wells: 88 },
+  ]
+</script>

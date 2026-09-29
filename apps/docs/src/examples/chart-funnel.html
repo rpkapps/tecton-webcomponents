@@ -1,0 +1,25 @@
+<tec-chart id="chart-funnel" class="mx-auto aspect-[4/3] w-full max-w-[480px]" label="Subscription funnel">
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-funnel key="visitors" name-key="stage" conversion>
+    <tec-chart-label-list position="center"></tec-chart-label-list>
+    <tec-chart-label-list position="end" key="stage"></tec-chart-label-list>
+  </tec-chart-funnel>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-funnel")
+  chart.config = {
+    visitors: { label: "Visitors" },
+    visits: { label: "Visited", color: "var(--tec-chart-1)" },
+    signups: { label: "Signed up", color: "var(--tec-chart-2)" },
+    trials: { label: "Started a trial", color: "var(--tec-chart-3)" },
+    subscriptions: { label: "Subscribed", color: "var(--tec-chart-4)" },
+    renewals: { label: "Renewed", color: "var(--tec-chart-5)" },
+  }
+  chart.data = [
+    { stage: "visits", visitors: 12400 },
+    { stage: "signups", visitors: 5230 },
+    { stage: "trials", visitors: 2870 },
+    { stage: "subscriptions", visitors: 1150 },
+    { stage: "renewals", visitors: 640 },
+  ]
+</script>

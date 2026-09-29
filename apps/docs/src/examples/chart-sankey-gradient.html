@@ -1,0 +1,31 @@
+<tec-chart id="chart-sankey-gradient" class="aspect-[16/10] w-full" label="Visitor journeys">
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-sankey link-color="gradient" node-width="14" link-curvature="0.4"></tec-chart-sankey>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-sankey-gradient")
+  chart.config = {
+    value: { label: "Visitors" },
+    search: { label: "Search", color: "var(--tec-chart-1)" },
+    social: { label: "Social", color: "var(--tec-chart-2)" },
+    direct: { label: "Direct", color: "var(--tec-chart-4)" },
+    home: { label: "Home page", color: "var(--tec-muted-foreground)" },
+    pricing: { label: "Pricing", color: "var(--tec-muted-foreground)" },
+    signup: { label: "Signed up", color: "var(--tec-chart-3)" },
+    left: { label: "Left", color: "var(--tec-chart-5)" },
+  }
+  chart.data = [{ name: "search" }, { name: "social" }, { name: "direct" }, { name: "home" }, { name: "pricing" }, { name: "signup" }, { name: "left" }]
+  // Links by node index, like Recharts.
+  chart.querySelector("tec-chart-sankey").links = [
+    { source: 0, target: 3, value: 3200 },
+    { source: 0, target: 4, value: 1400 },
+    { source: 1, target: 3, value: 1800 },
+    { source: 1, target: 4, value: 300 },
+    { source: 2, target: 3, value: 900 },
+    { source: 2, target: 4, value: 1100 },
+    { source: 3, target: 5, value: 1300 },
+    { source: 3, target: 6, value: 4600 },
+    { source: 4, target: 5, value: 1500 },
+    { source: 4, target: 6, value: 1300 },
+  ]
+</script>

@@ -1,0 +1,45 @@
+<tec-chart id="chart-sankey" class="aspect-[16/10] w-full" label="Crude oil flows, thousand barrels per day">
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-sankey node-padding="16"></tec-chart-sankey>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-sankey")
+  chart.config = {
+    value: { label: "kbbl/d" },
+    north: { label: "North Sea", color: "var(--tec-chart-1)" },
+    permian: { label: "Permian", color: "var(--tec-chart-2)" },
+    gulf: { label: "Gulf of Mexico", color: "var(--tec-chart-3)" },
+    refinery: { label: "Refinery", color: "var(--tec-chart-4)" },
+    terminal: { label: "Export terminal", color: "var(--tec-chart-5)" },
+    gasoline: { label: "Gasoline" },
+    diesel: { label: "Diesel" },
+    jet: { label: "Jet fuel" },
+    exports: { label: "Crude exports" },
+  }
+  // The nodes are the chart data; their colours come from the config, or from `fill`.
+  const product = "var(--tec-muted-foreground)"
+  chart.data = [
+    { name: "north" },
+    { name: "permian" },
+    { name: "gulf" },
+    { name: "refinery" },
+    { name: "terminal" },
+    { name: "gasoline", fill: product },
+    { name: "diesel", fill: product },
+    { name: "jet", fill: product },
+    { name: "exports", fill: product },
+  ]
+  // The links name their nodes (node indexes work too).
+  chart.querySelector("tec-chart-sankey").links = [
+    { source: "north", target: "refinery", value: 120 },
+    { source: "north", target: "terminal", value: 60 },
+    { source: "permian", target: "refinery", value: 160 },
+    { source: "permian", target: "terminal", value: 40 },
+    { source: "gulf", target: "refinery", value: 90 },
+    { source: "gulf", target: "terminal", value: 110 },
+    { source: "refinery", target: "gasoline", value: 170 },
+    { source: "refinery", target: "diesel", value: 120 },
+    { source: "refinery", target: "jet", value: 80 },
+    { source: "terminal", target: "exports", value: 210 },
+  ]
+</script>
