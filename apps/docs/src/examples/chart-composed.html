@@ -1,0 +1,28 @@
+<tec-chart id="chart-composed" class="min-h-[240px] w-full" label="Production, forecast and capacity by month">
+  <tec-chart-grid></tec-chart-grid>
+  <tec-chart-x-axis key="month"></tec-chart-x-axis>
+  <tec-chart-y-axis width="36"></tec-chart-y-axis>
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-legend></tec-chart-legend>
+  <tec-chart-area key="capacity" fill-opacity="0.15"></tec-chart-area>
+  <tec-chart-bar key="production" radius="4" max-bar-size="32"></tec-chart-bar>
+  <tec-chart-line key="forecast" dashed dots></tec-chart-line>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-composed")
+  chart.querySelector("tec-chart-x-axis").tickFormatter = (value) => value.slice(0, 3)
+  chart.margin = { top: 12 }
+  chart.config = {
+    capacity: { label: "Capacity", color: "var(--tec-chart-4)" },
+    production: { label: "Production", color: "var(--tec-chart-1)" },
+    forecast: { label: "Forecast", color: "var(--tec-chart-2)" },
+  }
+  chart.data = [
+    { month: "January", production: 186, forecast: 200, capacity: 320 },
+    { month: "February", production: 305, forecast: 260, capacity: 320 },
+    { month: "March", production: 237, forecast: 250, capacity: 320 },
+    { month: "April", production: 73, forecast: 120, capacity: 180 },
+    { month: "May", production: 209, forecast: 220, capacity: 300 },
+    { month: "June", production: 214, forecast: 240, capacity: 320 },
+  ]
+</script>

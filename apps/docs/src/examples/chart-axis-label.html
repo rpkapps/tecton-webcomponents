@@ -1,0 +1,25 @@
+<tec-chart id="chart-axis-label" class="min-h-[240px] w-full" label="Oil rate decline of well A-12">
+  <tec-chart-grid></tec-chart-grid>
+  <tec-chart-x-axis key="months" type="number" domain="0,36" tick-count="7" label="Months on production"></tec-chart-x-axis>
+  <tec-chart-y-axis width="40" label="Oil rate (bbl/d)"></tec-chart-y-axis>
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-line key="rate" curve="monotone" dots></tec-chart-line>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-axis-label")
+  chart.margin = { top: 12, end: 16 }
+  chart.config = { months: { label: "Month" }, rate: { label: "Oil rate (bbl/d)", color: "var(--tec-chart-1)" } }
+  // Samples at irregular intervals: a number axis spaces them by their value.
+  chart.data = [
+    { months: 0, rate: 1200 },
+    { months: 1, rate: 1030 },
+    { months: 2, rate: 905 },
+    { months: 3, rate: 810 },
+    { months: 6, rate: 620 },
+    { months: 9, rate: 505 },
+    { months: 12, rate: 430 },
+    { months: 18, rate: 335 },
+    { months: 24, rate: 275 },
+    { months: 36, rate: 205 },
+  ]
+</script>

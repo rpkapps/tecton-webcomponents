@@ -1,0 +1,22 @@
+<tec-chart id="chart-label-list" class="min-h-[220px] w-full" label="Oil production by month">
+  <tec-chart-grid></tec-chart-grid>
+  <tec-chart-x-axis key="month"></tec-chart-x-axis>
+  <tec-chart-tooltip hide-label></tec-chart-tooltip>
+  <tec-chart-bar key="oil" radius="6">
+    <tec-chart-label-list position="top" offset="8"></tec-chart-label-list>
+  </tec-chart-bar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-label-list")
+  chart.querySelector("tec-chart-x-axis").tickFormatter = (value) => value.slice(0, 3)
+  chart.margin = { top: 24 }
+  chart.config = { oil: { label: "Oil (kbbl)", color: "var(--tec-chart-1)" } }
+  chart.data = [
+    { month: "January", oil: 186 },
+    { month: "February", oil: 305 },
+    { month: "March", oil: 237 },
+    { month: "April", oil: 73 },
+    { month: "May", oil: 209 },
+    { month: "June", oil: 214 },
+  ]
+</script>

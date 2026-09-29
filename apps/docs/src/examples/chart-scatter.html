@@ -1,0 +1,33 @@
+<tec-chart id="chart-scatter" class="min-h-[260px] w-full" label="Initial oil rate by well depth">
+  <tec-chart-grid horizontal vertical></tec-chart-grid>
+  <tec-chart-x-axis key="depth" type="number" domain="auto" label="Depth (m)"></tec-chart-x-axis>
+  <tec-chart-y-axis domain="auto" label="Initial rate (bbl/d)" width="44"></tec-chart-y-axis>
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-legend></tec-chart-legend>
+  <tec-chart-scatter key="onshore"></tec-chart-scatter>
+  <tec-chart-scatter key="offshore" shape="triangle"></tec-chart-scatter>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-scatter")
+  chart.margin = { top: 10, end: 16 }
+  chart.config = {
+    depth: { label: "Depth (m)" },
+    onshore: { label: "Onshore", color: "var(--tec-chart-1)" },
+    offshore: { label: "Offshore", color: "var(--tec-chart-2)" },
+  }
+  // One row per well: a well has a value in the series it belongs to.
+  chart.data = [
+    { depth: 1250, onshore: 420 },
+    { depth: 1480, onshore: 510 },
+    { depth: 1720, onshore: 460 },
+    { depth: 1950, onshore: 640 },
+    { depth: 2210, onshore: 590 },
+    { depth: 2480, onshore: 720 },
+    { depth: 2150, offshore: 880 },
+    { depth: 2630, offshore: 1040 },
+    { depth: 2890, offshore: 960 },
+    { depth: 3120, offshore: 1210 },
+    { depth: 3440, offshore: 1150 },
+    { depth: 3780, offshore: 1380 },
+  ]
+</script>

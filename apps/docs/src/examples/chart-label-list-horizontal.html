@@ -1,0 +1,20 @@
+<tec-chart id="chart-label-list-horizontal" orientation="horizontal" category-key="field" class="min-h-[220px] w-full" label="Oil production by field">
+  <tec-chart-tooltip hide-label></tec-chart-tooltip>
+  <tec-chart-bar key="oil" radius="4">
+    <tec-chart-label-list key="field" position="inside-start" offset="8"></tec-chart-label-list>
+    <tec-chart-label-list position="end" offset="8"></tec-chart-label-list>
+  </tec-chart-bar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-label-list-horizontal")
+  chart.margin = { end: 40 }
+  chart.config = { oil: { label: "Oil (kbbl)", color: "var(--tec-chart-2)" } }
+  chart.data = [
+    { field: "Alder", oil: 305 },
+    { field: "Birch", oil: 237 },
+    { field: "Cedar", oil: 214 },
+    { field: "Dogwood", oil: 186 },
+    { field: "Elm", oil: 73 },
+    { field: "Fir", oil: 21 },
+  ]
+</script>

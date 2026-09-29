@@ -48,6 +48,15 @@ export const chartStyles = [
       transform-box: fill-box;
       transform-origin: center;
     }
+    /* A rotated title (the y axis label) turns around its own centre; in RTL it is also flipped back. */
+    text[data-rotated] {
+      transform: rotate(-90deg);
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    :host(:dir(rtl)) .mirror text[data-rotated] {
+      transform: scaleX(-1) rotate(-90deg);
+    }
     .tick {
       fill: var(--tec-muted-foreground);
     }
@@ -81,6 +90,119 @@ export const chartStyles = [
     .bar {
       cursor: default;
     }
+    /* Cartesian extensions: axis titles, scatter marks, annotations, value labels. */
+    .axis-label {
+      fill: var(--tec-muted-foreground);
+      font-weight: 500;
+    }
+    .symbol {
+      stroke: var(--tec-background);
+      stroke-width: 1px;
+    }
+    .active-symbol {
+      fill: none;
+      stroke: var(--tec-foreground);
+      stroke-width: 1.5px;
+      pointer-events: none;
+    }
+    .cursor-cross .cursor-line {
+      stroke-dasharray: 3 3;
+    }
+    .reference-area {
+      fill: var(--tec-muted-foreground);
+    }
+    .reference-line {
+      stroke: var(--tec-muted-foreground);
+      stroke-width: 1px;
+    }
+    .reference-dot {
+      fill: var(--tec-background);
+      stroke: var(--tec-foreground);
+      stroke-width: 1.5px;
+    }
+    .reference-label {
+      fill: var(--tec-foreground);
+    }
+    .error-bar {
+      fill: none;
+      stroke: var(--tec-foreground);
+      stroke-width: 1.5px;
+      stroke-linecap: round;
+    }
+    .value-label {
+      fill: var(--tec-foreground);
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
+    }
+    /* A label over a filled mark keeps its contrast with a surface-coloured halo. */
+    .value-label[data-inside],
+    .reference-label {
+      paint-order: stroke;
+      stroke: var(--tec-background);
+      stroke-width: 3px;
+      stroke-linejoin: round;
+    }
+    /* The brush (tec-chart-brush), drawn under the plot. */
+    .brush {
+      position: relative;
+      flex: none;
+    }
+    .brush-track {
+      position: absolute;
+      inset-block: 0;
+      border: 1px solid var(--tec-border);
+      border-radius: var(--tec-radius-sm);
+      background: var(--tec-background);
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .brush-preview {
+      inset: 0;
+      pointer-events: none;
+    }
+    :host(:dir(rtl)) .brush-preview {
+      transform: scaleX(-1);
+    }
+    .brush-band {
+      position: absolute;
+      inset-block: 0;
+      background: color-mix(in oklab, var(--tec-foreground) 10%, transparent);
+      cursor: grab;
+      outline: none;
+      touch-action: none;
+    }
+    .brush-band[data-dragging] {
+      cursor: grabbing;
+    }
+    .brush-handle {
+      position: absolute;
+      inset-block: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      width: 24px;
+      margin-inline-start: -12px;
+      cursor: ew-resize;
+      outline: none;
+      touch-action: none;
+    }
+    .brush-handle::before {
+      content: "";
+      width: 8px;
+      height: min(100%, max(16px, 60%));
+      border: 1px solid var(--tec-muted-foreground);
+      border-radius: var(--tec-radius-xs, 2px);
+      background: var(--tec-background);
+      box-shadow: var(--tec-shadow-xs, none);
+    }
+    .brush-handle:focus-visible::before {
+      border-color: var(--tec-ring);
+      box-shadow: var(--tec-focus-ring);
+    }
+    .brush-band:focus-visible {
+      box-shadow: var(--tec-focus-ring);
+    }
   `,
   focusRing(".plot"),
   motionSafe(css`
@@ -107,6 +229,21 @@ export const chartStyles = [
     }
     .pie {
       animation: tec-chart-pop 400ms var(--tec-ease-out, ease-out) both;
+    }
+    .symbol {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: tec-chart-pop 400ms var(--tec-ease-out, ease-out) both;
+    }
+    .labels,
+    .errors,
+    .reference {
+      animation: tec-chart-fade 400ms var(--tec-ease-out, ease-out) both;
+    }
+    svg[data-transition] .labels,
+    svg[data-transition] .errors,
+    svg[data-transition] .reference {
+      animation: none;
     }
     svg[data-transition] .bar,
     svg[data-transition] .series-path {
@@ -145,6 +282,11 @@ export const chartStyles = [
         clip-path: inset(0 0 0 0);
       }
     }
+    @keyframes tec-chart-fade {
+      from {
+        opacity: 0;
+      }
+    }
     @keyframes tec-chart-pop {
       from {
         opacity: 0;
@@ -159,11 +301,45 @@ export const chartStyles = [
     .bar,
     .sector,
     .series-path,
-    .area {
+    .area,
+    .symbol,
+    .brush-preview {
       forced-color-adjust: none;
     }
-    .tick {
+    .tick,
+    .axis-label,
+    .value-label,
+    .reference-label {
       fill: CanvasText;
+    }
+    .value-label[data-inside],
+    .reference-label {
+      stroke: Canvas;
+    }
+    .reference-line,
+    .error-bar,
+    .active-symbol {
+      stroke: CanvasText;
+    }
+    .reference-dot {
+      fill: Canvas;
+      stroke: CanvasText;
+    }
+    .reference-area {
+      fill: GrayText;
+    }
+    .brush-track,
+    .brush-handle::before {
+      border-color: CanvasText;
+      background: Canvas;
+    }
+    .brush-band {
+      background: Highlight;
+      opacity: 0.35;
+    }
+    .brush-handle:focus-visible::before,
+    .brush-band:focus-visible {
+      outline: 2px solid Highlight;
     }
     .grid line,
     .axis-line,

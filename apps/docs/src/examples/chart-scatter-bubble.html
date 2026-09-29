@@ -1,0 +1,27 @@
+<tec-chart id="chart-scatter-bubble" class="min-h-[260px] w-full" label="Oil rate, water cut and reserves by field">
+  <tec-chart-grid horizontal vertical></tec-chart-grid>
+  <tec-chart-x-axis key="waterCut" type="number" domain="0,100" label="Water cut (%)"></tec-chart-x-axis>
+  <tec-chart-y-axis label="Oil rate (kbbl/d)" width="40"></tec-chart-y-axis>
+  <tec-chart-z-axis key="reserves" range="6,26"></tec-chart-z-axis>
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-scatter key="rate" name-key="field" fill-opacity="0.7"></tec-chart-scatter>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-scatter-bubble")
+  chart.margin = { top: 16, end: 20 }
+  chart.config = {
+    field: { label: "Field" },
+    waterCut: { label: "Water cut (%)" },
+    rate: { label: "Oil rate (kbbl/d)", color: "var(--tec-chart-4)" },
+    reserves: { label: "Reserves (MMbbl)" },
+  }
+  chart.data = [
+    { field: "Alder", waterCut: 12, rate: 48, reserves: 310 },
+    { field: "Birch", waterCut: 27, rate: 36, reserves: 180 },
+    { field: "Cedar", waterCut: 41, rate: 29, reserves: 240 },
+    { field: "Dogwood", waterCut: 55, rate: 18, reserves: 60 },
+    { field: "Elm", waterCut: 63, rate: 22, reserves: 130 },
+    { field: "Fir", waterCut: 78, rate: 9, reserves: 40 },
+    { field: "Hazel", waterCut: 86, rate: 6, reserves: 95 },
+  ]
+</script>

@@ -1,0 +1,25 @@
+<tec-chart id="chart-error-bar" class="min-h-[240px] w-full" label="Core porosity by formation, mean and standard deviation">
+  <tec-chart-grid></tec-chart-grid>
+  <tec-chart-x-axis key="formation"></tec-chart-x-axis>
+  <tec-chart-y-axis width="36" label="Porosity (%)"></tec-chart-y-axis>
+  <tec-chart-tooltip></tec-chart-tooltip>
+  <tec-chart-bar key="porosity" radius="4" max-bar-size="48">
+    <tec-chart-error-bar key="sd" width="10"></tec-chart-error-bar>
+  </tec-chart-bar>
+</tec-chart>
+<script type="module">
+  const chart = document.getElementById("chart-error-bar")
+  chart.margin = { top: 12 }
+  chart.config = {
+    formation: { label: "Formation" },
+    porosity: { label: "Porosity (%)", color: "var(--tec-chart-3)" },
+    sd: { label: "Standard deviation" },
+  }
+  chart.data = [
+    { formation: "Brent", porosity: 24.1, sd: 2.3 },
+    { formation: "Statfjord", porosity: 19.6, sd: 3.1 },
+    { formation: "Dunlin", porosity: 14.2, sd: 1.8 },
+    { formation: "Heather", porosity: 11.5, sd: [1.2, 3.4] },
+    { formation: "Tarbert", porosity: 21.8, sd: 2.6 },
+  ]
+</script>
