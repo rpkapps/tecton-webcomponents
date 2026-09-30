@@ -5,7 +5,7 @@ import { kbdGroupStyles, kbdStyles } from "./kbd.styles.js"
 
 /**
  * Renders a `<kbd>` in its shadow root. Inside a tooltip (`tec-tooltip`, or any element with
- * `role="tooltip"`) the key cap inverts its colours; the `--tec-kbd-background` /
+ * `role="tooltip"`) the key cap uses the tooltip's text colour; the `--tec-kbd-background` /
  * `--tec-kbd-foreground` custom properties override the colours anywhere.
  *
  * @summary Displays a keyboard key or shortcut.
@@ -19,7 +19,7 @@ import { kbdGroupStyles, kbdStyles } from "./kbd.styles.js"
  * @cssprop --tec-kbd-background - Key cap background (default `--tec-muted`).
  * @cssprop --tec-kbd-foreground - Key cap text colour (default `--tec-muted-foreground`).
  *
- * @cssstate in-tooltip - The key is inside a tooltip (inverted colours).
+ * @cssstate in-tooltip - The key is inside a tooltip (matching tooltip text and a subtle surface).
  */
 export class TecKbd extends TectonElement {
   static styles = [hostStyles, kbdStyles]

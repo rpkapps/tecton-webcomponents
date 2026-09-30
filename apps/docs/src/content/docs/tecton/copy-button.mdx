@@ -30,7 +30,7 @@ Listen to `tec-copy` (`detail.value`) to react to a successful copy, and use `ti
 
 ## Errors
 
-When the clipboard refuses the write (an insecure context, a denied permission, a browser without the Clipboard API) the button shows a cross in the destructive colour for `timeout` ms instead of the check, and fires `tec-copy-error` with the clipboard's error. Both outcomes are announced politely through one shared live region: "Copied" or "Copy failed". An icon-only button also takes that text as its accessible name for as long as the state lasts ("Copy" otherwise).
+Where the Clipboard API is missing or denied (plain HTTP on a non-localhost address, an iframe without `clipboard-write`), the button falls back to the legacy copy command and restores focus to the button. Only when both methods fail does it show a cross in the destructive colour for `timeout` ms and fire `tec-copy-error` with the clipboard's error. Both outcomes are announced politely through one shared live region: "Copied" or "Copy failed". An icon-only button also takes that text as its accessible name for as long as the state lasts ("Copy" otherwise).
 
 ```js
 button.addEventListener("tec-copy-error", () => toast.error("Could not copy the well ID"))
@@ -128,7 +128,7 @@ Let the element name itself; set `aria-label` only to name the object ("Copy Top
 
 </Correct>
 
-The hand-rolled version drops everything the element adds: the copied state and check-mark swap, the name that flips to "Copied", the announcement, and the "Copy failed" state for a denied or insecure clipboard, which otherwise rejects unhandled.
+The hand-rolled version drops everything the element adds: the copied state and check-mark swap, the name that flips to "Copied", the announcement, the legacy copy fallback where the Clipboard API is missing, and the "Copy failed" state when both methods refuse.
 
 </Dont>
 

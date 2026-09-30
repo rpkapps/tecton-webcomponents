@@ -3,6 +3,7 @@ import { property, query, state } from "lit/decorators.js"
 import { ifDefined } from "lit/directives/if-defined.js"
 import { Check, Copy, X } from "lucide"
 import { AriaDelegateController } from "../../internal/aria.js"
+import { deepActiveElement } from "../../internal/focus.js"
 import { icon } from "../../internal/icons.js"
 import { HasSlotController } from "../../internal/slot.js"
 import { hostStyles } from "../../internal/styles.js"
@@ -60,10 +61,46 @@ function announce(message: string): void {
   }, 100)
 }
 
+/** Copy where the Clipboard API is missing or denied, then restore focus through shadow roots. */
+function legacyCopy(value: string, container: HTMLElement | DocumentFragment): boolean {
+  const active = deepActiveElement()
+  const textarea = document.createElement("textarea")
+  textarea.value = value
+  textarea.setAttribute("readonly", "")
+  Object.assign(textarea.style, {
+    position: "fixed",
+    top: "0",
+    left: "0",
+    opacity: "0",
+    pointerEvents: "none",
+  })
+  // Stay inside the component so the textarea remains usable in a modal dialog's inert boundary.
+  container.append(textarea)
+  try {
+    textarea.select()
+    return document.execCommand("copy")
+  } catch {
+    return false
+  } finally {
+    textarea.remove()
+    if (active instanceof HTMLElement && active.isConnected) active.focus({ preventScroll: true })
+  }
+}
+
+async function copyText(value: string, container: HTMLElement | DocumentFragment): Promise<void> {
+  try {
+    // Throws, rather than rejects, where the Clipboard API is missing.
+    await navigator.clipboard.writeText(value)
+  } catch (error) {
+    if (!legacyCopy(value, container)) throw error
+  }
+}
+
 /**
  * A `tec-button` that writes `value` to the clipboard. It then shows a check (success colour) for
- * `timeout` ms, or a cross (destructive colour) when the clipboard refuses the write (insecure
- * context, denied permission, no Clipboard API). Either outcome is announced through one shared
+ * `timeout` ms, or a cross (destructive colour) when both copy methods fail. Where the Clipboard
+ * API is missing or denied (plain HTTP, an iframe without clipboard-write), it falls back to the
+ * legacy copy command and restores focus to the button. Either outcome is announced through one shared
  * polite live region ("Copied" / "Copy failed"). Without a label the button is icon-only and names
  * itself "Copy", then "Copied" / "Copy failed" while the state lasts; an `aria-label` on the host
  * wins over that.
@@ -82,7 +119,7 @@ function announce(message: string): void {
  * @cssstate error - The last copy failed.
  *
  * @fires tec-copy - The value was written to the clipboard. `detail: { value }`.
- * @fires tec-copy-error - The clipboard refused the write. `detail: { error }`.
+ * @fires tec-copy-error - Both the Clipboard API and the legacy copy command failed. `detail: { error }`.
  */
 export class TecCopyButton extends TectonElement {
   static styles = [hostStyles, copyButtonStyles]
@@ -150,8 +187,7 @@ export class TecCopyButton extends TectonElement {
     if (this.disabled) return
     const value = this.value
     try {
-      // Throws, rather than rejects, where the Clipboard API is missing.
-      await navigator.clipboard.writeText(value)
+      await copyText(value, this.renderRoot)
     } catch (error) {
       this.#show("error")
       this.emit<CopyErrorDetail>("tec-copy-error", { detail: { error } })

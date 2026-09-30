@@ -46,8 +46,8 @@ export const drawerStyles = css`
     box-sizing: border-box;
     margin: var(--_d-inset);
     min-height: 0;
-    background-color: var(--tec-popover);
-    color: var(--tec-popover-foreground);
+    background-color: var(--tec-card);
+    color: var(--tec-card-foreground);
     border: 0 solid var(--tec-border);
     outline: none;
     user-select: none;
@@ -60,7 +60,7 @@ export const drawerStyles = css`
     content: "";
     position: absolute;
     pointer-events: none;
-    background-color: var(--tec-drawer-bleed-background, var(--tec-popover));
+    background-color: var(--tec-drawer-bleed-background, var(--tec-card));
   }
 
   /* Axis y: sizes to its content, capped below the top of the viewport. */

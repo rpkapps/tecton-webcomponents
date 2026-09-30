@@ -80,6 +80,10 @@ Read [`docs/CONVENTIONS.md`](docs/CONVENTIONS.md) before adding or changing a co
 
 The theme is generated from the Tecton token export in `packages/wc/tokens/`
 (`pnpm --filter @tecton/wc build:theme`); replace those files with a newer export to update it.
+The vendored tokens and semantic mappings follow the `@webframework/tecton` v0.7.0 export.
+Tooltips use `--tec-tooltip` / `--tec-tooltip-foreground`, modal overlays use `--tec-backdrop`,
+checked controls use `--tec-filled*`, and sliders and progress bars use their separate rail / track
+tokens. Sidebar items use content hover, pressed and active surfaces.
 
 ## Scripts
 

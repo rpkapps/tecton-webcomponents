@@ -7,7 +7,7 @@
   --foreground: var(--tecton-color-text-primary);
   --card: var(--tecton-color-bg-paper);
   --card-foreground: var(--tecton-color-text-primary);
-  --popover: var(--tecton-color-bg-elevated);
+  --popover: var(--tecton-color-bg-paper);
   --popover-foreground: var(--tecton-color-text-primary);
   --primary: var(--tecton-color-action-primary-bg);
   --primary-foreground: var(--tecton-color-action-primary-text);
@@ -30,7 +30,7 @@
   --sidebar-foreground: var(--tecton-color-text-primary);
   --sidebar-primary: var(--tecton-color-action-primary-bg);
   --sidebar-primary-foreground: var(--tecton-color-action-primary-text);
-  --sidebar-accent: var(--tecton-color-action-tertiary-bg-hover);
+  --sidebar-accent: var(--tecton-color-content-bg-hover);
   --sidebar-accent-foreground: var(--tecton-color-text-primary);
   --sidebar-border: var(--tecton-color-divider-subtle);
   --sidebar-ring: var(--tecton-color-focus-ring);
@@ -96,8 +96,20 @@
   --input-hover: var(--tecton-color-input-outlined-border-hover);
   --table-header: var(--tecton-color-table-header-bg);
   --table-active: var(--tecton-color-table-cell-bg-active);
-  --slider: var(--tecton-color-accent-graphite-fill);
-  --progress: var(--tecton-color-accent-graphite-fill);
+  --slider: var(--tecton-color-accent-lilac-main);
+  --progress: var(--tecton-color-extended-lilac-680);
+  --tooltip: var(--tecton-color-surface-elevation-2-bg);
+  --tooltip-foreground: var(--tecton-color-text-primary);
+  --backdrop: var(--tecton-color-backdrop-fill);
+  --filled: var(--tecton-color-action-filled-bg);
+  --filled-hover: var(--tecton-color-action-filled-bg-hover);
+  --filled-pressed: var(--tecton-color-action-filled-bg-press);
+  --filled-active: var(--tecton-color-action-filled-bg-active);
+  --slider-rail: var(--tecton-color-accent-lilac-muted);
+  --progress-track: var(--tecton-color-extended-lilac-260);
+  --content-hover: var(--tecton-color-content-bg-hover);
+  --content-pressed: var(--tecton-color-content-bg-press);
+  --content-active: var(--tecton-color-content-bg-active);
 }
 
 .dark {
@@ -105,7 +117,7 @@
   --foreground: var(--tecton-color-text-primary);
   --card: var(--tecton-color-bg-paper);
   --card-foreground: var(--tecton-color-text-primary);
-  --popover: var(--tecton-color-bg-elevated);
+  --popover: var(--tecton-color-bg-paper);
   --popover-foreground: var(--tecton-color-text-primary);
   --primary: var(--tecton-color-action-primary-bg);
   --primary-foreground: var(--tecton-color-action-primary-text);
@@ -128,7 +140,7 @@
   --sidebar-foreground: var(--tecton-color-text-primary);
   --sidebar-primary: var(--tecton-color-action-primary-bg);
   --sidebar-primary-foreground: var(--tecton-color-action-primary-text);
-  --sidebar-accent: var(--tecton-color-action-tertiary-bg-hover);
+  --sidebar-accent: var(--tecton-color-content-bg-hover);
   --sidebar-accent-foreground: var(--tecton-color-text-primary);
   --sidebar-border: var(--tecton-color-divider-subtle);
   --sidebar-ring: var(--tecton-color-focus-ring);
@@ -193,8 +205,20 @@
   --input-hover: var(--tecton-color-input-outlined-border-hover);
   --table-header: var(--tecton-color-table-header-bg);
   --table-active: var(--tecton-color-table-cell-bg-active);
-  --slider: var(--tecton-color-accent-graphite-fill);
-  --progress: var(--tecton-color-accent-graphite-fill);
+  --slider: var(--tecton-color-accent-lilac-main);
+  --progress: var(--tecton-color-extended-lilac-680);
+  --tooltip: var(--tecton-color-surface-elevation-2-bg);
+  --tooltip-foreground: var(--tecton-color-text-primary);
+  --backdrop: var(--tecton-color-backdrop-fill);
+  --filled: var(--tecton-color-action-filled-bg);
+  --filled-hover: var(--tecton-color-action-filled-bg-hover);
+  --filled-pressed: var(--tecton-color-action-filled-bg-press);
+  --filled-active: var(--tecton-color-action-filled-bg-active);
+  --slider-rail: var(--tecton-color-accent-lilac-muted);
+  --progress-track: var(--tecton-color-extended-lilac-260);
+  --content-hover: var(--tecton-color-content-bg-hover);
+  --content-pressed: var(--tecton-color-content-bg-press);
+  --content-active: var(--tecton-color-content-bg-active);
 }
 
 .light, [data-theme="light"] {
@@ -202,7 +226,7 @@
   --foreground: var(--tecton-color-text-primary);
   --card: var(--tecton-color-bg-paper);
   --card-foreground: var(--tecton-color-text-primary);
-  --popover: var(--tecton-color-bg-elevated);
+  --popover: var(--tecton-color-bg-paper);
   --popover-foreground: var(--tecton-color-text-primary);
   --primary: var(--tecton-color-action-primary-bg);
   --primary-foreground: var(--tecton-color-action-primary-text);
@@ -225,7 +249,7 @@
   --sidebar-foreground: var(--tecton-color-text-primary);
   --sidebar-primary: var(--tecton-color-action-primary-bg);
   --sidebar-primary-foreground: var(--tecton-color-action-primary-text);
-  --sidebar-accent: var(--tecton-color-action-tertiary-bg-hover);
+  --sidebar-accent: var(--tecton-color-content-bg-hover);
   --sidebar-accent-foreground: var(--tecton-color-text-primary);
   --sidebar-border: var(--tecton-color-divider-subtle);
   --sidebar-ring: var(--tecton-color-focus-ring);
@@ -291,8 +315,20 @@
   --input-hover: var(--tecton-color-input-outlined-border-hover);
   --table-header: var(--tecton-color-table-header-bg);
   --table-active: var(--tecton-color-table-cell-bg-active);
-  --slider: var(--tecton-color-accent-graphite-fill);
-  --progress: var(--tecton-color-accent-graphite-fill);
+  --slider: var(--tecton-color-accent-lilac-main);
+  --progress: var(--tecton-color-extended-lilac-680);
+  --tooltip: var(--tecton-color-surface-elevation-2-bg);
+  --tooltip-foreground: var(--tecton-color-text-primary);
+  --backdrop: var(--tecton-color-backdrop-fill);
+  --filled: var(--tecton-color-action-filled-bg);
+  --filled-hover: var(--tecton-color-action-filled-bg-hover);
+  --filled-pressed: var(--tecton-color-action-filled-bg-press);
+  --filled-active: var(--tecton-color-action-filled-bg-active);
+  --slider-rail: var(--tecton-color-accent-lilac-muted);
+  --progress-track: var(--tecton-color-extended-lilac-260);
+  --content-hover: var(--tecton-color-content-bg-hover);
+  --content-pressed: var(--tecton-color-content-bg-press);
+  --content-active: var(--tecton-color-content-bg-active);
 }
 
 @theme inline {
@@ -366,4 +402,16 @@
   --color-table-active: var(--table-active);
   --color-slider: var(--slider);
   --color-progress: var(--progress);
+  --color-tooltip: var(--tooltip);
+  --color-tooltip-foreground: var(--tooltip-foreground);
+  --color-backdrop: var(--backdrop);
+  --color-filled: var(--filled);
+  --color-filled-hover: var(--filled-hover);
+  --color-filled-pressed: var(--filled-pressed);
+  --color-filled-active: var(--filled-active);
+  --color-slider-rail: var(--slider-rail);
+  --color-progress-track: var(--progress-track);
+  --color-content-hover: var(--content-hover);
+  --color-content-pressed: var(--content-pressed);
+  --color-content-active: var(--content-active);
 }

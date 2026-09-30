@@ -54,7 +54,7 @@ function snap(value: number, min: number, max: number, step: number, base: numbe
  * @csspart range - The filled part of the track (from the minimum to the value, or between the first and last thumb).
  * @csspart thumb - Every thumb.
  *
- * @cssprop --tec-slider-color - Colour of the range and thumbs (default `--tec-slider`); the track is this at 60%.
+ * @cssprop --tec-slider-color - Colour of the range and thumbs (default `--tec-slider`); the track uses `--tec-slider-rail`.
  *
  * @cssstate vertical - The slider is vertical.
  * @cssstate dragging - A thumb is being dragged.

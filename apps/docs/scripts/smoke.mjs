@@ -92,6 +92,42 @@ for (const url of urls) {
   await page.close()
 }
 
+// Docs copy controls use the component's real legacy fallback when the Clipboard API is unusable.
+for (const missing of [true, false]) {
+  const page = await browser.newPage()
+  await page.addInitScript((missing) => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: missing ? undefined : { writeText: () => Promise.reject(new DOMException("denied", "NotAllowedError")) },
+    })
+  }, missing)
+  try {
+    for (const path of ["/", "/docs/tecton/copy-button"]) {
+      await page.goto(base + path, { waitUntil: "networkidle" })
+      const selector = path === "/" ? "tec-copy-button[copy-label='Copy install command']" : "[data-code-block] tec-copy-button"
+      const button = page.locator(`${selector}:visible`).first()
+      const valueMatches = await button.evaluate((el) => {
+        const displayed = el.closest("[data-code-block]")?.querySelector("pre code")?.textContent ?? el.previousElementSibling?.textContent
+        return el.value === displayed?.replace(/\n$/, "")
+      })
+      if (!valueMatches) throw new Error(`${path}: copy value differs from the displayed text`)
+      await button.click({ timeout: 5000 })
+      await page.waitForFunction((button) => button.status === "copied", await button.elementHandle(), { timeout: 5000 })
+      const restored = await button.evaluate((el) => {
+        const inner = el.shadowRoot.querySelector("tec-button")
+        return inner.shadowRoot.activeElement === inner.control && !el.shadowRoot.querySelector("textarea")
+      })
+      if (!restored) throw new Error(`${path}: fallback did not clean up and restore focus`)
+    }
+    console.log(`✓ docs copy fallback (${missing ? "missing" : "denied"} Clipboard API)`)
+  } catch (error) {
+    failures++
+    console.log(`✗ docs copy fallback: ${error.message}`)
+  } finally {
+    await page.close()
+  }
+}
+
 await browser.close()
 server.close()
 console.log(failures ? `\n${failures} failure(s)` : `\nAll ${urls.length} pages OK`)

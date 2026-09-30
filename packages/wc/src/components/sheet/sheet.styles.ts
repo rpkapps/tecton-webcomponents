@@ -11,9 +11,9 @@ export const sheetStyles = css`
     gap: 1rem;
     box-sizing: border-box;
     overflow-y: auto;
-    background-color: var(--tec-popover);
+    background-color: var(--tec-card);
     background-clip: padding-box;
-    color: var(--tec-popover-foreground);
+    color: var(--tec-card-foreground);
     box-shadow: var(--tec-shadow-lg);
     border: 0 solid var(--tec-border);
   }

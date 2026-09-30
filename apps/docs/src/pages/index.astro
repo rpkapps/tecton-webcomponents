@@ -73,16 +73,7 @@ const install = `pnpm add ${siteConfig.package}`
           >
             <Icon name="terminal" class="size-3.5" />
             <span>{install}</span>
-            <button
-              type="button"
-              data-copy-button
-              data-copy-value={install}
-              aria-label="Copy install command"
-              class="docs-copy-button inline-flex size-6 items-center justify-center rounded-md outline-none hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              <Icon name="copy" class="copy-icon size-3.5" />
-              <Icon name="check" class="check-icon size-3.5" />
-            </button>
+            <tec-copy-button value={install} copy-label="Copy install command"></tec-copy-button>
           </div>
         </div>
         <div class="flex justify-center" data-not-typeset>

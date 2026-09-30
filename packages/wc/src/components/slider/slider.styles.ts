@@ -1,7 +1,7 @@
 import { css } from "lit"
 
 /*
- * The element is as thick as the track (4px); thumbs overhang it. Track: 4px, `slider` colour at 60%, fully rounded; range: `slider`; thumbs: 20px `slider` circles
+ * The element is as thick as the track (4px); thumbs overhang it. Track: 4px, `slider-rail`, fully rounded; range: `slider`; thumbs: 20px `slider` circles
  * with a 4px `slider`/30 ring on hover and the 2px focus ring on keyboard focus. Thumb centres sit on
  * the value (so they overhang the ends of the track by half their size, as in the spec).
  */
@@ -59,7 +59,7 @@ export const sliderStyles = css`
     width: 100%;
     height: 0.25rem;
     border-radius: 9999px;
-    background-color: color-mix(in oklab, var(--_color) 60%, transparent);
+    background-color: var(--tec-slider-rail);
   }
   :host([orientation="vertical"]) .track {
     width: 0.25rem;

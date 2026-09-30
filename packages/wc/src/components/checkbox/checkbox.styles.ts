@@ -51,14 +51,24 @@ export const checkboxStyles = css`
     border-color: var(--tec-ghost-hover-foreground);
   }
   :host(:state(checked)) .input {
-    border-color: var(--tec-ghost-active-foreground);
-    background-color: var(--tec-ghost-active-foreground);
+    border-color: var(--tec-filled-active);
+    background-color: var(--tec-filled-active);
   }
-  .input:focus-visible {
+  :host(:state(checked)) .input:hover {
+    border-color: var(--tec-filled-hover);
+    background-color: var(--tec-filled-hover);
+  }
+  :host(:state(checked)) .input:active {
+    border-color: var(--tec-filled-pressed);
+    background-color: var(--tec-filled-pressed);
+  }
+  .input:focus-visible,
+  :host(:state(checked)) .input:focus-visible {
     border-color: var(--tec-ring);
     box-shadow: var(--tec-focus-ring);
   }
-  .input[aria-invalid="true"] {
+  .input[aria-invalid="true"],
+  :host(:state(checked)) .input[aria-invalid="true"] {
     border-color: var(--tec-destructive);
     box-shadow: var(--tec-focus-ring-invalid);
   }
@@ -103,7 +113,9 @@ export const checkboxStyles = css`
     .input {
       border-color: CanvasText;
     }
-    :host(:state(checked)) .input {
+    :host(:state(checked)) .input,
+    :host(:state(checked)) .input:hover,
+    :host(:state(checked)) .input:active {
       background-color: Highlight;
       border-color: Highlight;
     }

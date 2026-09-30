@@ -463,10 +463,16 @@ const rowStyles = css`
     outline: none;
   }
   :host(:hover) .base,
-  :host(:active) .base,
-  :host([aria-expanded="true"]:hover) .base,
-  :host([active]) .base {
+  :host([aria-expanded="true"]:hover) .base {
     background-color: var(--tec-sidebar-accent);
+    color: var(--tec-sidebar-accent-foreground);
+  }
+  :host([active]) .base {
+    background-color: var(--tec-content-active);
+    color: var(--tec-sidebar-accent-foreground);
+  }
+  :host(:active) .base {
+    background-color: var(--tec-content-pressed);
     color: var(--tec-sidebar-accent-foreground);
   }
   :host(:state(focus-visible)) .base {
@@ -561,8 +567,8 @@ export const sidebarMenuButtonStyles = [
       max-width: 20rem;
       padding: 0.375rem 0.75rem;
       border-radius: var(--tec-radius-md);
-      background-color: var(--tec-foreground);
-      color: var(--tec-background);
+      background-color: var(--tec-tooltip);
+      color: var(--tec-tooltip-foreground);
       font-family: var(--tec-font-sans);
       font-size: var(--tec-text-xs);
       line-height: var(--tec-text-xs--line-height);
@@ -580,7 +586,7 @@ export const sidebarMenuButtonStyles = [
       width: 0.625rem;
       height: 0.625rem;
       border-radius: 2px;
-      background-color: var(--tec-foreground);
+      background-color: var(--tec-tooltip);
       rotate: 45deg;
     }
     .arrow[data-side="right"] {

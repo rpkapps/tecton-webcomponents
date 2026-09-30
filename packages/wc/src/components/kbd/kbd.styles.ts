@@ -29,16 +29,13 @@ export const kbdStyles = css`
     font-style: normal;
     white-space: nowrap;
   }
-  /* Inverted inside a tooltip. */
+  /* Match the tooltip text, with a subtle key cap surface. */
   :host(:state(in-tooltip)) .base {
     background-color: var(
       --tec-kbd-background,
-      light-dark(
-        color-mix(in oklab, var(--tec-background) 20%, transparent),
-        color-mix(in oklab, var(--tec-background) 10%, transparent)
-      )
+      color-mix(in oklab, var(--tec-tooltip-foreground) 15%, transparent)
     );
-    color: var(--tec-kbd-foreground, var(--tec-background));
+    color: var(--tec-kbd-foreground, var(--tec-tooltip-foreground));
   }
   ::slotted(svg),
   ::slotted(tec-icon) {

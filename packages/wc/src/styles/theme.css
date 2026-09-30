@@ -11,7 +11,7 @@
   --tec-foreground: var(--tecton-color-text-primary);
   --tec-card: var(--tecton-color-bg-paper);
   --tec-card-foreground: var(--tecton-color-text-primary);
-  --tec-popover: var(--tecton-color-bg-elevated);
+  --tec-popover: var(--tecton-color-bg-paper);
   --tec-popover-foreground: var(--tecton-color-text-primary);
   --tec-primary: var(--tecton-color-action-primary-bg);
   --tec-primary-foreground: var(--tecton-color-action-primary-text);
@@ -34,7 +34,7 @@
   --tec-sidebar-foreground: var(--tecton-color-text-primary);
   --tec-sidebar-primary: var(--tecton-color-action-primary-bg);
   --tec-sidebar-primary-foreground: var(--tecton-color-action-primary-text);
-  --tec-sidebar-accent: var(--tecton-color-action-tertiary-bg-hover);
+  --tec-sidebar-accent: var(--tecton-color-content-bg-hover);
   --tec-sidebar-accent-foreground: var(--tecton-color-text-primary);
   --tec-sidebar-border: var(--tecton-color-divider-subtle);
   --tec-sidebar-ring: var(--tecton-color-focus-ring);
@@ -100,8 +100,20 @@
   --tec-input-hover: var(--tecton-color-input-outlined-border-hover);
   --tec-table-header: var(--tecton-color-table-header-bg);
   --tec-table-active: var(--tecton-color-table-cell-bg-active);
-  --tec-slider: var(--tecton-color-accent-graphite-fill);
-  --tec-progress: var(--tecton-color-accent-graphite-fill);
+  --tec-slider: var(--tecton-color-accent-lilac-main);
+  --tec-progress: var(--tecton-color-extended-lilac-680);
+  --tec-tooltip: var(--tecton-color-surface-elevation-2-bg);
+  --tec-tooltip-foreground: var(--tecton-color-text-primary);
+  --tec-backdrop: var(--tecton-color-backdrop-fill);
+  --tec-filled: var(--tecton-color-action-filled-bg);
+  --tec-filled-hover: var(--tecton-color-action-filled-bg-hover);
+  --tec-filled-pressed: var(--tecton-color-action-filled-bg-press);
+  --tec-filled-active: var(--tecton-color-action-filled-bg-active);
+  --tec-slider-rail: var(--tecton-color-accent-lilac-muted);
+  --tec-progress-track: var(--tecton-color-extended-lilac-260);
+  --tec-content-hover: var(--tecton-color-content-bg-hover);
+  --tec-content-pressed: var(--tecton-color-content-bg-press);
+  --tec-content-active: var(--tecton-color-content-bg-active);
 }
 
 .dark, [data-theme="dark"] {
@@ -109,7 +121,7 @@
   --tec-foreground: var(--tecton-color-text-primary);
   --tec-card: var(--tecton-color-bg-paper);
   --tec-card-foreground: var(--tecton-color-text-primary);
-  --tec-popover: var(--tecton-color-bg-elevated);
+  --tec-popover: var(--tecton-color-bg-paper);
   --tec-popover-foreground: var(--tecton-color-text-primary);
   --tec-primary: var(--tecton-color-action-primary-bg);
   --tec-primary-foreground: var(--tecton-color-action-primary-text);
@@ -132,7 +144,7 @@
   --tec-sidebar-foreground: var(--tecton-color-text-primary);
   --tec-sidebar-primary: var(--tecton-color-action-primary-bg);
   --tec-sidebar-primary-foreground: var(--tecton-color-action-primary-text);
-  --tec-sidebar-accent: var(--tecton-color-action-tertiary-bg-hover);
+  --tec-sidebar-accent: var(--tecton-color-content-bg-hover);
   --tec-sidebar-accent-foreground: var(--tecton-color-text-primary);
   --tec-sidebar-border: var(--tecton-color-divider-subtle);
   --tec-sidebar-ring: var(--tecton-color-focus-ring);
@@ -197,8 +209,20 @@
   --tec-input-hover: var(--tecton-color-input-outlined-border-hover);
   --tec-table-header: var(--tecton-color-table-header-bg);
   --tec-table-active: var(--tecton-color-table-cell-bg-active);
-  --tec-slider: var(--tecton-color-accent-graphite-fill);
-  --tec-progress: var(--tecton-color-accent-graphite-fill);
+  --tec-slider: var(--tecton-color-accent-lilac-main);
+  --tec-progress: var(--tecton-color-extended-lilac-680);
+  --tec-tooltip: var(--tecton-color-surface-elevation-2-bg);
+  --tec-tooltip-foreground: var(--tecton-color-text-primary);
+  --tec-backdrop: var(--tecton-color-backdrop-fill);
+  --tec-filled: var(--tecton-color-action-filled-bg);
+  --tec-filled-hover: var(--tecton-color-action-filled-bg-hover);
+  --tec-filled-pressed: var(--tecton-color-action-filled-bg-press);
+  --tec-filled-active: var(--tecton-color-action-filled-bg-active);
+  --tec-slider-rail: var(--tecton-color-accent-lilac-muted);
+  --tec-progress-track: var(--tecton-color-extended-lilac-260);
+  --tec-content-hover: var(--tecton-color-content-bg-hover);
+  --tec-content-pressed: var(--tecton-color-content-bg-press);
+  --tec-content-active: var(--tecton-color-content-bg-active);
 }
 
 .light, [data-theme="light"] {
@@ -206,7 +230,7 @@
   --tec-foreground: var(--tecton-color-text-primary);
   --tec-card: var(--tecton-color-bg-paper);
   --tec-card-foreground: var(--tecton-color-text-primary);
-  --tec-popover: var(--tecton-color-bg-elevated);
+  --tec-popover: var(--tecton-color-bg-paper);
   --tec-popover-foreground: var(--tecton-color-text-primary);
   --tec-primary: var(--tecton-color-action-primary-bg);
   --tec-primary-foreground: var(--tecton-color-action-primary-text);
@@ -229,7 +253,7 @@
   --tec-sidebar-foreground: var(--tecton-color-text-primary);
   --tec-sidebar-primary: var(--tecton-color-action-primary-bg);
   --tec-sidebar-primary-foreground: var(--tecton-color-action-primary-text);
-  --tec-sidebar-accent: var(--tecton-color-action-tertiary-bg-hover);
+  --tec-sidebar-accent: var(--tecton-color-content-bg-hover);
   --tec-sidebar-accent-foreground: var(--tecton-color-text-primary);
   --tec-sidebar-border: var(--tecton-color-divider-subtle);
   --tec-sidebar-ring: var(--tecton-color-focus-ring);
@@ -295,8 +319,20 @@
   --tec-input-hover: var(--tecton-color-input-outlined-border-hover);
   --tec-table-header: var(--tecton-color-table-header-bg);
   --tec-table-active: var(--tecton-color-table-cell-bg-active);
-  --tec-slider: var(--tecton-color-accent-graphite-fill);
-  --tec-progress: var(--tecton-color-accent-graphite-fill);
+  --tec-slider: var(--tecton-color-accent-lilac-main);
+  --tec-progress: var(--tecton-color-extended-lilac-680);
+  --tec-tooltip: var(--tecton-color-surface-elevation-2-bg);
+  --tec-tooltip-foreground: var(--tecton-color-text-primary);
+  --tec-backdrop: var(--tecton-color-backdrop-fill);
+  --tec-filled: var(--tecton-color-action-filled-bg);
+  --tec-filled-hover: var(--tecton-color-action-filled-bg-hover);
+  --tec-filled-pressed: var(--tecton-color-action-filled-bg-press);
+  --tec-filled-active: var(--tecton-color-action-filled-bg-active);
+  --tec-slider-rail: var(--tecton-color-accent-lilac-muted);
+  --tec-progress-track: var(--tecton-color-extended-lilac-260);
+  --tec-content-hover: var(--tecton-color-content-bg-hover);
+  --tec-content-pressed: var(--tecton-color-content-bg-press);
+  --tec-content-active: var(--tecton-color-content-bg-active);
 }
 
 :root {
