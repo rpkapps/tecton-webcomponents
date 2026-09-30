@@ -8,6 +8,15 @@ tags: ["tec-link"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { ExternalLink } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ ExternalLink })
+```
+
 ```ts
 import "@tecton/wc/link"
 ```
@@ -144,7 +153,7 @@ Without `href` the anchor is not focusable and promises navigation it cannot do:
 <Wrong>
 
 ```html
-<tec-link href="https://factpages.sodir.no" target="_blank">Sodir FactPages <svg>…</svg></tec-link>
+<tec-link href="https://factpages.sodir.no" target="_blank">Sodir FactPages <tec-icon name="external-link"></tec-icon></tec-link>
 ```
 
 </Wrong>

@@ -8,6 +8,15 @@ tags: ["tec-overflow", "tec-toolbar", "tec-overflow-item", "tec-overflow-label",
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Download, Share2, Tag } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Download, Share2, Tag })
+```
+
 ```ts
 import "@tecton/wc/overflow"
 ```
@@ -16,7 +25,7 @@ import "@tecton/wc/overflow"
 <tec-toolbar aria-label="Well actions">
   <tec-overflow-item value="share" priority="1">
     <tec-button variant="outline">
-      <svg slot="start" aria-hidden="true">…</svg>
+      <tec-icon name="share-2" slot="start" aria-hidden="true"></tec-icon>
       <tec-overflow-label>Share</tec-overflow-label>
     </tec-button>
   </tec-overflow-item>
@@ -193,8 +202,8 @@ Attach your handlers to the controls themselves (`click`, `change`, `tec-select`
 
 ```html
 <tec-toolbar aria-label="Well actions">
-  <tec-button variant="outline"><svg slot="start">…</svg>Add tag</tec-button>
-  <tec-button variant="outline"><svg slot="start">…</svg>Share</tec-button>
+  <tec-button variant="outline"><tec-icon name="tag" slot="start"></tec-icon>Add tag</tec-button>
+  <tec-button variant="outline"><tec-icon name="share-2" slot="start"></tec-icon>Share</tec-button>
   <tec-button>New well</tec-button>
 </tec-toolbar>
 ```
@@ -206,10 +215,10 @@ Attach your handlers to the controls themselves (`click`, `change`, `tec-select`
 ```html
 <tec-toolbar aria-label="Well actions">
   <tec-overflow-item value="tag">
-    <tec-button variant="outline"><svg slot="start">…</svg><tec-overflow-label>Add tag</tec-overflow-label></tec-button>
+    <tec-button variant="outline"><tec-icon name="tag" slot="start"></tec-icon><tec-overflow-label>Add tag</tec-overflow-label></tec-button>
   </tec-overflow-item>
   <tec-overflow-item value="share">
-    <tec-button variant="outline"><svg slot="start">…</svg><tec-overflow-label>Share</tec-overflow-label></tec-button>
+    <tec-button variant="outline"><tec-icon name="share-2" slot="start"></tec-icon><tec-overflow-label>Share</tec-overflow-label></tec-button>
   </tec-overflow-item>
   <tec-button>New well</tec-button>
 </tec-toolbar>
@@ -227,7 +236,7 @@ Only a `<tec-overflow-item>` can be collapsed or moved into the menu: a row of b
 
 ```html
 <tec-overflow-item value="export">
-  <tec-button variant="outline"><svg slot="start">…</svg>Export</tec-button>
+  <tec-button variant="outline"><tec-icon name="download" slot="start"></tec-icon>Export</tec-button>
 </tec-overflow-item>
 ```
 
@@ -237,7 +246,7 @@ Only a `<tec-overflow-item>` can be collapsed or moved into the menu: a row of b
 
 ```html
 <tec-overflow-item value="export">
-  <tec-button variant="outline"><svg slot="start">…</svg><tec-overflow-label>Export</tec-overflow-label></tec-button>
+  <tec-button variant="outline"><tec-icon name="download" slot="start"></tec-icon><tec-overflow-label>Export</tec-overflow-label></tec-button>
 </tec-overflow-item>
 ```
 

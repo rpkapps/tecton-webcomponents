@@ -8,6 +8,15 @@ tags: ["tec-input"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Search } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Search })
+```
+
 ```ts
 import "@tecton/wc/input"
 ```
@@ -255,7 +264,7 @@ Like a native input, the `value` attribute is the default value and never change
 
 ```html
 <div class="relative">
-  <svg class="absolute start-2 top-2 size-4">…</svg>
+  <tec-icon name="search" class="absolute start-2 top-2 size-4"></tec-icon>
   <tec-input class="ps-8" placeholder="Search wells"></tec-input>
 </div>
 ```
@@ -267,7 +276,7 @@ Like a native input, the `value` attribute is the default value and never change
 ```html
 <tec-input-group>
   <tec-input-group-input placeholder="Search wells" aria-label="Search wells"></tec-input-group-input>
-  <tec-input-group-addon><svg aria-hidden="true">…</svg></tec-input-group-addon>
+  <tec-input-group-addon><tec-icon name="search" aria-hidden="true"></tec-icon></tec-input-group-addon>
 </tec-input-group>
 ```
 

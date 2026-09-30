@@ -2,7 +2,7 @@
   <div data-tile class="relative isolate flex h-72 flex-col justify-end overflow-hidden rounded-lg border border-border bg-background p-6 [&:fullscreen]:rounded-none [&:fullscreen]:border-0 [&:fullscreen]:p-10">
     <tec-background effect="seismic" tone="azure" intensity="medium"></tec-background>
     <tec-button variant="ghost" size="icon-sm" aria-label="View fullscreen" data-fullscreen class="absolute end-2 top-2">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/><path d="M9 21H3v-6"/></svg>
+      <tec-icon name="maximize2" aria-hidden="true"></tec-icon>
     </tec-button>
     <p class="text-xs font-medium tracking-wide text-muted-foreground uppercase">Field development</p>
     <h2 class="mt-1 text-2xl font-medium">Northern Fairway, phase 2</h2>
@@ -52,6 +52,11 @@
   </div>
 </div>
 <script type="module">
+  import { Maximize2 } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Maximize2 })
+
   const root = document.getElementById("background-demo")
   const tile = root.querySelector("[data-tile]")
   const background = tile.querySelector("tec-background")

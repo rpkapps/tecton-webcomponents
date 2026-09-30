@@ -6,18 +6,18 @@
       <tec-attachment-description>جارٍ الرفع · 64%</tec-attachment-description>
     </tec-attachment-content>
     <tec-attachment-actions>
-      <tec-attachment-action aria-label="إلغاء رفع تقرير-المبيعات.pdf"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></tec-attachment-action>
+      <tec-attachment-action aria-label="إلغاء رفع تقرير-المبيعات.pdf"><tec-icon name="x" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-action>
     </tec-attachment-actions>
   </tec-attachment>
   <tec-attachment state="error" class="w-full">
-    <tec-attachment-media><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></tec-attachment-media>
+    <tec-attachment-media><tec-icon name="file-exclamation-point" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-media>
     <tec-attachment-content>
       <tec-attachment-title>النموذج-المالي.xlsx</tec-attachment-title>
       <tec-attachment-description>فشل الرفع. حاول مرة أخرى.</tec-attachment-description>
     </tec-attachment-content>
     <tec-attachment-actions>
-      <tec-attachment-action aria-label="إعادة المحاولة"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></tec-attachment-action>
-      <tec-attachment-action aria-label="إزالة النموذج-المالي.xlsx"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></tec-attachment-action>
+      <tec-attachment-action aria-label="إعادة المحاولة"><tec-icon name="refresh-cw" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-action>
+      <tec-attachment-action aria-label="إزالة النموذج-المالي.xlsx"><tec-icon name="x" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-action>
     </tec-attachment-actions>
   </tec-attachment>
   <tec-attachment-group class="w-full">
@@ -44,3 +44,9 @@
     </tec-attachment>
   </tec-attachment-group>
 </div>
+<script type="module">
+  import { FileExclamationPoint, RefreshCw, X } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ FileExclamationPoint, RefreshCw, X })
+</script>

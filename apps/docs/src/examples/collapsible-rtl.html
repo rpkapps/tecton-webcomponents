@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between gap-4 px-4">
     <h4 class="text-sm font-semibold">الطلب #4189</h4>
     <tec-collapsible-trigger>
-      <tec-button variant="ghost" size="icon" class="size-8" aria-label="إظهار التفاصيل"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg></tec-button>
+      <tec-button variant="ghost" size="icon" class="size-8" aria-label="إظهار التفاصيل"><tec-icon name="chevrons-up-down" aria-hidden="true"></tec-icon></tec-button>
     </tec-collapsible-trigger>
   </div>
   <div class="flex items-center justify-between rounded-md border border-border px-4 py-2 text-sm">
@@ -22,3 +22,9 @@
     </div>
   </tec-collapsible-content>
 </tec-collapsible>
+<script type="module">
+  import { ChevronsUpDown } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ ChevronsUpDown })
+</script>

@@ -8,6 +8,15 @@ tags: ["tec-input-group", "tec-input-group-addon", "tec-input-group-input", "tec
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Search } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Search })
+```
+
 ```ts
 import "@tecton/wc/input-group"
 ```
@@ -16,7 +25,7 @@ import "@tecton/wc/input-group"
 <tec-input-group>
   <tec-input-group-input placeholder="Search..." aria-label="Search"></tec-input-group-input>
   <tec-input-group-addon>
-    <svg aria-hidden="true">…</svg>
+    <tec-icon name="search" aria-hidden="true"></tec-icon>
   </tec-input-group-addon>
   <tec-input-group-addon align="inline-end">
     <tec-input-group-button>Search</tec-input-group-button>
@@ -149,7 +158,7 @@ Put buttons in `tec-input-group-button`, static copy in `tec-input-group-text`, 
 ```html
 <tec-input-group>
   <tec-input placeholder="Search wells"></tec-input>
-  <tec-input-group-addon><svg aria-hidden="true">…</svg></tec-input-group-addon>
+  <tec-input-group-addon><tec-icon name="search" aria-hidden="true"></tec-icon></tec-input-group-addon>
 </tec-input-group>
 ```
 
@@ -160,7 +169,7 @@ Put buttons in `tec-input-group-button`, static copy in `tec-input-group-text`, 
 ```html
 <tec-input-group>
   <tec-input-group-input placeholder="Search wells" aria-label="Search wells"></tec-input-group-input>
-  <tec-input-group-addon><svg aria-hidden="true">…</svg></tec-input-group-addon>
+  <tec-input-group-addon><tec-icon name="search" aria-hidden="true"></tec-icon></tec-input-group-addon>
 </tec-input-group>
 ```
 

@@ -7,7 +7,7 @@
         <tec-attachment-description>PNG · 820 KB</tec-attachment-description>
       </tec-attachment-content>
       <tec-attachment-actions>
-        <tec-attachment-action aria-label="Remove workspace.png"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></tec-attachment-action>
+        <tec-attachment-action aria-label="Remove workspace.png"><tec-icon name="x" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-action>
       </tec-attachment-actions>
       <tec-attachment-trigger href="/images/photo-gradient.svg" target="_blank" aria-label="Open workspace.png"></tec-attachment-trigger>
     </tec-attachment>
@@ -18,7 +18,7 @@
         <tec-attachment-description>JPG · 1.1 MB</tec-attachment-description>
       </tec-attachment-content>
       <tec-attachment-actions>
-        <tec-attachment-action aria-label="Remove desk-reference.jpg"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></tec-attachment-action>
+        <tec-attachment-action aria-label="Remove desk-reference.jpg"><tec-icon name="x" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-action>
       </tec-attachment-actions>
       <tec-attachment-trigger href="/images/artwork-1.svg" target="_blank" aria-label="Open desk-reference.jpg"></tec-attachment-trigger>
     </tec-attachment>
@@ -29,9 +29,15 @@
         <tec-attachment-description>JPG · 940 KB</tec-attachment-description>
       </tec-attachment-content>
       <tec-attachment-actions>
-        <tec-attachment-action aria-label="Remove office-reference.jpg"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></tec-attachment-action>
+        <tec-attachment-action aria-label="Remove office-reference.jpg"><tec-icon name="x" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-action>
       </tec-attachment-actions>
       <tec-attachment-trigger href="/images/artwork-2.svg" target="_blank" aria-label="Open office-reference.jpg"></tec-attachment-trigger>
     </tec-attachment>
   </tec-attachment-group>
 </div>
+<script type="module">
+  import { X } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ X })
+</script>

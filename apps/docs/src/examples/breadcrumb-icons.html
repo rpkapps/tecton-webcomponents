@@ -1,15 +1,21 @@
 <tec-breadcrumb>
   <tec-breadcrumb-list>
     <tec-breadcrumb-item>
-      <tec-breadcrumb-link href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Home</tec-breadcrumb-link>
+      <tec-breadcrumb-link href="#"><tec-icon name="home" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Home</tec-breadcrumb-link>
     </tec-breadcrumb-item>
-    <tec-breadcrumb-separator><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 2 22"/></svg></tec-breadcrumb-separator>
+    <tec-breadcrumb-separator><tec-icon name="slash" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-breadcrumb-separator>
     <tec-breadcrumb-item>
-      <tec-breadcrumb-link href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>Fields</tec-breadcrumb-link>
+      <tec-breadcrumb-link href="#"><tec-icon name="folder" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Fields</tec-breadcrumb-link>
     </tec-breadcrumb-item>
-    <tec-breadcrumb-separator><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 2 22"/></svg></tec-breadcrumb-separator>
+    <tec-breadcrumb-separator><tec-icon name="slash" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-breadcrumb-separator>
     <tec-breadcrumb-item>
-      <tec-breadcrumb-page><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>34/10-A-12</tec-breadcrumb-page>
+      <tec-breadcrumb-page><tec-icon name="box" aria-hidden="true" style="width:16px;height:16px"></tec-icon>34/10-A-12</tec-breadcrumb-page>
     </tec-breadcrumb-item>
   </tec-breadcrumb-list>
 </tec-breadcrumb>
+<script type="module">
+  import { Box, Folder, Home, Slash } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Box, Folder, Home, Slash })
+</script>

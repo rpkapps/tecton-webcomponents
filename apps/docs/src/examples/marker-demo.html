@@ -1,6 +1,6 @@
 <div class="flex w-full max-w-sm flex-col gap-8 py-12">
   <tec-marker>
-    <tec-marker-icon><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6a9 9 0 0 0-9 9V3"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/></svg></tec-marker-icon>
+    <tec-marker-icon><tec-icon name="git-branch" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-marker-icon>
     <tec-marker-content>Switched to a new branch</tec-marker-content>
   </tec-marker>
   <tec-marker role="status">
@@ -11,7 +11,13 @@
     <tec-marker-content>Conversation compacted</tec-marker-content>
   </tec-marker>
   <tec-marker>
-    <tec-marker-icon><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></tec-marker-icon>
+    <tec-marker-icon><tec-icon name="search" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-marker-icon>
     <tec-marker-content>Explored 4 files</tec-marker-content>
   </tec-marker>
 </div>
+<script type="module">
+  import { GitBranch, Search } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ GitBranch, Search })
+</script>

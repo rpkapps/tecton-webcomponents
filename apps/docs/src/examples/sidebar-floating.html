@@ -2,24 +2,24 @@
   <tec-sidebar-provider class="h-full min-h-0" persist="none" shortcut="">
     <tec-sidebar variant="floating">
       <tec-sidebar-header>
-        <div class="flex h-8 items-center gap-2 px-2 text-sm font-medium"><svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg><span class="truncate">Gullfaks</span></div>
+        <div class="flex h-8 items-center gap-2 px-2 text-sm font-medium"><tec-icon name="hexagon" class="size-4 shrink-0" aria-hidden="true"></tec-icon><span class="truncate">Gullfaks</span></div>
       </tec-sidebar-header>
       <tec-sidebar-content>
         <tec-sidebar-group>
           <tec-sidebar-group-label>Field</tec-sidebar-group-label>
           <tec-sidebar-menu>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" active tooltip="Overview"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg><span>Overview</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" active tooltip="Overview"><tec-icon name="layout-dashboard" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Overview</span></tec-sidebar-menu-button>
             </tec-sidebar-menu-item>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" tooltip="Wells"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z"/><path d="M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8"/><path d="M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3"/><path d="M18 6h4"/><path d="m5 10-2 8"/><path d="m7 18 2-8"/></svg><span>Wells</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" tooltip="Wells"><tec-icon name="drill" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Wells</span></tec-sidebar-menu-button>
               <tec-sidebar-menu-badge>12</tec-sidebar-menu-badge>
             </tec-sidebar-menu-item>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" tooltip="Horizons"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg><span>Horizons</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" tooltip="Horizons"><tec-icon name="mountain" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Horizons</span></tec-sidebar-menu-button>
             </tec-sidebar-menu-item>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" tooltip="Reports"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg><span>Reports</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" tooltip="Reports"><tec-icon name="file-text" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Reports</span></tec-sidebar-menu-button>
             </tec-sidebar-menu-item>
           </tec-sidebar-menu>
         </tec-sidebar-group>
@@ -27,7 +27,7 @@
       <tec-sidebar-footer>
         <tec-sidebar-menu>
           <tec-sidebar-menu-item>
-            <tec-sidebar-menu-button href="#" tooltip="Settings"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></tec-sidebar-menu-button>
+            <tec-sidebar-menu-button href="#" tooltip="Settings"><tec-icon name="settings" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Settings</span></tec-sidebar-menu-button>
           </tec-sidebar-menu-item>
         </tec-sidebar-menu>
       </tec-sidebar-footer>
@@ -45,3 +45,9 @@
     </tec-sidebar-inset>
   </tec-sidebar-provider>
 </div>
+<script type="module">
+  import { Drill, FileText, Hexagon, LayoutDashboard, Mountain, Settings } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Drill, FileText, Hexagon, LayoutDashboard, Mountain, Settings })
+</script>

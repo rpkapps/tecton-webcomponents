@@ -1,6 +1,6 @@
 <tec-button-group aria-label="Message actions">
   <tec-button-group class="hidden sm:flex">
-    <tec-button variant="outline" size="icon" aria-label="Go Back"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg></tec-button>
+    <tec-button variant="outline" size="icon" aria-label="Go Back"><tec-icon name="arrow-left" aria-hidden="true"></tec-icon></tec-button>
   </tec-button-group>
   <tec-button-group>
     <tec-button variant="outline">Archive</tec-button>
@@ -9,18 +9,18 @@
   <tec-button-group>
     <tec-button variant="outline">Snooze</tec-button>
     <tec-dropdown-menu align="end" style="--tec-dropdown-menu-width: 10rem">
-      <tec-button slot="trigger" variant="outline" size="icon" aria-label="More Options"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></tec-button>
+      <tec-button slot="trigger" variant="outline" size="icon" aria-label="More Options"><tec-icon name="ellipsis" aria-hidden="true"></tec-icon></tec-button>
       <tec-dropdown-menu-group>
-        <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="m16 19 2 2 4-4"/></svg>Mark as Read</tec-dropdown-menu-item>
-        <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>Archive</tec-dropdown-menu-item>
+        <tec-dropdown-menu-item><tec-icon name="mail-check" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Mark as Read</tec-dropdown-menu-item>
+        <tec-dropdown-menu-item><tec-icon name="archive" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Archive</tec-dropdown-menu-item>
       </tec-dropdown-menu-group>
       <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
       <tec-dropdown-menu-group>
-        <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Snooze</tec-dropdown-menu-item>
-        <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 18h6"/><path d="M16 2v3"/><path d="M19 15v6"/><path d="M21 11.5V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h8.3"/><path d="M3 9h18"/><path d="M8 2v3"/></svg>Add to Calendar</tec-dropdown-menu-item>
-        <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 5h20"/><path d="M6 12h12"/><path d="M9 19h6"/></svg>Add to List</tec-dropdown-menu-item>
+        <tec-dropdown-menu-item><tec-icon name="clock" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Snooze</tec-dropdown-menu-item>
+        <tec-dropdown-menu-item><tec-icon name="calendar-plus" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Add to Calendar</tec-dropdown-menu-item>
+        <tec-dropdown-menu-item><tec-icon name="list-filter" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Add to List</tec-dropdown-menu-item>
         <tec-dropdown-menu-sub>
-          <tec-dropdown-menu-sub-trigger><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>Label As...</tec-dropdown-menu-sub-trigger>
+          <tec-dropdown-menu-sub-trigger><tec-icon name="tag" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Label As...</tec-dropdown-menu-sub-trigger>
           <tec-dropdown-menu-sub-content>
             <tec-dropdown-menu-group selection-mode="single">
               <tec-dropdown-menu-item value="personal" checked>Personal</tec-dropdown-menu-item>
@@ -32,8 +32,14 @@
       </tec-dropdown-menu-group>
       <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
       <tec-dropdown-menu-group>
-        <tec-dropdown-menu-item variant="destructive"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Trash</tec-dropdown-menu-item>
+        <tec-dropdown-menu-item variant="destructive"><tec-icon name="trash" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Trash</tec-dropdown-menu-item>
       </tec-dropdown-menu-group>
     </tec-dropdown-menu>
   </tec-button-group>
 </tec-button-group>
+<script type="module">
+  import { Archive, ArrowLeft, CalendarPlus, Clock, Ellipsis, ListFilter, MailCheck, Tag, Trash } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Archive, ArrowLeft, CalendarPlus, Clock, Ellipsis, ListFilter, MailCheck, Tag, Trash })
+</script>

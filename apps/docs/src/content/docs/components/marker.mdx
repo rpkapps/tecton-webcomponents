@@ -10,13 +10,22 @@ tags: ["tec-marker", "tec-marker-icon", "tec-marker-content"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Files } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Files })
+```
+
 ```ts
 import "@tecton/wc/marker"
 ```
 
 ```html
 <tec-marker>
-  <tec-marker-icon><svg …></svg></tec-marker-icon>
+  <tec-marker-icon><tec-icon name="files"></tec-icon></tec-marker-icon>
   <tec-marker-content>Explored 4 files</tec-marker-content>
 </tec-marker>
 ```
@@ -167,7 +176,7 @@ Make it interactive with `href` or `type="button"`, and wrap it in a `tec-messag
 <Wrong>
 
 ```html
-<span class="flex items-center gap-2 text-xs text-gray-500"><svg …></svg> Explored 4 files</span>
+<span class="flex items-center gap-2 text-xs text-gray-500"><tec-icon name="files"></tec-icon> Explored 4 files</span>
 ```
 
 </Wrong>
@@ -176,7 +185,7 @@ Make it interactive with `href` or `type="button"`, and wrap it in a `tec-messag
 
 ```html
 <tec-marker>
-  <tec-marker-icon><svg …></svg></tec-marker-icon>
+  <tec-marker-icon><tec-icon name="files"></tec-icon></tec-marker-icon>
   <tec-marker-content>Explored 4 files</tec-marker-content>
 </tec-marker>
 ```

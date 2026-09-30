@@ -27,6 +27,15 @@ tags:
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { CircleHelp, Settings } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ CircleHelp, Settings })
+```
+
 ```ts
 import "@tecton/wc/app-shell"
 ```
@@ -86,7 +95,7 @@ The regions are pure layout. Each column scrolls on its own; pad its content wit
 ```html
 <tec-app-shell-actions>
   <tec-app-shell-command-trigger>Search or jump to…</tec-app-shell-command-trigger>
-  <tec-app-shell-action label="Help" shortcut="?"><svg …></svg></tec-app-shell-action>
+  <tec-app-shell-action label="Help" shortcut="?"><tec-icon name="circle-help"></tec-icon></tec-app-shell-action>
   <tec-app-shell-divider></tec-app-shell-divider>
   <tec-dropdown-menu align="end">
     <tec-app-shell-user-menu-trigger slot="trigger" name="Sarah Elliott" image="/avatars/01.png"></tec-app-shell-user-menu-trigger>
@@ -235,7 +244,7 @@ Every navigation area on a page has its own screen-reader name (`aria-label`): a
 <Wrong>
 
 ```html
-<tec-button variant="ghost" size="icon-sm" title="Settings"><svg …></svg></tec-button>
+<tec-button variant="ghost" size="icon-sm" title="Settings"><tec-icon name="settings"></tec-icon></tec-button>
 ```
 
 </Wrong>
@@ -243,7 +252,7 @@ Every navigation area on a page has its own screen-reader name (`aria-label`): a
 <Correct>
 
 ```html
-<tec-app-shell-action label="Settings"><svg …></svg></tec-app-shell-action>
+<tec-app-shell-action label="Settings"><tec-icon name="settings"></tec-icon></tec-app-shell-action>
 ```
 
 </Correct>

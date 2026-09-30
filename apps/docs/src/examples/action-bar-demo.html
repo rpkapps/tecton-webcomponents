@@ -5,20 +5,20 @@
       <tec-action-bar-selection count="2" total="5" clearable></tec-action-bar-selection>
       <tec-action-bar-actions aria-label="Selection actions">
         <tec-overflow-item value="assign" priority="2">
-          <tec-button variant="outline" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg><tec-overflow-label>Assign</tec-overflow-label></tec-button>
+          <tec-button variant="outline" size="sm"><tec-icon name="user-plus" slot="start" aria-hidden="true"></tec-icon><tec-overflow-label>Assign</tec-overflow-label></tec-button>
         </tec-overflow-item>
         <tec-overflow-item value="tag" priority="1">
-          <tec-button variant="outline" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg><tec-overflow-label>Add tag</tec-overflow-label></tec-button>
+          <tec-button variant="outline" size="sm"><tec-icon name="tag" slot="start" aria-hidden="true"></tec-icon><tec-overflow-label>Add tag</tec-overflow-label></tec-button>
         </tec-overflow-item>
         <tec-overflow-item value="export">
-          <tec-button variant="outline" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg><tec-overflow-label>Export</tec-overflow-label></tec-button>
+          <tec-button variant="outline" size="sm"><tec-icon name="download" slot="start" aria-hidden="true"></tec-icon><tec-overflow-label>Export</tec-overflow-label></tec-button>
         </tec-overflow-item>
         <tec-overflow-item value="archive">
-          <tec-button variant="outline" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg><tec-overflow-label>Archive</tec-overflow-label></tec-button>
+          <tec-button variant="outline" size="sm"><tec-icon name="archive" slot="start" aria-hidden="true"></tec-icon><tec-overflow-label>Archive</tec-overflow-label></tec-button>
         </tec-overflow-item>
         <tec-overflow-divider></tec-overflow-divider>
         <tec-overflow-item value="delete" label-behavior="keep">
-          <tec-button variant="destructive" size="sm"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Delete</tec-button>
+          <tec-button variant="destructive" size="sm"><tec-icon name="trash" slot="start" aria-hidden="true"></tec-icon>Delete</tec-button>
         </tec-overflow-item>
       </tec-action-bar-actions>
     </tec-action-bar>
@@ -75,6 +75,11 @@
   </div>
 </div>
 <script type="module">
+  import { Archive, Download, Tag, Trash, UserPlus } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Archive, Download, Tag, Trash, UserPlus })
+
   const root = document.getElementById("action-bar-demo")
   const bar = root.querySelector("tec-action-bar")
   const summary = root.querySelector("tec-action-bar-selection")

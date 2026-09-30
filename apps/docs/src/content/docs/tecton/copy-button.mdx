@@ -8,6 +8,15 @@ tags: ["tec-copy-button"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Copy } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Copy })
+```
+
 ```ts
 import "@tecton/wc/copy-button"
 ```
@@ -159,7 +168,7 @@ copyButton.addEventListener("tec-copy", () => track("copy"))
 <Wrong>
 
 ```html
-<tec-copy-button value="34/10-A-12"><svg>…</svg></tec-copy-button>
+<tec-copy-button value="34/10-A-12"><tec-icon name="copy"></tec-icon></tec-copy-button>
 ```
 
 </Wrong>

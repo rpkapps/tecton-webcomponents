@@ -8,13 +8,22 @@ tags: ["tec-alert", "tec-alert-title", "tec-alert-description"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { TriangleAlert } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ TriangleAlert })
+```
+
 ```ts
 import "@tecton/wc/alert"
 ```
 
 ```html
 <tec-alert>
-  <svg slot="icon" aria-hidden="true">…</svg>
+  <tec-icon name="triangle-alert" slot="icon" aria-hidden="true"></tec-icon>
   <tec-alert-title>Heads up!</tec-alert-title>
   <tec-alert-description>You can add components to your app with a single import.</tec-alert-description>
   <tec-button slot="action" variant="outline" size="xs">Enable</tec-button>
@@ -201,7 +210,7 @@ Say the severity in the alert title's words ("Pressure warning", "Export failed"
 
 ```html
 <tec-alert variant="warning" appearance="filled">
-  <tec-alert-title><svg aria-hidden="true">…</svg> Unsaved changes</tec-alert-title>
+  <tec-alert-title><tec-icon name="triangle-alert" aria-hidden="true"></tec-icon> Unsaved changes</tec-alert-title>
   <tec-alert-description>Three horizons have uncommitted edits.</tec-alert-description>
 </tec-alert>
 ```
@@ -212,7 +221,7 @@ Say the severity in the alert title's words ("Pressure warning", "Export failed"
 
 ```html
 <tec-alert variant="warning" appearance="filled">
-  <svg slot="icon" aria-hidden="true">…</svg>
+  <tec-icon name="triangle-alert" slot="icon" aria-hidden="true"></tec-icon>
   <tec-alert-title>Unsaved changes</tec-alert-title>
   <tec-alert-description>Three horizons have uncommitted edits.</tec-alert-description>
 </tec-alert>

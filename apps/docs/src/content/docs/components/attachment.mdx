@@ -10,19 +10,28 @@ tags: ["tec-attachment", "tec-attachment-media", "tec-attachment-content", "tec-
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { FileText, Paperclip, X } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ FileText, Paperclip, X })
+```
+
 ```ts
 import "@tecton/wc/attachment"
 ```
 
 ```html
 <tec-attachment>
-  <tec-attachment-media><svg aria-hidden="true" …></svg></tec-attachment-media>
+  <tec-attachment-media><tec-icon name="file-text"></tec-icon></tec-attachment-media>
   <tec-attachment-content>
     <tec-attachment-title>sales-dashboard.pdf</tec-attachment-title>
     <tec-attachment-description>PDF · 2.4 MB</tec-attachment-description>
   </tec-attachment-content>
   <tec-attachment-actions>
-    <tec-attachment-action aria-label="Remove sales-dashboard.pdf"><svg aria-hidden="true" …></svg></tec-attachment-action>
+    <tec-attachment-action aria-label="Remove sales-dashboard.pdf"><tec-icon name="x"></tec-icon></tec-attachment-action>
   </tec-attachment-actions>
 </tec-attachment>
 ```
@@ -170,7 +179,7 @@ Limit the file picker to the formats the import can read (LAS, DLIS, SEG-Y), and
 <Wrong>
 
 ```html
-<tec-badge variant="info"><svg slot="start" …></svg> sales-dashboard.pdf</tec-badge>
+<tec-badge variant="info"><tec-icon name="paperclip"></tec-icon> sales-dashboard.pdf</tec-badge>
 ```
 
 </Wrong>
@@ -179,7 +188,7 @@ Limit the file picker to the formats the import can read (LAS, DLIS, SEG-Y), and
 
 ```html
 <tec-attachment size="sm">
-  <tec-attachment-media><svg aria-hidden="true" …></svg></tec-attachment-media>
+  <tec-attachment-media><tec-icon name="file-text"></tec-icon></tec-attachment-media>
   <tec-attachment-content>
     <tec-attachment-title>sales-dashboard.pdf</tec-attachment-title>
     <tec-attachment-description>PDF · 2.4 MB</tec-attachment-description>

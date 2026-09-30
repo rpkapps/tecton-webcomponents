@@ -9,23 +9,23 @@
                button keeps the panel's small button size. -->
           <tec-toolbar aria-label="Panel actions" labels="never" style="--tec-overflow-gap: 0.25rem">
             <tec-overflow-item value="refresh" label="Refresh" priority="2">
-              <tec-button variant="ghost" size="icon-sm" aria-label="Refresh"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></tec-button>
+              <tec-button variant="ghost" size="icon-sm" aria-label="Refresh"><tec-icon name="refresh-cw" aria-hidden="true"></tec-icon></tec-button>
             </tec-overflow-item>
             <tec-overflow-item value="pin" label="Pin" priority="1">
-              <tec-button variant="ghost" size="icon-sm" aria-label="Pin"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg></tec-button>
+              <tec-button variant="ghost" size="icon-sm" aria-label="Pin"><tec-icon name="pin" aria-hidden="true"></tec-icon></tec-button>
             </tec-overflow-item>
             <tec-overflow-item value="share" label="Share">
-              <tec-button variant="ghost" size="icon-sm" aria-label="Share"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v13"/><path d="m16 6-4-4-4 4"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg></tec-button>
+              <tec-button variant="ghost" size="icon-sm" aria-label="Share"><tec-icon name="share" aria-hidden="true"></tec-icon></tec-button>
             </tec-overflow-item>
             <tec-overflow-item value="export" label="Export">
-              <tec-button variant="ghost" size="icon-sm" aria-label="Export"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg></tec-button>
+              <tec-button variant="ghost" size="icon-sm" aria-label="Export"><tec-icon name="download" aria-hidden="true"></tec-icon></tec-button>
             </tec-overflow-item>
             <tec-overflow-item value="maximize" label="Maximize">
-              <tec-button variant="ghost" size="icon-sm" aria-label="Maximize"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg></tec-button>
+              <tec-button variant="ghost" size="icon-sm" aria-label="Maximize"><tec-icon name="maximize" aria-hidden="true"></tec-icon></tec-button>
             </tec-overflow-item>
             <!-- Not wrapped: settings never leaves the header. -->
-            <tec-button variant="ghost" size="icon-sm" aria-label="Settings"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg></tec-button>
-            <tec-button slot="menu-trigger" variant="ghost" size="icon-sm" aria-label="More actions"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></tec-button>
+            <tec-button variant="ghost" size="icon-sm" aria-label="Settings"><tec-icon name="settings" aria-hidden="true"></tec-icon></tec-button>
+            <tec-button slot="menu-trigger" variant="ghost" size="icon-sm" aria-label="More actions"><tec-icon name="ellipsis" aria-hidden="true"></tec-icon></tec-button>
           </tec-toolbar>
         </tec-panel-actions>
       </tec-panel-header>
@@ -34,3 +34,9 @@
   </div>
   <p class="text-xs text-muted-foreground">Drag the corner to resize.</p>
 </div>
+<script type="module">
+  import { Download, Ellipsis, Maximize, Pin, RefreshCw, Settings, Share } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Download, Ellipsis, Maximize, Pin, RefreshCw, Settings, Share })
+</script>

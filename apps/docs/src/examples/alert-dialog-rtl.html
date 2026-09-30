@@ -16,7 +16,7 @@
     <tec-button slot="trigger" variant="outline">إظهار الحوار (صغير)</tec-button>
     <tec-alert-dialog-header>
       <tec-alert-dialog-media>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 7 10 10-5 5V2l5 5L7 17" /></svg>
+        <tec-icon name="bluetooth" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
       </tec-alert-dialog-media>
       <tec-alert-dialog-title>السماح للملحق بالاتصال؟</tec-alert-dialog-title>
       <tec-alert-dialog-description>
@@ -29,3 +29,9 @@
     </tec-alert-dialog-footer>
   </tec-alert-dialog>
 </div>
+<script type="module">
+  import { Bluetooth } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Bluetooth })
+</script>

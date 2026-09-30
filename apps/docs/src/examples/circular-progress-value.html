@@ -2,6 +2,12 @@
   <tec-circular-progress size="lg" value="38" aria-label="Wells drilled" show-value></tec-circular-progress>
   <tec-circular-progress size="lg" value="7" max="12" value-label="7 of 12" aria-label="Templates">7/12</tec-circular-progress>
   <tec-circular-progress size="lg" value="100" color="success" aria-label="Export">
-    <svg class="size-5 text-success" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+    <tec-icon name="check" class="size-5 text-success" aria-hidden="true"></tec-icon>
   </tec-circular-progress>
 </div>
+<script type="module">
+  import { Check } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Check })
+</script>

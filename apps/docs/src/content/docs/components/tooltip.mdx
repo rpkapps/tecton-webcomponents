@@ -8,6 +8,15 @@ tags: ["tec-tooltip"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Save } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Save })
+```
+
 ```ts
 import "@tecton/wc/tooltip"
 ```
@@ -133,7 +142,7 @@ A trigger that is not a control (a badge, a term) needs focus and a role, or key
 
 ```html
 <tec-tooltip>
-  <tec-button slot="trigger" variant="ghost" size="icon-sm"><svg>…</svg></tec-button>
+  <tec-button slot="trigger" variant="ghost" size="icon-sm"><tec-icon name="save"></tec-icon></tec-button>
   Save changes
 </tec-tooltip>
 ```
@@ -144,7 +153,7 @@ A trigger that is not a control (a badge, a term) needs focus and a role, or key
 
 ```html
 <tec-tooltip>
-  <tec-button slot="trigger" variant="ghost" size="icon-sm" aria-label="Save changes"><svg>…</svg></tec-button>
+  <tec-button slot="trigger" variant="ghost" size="icon-sm" aria-label="Save changes"><tec-icon name="save"></tec-icon></tec-button>
   Save changes
 </tec-tooltip>
 ```

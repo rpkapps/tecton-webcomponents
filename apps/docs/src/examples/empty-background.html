@@ -1,7 +1,7 @@
 <tec-empty variant="muted" class="h-full">
   <tec-empty-header>
     <tec-empty-media variant="icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+      <tec-icon name="bell" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
     </tec-empty-media>
     <tec-empty-title>No Notifications</tec-empty-title>
     <tec-empty-description class="max-w-xs text-pretty">
@@ -10,8 +10,14 @@
   </tec-empty-header>
   <tec-empty-content>
     <tec-button variant="outline">
-      <svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+      <tec-icon name="refresh-ccw" slot="start" aria-hidden="true"></tec-icon>
       Refresh
     </tec-button>
   </tec-empty-content>
 </tec-empty>
+<script type="module">
+  import { Bell, RefreshCcw } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Bell, RefreshCcw })
+</script>

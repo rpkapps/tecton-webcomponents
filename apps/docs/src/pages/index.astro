@@ -77,7 +77,7 @@ const install = `pnpm add ${siteConfig.package}`
           </div>
         </div>
         <div class="flex justify-center" data-not-typeset>
-          {heroSource && <Fragment set:html={heroSource} />}
+          {heroSource && <Fragment set:html={heroSource.replace(/<script\b[^>]*type=["']module["'][^>]*>[\s\S]*?<\/script>/gi, "")} />}
         </div>
       </section>
 
@@ -118,3 +118,7 @@ const install = `pnpm add ${siteConfig.package}`
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  import "../examples/hero-preview.html?example-script"
+</script>

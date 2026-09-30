@@ -8,7 +8,7 @@
     <tec-composer-field>
       <tec-composer-attachments>
         <tec-composer-attachment description="“Flaring at A-7 exceeded the permit for 14 minutes.”">
-          <svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 5H3" /><path d="M21 12H8" /><path d="M21 19H8" /><path d="M3 12v7" /></svg>
+          <tec-icon name="text-quote" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
           Selected text
         </tec-composer-attachment>
       </tec-composer-attachments>
@@ -24,6 +24,11 @@
 </div>
 
 <script type="module">
+  import { TextQuote } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ TextQuote })
+
   const root = document.getElementById("composer-context")
   const output = root.querySelector("p")
   root.querySelector("tec-composer").addEventListener("tec-submit", (event) => {

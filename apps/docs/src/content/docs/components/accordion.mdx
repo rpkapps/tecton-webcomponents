@@ -8,6 +8,15 @@ tags: ["tec-accordion", "tec-accordion-item", "tec-accordion-trigger", "tec-acco
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { ChevronDown } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ ChevronDown })
+```
+
 ```ts
 import "@tecton/wc/accordion"
 ```
@@ -232,7 +241,7 @@ A click fires on the collapse as well as the expand, never fires when another it
 <Wrong>
 
 ```html
-<tec-accordion-trigger>Billing <svg class="ms-auto">…</svg></tec-accordion-trigger>
+<tec-accordion-trigger>Billing <tec-icon name="chevron-down" class="ms-auto"></tec-icon></tec-accordion-trigger>
 ```
 
 </Wrong>

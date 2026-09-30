@@ -6,15 +6,15 @@
   <tec-card-content>
     <ul class="grid gap-2 py-2 text-sm">
       <li class="flex gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-muted-foreground rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+        <tec-icon name="chevron-right" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-muted-foreground rtl:rotate-180"></tec-icon>
         <span>Choose a schedule (daily, or weekly).</span>
       </li>
       <li class="flex gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-muted-foreground rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+        <tec-icon name="chevron-right" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-muted-foreground rtl:rotate-180"></tec-icon>
         <span>Send to channels or specific teammates.</span>
       </li>
       <li class="flex gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-muted-foreground rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+        <tec-icon name="chevron-right" aria-hidden="true" class="mt-0.5 size-4 shrink-0 text-muted-foreground rtl:rotate-180"></tec-icon>
         <span>Include charts, tables, and key metrics.</span>
       </li>
     </ul>
@@ -24,3 +24,9 @@
     <tec-button variant="outline" size="sm" class="w-full">See what's new</tec-button>
   </tec-card-footer>
 </tec-card>
+<script type="module">
+  import { ChevronRight } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ ChevronRight })
+</script>

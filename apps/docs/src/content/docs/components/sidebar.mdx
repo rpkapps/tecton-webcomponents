@@ -10,6 +10,15 @@ A sidebar is the navigation rail of an application: groups of destinations, an a
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Drill } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Drill })
+```
+
 ```ts
 import "@tecton/wc/sidebar"
 ```
@@ -139,7 +148,7 @@ Sub menus that expand from their row go in a [collapsible](/docs/components/coll
 ```html
 <tec-sidebar-menu-item>
   <tec-collapsible>
-    <tec-sidebar-menu-button slot="trigger" tooltip="Wells"><svg>…</svg><span>Wells</span></tec-sidebar-menu-button>
+    <tec-sidebar-menu-button slot="trigger" tooltip="Wells"><tec-icon name="drill"></tec-icon><span>Wells</span></tec-sidebar-menu-button>
     <tec-collapsible-content>
       <tec-sidebar-menu-sub>…</tec-sidebar-menu-sub>
     </tec-collapsible-content>

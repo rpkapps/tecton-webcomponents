@@ -1,10 +1,15 @@
 <tec-field class="mx-auto w-60">
   <tec-field-label for="date-picker-range">Date Picker Range</tec-field-label>
   <tec-date-range-picker id="date-picker-range" appearance="button" visible-months="2">
-    <svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" /></svg>
+    <tec-icon name="calendar" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
   </tec-date-range-picker>
 </tec-field>
 <script type="module">
+  import { Calendar } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Calendar })
+
   const year = new Date().getFullYear()
   // January 20 + 20 days.
   document.getElementById("date-picker-range").value = `${year}-01-20/${year}-02-09`

@@ -3,7 +3,7 @@
     <tec-panel-title>خصائص البئر</tec-panel-title>
     <tec-panel-description>غولفاكس · العمق الكلي ٣٢٥٠ م</tec-panel-description>
     <tec-panel-actions>
-      <tec-button variant="ghost" size="icon-sm" aria-label="الإعدادات"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg></tec-button>
+      <tec-button variant="ghost" size="icon-sm" aria-label="الإعدادات"><tec-icon name="settings" aria-hidden="true"></tec-icon></tec-button>
     </tec-panel-actions>
   </tec-panel-header>
   <tec-panel-content class="text-sm text-muted-foreground">٣٤/١٠-A-١٢ · ١٢٤٠ برميل/يوم</tec-panel-content>
@@ -12,3 +12,9 @@
     <tec-button size="sm">فتح</tec-button>
   </tec-panel-footer>
 </tec-panel>
+<script type="module">
+  import { Settings } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Settings })
+</script>

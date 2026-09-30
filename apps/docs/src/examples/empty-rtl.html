@@ -1,7 +1,7 @@
 <tec-empty lang="ar">
   <tec-empty-header>
     <tec-empty-media variant="icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 10.5 8 13l2 2.5"/><path d="m14 10.5 2 2.5-2 2.5"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z"/></svg>
+      <tec-icon name="folder-code" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
     </tec-empty-media>
     <tec-empty-title>لا توجد مشاريع بعد</tec-empty-title>
     <tec-empty-description>لم تقم بإنشاء أي مشاريع بعد. ابدأ بإنشاء مشروعك الأول.</tec-empty-description>
@@ -12,6 +12,12 @@
   </tec-empty-content>
   <tec-button href="#" variant="link" size="sm" style="--tec-link-foreground: var(--tec-muted-foreground)">
     تعرف على المزيد
-    <svg slot="end" class="rtl:-rotate-90" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+    <tec-icon name="arrow-up-right" slot="end" class="rtl:-rotate-90" aria-hidden="true"></tec-icon>
   </tec-button>
 </tec-empty>
+<script type="module">
+  import { ArrowUpRight, FolderCode } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ ArrowUpRight, FolderCode })
+</script>

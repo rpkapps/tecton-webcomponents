@@ -8,6 +8,15 @@ tags: ["tec-toggle"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Bookmark } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Bookmark })
+```
+
 ```ts
 import "@tecton/wc/toggle"
 ```
@@ -180,7 +189,7 @@ A toggle renders a button with `aria-pressed`, which announces a pressed control
 <Wrong>
 
 ```html
-<tec-toggle variant="outline"><svg aria-hidden="true">…</svg></tec-toggle>
+<tec-toggle variant="outline"><tec-icon name="bookmark" aria-hidden="true"></tec-icon></tec-toggle>
 ```
 
 </Wrong>
@@ -188,7 +197,7 @@ A toggle renders a button with `aria-pressed`, which announces a pressed control
 <Correct>
 
 ```html
-<tec-toggle variant="outline" aria-label="Toggle bookmark"><svg aria-hidden="true">…</svg></tec-toggle>
+<tec-toggle variant="outline" aria-label="Toggle bookmark"><tec-icon name="bookmark" aria-hidden="true"></tec-icon></tec-toggle>
 ```
 
 </Correct>

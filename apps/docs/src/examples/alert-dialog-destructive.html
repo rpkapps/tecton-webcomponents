@@ -2,7 +2,7 @@
   <tec-button slot="trigger" variant="destructive">Delete Chat</tec-button>
   <tec-alert-dialog-header>
     <tec-alert-dialog-media style="--tec-alert-dialog-media-background: color-mix(in oklab, var(--tec-destructive) 10%, transparent); --tec-alert-dialog-media-foreground: var(--tec-destructive)">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 11v6" /><path d="M14 11v6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>
+      <tec-icon name="trash" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
     </tec-alert-dialog-media>
     <tec-alert-dialog-title>Delete chat?</tec-alert-dialog-title>
     <tec-alert-dialog-description>
@@ -14,3 +14,9 @@
     <tec-alert-dialog-action variant="destructive">Delete</tec-alert-dialog-action>
   </tec-alert-dialog-footer>
 </tec-alert-dialog>
+<script type="module">
+  import { Trash } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Trash })
+</script>
