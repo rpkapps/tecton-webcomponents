@@ -1,4 +1,4 @@
-// Behaviour of the docs chrome: theme toggle, copy buttons, mobile menu, command menu,
+// Behaviour of the docs chrome: theme toggle, mobile menu, command menu,
 // "On this page" highlighting. Plain DOM, no framework.
 
 const THEME_KEY = "tecton-docs:theme"
@@ -20,26 +20,6 @@ for (const button of document.querySelectorAll("[data-theme-toggle]")) {
     setTheme(document.documentElement.classList.contains("dark") ? "light" : "dark")
   })
 }
-
-/* Copy buttons (code blocks) -------------------------------------------------------- */
-
-document.addEventListener("click", async (event) => {
-  const button = (event.target as Element | null)?.closest?.<HTMLElement>("[data-copy-button]")
-  if (!button) return
-  const code = button.closest("[data-code-block]")?.querySelector("pre code")
-  const text = button.dataset.copyValue ?? code?.textContent ?? ""
-  try {
-    await navigator.clipboard.writeText(text.replace(/\n$/, ""))
-    button.setAttribute("data-copied", "")
-    button.setAttribute("aria-label", "Copied")
-    setTimeout(() => {
-      button.removeAttribute("data-copied")
-      button.setAttribute("aria-label", "Copy code")
-    }, 2000)
-  } catch {
-    button.setAttribute("aria-label", "Copy failed")
-  }
-})
 
 /* Modal dialogs (mobile menu, command menu): close on backdrop press. ---------------- */
 

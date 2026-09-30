@@ -17,7 +17,7 @@ export const radioGroupStyles = css`
 
 /*
  * The circle: 16px, 1px `link-foreground` border; hover `link-hover-foreground`; checked
- * `link-active-foreground` border and 8px dot; keyboard focus: `ring` border + 2px ring; invalid:
+ * `filled` border and 8px dot (`filled-hover` / `filled-pressed` on interaction); keyboard focus: `ring` border + 2px ring; invalid:
  * destructive border + destructive/20 ring; disabled: 50% opacity.
  */
 export const radioGroupItemStyles = css`
@@ -59,19 +59,28 @@ export const radioGroupItemStyles = css`
     position: absolute;
     inset: -0.5rem -0.75rem;
   }
-  :host(:state(checked)) .control {
-    border-color: var(--tec-link-active-foreground);
-    color: var(--tec-link-active-foreground);
-  }
-  /* As in the spec, the hover border wins over the checked one. */
   :host(:hover) .control {
     border-color: var(--tec-link-hover-foreground);
   }
-  :host(:focus-visible) .control {
+  :host(:state(checked)) .control {
+    border-color: var(--tec-filled);
+    color: var(--tec-filled);
+  }
+  :host(:state(checked):hover) .control {
+    border-color: var(--tec-filled-hover);
+    color: var(--tec-filled-hover);
+  }
+  :host(:state(checked):active) .control {
+    border-color: var(--tec-filled-pressed);
+    color: var(--tec-filled-pressed);
+  }
+  :host(:focus-visible) .control,
+  :host(:state(checked):focus-visible) .control {
     border-color: var(--tec-ring);
     box-shadow: var(--tec-focus-ring);
   }
-  :host(:state(user-invalid)) .control {
+  :host(:state(user-invalid)) .control,
+  :host(:state(checked):state(user-invalid)) .control {
     border-color: var(--tec-destructive);
     box-shadow: var(--tec-focus-ring-invalid);
   }
@@ -111,7 +120,9 @@ export const radioGroupItemStyles = css`
       border-color: CanvasText;
       color: CanvasText;
     }
-    :host(:state(checked)) .control {
+    :host(:state(checked)) .control,
+    :host(:state(checked):hover) .control,
+    :host(:state(checked):active) .control {
       border-color: Highlight;
       color: Highlight;
     }

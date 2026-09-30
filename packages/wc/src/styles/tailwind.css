@@ -102,6 +102,18 @@
   --color-table-active: var(--tec-table-active);
   --color-slider: var(--tec-slider);
   --color-progress: var(--tec-progress);
+  --color-tooltip: var(--tec-tooltip);
+  --color-tooltip-foreground: var(--tec-tooltip-foreground);
+  --color-backdrop: var(--tec-backdrop);
+  --color-filled: var(--tec-filled);
+  --color-filled-hover: var(--tec-filled-hover);
+  --color-filled-pressed: var(--tec-filled-pressed);
+  --color-filled-active: var(--tec-filled-active);
+  --color-slider-rail: var(--tec-slider-rail);
+  --color-progress-track: var(--tec-progress-track);
+  --color-content-hover: var(--tec-content-hover);
+  --color-content-pressed: var(--tec-content-pressed);
+  --color-content-active: var(--tec-content-active);
   --font-sans: var(--tec-font-sans);
   --font-mono: var(--tec-font-mono);
   --radius-sm: var(--tec-radius-sm);

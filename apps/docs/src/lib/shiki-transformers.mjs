@@ -4,7 +4,7 @@
 // Every block renders as
 //   <figure data-code-block data-not-typeset>
 //     <figcaption data-code-block-title>title</figcaption>   (fence meta title="…")
-//     <button data-copy-button>…</button>                    (unless the meta says noCopy)
+//     <tec-copy-button value="…"></tec-copy-button>           (unless the meta says noCopy)
 //     <pre class="astro-code shiki" data-language="html">…</pre>
 //   </figure>
 // Colours are dual-theme CSS variables (defaultColor: false): app.css picks
@@ -23,36 +23,24 @@ function parseMeta(raw = "") {
   }
 }
 
-export function copyButtonHast() {
+export function copyButtonHast(value = "") {
   return {
     type: "element",
-    tagName: "button",
+    tagName: "tec-copy-button",
     properties: {
-      type: "button",
-      dataCopyButton: "",
-      ariaLabel: "Copy code",
-      title: "Copy code",
+      value,
+      "copy-label": "Copy code",
       className: [
         "docs-copy-button",
         "absolute",
         "top-3",
         "end-2",
         "z-10",
-        "inline-flex",
         "size-7",
-        "items-center",
-        "justify-center",
-        "rounded-md",
         "bg-code",
-        "text-muted-foreground",
-        "outline-none",
-        "hover:text-foreground",
-        "hover:bg-accent",
-        "focus-visible:ring-2",
-        "focus-visible:ring-ring",
       ],
     },
-    children: [iconHast("copy", "size-3.5 copy-icon"), iconHast("check", "size-3.5 check-icon")],
+    children: [],
   }
 }
 
@@ -88,7 +76,7 @@ export function codeBlockTransformer(options = {}) {
           ],
         })
       }
-      if (options.copy !== false && !meta.noCopy) children.push(copyButtonHast())
+      if (options.copy !== false && !meta.noCopy) children.push(copyButtonHast(this.source.replace(/\n$/, "")))
       children.push(pre)
       root.children = [
         {

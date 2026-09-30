@@ -27,7 +27,7 @@ const clamp = (n: number, min: number, max: number) => Math.min(Math.max(n, min)
  *
  * @slot - A `tec-progress-label` and a `tec-progress-value`.
  *
- * @csspart track - The track (4px, the progress colour at 38%).
+ * @csspart track - The track (4px, `--tec-progress-track`).
  * @csspart indicator - The filled part of the track.
  *
  * @cssstate indeterminate - The progress is indeterminate.

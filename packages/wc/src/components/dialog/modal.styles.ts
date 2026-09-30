@@ -46,11 +46,11 @@ export const modalStyles = css`
     }
   }
 
-  /* bg-black/10 supports-backdrop-filter:backdrop-blur-xs, fade 100ms */
+  /* Tecton modal backdrop with a light blur, fade 100ms. */
   .overlay {
     position: fixed;
     inset: 0;
-    background-color: color-mix(in oklab, var(--tecton-palette-black) 10%, transparent);
+    background-color: var(--tec-backdrop);
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
   }

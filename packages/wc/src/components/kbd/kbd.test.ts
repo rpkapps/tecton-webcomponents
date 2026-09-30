@@ -14,8 +14,8 @@ describe("tec-kbd", () => {
     await expectAccessible(root)
   })
 
-  it("inverts inside a tooltip", async () => {
-    const root = await fixture<HTMLElement>(html`<div role="tooltip">Save <tec-kbd>S</tec-kbd><span style="color: var(--tec-background)"></span></div>`)
+  it("matches the text inside a tooltip", async () => {
+    const root = await fixture<HTMLElement>(html`<div role="tooltip">Save <tec-kbd>S</tec-kbd><span style="color: var(--tec-tooltip-foreground)"></span></div>`)
     const kbd = root.querySelector("tec-kbd")!
     expect(kbd.matches(":state(in-tooltip)")).toBe(true)
     const background = getComputedStyle(root.querySelector("span")!).color

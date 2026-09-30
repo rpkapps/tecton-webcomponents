@@ -250,15 +250,6 @@
     color: var(--shiki-light);
   }
 
-  /* Copy buttons swap their icon after a copy. */
-  .docs-copy-button .check-icon,
-  .docs-copy-button[data-copied] .copy-icon {
-    display: none;
-  }
-  .docs-copy-button[data-copied] .check-icon {
-    display: block;
-  }
-
   /* <ComponentPreview>: collapsed code shows three lines under a fade. */
   [data-slot="component-preview"] [data-code-block] {
     margin: 0;

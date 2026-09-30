@@ -20,7 +20,7 @@ export const progressStyles = css`
     height: 0.25rem;
     overflow: hidden;
     border-radius: 0;
-    background-color: color-mix(in oklab, var(--tec-progress) 38%, transparent);
+    background-color: var(--tec-progress-track);
   }
   .indicator {
     display: block;
