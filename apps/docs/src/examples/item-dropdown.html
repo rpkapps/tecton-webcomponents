@@ -1,7 +1,7 @@
 <tec-dropdown-menu align="end" label="People" style="--tec-menu-min-width: 12rem">
   <tec-button slot="trigger" variant="outline">
     Select
-    <svg slot="end" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    <tec-icon name="chevron-down" slot="end" aria-hidden="true"></tec-icon>
   </tec-button>
   <tec-dropdown-menu-group>
     <tec-dropdown-menu-item>
@@ -48,3 +48,9 @@
     </tec-dropdown-menu-item>
   </tec-dropdown-menu-group>
 </tec-dropdown-menu>
+<script type="module">
+  import { ChevronDown } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ ChevronDown })
+</script>

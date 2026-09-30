@@ -18,6 +18,11 @@
   ></tec-data-table>
 </div>
 <script type="module">
+  import { Ellipsis } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Ellipsis })
+
   import { html } from "@tecton/wc/data-table/data-table.js"
 
   const data = [
@@ -42,7 +47,7 @@
       hideable: false,
       cell: ({ row }) => html`<tec-dropdown-menu side="bottom" align="end">
         <tec-button slot="trigger" variant="ghost" size="icon-xs" aria-label="فتح القائمة">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg>
+          <tec-icon name="ellipsis" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
         </tec-button>
         <tec-dropdown-menu-group>
           <tec-dropdown-menu-label>الإجراءات</tec-dropdown-menu-label>

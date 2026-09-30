@@ -11,6 +11,15 @@ Here is a card in a right-to-left page. The RTL section of each component page s
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { ChevronRight } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ ChevronRight })
+```
+
 Set the direction and the language once, on `<html>`:
 
 ```html
@@ -57,7 +66,7 @@ In CSS, use the `:dir()` pseudo-class, or Tailwind's `rtl:` / `ltr:` variants in
 ```
 
 ```html
-<svg class="rtl:rotate-180" aria-hidden="true">…</svg>
+<tec-icon name="chevron-right" class="rtl:rotate-180" aria-hidden="true"></tec-icon>
 ```
 
 ## Usage guidelines

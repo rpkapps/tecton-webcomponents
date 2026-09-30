@@ -8,6 +8,15 @@ tags: ["tec-action-bar", "tec-action-bar-selection", "tec-action-bar-message", "
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Tag } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Tag })
+```
+
 ```ts
 import "@tecton/wc/action-bar"
 ```
@@ -18,7 +27,7 @@ import "@tecton/wc/action-bar"
   <tec-action-bar-actions aria-label="Selection actions">
     <tec-overflow-item value="tag">
       <tec-button variant="outline" size="sm">
-        <svg slot="start" aria-hidden="true">…</svg>
+        <tec-icon name="tag" slot="start" aria-hidden="true"></tec-icon>
         <tec-overflow-label>Add tag</tec-overflow-label>
       </tec-button>
     </tec-overflow-item>
@@ -195,7 +204,7 @@ Choose `placement="toolbar"` to fill a table's toolbar row and `"floating"` for 
 
 ```html
 <tec-action-bar-actions aria-label="Selection actions">
-  <tec-button variant="outline" size="sm"><svg slot="start">…</svg>Add tag</tec-button>
+  <tec-button variant="outline" size="sm"><tec-icon name="tag" slot="start"></tec-icon>Add tag</tec-button>
   <tec-button size="sm">Assign</tec-button>
 </tec-action-bar-actions>
 ```
@@ -207,7 +216,7 @@ Choose `placement="toolbar"` to fill a table's toolbar row and `"floating"` for 
 ```html
 <tec-action-bar-actions aria-label="Selection actions">
   <tec-overflow-item value="tag">
-    <tec-button variant="outline" size="sm"><svg slot="start">…</svg><tec-overflow-label>Add tag</tec-overflow-label></tec-button>
+    <tec-button variant="outline" size="sm"><tec-icon name="tag" slot="start"></tec-icon><tec-overflow-label>Add tag</tec-overflow-label></tec-button>
   </tec-overflow-item>
   <tec-button size="sm">Assign</tec-button>
 </tec-action-bar-actions>

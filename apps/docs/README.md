@@ -103,8 +103,10 @@ shown as the code, so write it the way a user would copy it.
   (`bg-blue-120 text-blue-830`). Stock Tailwind colours (`bg-red-500`, `text-zinc-400`) produce no
   CSS. Classes style your light DOM and the component host; never try to restyle a component's
   internals with classes — use its attributes, `::part()` or custom properties.
-- **Icons**: inline Lucide SVG with `width="16" height="16"` and `aria-hidden="true"` (copy the
-  markup from lucide.dev), or `<tec-icon name="well">` for Tecton domain icons. Slot them with
+- **Icons**: use `<tec-icon>` for Lucide and Tecton domain icons. Import the named Lucide
+  icons from `lucide` and call `registerIcons` from `@tecton/wc/icon/registry.js` in the
+  example’s module script, so the copied source includes registration. Domain icons ship
+  registered. Preserve custom SVG illustrations and background patterns. Slot icons with
   `slot="start"` / `slot="end"` where the component offers those slots.
 - **Ids are unique on the page and prefixed with the example name** (`id="dialog-demo-title"`):
   several examples render on one page, and `<label for>` / `aria-*` references must not collide.

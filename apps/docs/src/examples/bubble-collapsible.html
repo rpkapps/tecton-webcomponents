@@ -12,7 +12,7 @@
         <tec-collapsible-trigger>
           <tec-button variant="link" style="--tec-button-foreground: var(--tec-muted-foreground); --tec-button-padding-inline: 0">
             <span>Show more</span>
-            <svg slot="end" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            <tec-icon name="chevron-down" slot="end" aria-hidden="true"></tec-icon>
           </tec-button>
         </tec-collapsible-trigger>
       </tec-collapsible>
@@ -20,6 +20,11 @@
   </tec-bubble>
 </div>
 <script type="module">
+  import { ChevronDown } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ ChevronDown })
+
   const root = document.getElementById("bubble-collapsible")
   const text = `The accessibility review found two focus states that were visually too subtle in dark mode.
 

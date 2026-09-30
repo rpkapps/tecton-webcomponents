@@ -5,7 +5,7 @@
       <tec-item-description>Learn how to get started with our components.</tec-item-description>
     </tec-item-content>
     <tec-item-actions>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4 rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+      <tec-icon name="chevron-right" aria-hidden="true" class="size-4 rtl:rotate-180"></tec-icon>
     </tec-item-actions>
   </tec-item>
   <tec-item href="#" target="_blank" rel="noopener noreferrer" variant="outline">
@@ -14,7 +14,13 @@
       <tec-item-description>Opens in a new tab with security attributes.</tec-item-description>
     </tec-item-content>
     <tec-item-actions>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="size-4"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+      <tec-icon name="external-link" aria-hidden="true" class="size-4"></tec-icon>
     </tec-item-actions>
   </tec-item>
 </div>
+<script type="module">
+  import { ChevronRight, ExternalLink } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ ChevronRight, ExternalLink })
+</script>

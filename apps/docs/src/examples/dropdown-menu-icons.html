@@ -1,8 +1,14 @@
 <tec-dropdown-menu>
   <tec-button slot="trigger" variant="outline">Open</tec-button>
-  <tec-dropdown-menu-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" slot="start"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile</tec-dropdown-menu-item>
-  <tec-dropdown-menu-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" slot="start"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line><path d="M6 14h2"></path></svg>Billing</tec-dropdown-menu-item>
-  <tec-dropdown-menu-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" slot="start"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg>Settings</tec-dropdown-menu-item>
+  <tec-dropdown-menu-item><tec-icon name="user" aria-hidden="true" slot="start" style="width:16px;height:16px"></tec-icon>Profile</tec-dropdown-menu-item>
+  <tec-dropdown-menu-item><tec-icon name="credit-card" aria-hidden="true" slot="start" style="width:16px;height:16px"></tec-icon>Billing</tec-dropdown-menu-item>
+  <tec-dropdown-menu-item><tec-icon name="settings" aria-hidden="true" slot="start" style="width:16px;height:16px"></tec-icon>Settings</tec-dropdown-menu-item>
   <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
-  <tec-dropdown-menu-item variant="destructive"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" slot="start"><path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path></svg>Log out</tec-dropdown-menu-item>
+  <tec-dropdown-menu-item variant="destructive"><tec-icon name="log-out" aria-hidden="true" slot="start" style="width:16px;height:16px"></tec-icon>Log out</tec-dropdown-menu-item>
 </tec-dropdown-menu>
+<script type="module">
+  import { CreditCard, LogOut, Settings, User } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ CreditCard, LogOut, Settings, User })
+</script>

@@ -11,10 +11,10 @@
           <tec-sidebar-group>
             <tec-sidebar-menu>
               <tec-sidebar-menu-item>
-                <tec-sidebar-menu-button href="#" active tooltip="Overview"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg><span>Overview</span></tec-sidebar-menu-button>
+                <tec-sidebar-menu-button href="#" active tooltip="Overview"><tec-icon name="layout-dashboard" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Overview</span></tec-sidebar-menu-button>
               </tec-sidebar-menu-item>
               <tec-sidebar-menu-item>
-                <tec-sidebar-menu-button href="#" tooltip="Wells"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z"/><path d="M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8"/><path d="M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3"/><path d="M18 6h4"/><path d="m5 10-2 8"/><path d="m7 18 2-8"/></svg><span>Wells</span></tec-sidebar-menu-button>
+                <tec-sidebar-menu-button href="#" tooltip="Wells"><tec-icon name="drill" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Wells</span></tec-sidebar-menu-button>
               </tec-sidebar-menu-item>
             </tec-sidebar-menu>
           </tec-sidebar-group>
@@ -31,6 +31,11 @@
   </div>
 </div>
 <script type="module">
+  import { Drill, LayoutDashboard } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Drill, LayoutDashboard })
+
   const root = document.getElementById("sidebar-controlled")
   const provider = root.querySelector("tec-sidebar-provider")
   const lock = root.querySelector("[data-action=lock]")

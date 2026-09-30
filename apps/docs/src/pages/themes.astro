@@ -155,7 +155,7 @@ const modes = [
           </tec-alert>
         </div>
         <div class="flex min-w-0 flex-col gap-6" data-not-typeset>
-          {heroSource && <div class="flex justify-center" set:html={heroSource} />}
+          {heroSource && <div class="flex justify-center" set:html={heroSource.replace(/<script\b[^>]*type=["']module["'][^>]*>[\s\S]*?<\/script>/gi, "")} />}
           <div class="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card p-4">
             <tec-button>Primary</tec-button>
             <tec-button variant="secondary">Secondary</tec-button>
@@ -324,4 +324,8 @@ const modes = [
       ? `${baseCss}\n\n:root {\n${scale.map(([name, factor]) => `  ${name}: calc(${radius} * ${factor});`).join("\n")}\n}\n`
       : baseCss
   })
+</script>
+
+<script>
+  import "../examples/hero-preview.html?example-script"
 </script>

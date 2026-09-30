@@ -8,6 +8,15 @@ tags: ["tec-count-badge"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Bell } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Bell })
+```
+
 ```ts
 import "@tecton/wc/count-badge"
 ```
@@ -15,7 +24,7 @@ import "@tecton/wc/count-badge"
 ```html
 <tec-count-badge count="4" color="destructive">
   <tec-button variant="outline" size="icon" aria-label="Notifications, 4 unread">
-    <svg aria-hidden="true">…</svg>
+    <tec-icon name="bell" aria-hidden="true"></tec-icon>
   </tec-button>
 </tec-count-badge>
 ```

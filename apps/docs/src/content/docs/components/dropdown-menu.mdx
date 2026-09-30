@@ -8,6 +8,15 @@ tags: ["tec-dropdown-menu", "tec-dropdown-menu-item", "tec-dropdown-menu-group",
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Check } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Check })
+```
+
 ```ts
 import "@tecton/wc/dropdown-menu"
 ```
@@ -239,7 +248,7 @@ A menu item is not a button: <Kbd>Enter</Kbd> and <Kbd>Space</Kbd> don't produce
 
 ```html
 <tec-dropdown-menu-item>
-  <svg slot="start"><!-- check --></svg>
+  <tec-icon name="check" slot="start"></tec-icon>
   Panel
 </tec-dropdown-menu-item>
 ```

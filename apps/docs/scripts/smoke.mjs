@@ -68,12 +68,41 @@ for (const url of urls) {
   })
   await page.goto(base + url, { waitUntil: "networkidle" })
   const scripted = await page.locator("[data-example-script]").count()
+  const emptyIcons = await page.locator("tec-icon").evaluateAll((icons) =>
+    icons.filter((icon) => !icon.shadowRoot?.querySelector("svg > *"))
+      .map((icon) => icon.getAttribute("name")),
+  )
+  if (emptyIcons.length) problems.push(`unrendered icons: ${emptyIcons.join(", ")}`)
+
   if (problems.length) {
     failures++
     console.log(`✗ ${url}\n  ${problems.join("\n  ")}`)
   } else {
     console.log(`✓ ${url}${scripted ? ` (${scripted} scripted examples)` : ""}`)
   }
+  await page.close()
+}
+
+// State-dependent icon styling reaches the SVG part inside tec-icon's shadow DOM.
+for (const [url, selector, activeAttribute] of [
+  ["/docs/components/toggle", '[data-example="toggle-demo"] tec-toggle', "pressed"],
+  ["/docs/components/input-group", '#input-group-button [data-action="favorite"]', "aria-pressed"],
+]) {
+  const page = await browser.newPage()
+  await page.goto(base + url, { waitUntil: "networkidle" })
+  const control = page.locator(selector)
+  const icon = control.locator("tec-icon")
+  const fill = () => icon.evaluate((el) => getComputedStyle(el.shadowRoot.querySelector("svg")).fill)
+  const before = await fill()
+  await control.click()
+  const after = await fill()
+  const active = await control.getAttribute(activeAttribute)
+  await control.click()
+  const restored = await fill()
+  if (before !== "none" || after === "none" || restored !== "none" || active === null || active === "false") {
+    failures++
+    console.log(`✗ icon state: ${url} (${before} → ${after} → ${restored})`)
+  } else console.log(`✓ icon state: ${url}`)
   await page.close()
 }
 

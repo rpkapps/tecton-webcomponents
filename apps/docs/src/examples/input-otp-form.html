@@ -10,7 +10,7 @@
       <tec-field>
         <div class="flex items-center justify-between">
           <tec-field-label>Verification code</tec-field-label>
-          <tec-button variant="outline" size="xs"><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /><path d="M8 16H3v5" /></svg> Resend Code</tec-button>
+          <tec-button variant="outline" size="xs"><tec-icon name="refresh-cw" slot="start" aria-hidden="true"></tec-icon> Resend Code</tec-button>
         </div>
         <tec-input-otp name="code" maxlength="6" pattern="digits" required>
           <tec-input-otp-group class="[--tec-input-otp-slot-height:3rem] [--tec-input-otp-slot-width:2.75rem] [--tec-input-otp-slot-font-size:var(--tec-text-xl)]">
@@ -43,6 +43,11 @@
   </tec-card>
 </form>
 <script type="module">
+  import { RefreshCw } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ RefreshCw })
+
   const form = document.getElementById("input-otp-form")
   form.addEventListener("submit", (event) => {
     event.preventDefault()

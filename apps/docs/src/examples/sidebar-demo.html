@@ -6,12 +6,12 @@
           <tec-sidebar-menu-item>
             <tec-dropdown-menu side="right" align="start" style="--tec-menu-min-width: 14rem">
               <tec-sidebar-menu-button slot="trigger" size="lg" aria-label="Project: Johan Sverdrup Phase 3">
-                <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"><svg class="size-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+                <div class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"><tec-icon name="hexagon" class="size-4" aria-hidden="true"></tec-icon></div>
                 <div class="grid flex-1 text-start text-sm leading-tight">
                   <span class="truncate font-medium">Johan Sverdrup Phase 3</span>
                   <span class="truncate text-xs text-sidebar-foreground/70">Concept select</span>
                 </div>
-                <svg class="ms-auto" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+                <tec-icon name="chevrons-up-down" class="ms-auto" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
               </tec-sidebar-menu-button>
               <tec-dropdown-menu-group>
                 <tec-dropdown-menu-label>Projects</tec-dropdown-menu-label>
@@ -20,7 +20,7 @@
                 <tec-dropdown-menu-item>Snorre Expansion<tec-dropdown-menu-shortcut>Ctrl+3</tec-dropdown-menu-shortcut></tec-dropdown-menu-item>
               </tec-dropdown-menu-group>
               <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
-              <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>New project</tec-dropdown-menu-item>
+              <tec-dropdown-menu-item><tec-icon name="plus" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>New project</tec-dropdown-menu-item>
             </tec-dropdown-menu>
           </tec-sidebar-menu-item>
         </tec-sidebar-menu>
@@ -31,13 +31,13 @@
           <tec-sidebar-group-label>Project</tec-sidebar-group-label>
           <tec-sidebar-menu>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" active tooltip="Overview"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg><span>Overview</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" active tooltip="Overview"><tec-icon name="layout-dashboard" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Overview</span></tec-sidebar-menu-button>
             </tec-sidebar-menu-item>
             <tec-sidebar-menu-item>
               <tec-collapsible>
                 <tec-sidebar-menu-button slot="trigger" tooltip="Wells">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 18a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H5a3 3 0 0 1-3-3 1 1 0 0 1 1-1z"/><path d="M13 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1l-.81 3.242a1 1 0 0 1-.97.758H8"/><path d="M14 4h3a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-3"/><path d="M18 6h4"/><path d="m5 10-2 8"/><path d="m7 18 2-8"/></svg><span>Wells</span>
-                  <svg class="ms-auto transition-transform duration-200 rtl:-scale-x-100 [tec-collapsible[open]_&]:rotate-90" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                  <tec-icon name="drill" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Wells</span>
+                  <tec-icon name="chevron-right" class="ms-auto transition-transform duration-200 rtl:-scale-x-100 [tec-collapsible[open]_&]:rotate-90" aria-hidden="true"></tec-icon>
                 </tec-sidebar-menu-button>
                 <tec-collapsible-content>
                   <tec-sidebar-menu-sub>
@@ -50,14 +50,14 @@
               </tec-collapsible>
             </tec-sidebar-menu-item>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" tooltip="Horizons"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg><span>Horizons</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" tooltip="Horizons"><tec-icon name="mountain" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Horizons</span></tec-sidebar-menu-button>
               <tec-sidebar-menu-badge>6</tec-sidebar-menu-badge>
             </tec-sidebar-menu-item>
             <tec-sidebar-menu-item>
               <tec-collapsible>
                 <tec-sidebar-menu-button slot="trigger" tooltip="Models">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg><span>Models</span>
-                  <svg class="ms-auto transition-transform duration-200 rtl:-scale-x-100 [tec-collapsible[open]_&]:rotate-90" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                  <tec-icon name="box" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Models</span>
+                  <tec-icon name="chevron-right" class="ms-auto transition-transform duration-200 rtl:-scale-x-100 [tec-collapsible[open]_&]:rotate-90" aria-hidden="true"></tec-icon>
                 </tec-sidebar-menu-button>
                 <tec-collapsible-content>
                   <tec-sidebar-menu-sub>
@@ -69,7 +69,7 @@
               </tec-collapsible>
             </tec-sidebar-menu-item>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" tooltip="Field development"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/></svg><span>Field development</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" tooltip="Field development"><tec-icon name="git-compare" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Field development</span></tec-sidebar-menu-button>
             </tec-sidebar-menu-item>
           </tec-sidebar-menu>
         </tec-sidebar-group>
@@ -77,13 +77,13 @@
           <tec-sidebar-group-label>Analysis</tec-sidebar-group-label>
           <tec-sidebar-menu>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" tooltip="Cost vs risk"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg><span>Cost vs risk</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" tooltip="Cost vs risk"><tec-icon name="bar-chart3" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Cost vs risk</span></tec-sidebar-menu-button>
             </tec-sidebar-menu-item>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" tooltip="Emissions"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20a10 10 0 0010-10 25.9 25.9 0 00-1.04-7.281 1 1 0 00-1.755-.325C15.833 5.5 13 5.5 9.8 6.1A7 7 0 0011 20"/><path d="M2 21a5 5 0 012.911-4.544C7.613 15.212 8.351 15.24 11 13"/></svg><span>Emissions</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" tooltip="Emissions"><tec-icon name="leaf" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Emissions</span></tec-sidebar-menu-button>
             </tec-sidebar-menu-item>
             <tec-sidebar-menu-item>
-              <tec-sidebar-menu-button href="#" tooltip="Reports"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg><span>Reports</span></tec-sidebar-menu-button>
+              <tec-sidebar-menu-button href="#" tooltip="Reports"><tec-icon name="file-text" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Reports</span></tec-sidebar-menu-button>
             </tec-sidebar-menu-item>
           </tec-sidebar-menu>
         </tec-sidebar-group>
@@ -99,7 +99,7 @@
                   <span class="truncate font-medium">Lena Haugen</span>
                   <span class="truncate text-xs text-sidebar-foreground/70">Subsurface lead</span>
                 </div>
-                <svg class="ms-auto" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+                <tec-icon name="chevrons-up-down" class="ms-auto" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
               </tec-sidebar-menu-button>
               <tec-dropdown-menu-label>
                 <div class="flex flex-col text-start text-sm leading-tight">
@@ -109,12 +109,12 @@
               </tec-dropdown-menu-label>
               <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
               <tec-dropdown-menu-group>
-                <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</tec-dropdown-menu-item>
-                <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>Notifications</tec-dropdown-menu-item>
-                <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>Settings</tec-dropdown-menu-item>
+                <tec-dropdown-menu-item><tec-icon name="user" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Profile</tec-dropdown-menu-item>
+                <tec-dropdown-menu-item><tec-icon name="bell" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Notifications</tec-dropdown-menu-item>
+                <tec-dropdown-menu-item><tec-icon name="settings" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Settings</tec-dropdown-menu-item>
               </tec-dropdown-menu-group>
               <tec-dropdown-menu-separator></tec-dropdown-menu-separator>
-              <tec-dropdown-menu-item><svg slot="start" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>Sign out</tec-dropdown-menu-item>
+              <tec-dropdown-menu-item><tec-icon name="log-out" slot="start" aria-hidden="true" style="width:16px;height:16px"></tec-icon>Sign out</tec-dropdown-menu-item>
             </tec-dropdown-menu>
           </tec-sidebar-menu-item>
         </tec-sidebar-menu>
@@ -148,3 +148,9 @@
     </tec-sidebar-inset>
   </tec-sidebar-provider>
 </div>
+<script type="module">
+  import { BarChart3, Bell, Box, ChevronRight, ChevronsUpDown, Drill, FileText, GitCompare, Hexagon, LayoutDashboard, Leaf, LogOut, Mountain, Plus, Settings, User } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ BarChart3, Bell, Box, ChevronRight, ChevronsUpDown, Drill, FileText, GitCompare, Hexagon, LayoutDashboard, Leaf, LogOut, Mountain, Plus, Settings, User })
+</script>

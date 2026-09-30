@@ -2,6 +2,12 @@
   <tec-avatar-image src="/avatars/02.png" alt="@pranathip"></tec-avatar-image>
   <tec-avatar-fallback>PP</tec-avatar-fallback>
   <tec-avatar-badge label="Add">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    <tec-icon name="plus" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
   </tec-avatar-badge>
 </tec-avatar>
+<script type="module">
+  import { Plus } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Plus })
+</script>

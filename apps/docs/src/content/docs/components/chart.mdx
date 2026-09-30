@@ -144,14 +144,14 @@ The config holds the labels, icons and colours of a chart. It is decoupled from 
 import { createElement, Monitor } from "lucide"
 
 chart.config = {
-  desktop: {
-    label: "Desktop",
-    icon: createElement(Monitor), // an element (cloned) or a Lit template, shown instead of the swatch
-    // A colour: "var(--tec-chart-1)", "oklch(0.5 0.2 240)", "#2563eb" …
-    color: "var(--tec-chart-1)",
-    // … or one colour per theme
-    theme: { light: "var(--tec-chart-1)", dark: "var(--tec-chart-4)" },
-  },
+desktop: {
+  label: "Desktop",
+  icon: createElement(Monitor), // an element (cloned) or a Lit template, shown instead of the swatch
+  // A colour: "var(--tec-chart-1)", "oklch(0.5 0.2 240)", "#2563eb" …
+  color: "var(--tec-chart-1)",
+  // … or one colour per theme
+  theme: { light: "var(--tec-chart-1)", dark: "var(--tec-chart-4)" },
+},
 }
 ```
 

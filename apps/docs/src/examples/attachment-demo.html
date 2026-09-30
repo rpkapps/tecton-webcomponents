@@ -29,17 +29,23 @@
       <tec-attachment-description>Uploading · 64%</tec-attachment-description>
     </tec-attachment-content>
     <tec-attachment-actions>
-      <tec-attachment-action aria-label="Cancel upload of sales-dashboard.pdf"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></tec-attachment-action>
+      <tec-attachment-action aria-label="Cancel upload of sales-dashboard.pdf"><tec-icon name="x" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-action>
     </tec-attachment-actions>
   </tec-attachment>
   <tec-attachment class="w-full">
-    <tec-attachment-media><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 12.5 8 15l2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/></svg></tec-attachment-media>
+    <tec-attachment-media><tec-icon name="file-code" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-media>
     <tec-attachment-content>
       <tec-attachment-title>message-renderer.ts</tec-attachment-title>
       <tec-attachment-description>TypeScript · 12 KB</tec-attachment-description>
     </tec-attachment-content>
     <tec-attachment-actions>
-      <tec-attachment-action aria-label="Remove message-renderer.ts"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></tec-attachment-action>
+      <tec-attachment-action aria-label="Remove message-renderer.ts"><tec-icon name="x" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-attachment-action>
     </tec-attachment-actions>
   </tec-attachment>
 </div>
+<script type="module">
+  import { FileCode, X } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ FileCode, X })
+</script>

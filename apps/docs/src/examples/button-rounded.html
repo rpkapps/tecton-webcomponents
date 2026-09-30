@@ -1,6 +1,12 @@
 <div class="flex gap-2">
   <tec-button style="--tec-button-radius: 9999px">Get Started</tec-button>
   <tec-button variant="outline" size="icon" aria-label="Scroll to top" style="--tec-button-radius: 9999px">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+    <tec-icon name="arrow-up" aria-hidden="true"></tec-icon>
   </tec-button>
 </div>
+<script type="module">
+  import { ArrowUp } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ ArrowUp })
+</script>

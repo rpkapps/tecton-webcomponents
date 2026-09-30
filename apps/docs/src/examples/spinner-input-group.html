@@ -10,8 +10,14 @@
     <tec-input-group-addon align="block-end">
       <tec-spinner></tec-spinner> Validating...
       <tec-input-group-button class="ms-auto" variant="default" aria-label="Send">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+        <tec-icon name="arrow-up" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
       </tec-input-group-button>
     </tec-input-group-addon>
   </tec-input-group>
 </div>
+<script type="module">
+  import { ArrowUp } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ ArrowUp })
+</script>

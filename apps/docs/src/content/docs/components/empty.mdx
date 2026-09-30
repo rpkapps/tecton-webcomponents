@@ -8,6 +8,15 @@ tags: ["tec-empty", "tec-empty-header", "tec-empty-media", "tec-empty-title", "t
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { FolderOpen } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ FolderOpen })
+```
+
 ```ts
 import "@tecton/wc/empty"
 ```
@@ -16,7 +25,7 @@ import "@tecton/wc/empty"
 <tec-empty>
   <tec-empty-header>
     <tec-empty-media variant="icon">
-      <svg aria-hidden="true">…</svg>
+      <tec-icon name="folder-open" aria-hidden="true"></tec-icon>
     </tec-empty-media>
     <tec-empty-title>No data</tec-empty-title>
     <tec-empty-description>No data found</tec-empty-description>
@@ -139,7 +148,7 @@ Name the next step: one primary button in `tec-empty-content`, at most one secon
 
 ```html
 <div class="flex flex-col items-center gap-2 p-12 text-center">
-  <svg class="size-10 text-gray-400" aria-hidden="true">…</svg>
+  <tec-icon name="folder-open" class="size-10 text-gray-400" aria-hidden="true"></tec-icon>
   <h3 class="text-lg font-semibold">No projects yet</h3>
   <p class="text-sm text-gray-500">Create your first project to get started.</p>
   <tec-button>Create project</tec-button>
@@ -153,7 +162,7 @@ Name the next step: one primary button in `tec-empty-content`, at most one secon
 ```html
 <tec-empty>
   <tec-empty-header>
-    <tec-empty-media variant="icon"><svg aria-hidden="true">…</svg></tec-empty-media>
+    <tec-empty-media variant="icon"><tec-icon name="folder-open" aria-hidden="true"></tec-icon></tec-empty-media>
     <tec-empty-title>No projects yet</tec-empty-title>
     <tec-empty-description>Create your first project to get started.</tec-empty-description>
   </tec-empty-header>
@@ -175,7 +184,7 @@ Name the next step: one primary button in `tec-empty-content`, at most one secon
 
 ```html
 <tec-empty-header>
-  <tec-empty-media><svg aria-hidden="true">…</svg></tec-empty-media>
+  <tec-empty-media><tec-icon name="folder-open" aria-hidden="true"></tec-icon></tec-empty-media>
   <tec-empty-title>Cloud storage empty</tec-empty-title>
 </tec-empty-header>
 ```
@@ -186,7 +195,7 @@ Name the next step: one primary button in `tec-empty-content`, at most one secon
 
 ```html
 <tec-empty-header>
-  <tec-empty-media variant="icon"><svg aria-hidden="true">…</svg></tec-empty-media>
+  <tec-empty-media variant="icon"><tec-icon name="folder-open" aria-hidden="true"></tec-icon></tec-empty-media>
   <tec-empty-title>Cloud storage empty</tec-empty-title>
 </tec-empty-header>
 ```

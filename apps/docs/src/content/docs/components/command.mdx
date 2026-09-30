@@ -8,6 +8,15 @@ tags: ["tec-command", "tec-command-input", "tec-command-list", "tec-command-grou
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { CreditCard } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ CreditCard })
+```
+
 ```ts
 import "@tecton/wc/command"
 ```
@@ -199,7 +208,7 @@ Focus stays in the search field, so <Kbd>Enter</Kbd> on a highlighted item never
 <Wrong>
 
 ```html
-<tec-command-item value="billing"><svg …></svg><span>Billing</span><span class="badge">3 due</span></tec-command-item>
+<tec-command-item value="billing"><tec-icon name="credit-card"></tec-icon><span>Billing</span><span class="badge">3 due</span></tec-command-item>
 ```
 
 </Wrong>
@@ -207,7 +216,7 @@ Focus stays in the search field, so <Kbd>Enter</Kbd> on a highlighted item never
 <Correct>
 
 ```html
-<tec-command-item value="billing" label="Billing"><svg …></svg><span>Billing</span><span class="badge">3 due</span></tec-command-item>
+<tec-command-item value="billing" label="Billing"><tec-icon name="credit-card"></tec-icon><span>Billing</span><span class="badge">3 due</span></tec-command-item>
 ```
 
 </Correct>

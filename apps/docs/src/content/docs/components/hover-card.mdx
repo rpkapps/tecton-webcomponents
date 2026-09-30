@@ -8,6 +8,15 @@ tags: ["tec-hover-card"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Info } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Info })
+```
+
 ```ts
 import "@tecton/wc/hover-card"
 ```
@@ -123,7 +132,7 @@ Make the trigger something the keyboard can reach — a `tec-button variant="lin
 
 ```html
 <tec-hover-card>
-  <tec-button slot="trigger" variant="ghost" size="icon-sm"><svg>…</svg></tec-button>
+  <tec-button slot="trigger" variant="ghost" size="icon-sm"><tec-icon name="info"></tec-icon></tec-button>
   Reservoir pressure, measured 2025-03-14.
 </tec-hover-card>
 ```
@@ -134,7 +143,7 @@ Make the trigger something the keyboard can reach — a `tec-button variant="lin
 
 ```html
 <tec-tooltip>
-  <tec-button slot="trigger" variant="ghost" size="icon-sm" aria-label="About this reading"><svg>…</svg></tec-button>
+  <tec-button slot="trigger" variant="ghost" size="icon-sm" aria-label="About this reading"><tec-icon name="info"></tec-icon></tec-button>
   Reservoir pressure, measured 2025-03-14.
 </tec-tooltip>
 ```

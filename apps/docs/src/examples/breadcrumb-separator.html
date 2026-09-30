@@ -3,13 +3,19 @@
     <tec-breadcrumb-item>
       <tec-breadcrumb-link href="#">Home</tec-breadcrumb-link>
     </tec-breadcrumb-item>
-    <tec-breadcrumb-separator><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 2 22"/></svg></tec-breadcrumb-separator>
+    <tec-breadcrumb-separator><tec-icon name="slash" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-breadcrumb-separator>
     <tec-breadcrumb-item>
       <tec-breadcrumb-link href="#">Components</tec-breadcrumb-link>
     </tec-breadcrumb-item>
-    <tec-breadcrumb-separator><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 2 22"/></svg></tec-breadcrumb-separator>
+    <tec-breadcrumb-separator><tec-icon name="slash" aria-hidden="true" style="width:16px;height:16px"></tec-icon></tec-breadcrumb-separator>
     <tec-breadcrumb-item>
       <tec-breadcrumb-page>Breadcrumb</tec-breadcrumb-page>
     </tec-breadcrumb-item>
   </tec-breadcrumb-list>
 </tec-breadcrumb>
+<script type="module">
+  import { Slash } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Slash })
+</script>

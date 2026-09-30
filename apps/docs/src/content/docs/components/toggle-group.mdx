@@ -8,6 +8,15 @@ tags: ["tec-toggle-group", "tec-toggle-group-item"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Bold } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Bold })
+```
+
 ```ts
 import "@tecton/wc/toggle-group"
 ```
@@ -203,7 +212,7 @@ Toggle items are radios or pressed buttons, not `tab`s with `tabpanel`s, so the 
 <Wrong>
 
 ```html
-<tec-toggle-group-item value="bold"><svg aria-hidden="true">…</svg></tec-toggle-group-item>
+<tec-toggle-group-item value="bold"><tec-icon name="bold" aria-hidden="true"></tec-icon></tec-toggle-group-item>
 ```
 
 </Wrong>
@@ -211,7 +220,7 @@ Toggle items are radios or pressed buttons, not `tab`s with `tabpanel`s, so the 
 <Correct>
 
 ```html
-<tec-toggle-group-item value="bold" aria-label="Toggle bold"><svg aria-hidden="true">…</svg></tec-toggle-group-item>
+<tec-toggle-group-item value="bold" aria-label="Toggle bold"><tec-icon name="bold" aria-hidden="true"></tec-icon></tec-toggle-group-item>
 ```
 
 </Correct>

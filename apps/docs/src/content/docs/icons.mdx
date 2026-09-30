@@ -8,7 +8,7 @@ tags: ["tec-icon"]
 Tecton applications use **two icon sets**:
 
 - **Tecton icons** — the domain glyphs of the design system (wells, horizons, seismic, drill bits…), the ones general icon sets have no answer for. They ship with `@tecton/wc` and render with `<tec-icon>`, in an outlined and a filled variant.
-- **[Lucide](https://lucide.dev)** — everything general-purpose (chevrons, search, close, arrows). The components use Lucide glyphs internally; your markup can register the Lucide icons it needs with `<tec-icon>`, or inline their SVG.
+- **[Lucide](https://lucide.dev)** — everything general-purpose (chevrons, search, close, arrows). The components use Lucide glyphs internally; register the Lucide icons your markup needs and render them with `<tec-icon>`.
 
 ```html
 <tec-icon name="well"></tec-icon>
@@ -61,14 +61,11 @@ registerIcons({ ChevronDown, Search }) // <tec-icon name="chevron-down">, <tec-i
 registerIcons({ logo: { viewBox: "0 0 24 24", svg: "<path d='…'/>" } }) // your own SVG
 ```
 
-Elements already on the page re-render when an icon they show is registered. Inline SVG needs no registration at all, and is what the examples in these docs use so they can be copied anywhere:
+Elements already on the page re-render when their icon is registered. The examples include a module script that registers each Lucide icon they use, so the copied source includes its setup. Install `lucide` with your package manager and load the registration module once in your application:
 
 ```html
 <tec-button variant="ghost" size="icon" aria-label="Search">
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" />
-  </svg>
+  <tec-icon name="search" aria-hidden="true" style=";width:16px;height:16px"></tec-icon>
 </tec-button>
 ```
 

@@ -8,6 +8,15 @@ tags: ["tec-canvas", "tec-canvas-surface", "tec-canvas-overlay", "tec-canvas-too
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { Plus } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ Plus })
+```
+
 ```ts
 import "@tecton/wc/canvas"
 ```
@@ -19,7 +28,7 @@ import "@tecton/wc/canvas"
   </tec-canvas-surface>
   <tec-canvas-overlay position="top-left">
     <tec-canvas-toolbar aria-label="Navigation">
-      <tec-button variant="ghost" size="icon-sm" aria-label="Zoom in"><svg …></svg></tec-button>
+      <tec-button variant="ghost" size="icon-sm" aria-label="Zoom in"><tec-icon name="plus"></tec-icon></tec-button>
     </tec-canvas-toolbar>
   </tec-canvas-overlay>
   <tec-canvas-overlay position="bottom-left">

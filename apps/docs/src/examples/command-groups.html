@@ -5,15 +5,15 @@
       <tec-command-input placeholder="Type a command or search..."></tec-command-input>
       <tec-command-list>
         <tec-command-group heading="Suggestions">
-          <tec-command-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v3"></path><path d="M16 2v3"></path><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path></svg><span>Calendar</span></tec-command-item>
-          <tec-command-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10V9"></path><path d="M16.472 15a6 6 0 01-8.943 0"></path><path d="M9 10V9"></path><circle cx="12" cy="12" r="10"></circle></svg><span>Search Emoji</span></tec-command-item>
-          <tec-command-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg><span>Calculator</span></tec-command-item>
+          <tec-command-item><tec-icon name="calendar" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Calendar</span></tec-command-item>
+          <tec-command-item><tec-icon name="face-slightly-smiling" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Search Emoji</span></tec-command-item>
+          <tec-command-item><tec-icon name="calculator" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Calculator</span></tec-command-item>
         </tec-command-group>
         <tec-command-separator></tec-command-separator>
         <tec-command-group heading="Settings">
-          <tec-command-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span><tec-command-shortcut>⌘P</tec-command-shortcut></tec-command-item>
-          <tec-command-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line><path d="M6 14h2"></path></svg><span>Billing</span><tec-command-shortcut>⌘B</tec-command-shortcut></tec-command-item>
-          <tec-command-item><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg><span>Settings</span><tec-command-shortcut>⌘S</tec-command-shortcut></tec-command-item>
+          <tec-command-item><tec-icon name="user" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Profile</span><tec-command-shortcut>⌘P</tec-command-shortcut></tec-command-item>
+          <tec-command-item><tec-icon name="credit-card" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Billing</span><tec-command-shortcut>⌘B</tec-command-shortcut></tec-command-item>
+          <tec-command-item><tec-icon name="settings" aria-hidden="true" style="width:16px;height:16px"></tec-icon><span>Settings</span><tec-command-shortcut>⌘S</tec-command-shortcut></tec-command-item>
         </tec-command-group>
         <tec-command-empty>No results found.</tec-command-empty>
       </tec-command-list>
@@ -21,6 +21,11 @@
   </tec-command-dialog>
 </div>
 <script type="module">
+  import { Calculator, Calendar, CreditCard, FaceSlightlySmiling, Settings, User } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Calculator, Calendar, CreditCard, FaceSlightlySmiling, Settings, User })
+
   const root = document.getElementById("command-groups")
   const dialog = root.querySelector("tec-command-dialog")
   root.querySelector("tec-button").addEventListener("click", () => dialog.show())

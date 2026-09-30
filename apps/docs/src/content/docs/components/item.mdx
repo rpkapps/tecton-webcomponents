@@ -10,6 +10,15 @@ tags: ["tec-item", "tec-item-group", "tec-item-separator", "tec-item-media", "te
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { File } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ File })
+```
+
 ```ts
 import "@tecton/wc/item"
 ```
@@ -17,7 +26,7 @@ import "@tecton/wc/item"
 ```html
 <tec-item>
   <tec-item-media variant="icon">
-    <svg>…</svg>
+    <tec-icon name="file"></tec-icon>
   </tec-item-media>
   <tec-item-content>
     <tec-item-title>Title</tec-item-title>
@@ -98,7 +107,7 @@ With `href`, the whole item is a real link (an `<a>` in its shadow root): it tak
 ```html
 <tec-item href="/dashboard">
   <tec-item-media variant="icon">
-    <svg>…</svg>
+    <tec-icon name="file"></tec-icon>
   </tec-item-media>
   <tec-item-content>
     <tec-item-title>Dashboard</tec-item-title>

@@ -21,11 +21,17 @@
       <tec-overflow-spacer></tec-overflow-spacer>
       <tec-overflow-item value="view" label="View" priority="1">
         <tec-toggle-group aria-label="View" value="list" variant="outline" size="sm" spacing="0">
-          <tec-toggle-group-item value="list" aria-label="List view"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h.01"/><path d="M3 12h.01"/><path d="M3 19h.01"/><path d="M8 5h13"/><path d="M8 12h13"/><path d="M8 19h13"/></svg> List</tec-toggle-group-item>
-          <tec-toggle-group-item value="graph" aria-label="Graph view"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10.586 5.414-5.172 5.172"/><path d="m18.586 13.414-5.172 5.172"/><path d="M6 12h12"/><circle cx="12" cy="20" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="4" cy="12" r="2"/></svg> Graph</tec-toggle-group-item>
+          <tec-toggle-group-item value="list" aria-label="List view"><tec-icon name="list" aria-hidden="true" style="width:16px;height:16px"></tec-icon> List</tec-toggle-group-item>
+          <tec-toggle-group-item value="graph" aria-label="Graph view"><tec-icon name="waypoints" aria-hidden="true" style="width:16px;height:16px"></tec-icon> Graph</tec-toggle-group-item>
         </tec-toggle-group>
       </tec-overflow-item>
     </tec-page-header-actions>
   </tec-page-header>
   <p class="mt-3 text-xs text-muted-foreground">Drag the corner to resize.</p>
 </div>
+<script type="module">
+  import { List, Waypoints } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ List, Waypoints })
+</script>

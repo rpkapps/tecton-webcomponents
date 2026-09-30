@@ -8,6 +8,15 @@ tags: ["tec-badge"]
 
 ## Usage
 
+Register the Lucide icons used in the snippets below (see [Icons](/docs/icons)):
+
+```ts
+import { TriangleAlert } from "lucide"
+import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+registerIcons({ TriangleAlert })
+```
+
 ```ts
 import "@tecton/wc/badge"
 ```
@@ -180,7 +189,7 @@ A badge has no role, no tab stop and no key handling, so the label answers a mou
 <Wrong>
 
 ```html
-<tec-badge variant="warning"><svg aria-hidden="true">…</svg> Unsaved</tec-badge>
+<tec-badge variant="warning"><tec-icon name="triangle-alert" aria-hidden="true"></tec-icon> Unsaved</tec-badge>
 ```
 
 </Wrong>
@@ -188,7 +197,7 @@ A badge has no role, no tab stop and no key handling, so the label answers a mou
 <Correct>
 
 ```html
-<tec-badge variant="warning"><svg slot="start" aria-hidden="true">…</svg> Unsaved</tec-badge>
+<tec-badge variant="warning"><tec-icon name="triangle-alert" slot="start" aria-hidden="true"></tec-icon> Unsaved</tec-badge>
 ```
 
 </Correct>

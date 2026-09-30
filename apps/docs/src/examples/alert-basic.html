@@ -1,7 +1,13 @@
 <tec-alert class="max-w-md">
-  <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m16 9-5.5 5.5L8 12"/></svg>
+  <tec-icon name="check-circle2" slot="icon" aria-hidden="true" style="width:16px;height:16px"></tec-icon>
   <tec-alert-title>Account updated successfully</tec-alert-title>
   <tec-alert-description>
     Your profile information has been saved. Changes will be reflected immediately.
   </tec-alert-description>
 </tec-alert>
+<script type="module">
+  import { CheckCircle2 } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ CheckCircle2 })
+</script>

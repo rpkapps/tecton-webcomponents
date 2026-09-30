@@ -12,7 +12,7 @@
     </tec-item-content>
     <tec-item-actions>
       <tec-button variant="ghost" size="icon" style="--tec-button-radius: 9999px" aria-label="Add alex">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <tec-icon name="plus" aria-hidden="true"></tec-icon>
       </tec-button>
     </tec-item-actions>
   </tec-item>
@@ -29,7 +29,7 @@
     </tec-item-content>
     <tec-item-actions>
       <tec-button variant="ghost" size="icon" style="--tec-button-radius: 9999px" aria-label="Add jamie">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <tec-icon name="plus" aria-hidden="true"></tec-icon>
       </tec-button>
     </tec-item-actions>
   </tec-item>
@@ -46,8 +46,14 @@
     </tec-item-content>
     <tec-item-actions>
       <tec-button variant="ghost" size="icon" style="--tec-button-radius: 9999px" aria-label="Add taylor">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <tec-icon name="plus" aria-hidden="true"></tec-icon>
       </tec-button>
     </tec-item-actions>
   </tec-item>
 </tec-item-group>
+<script type="module">
+  import { Plus } from "lucide"
+  import { registerIcons } from "@tecton/wc/icon/registry.js"
+
+  registerIcons({ Plus })
+</script>
